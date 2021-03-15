@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const yaml = require('yaml');
 const glob = require('glob');
+const Runner = require('./runner');
 
 async function read() {
     const flowFiles = await new Promise((resolve, reject) => {
@@ -75,9 +76,46 @@ function resolve(flow) {
     return flow;
 }
 
+async function processStep(step) {
+    console.log('-', step);
+}
+
+async function executeFlows(flows, runner) {
+    await runner.init();
+
+    for await (let flow of flows) {
+        for await (let [variant, steps] of Object.entries(flow.get('flattenedSteps'))) {
+            await runner.newFlow(variant);
+
+            for await (let step of steps) {
+                await runner.processStep(step);
+            }
+        }
+    }
+
+    await runner.cleanup();
+}
+
 async function run() {
     const flows = await read().then(flows => flows.filter(validate).map(flatten).map(resolve));
-    console.log(flows);
+    const runner = new Runner();
+
+    let error;
+
+    try {
+        await executeFlows(flows, runner);
+    } catch (e) {
+        error = e;
+    }
+
+    if (error) {
+        console.log('Tests are failing.');
+        console.log();
+        console.log(error);
+        process.exit(1);
+    } else {
+        console.log('Tests are passing.');
+    }
 }
 
 module.exports.run = run;
