@@ -76,34 +76,16 @@ function resolve(flow) {
     return flow;
 }
 
-async function processStep(step) {
-    console.log('-', step);
-}
-
-async function executeFlows(flows, runner) {
-    await runner.init();
-
-    for await (let flow of flows) {
-        for await (let [variant, steps] of Object.entries(flow.get('flattenedSteps'))) {
-            await runner.newFlow(variant);
-
-            for await (let step of steps) {
-                await runner.processStep(step);
-            }
-        }
-    }
-
-    await runner.cleanup();
-}
-
 async function run() {
     const flows = await read().then(flows => flows.filter(validate).map(flatten).map(resolve));
-    const runner = new Runner();
 
     let error;
 
     try {
-        await executeFlows(flows, runner);
+        for await (let flow of flows) {
+            const runner = new Runner(flow);
+            await runner.run();
+        }
     } catch (e) {
         error = e;
     }

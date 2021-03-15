@@ -4,7 +4,9 @@ const expect = require('expect');
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
 module.exports = class Runner {
-    constructor({ headless = true } = {}) {
+    constructor(flow, { headless = true } = {}) {
+        this.flow = flow;
+        this.currentVariant = null;
         this.browser = null;
         this.page = null;
         this.headless = headless;
@@ -14,9 +16,12 @@ module.exports = class Runner {
         this.browser = await puppeteer.launch({ headless: this.headless });
     };
 
-    newFlow = async variant => {
+    startVariant = async variant => {
+        const startUrl = `${baseUrl}${this.flow.get('start').get('route')}`;
+        console.log('doing variant:', variant, startUrl);
+        this.currentVariant = variant;
         this.page = await this.browser.newPage();
-        console.log('doing variant:', variant);
+        await this.page.goto(startUrl);
     };
 
     processStep = async step => {
@@ -28,6 +33,20 @@ module.exports = class Runner {
         this.browser = null;
 
         console.log('done.');
+    };
+
+    run = async () => {
+        await this.init();
+
+        for await (let [variant, steps] of Object.entries(this.flow.get('flattenedSteps'))) {
+            await this.startVariant(variant);
+
+            for await (let step of steps) {
+                await this.processStep(step);
+            }
+        }
+
+        await this.cleanup();
     };
 };
 
