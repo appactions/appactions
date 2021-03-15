@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const expect = require('expect');
+const get = require('lodash.get');
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
@@ -22,10 +23,20 @@ module.exports = class Runner {
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
         await this.page.goto(startUrl);
+        await this.page.addScriptTag({ path: require.resolve('lodash.get/index.js') });
     };
 
-    processStep = async step => {
-        console.log('-', step);
+    processStep = async stepMap => {
+        const step = Object.fromEntries(stepMap);
+
+        if (step.with === 'document') {
+            if (step.assert) {
+                const [pathToActual, matcher, expected] = step.assert;
+                const value = await this.page.evaluate(path => get(document, path), pathToActual);
+                await expect(value)[matcher](expected);
+                return true;
+            }
+        }
     };
 
     cleanup = async () => {
@@ -42,7 +53,12 @@ module.exports = class Runner {
             await this.startVariant(variant);
 
             for await (let step of steps) {
-                await this.processStep(step);
+                const result = await this.processStep(step);
+                if (result === true) {
+                    console.log('-', step.get('with'), '✓');
+                } else {
+                    console.log('-', step);
+                }
             }
         }
 
