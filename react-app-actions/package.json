@@ -1,5 +1,17 @@
 {
     "name": "react-app-actions",
+    "bin": {
+        "react-app-actions": "cli.js"
+    },
+    "main": "index.js",
     "version": "0.1.0",
-    "private": true
+    "private": true,
+    "peerDependencies": {
+        "expect": "^26.6.2",
+        "puppeteer": "^8.0.0"
+    },
+    "dependencies": {
+        "glob": "^7.1.6",
+        "yaml": "^1.10.2"
+    }
 }
