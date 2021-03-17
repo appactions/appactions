@@ -8,7 +8,7 @@ let authProvider = Providers.Auth0({
     domain: process.env.AUTH0_DOMAIN,
 });
 
-if (process.env.NEXT_PUBLIC_SPECIAL_AUTH === 'TestLogin') {
+if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview') {
     authProvider = Providers.Credentials({
         name: 'TestLogin',
         credentials: {
