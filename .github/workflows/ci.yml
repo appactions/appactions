@@ -1,6 +1,12 @@
 name: ci
 on: [deployment_status]
 jobs:
+  Debug:
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
   Cypress:
     if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
