@@ -9,7 +9,7 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
   Cypress:
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
@@ -71,7 +71,7 @@ jobs:
             })
 
   Puppeteer:
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
@@ -134,7 +134,7 @@ jobs:
             })
 
   react-app-actions-backend:
-    if: github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
