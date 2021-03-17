@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const expect = require('expect');
-const get = require('lodash.get');
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
@@ -19,7 +18,7 @@ module.exports = class Runner {
 
     startVariant = async variant => {
         const startUrl = `${baseUrl}${this.flow.get('start').get('route')}`;
-        console.log('doing variant:', variant, startUrl);
+        console.log('=== running variant:', { variant, startUrl });
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
         await this.page.goto(startUrl);
