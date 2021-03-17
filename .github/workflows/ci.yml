@@ -125,3 +125,66 @@ jobs:
               description: 'Puppeteer tests failed',
               target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
+
+  react-app-actions-backend:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'pending',
+              context: 'react-app-actions-backend',
+              description: 'Waiting...',
+            })
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+      - run: yarn install
+
+      - name: Build and Test react-app-actions-backend 🍍
+        uses: actions/setup-node@v2
+        working-directory: ./react-app-actions-backend
+        continue-on-error: true
+        env:
+          BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CI: true
+        run: yarn build-and-test
+
+      - name: react-app-actions-backend tests ✅
+        uses: actions/github-script@v3
+        if: ${{ success() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'success',
+              context: 'react-app-actions-backend',
+              description: 'backend tests passed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+      - name: react-app-actions-backend tests 🚨
+        uses: actions/github-script@v3
+        if: ${{ failure() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'failure',
+              context: 'react-app-actions-backend',
+              description: 'backend tests failed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
