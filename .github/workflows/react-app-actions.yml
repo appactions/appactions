@@ -28,7 +28,6 @@ jobs:
 
       - name: Build and Test react-app-actions-backend 🍍
         working-directory: ./react-app-actions-backend
-        continue-on-error: true
         env:
           BASE_URL: ${{ github.event.deployment_status.target_url }}
           CI: true

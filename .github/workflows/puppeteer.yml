@@ -28,7 +28,6 @@ jobs:
       - name: Run Puppeteer 🍍
         id: puppeteer
         working-directory: ./restaurant-reviewer
-        continue-on-error: true
         env:
           PUPPETEER_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CI: true
