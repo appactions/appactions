@@ -1,4 +1,4 @@
-name: ci
+name: react-app-actions
 on: [deployment_status]
 jobs:
   react-app-actions-backend:

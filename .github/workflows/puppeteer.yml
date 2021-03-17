@@ -1,4 +1,4 @@
-name: ci
+name: puppeteer
 on: [deployment_status]
 jobs:
   tests:
