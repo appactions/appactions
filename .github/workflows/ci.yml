@@ -24,10 +24,10 @@ jobs:
         uses: cypress-io/github-action@v2
         # let's give this action an ID so we can refer to its output values later
         id: cypress
-        working-directory: ./restaurant-reviewer
         # continue the build in case of an error, as we need to set the commit status in the next step
         continue-on-error: true
         with:
+          working-directory: ./restaurant-reviewer
           record: true
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
