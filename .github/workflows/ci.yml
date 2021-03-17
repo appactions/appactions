@@ -2,6 +2,7 @@ name: ci
 on: [deployment_status]
 jobs:
   Debug:
+    runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
         env:
