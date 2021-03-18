@@ -4,14 +4,15 @@ import replace from '@rollup/plugin-replace';
 
 export default {
     input: 'src/index.js',
+    external: [/@babel\/runtime/],
     output: {
         file: 'dist/index.js',
         format: 'umd',
-        name: 'ReactAppActions',
+        name: 'ReactAppActionsBackend',
     },
     plugins: [
         resolve(),
-        babel({ babelHelpers: 'bundled' }),
+        babel({ babelHelpers: 'runtime' }),
         replace({
             preventAssignment: true,
             values: {

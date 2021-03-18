@@ -15,7 +15,7 @@ async function test(page) {
 
     await page.evaluateOnNewDocument(fs.readFileSync('./dist/index.js', 'utf8'));
     await page.evaluateOnNewDocument(() => {
-        ReactAppActions.installBackend(window);
+        ReactAppActionsBackend.installBackend(window);
     });
 
     await page.goto(baseUrl);

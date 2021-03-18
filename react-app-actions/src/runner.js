@@ -1,9 +1,9 @@
-const puppeteer = require('puppeteer');
-const expect = require('expect');
+import puppeteer from 'puppeteer';
+import expect from 'expect';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
-module.exports = class Runner {
+export default class Runner {
     constructor(flow, { headless = true } = {}) {
         this.flow = flow;
         this.currentVariant = null;
@@ -63,7 +63,7 @@ module.exports = class Runner {
 
         await this.cleanup();
     };
-};
+}
 
 // async function test(page) {
 //     const data = generateData();

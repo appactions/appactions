@@ -1,6 +1,6 @@
 import { attach } from '../vendor/react-devtools-renderer';
 
-export default function createBackend(hook, rendererID, renderer, global) {
+export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
     const devtoolsInterface = attach(hook, rendererID, renderer, global);
 
     const {
