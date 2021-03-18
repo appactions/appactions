@@ -26,12 +26,14 @@ jobs:
 
       - run: yarn install
 
-      - name: Build and Test react-app-actions 🍍
-        working-directory: ./restaurant-reviewer
+      - name: Build react-app-actions 🍍
+        run: yarn workspace react-app-actions build
+
+      - name: Test react-app-actions 🍍
         env:
           REACT_APP_ACTIONS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CI: true
-        run: yarn react-app-actions
+        run: yarn workspace restaurant-reviewer react-app-actions
 
       - name: react-app-actions tests ✅
         uses: actions/github-script@v3
@@ -88,12 +90,14 @@ jobs:
 
       - run: yarn install
 
-      - name: Build and Test react-app-actions-backend 🍍
-        working-directory: ./react-app-actions-backend
+      - name: Build react-app-actions-backend 🍍
+        run: yarn workspace react-app-actions-backend build
+
+      - name: Test react-app-actions-backend 🍍
         env:
           BASE_URL: ${{ github.event.deployment_status.target_url }}
           CI: true
-        run: yarn build-and-test
+        run: yarn workspace react-app-actions-backend test
 
       - name: react-app-actions-backend tests ✅
         uses: actions/github-script@v3
