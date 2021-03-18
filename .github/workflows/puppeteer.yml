@@ -1,0 +1,64 @@
+name: puppeteer
+on: [deployment_status]
+jobs:
+  tests:
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'pending',
+              context: 'Puppeteer',
+              description: 'Waiting...',
+            })
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+      - run: yarn install
+
+      - name: Run Puppeteer 🍍
+        id: puppeteer
+        working-directory: ./restaurant-reviewer
+        env:
+          PUPPETEER_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CI: true
+        run: node puppeteer/test.js
+
+      - name: Puppeteer tests ✅
+        uses: actions/github-script@v3
+        if: ${{ success() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'success',
+              context: 'Puppeteer',
+              description: 'Puppeteer tests passed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+      - name: Puppeteer tests 🚨
+        uses: actions/github-script@v3
+        if: ${{ failure() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'failure',
+              context: 'Puppeteer',
+              description: 'Puppeteer tests failed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })

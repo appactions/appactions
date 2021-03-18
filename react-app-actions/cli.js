@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-const { run } = require('./src/api');
+const { run } = require('./dist/flow-api');
 
 run();

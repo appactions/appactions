@@ -75,7 +75,9 @@ export default function Header() {
                                 </Toggle>
                             ) : (
                                 <button
-                                    onClick={() => signIn(process.env.NEXT_PUBLIC_SPECIAL_AUTH)}
+                                    onClick={() =>
+                                        signIn(process.env.NEXT_PUBLIC_VERCEL_ENV !== 'preview' ? 'auth0' : 'TestLogin')
+                                    }
                                     className="inline-flex items-center px-4 py-2 ml-2 text-sm font-medium text-white bg-gradient-to-r to-green-400 via-green-500 from-green-500 rounded-md shadow-sm hover:via-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
                                 >
                                     Sign in

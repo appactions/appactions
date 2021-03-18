@@ -1,7 +1,8 @@
-const fs = require('fs').promises;
-const path = require('path');
-const yaml = require('yaml');
-const glob = require('glob');
+import { promises as fs } from 'fs';
+import path from 'path';
+import yaml from 'yaml';
+import glob from 'glob';
+import Runner from './runner';
 
 async function read() {
     const flowFiles = await new Promise((resolve, reject) => {
@@ -75,9 +76,26 @@ function resolve(flow) {
     return flow;
 }
 
-async function run() {
+export async function run() {
     const flows = await read().then(flows => flows.filter(validate).map(flatten).map(resolve));
-    console.log(flows);
-}
 
-module.exports.run = run;
+    let error;
+
+    try {
+        for await (let flow of flows) {
+            const runner = new Runner(flow);
+            await runner.run();
+        }
+    } catch (e) {
+        error = e;
+    }
+
+    if (error) {
+        console.log('Tests are failing.');
+        console.log();
+        console.log(error);
+        process.exit(1);
+    } else {
+        console.log('Tests are passing.');
+    }
+}

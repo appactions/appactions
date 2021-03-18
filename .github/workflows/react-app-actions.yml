@@ -1,8 +1,8 @@
-name: ci
+name: react-app-actions
 on: [deployment_status]
 jobs:
-  Cypress:
-    if: github.event.deployment_status.state == 'success'
+  react-app-actions:
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
@@ -13,69 +13,7 @@ jobs:
               repo: context.repo.repo,
               sha: '${{ github.sha }}',
               state: 'pending',
-              context: 'Cypress',
-              description: 'Waiting...',
-            })
-
-      - name: Checkout 🛎
-        uses: actions/checkout@v1
-
-      - name: Run Cypress 🌲
-        uses: cypress-io/github-action@v2
-        # let's give this action an ID so we can refer to its output values later
-        id: cypress
-        working-directory: ./restaurant-reviewer
-        # continue the build in case of an error, as we need to set the commit status in the next step
-        continue-on-error: true
-        with:
-          record: true
-        env:
-          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-
-      - name: Cypress tests ✅
-        uses: actions/github-script@v3
-        if: ${{ success() }}
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'success',
-              context: 'Cypress',
-              description: 'Cypress tests passed',
-              target_url: '${{ steps.cypress.outputs.dashboardUrl }}'
-            })
-
-      - name: Cypress tests 🚨
-        uses: actions/github-script@v3
-        if: ${{ failure() }}
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'failure',
-              context: 'Cypress',
-              description: 'Cypress tests failed',
-              target_url: '${{ steps.cypress.outputs.dashboardUrl }}'
-            })
-
-  Puppeteer:
-    if: github.event.deployment_status.state == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@v3
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'pending',
-              context: 'Puppeteer',
+              context: 'react-app-actions',
               description: 'Waiting...',
             })
 
@@ -85,18 +23,19 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12.x'
+
       - run: yarn install
 
-      - name: Run Puppeteer 🍍
-        id: puppeteer
-        working-directory: ./restaurant-reviewer
-        continue-on-error: true
-        env:
-          PUPPETEER_BASE_URL: ${{ github.event.deployment_status.target_url }}
-          CI: true
-        run: node puppeteer/test.js
+      - name: Build react-app-actions 🍍
+        run: yarn workspace react-app-actions build
 
-      - name: Puppeteer tests ✅
+      - name: Test react-app-actions 🍍
+        env:
+          REACT_APP_ACTIONS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CI: true
+        run: yarn workspace restaurant-reviewer react-app-actions
+
+      - name: react-app-actions tests ✅
         uses: actions/github-script@v3
         if: ${{ success() }}
         with:
@@ -106,12 +45,12 @@ jobs:
               repo: context.repo.repo,
               sha: '${{ github.sha }}',
               state: 'success',
-              context: 'Puppeteer',
-              description: 'Puppeteer tests passed',
+              context: 'react-app-actions',
+              description: 'cli tests passed',
               target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
 
-      - name: Puppeteer tests 🚨
+      - name: react-app-actions tests 🚨
         uses: actions/github-script@v3
         if: ${{ failure() }}
         with:
@@ -121,7 +60,71 @@ jobs:
               repo: context.repo.repo,
               sha: '${{ github.sha }}',
               state: 'failure',
-              context: 'Puppeteer',
-              description: 'Puppeteer tests failed',
+              context: 'react-app-actions',
+              description: 'cli tests failed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+  react-app-actions-backend:
+    if: github.event.deployment_status.environment == 'Preview – restaurant-reviewer' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'pending',
+              context: 'react-app-actions-backend',
+              description: 'Waiting...',
+            })
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+
+      - run: yarn install
+
+      - name: Build react-app-actions-backend 🍍
+        run: yarn workspace react-app-actions-backend build
+
+      - name: Test react-app-actions-backend 🍍
+        env:
+          BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CI: true
+        run: yarn workspace react-app-actions-backend test
+
+      - name: react-app-actions-backend tests ✅
+        uses: actions/github-script@v3
+        if: ${{ success() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'success',
+              context: 'react-app-actions-backend',
+              description: 'backend tests passed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+      - name: react-app-actions-backend tests 🚨
+        uses: actions/github-script@v3
+        if: ${{ failure() }}
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.sha }}',
+              state: 'failure',
+              context: 'react-app-actions-backend',
+              description: 'backend tests failed',
               target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })

@@ -9,7 +9,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "cypress": "start-server-and-test 'NEXT_PUBLIC_SPECIAL_AUTH=TestLogin vercel dev' :3000 'yarn cypress:open'",
+        "cypress": "start-server-and-test 'NEXT_PUBLIC_VERCEL_ENV=preview vercel dev' :3000 'yarn cypress:open'",
         "cypress:open": "cypress open"
     },
     "dependencies": {

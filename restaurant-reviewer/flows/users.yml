@@ -2,11 +2,13 @@ description: General user flows.
 variants: [regular, owner]
 usage: 100%
 data:
-  [user, restaurant]: generate.js # named export
+  [user, restaurant]: generate.js
+start:
+  route: '/'
+  auth: false
 steps:
   - with: document
-    # assert: [.title, toEq, Restaurant Reviewer]
-    assert: { .title, toEq, Restaurant Reviewer }
+    assert: [title, toBe, Restaurant Reviewer]
   - with: { button: Sign in }
     do: click
   - with: { input: Email }
