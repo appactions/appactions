@@ -2,7 +2,6 @@
     "private": true,
     "workspaces": [
         "react-app-actions",
-        "react-app-actions-backend",
         "react-app-actions.com",
         "restaurant-reviewer"
     ],

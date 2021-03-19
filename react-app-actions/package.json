@@ -3,7 +3,7 @@
     "bin": {
         "react-app-actions": "cli.js"
     },
-    "main": "dist/index.js",
+    "main": "dist/driver.js",
     "version": "0.1.0",
     "private": true,
     "peerDependencies": {
@@ -12,6 +12,8 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.13.10",
+        "aria-query": "^4.2.2",
+        "dom-accessibility-api": "^0.5.4",
         "glob": "^7.1.6",
         "lodash.get": "^4.4.2",
         "yaml": "^1.10.2"
@@ -21,10 +23,16 @@
         "@babel/plugin-proposal-class-properties": "^7.13.0",
         "@babel/plugin-transform-runtime": "^7.13.10",
         "@babel/preset-env": "^7.13.10",
+        "@rollup/plugin-alias": "^3.1.2",
         "@rollup/plugin-babel": "^5.3.0",
+        "@rollup/plugin-commonjs": "^17.1.0",
+        "@rollup/plugin-node-resolve": "^11.2.0",
+        "@rollup/plugin-replace": "^2.4.1",
+        "puppeteer": "^8.0.0",
         "rollup": "^2.41.4"
     },
     "scripts": {
-        "build": "rollup --config rollup.config.js"
+        "build": "rollup --config rollup.config.js",
+        "test": "node test.js"
     }
 }
