@@ -23,6 +23,7 @@
         "@babel/plugin-proposal-class-properties": "^7.13.0",
         "@babel/plugin-transform-runtime": "^7.13.10",
         "@babel/preset-env": "^7.13.10",
+        "@babel/preset-flow": "^7.12.13",
         "@rollup/plugin-alias": "^3.1.2",
         "@rollup/plugin-babel": "^5.3.0",
         "@rollup/plugin-commonjs": "^17.1.0",
@@ -32,6 +33,7 @@
         "rollup": "^2.41.4"
     },
     "scripts": {
+        "build:devtools-vendor": "./packages/backend/vendor/build-backend-renderer.sh",
         "build": "rollup --config rollup.config.js",
         "test": "node test.js"
     }
