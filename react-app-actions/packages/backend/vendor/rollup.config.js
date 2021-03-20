@@ -15,8 +15,24 @@ export default {
         alias({
             entries: [
                 {
+                    find: 'react-debug-tools',
+                    replacement: path.resolve(__dirname, 'react-debug-tools'),
+                },
+                {
+                    find: 'react-reconciler',
+                    replacement: path.resolve(__dirname, 'react-reconciler'),
+                },
+                {
                     find: 'react-devtools-shared',
                     replacement: path.resolve(__dirname, 'react-devtools-shared'),
+                },
+                {
+                    find: 'react-devtools-feature-flags',
+                    replacement: 'packages/backend/vendor/mocked/react-devtools-feature-flags.js',
+                },
+                {
+                    find: /^shared\/(.*)/,
+                    replacement: 'packages/backend/vendor/shared/$1.js',
                 },
             ],
         }),

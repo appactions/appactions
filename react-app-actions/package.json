@@ -29,6 +29,8 @@
         "@rollup/plugin-commonjs": "^17.1.0",
         "@rollup/plugin-node-resolve": "^11.2.0",
         "@rollup/plugin-replace": "^2.4.1",
+        "clipboard-js": "^0.3.6",
+        "error-stack-parser": "^2.0.6",
         "puppeteer": "^8.0.0",
         "rollup": "^2.41.4"
     },
