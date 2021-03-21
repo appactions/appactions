@@ -37,6 +37,7 @@
     "scripts": {
         "build:devtools-vendor": "./packages/backend/vendor/build-backend-renderer.sh",
         "build": "rollup --config rollup.config.js",
+        "postinstall": "build",
         "test": "node test.js"
     }
 }

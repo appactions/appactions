@@ -13,7 +13,7 @@
     },
     "scripts": {
         "dev": "next dev",
-        "build": "yarn workspace react-app-actions build && next build",
+        "build": "next build",
         "start": "next start",
         "cypress": "start-server-and-test 'NEXT_PUBLIC_TEST_MODE=true vercel dev' :3000 'yarn cypress:open'",
         "cypress:open": "cypress open"
