@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import expect from 'expect';
+import fs from 'fs';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
@@ -21,6 +22,12 @@ export default class Runner {
         console.log('=== running variant:', { variant, startUrl });
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
+        await this.page.evaluateOnNewDocument(
+            fs.readFileSync(require.resolve('react-app-actions/dist/backend.js'), 'utf8'),
+        );
+        await this.page.evaluateOnNewDocument(() => {
+            ReactAppActionsBackend.installBackend(window);
+        });
         await this.page.goto(startUrl);
         await this.page.addScriptTag({ path: require.resolve('lodash.get/index.js') });
     };
@@ -35,6 +42,8 @@ export default class Runner {
                 await expect(value)[matcher](expected);
                 return true;
             }
+        } else {
+            return await this.page.evaluate(step => ReactAppActionsBackend.dispatch(step), step);
         }
     };
 

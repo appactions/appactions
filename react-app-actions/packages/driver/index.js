@@ -5,10 +5,13 @@ export function register(Component, { role, ...driverFunctions }) {
     roles.set(Component, role);
     drivers.set(Component, driverFunctions);
 
-    console.log('register', Component, roles, drivers);
+    Object.defineProperty(Component, '__REACT_APP_ACTIONS__', {
+        enumerable: false,
+        get() {
+            return {
+                roles,
+                drivers,
+            };
+        },
+    });
 }
-
-// window.ReactAppActionsBackend.driverApi = {
-//     roles,
-//     drivers,
-// };
