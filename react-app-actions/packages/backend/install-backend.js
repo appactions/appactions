@@ -133,12 +133,14 @@ export function installBackend(target) {
                 // react-reconciler v16+
                 const appActionsRenderer = attachAppActionsRenderer(hook, id, renderer, target);
 
-                Object.defineProperty(target, 'ReactAppActionsRenderer', {
-                    enumerable: false,
-                    get() {
-                        return appActionsRenderer;
-                    },
-                });
+                target.ReactAppActionsBackend.renderer = appActionsRenderer;
+
+                // Object.defineProperty(target, 'ReactAppActionsRenderer', {
+                //     enumerable: false,
+                //     get() {
+                //         return appActionsRenderer;
+                //     },
+                // });
 
                 hook.rendererInterfaces.set(id, rendererInterface);
             } else if (renderer.ComponentTree) {

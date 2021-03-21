@@ -2,9 +2,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'yaml';
 import glob from 'glob';
-import Runner from './runner';
 
-async function read() {
+export async function read() {
     const flowFiles = await new Promise((resolve, reject) => {
         glob('flows/*.yml', (error, files) => {
             if (error) {
@@ -29,7 +28,7 @@ async function read() {
     );
 }
 
-function validate(flow) {
+export function validate(flow) {
     return !!flow;
 }
 
@@ -51,7 +50,7 @@ function getStepsForVariant(variant, steps) {
     return result;
 }
 
-function flatten(flow) {
+export function flatten(flow) {
     const newFlow = new Map(flow);
 
     const flattenedSteps = flow
@@ -67,35 +66,11 @@ function flatten(flow) {
     return newFlow;
 }
 
-function resolve(flow) {
+export function resolve(flow) {
     if (!flow.has('name')) {
         const flowName = path.basename(flow.get('fileName')).replace(/\.yml$/, '');
         flow.set('name', flowName);
     }
 
     return flow;
-}
-
-export async function run() {
-    const flows = await read().then(flows => flows.filter(validate).map(flatten).map(resolve));
-
-    let error;
-
-    try {
-        for await (let flow of flows) {
-            const runner = new Runner(flow);
-            await runner.run();
-        }
-    } catch (e) {
-        error = e;
-    }
-
-    if (error) {
-        console.log('Tests are failing.');
-        console.log();
-        console.log(error);
-        process.exit(1);
-    } else {
-        console.log('Tests are passing.');
-    }
 }

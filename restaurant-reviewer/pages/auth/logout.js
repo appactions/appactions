@@ -9,7 +9,7 @@ export async function getServerSideProps({ res }) {
 
     let redirect = `https://${process.env.AUTH0_DOMAIN}/v2/logout?federated&returnTo=${returnTo}`;
 
-    if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview') {
+    if (process.env.NEXT_PUBLIC_TEST_MODE) {
         redirect = process.env.NEXT_PUBLIC_DOMAIN;
     }
 

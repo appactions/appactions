@@ -2,7 +2,7 @@ description: General user flows.
 variants: [regular, owner]
 usage: 100%
 data:
-  [user, restaurant]: generate.js
+  { user, restaurant }: generate.js
 start:
   route: '/'
   auth: false

@@ -1,4 +1,5 @@
 import React from 'react';
+import { register } from 'react-app-actions';
 
 const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, error }, ref) => {
     return (
@@ -44,3 +45,19 @@ const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, 
 });
 
 export default Input;
+
+register(Input, {
+    role: 'Input',
+    fill(text) {
+        this.ref.value = text;
+    },
+    isDisabled() {
+        return this.ref.disabled;
+    },
+    // fill(text) {
+    //     this.props.onChange({ target: { value: text } });
+    // },
+    // isDisabled() {
+    //     return this.props.disabled;
+    // },
+});
