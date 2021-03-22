@@ -134,13 +134,7 @@ export function installBackend(target) {
                 const appActionsRenderer = attachAppActionsRenderer(hook, id, renderer, target);
 
                 target.ReactAppActionsBackend.renderer = appActionsRenderer;
-
-                // Object.defineProperty(target, 'ReactAppActionsRenderer', {
-                //     enumerable: false,
-                //     get() {
-                //         return appActionsRenderer;
-                //     },
-                // });
+                target.ReactAppActionsBackend.getFiberRoots = () => Array.from(getFiberRoots(id));
 
                 hook.rendererInterfaces.set(id, rendererInterface);
             } else if (renderer.ComponentTree) {
