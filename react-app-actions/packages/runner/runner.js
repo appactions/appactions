@@ -5,16 +5,18 @@ import fs from 'fs';
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
 export default class Runner {
-    constructor(flow, { headless = true } = {}) {
+    constructor(flow, config = {}) {
         this.flow = flow;
         this.currentVariant = null;
         this.browser = null;
         this.page = null;
+        this.config = config;
+        const { headless = true } = config;
         this.headless = headless;
     }
 
     init = async () => {
-        this.browser = await puppeteer.launch({ headless: this.headless });
+        this.browser = await puppeteer.launch(this.config);
     };
 
     startVariant = async variant => {
@@ -28,8 +30,11 @@ export default class Runner {
         await this.page.evaluateOnNewDocument(() => {
             ReactAppActionsBackend.installBackend(window);
         });
+        await this.page.setViewport({
+            width: 1500,
+            height: 1300,
+        });
         await this.page.goto(startUrl);
-        await this.page.addScriptTag({ path: require.resolve('lodash.get/index.js') });
     };
 
     processStep = async stepMap => {
@@ -38,7 +43,10 @@ export default class Runner {
         if (step.with === 'document') {
             if (step.assert) {
                 const [pathToActual, matcher, expected] = step.assert;
-                const value = await this.page.evaluate(path => get(document, path), pathToActual);
+                const value = await this.page.evaluate(
+                    path => ReactAppActionsBackend.utils.get(document, path),
+                    pathToActual,
+                );
                 await expect(value)[matcher](expected);
                 return true;
             }
@@ -67,6 +75,11 @@ export default class Runner {
                 } else {
                     console.log('-', step);
                 }
+            }
+
+            // leave the browser open in headful mode
+            if (!this.headless) {
+                await new Promise(() => {});
             }
         }
 
