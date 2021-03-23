@@ -5,18 +5,25 @@ import fs from 'fs';
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
 export default class Runner {
-    constructor(flow, config = {}) {
+    constructor(flow) {
         this.flow = flow;
         this.currentVariant = null;
         this.browser = null;
         this.page = null;
-        this.config = config;
-        const { headless = true } = config;
-        this.headless = headless;
+        this.headless = Boolean(process.env.CI);
     }
 
     init = async () => {
-        this.browser = await puppeteer.launch(this.config);
+        this.browser = await puppeteer.launch({
+            headless: this.headless,
+            devtools: true,
+            args: [
+                `--window-size=1500,1300`,
+                `--remote-debugging-address=0.0.0.0`,
+                `--remote-debugging-port=9333`,
+                // '--wait-for-debugger',
+            ],
+        });
     };
 
     startVariant = async variant => {
@@ -24,6 +31,21 @@ export default class Runner {
         console.log('=== running variant:', { variant, startUrl });
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
+
+        this.page.on('console', msg => {
+            if (msg.type() !== 'log') {
+                return;
+            }
+
+            const text = msg.text();
+
+            if (text.startsWith('[Fast Refresh]')) {
+                return;
+            }
+
+            console.log('[backend:log]', msg.text());
+        });
+
         await this.page.evaluateOnNewDocument(
             fs.readFileSync(require.resolve('react-app-actions/dist/backend.js'), 'utf8'),
         );
@@ -51,7 +73,10 @@ export default class Runner {
                 return true;
             }
         } else {
-            return await this.page.evaluate(step => ReactAppActionsBackend.dispatch(step), step);
+            return await this.page.evaluate(
+                step => ReactAppActionsBackend.dispatch(ReactAppActionsBackend, step),
+                step,
+            );
         }
     };
 

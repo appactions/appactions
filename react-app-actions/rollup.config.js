@@ -10,6 +10,7 @@ export default [
         output: {
             file: 'dist/driver.js',
             format: 'cjs',
+            sourcemap: true,
         },
         plugins: [babel({ babelHelpers: 'runtime' })],
     },
@@ -19,6 +20,7 @@ export default [
         output: {
             file: 'dist/runner.js',
             format: 'cjs',
+            sourcemap: true,
         },
         plugins: [babel({ babelHelpers: 'runtime' })],
     },
@@ -28,6 +30,7 @@ export default [
             file: 'dist/backend.js',
             format: 'iife',
             name: 'ReactAppActionsBackend',
+            sourcemap: true,
         },
         plugins: [
             commonjs(),

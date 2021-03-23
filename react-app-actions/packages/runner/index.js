@@ -8,11 +8,7 @@ export async function run() {
 
     try {
         for await (let flow of flows) {
-            const runner = new Runner(flow, {
-                headless: Boolean(process.env.CI),
-                devtools: true,
-                args: [`--window-size=1500,1300`],
-            });
+            const runner = new Runner(flow);
             await runner.run();
         }
     } catch (e) {
