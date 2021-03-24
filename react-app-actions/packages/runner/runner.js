@@ -43,14 +43,14 @@ export default class Runner {
                 return;
             }
 
-            console.log('[backend:log]', msg.text());
+            console.log('[runtime:log]', msg.text());
         });
 
         await this.page.evaluateOnNewDocument(
-            fs.readFileSync(require.resolve('react-app-actions/dist/backend.js'), 'utf8'),
+            fs.readFileSync(require.resolve('react-app-actions/dist/runtime.js'), 'utf8'),
         );
         await this.page.evaluateOnNewDocument(() => {
-            ReactAppActionsBackend.installBackend(window);
+            ReactAppActions.installBackend(window);
         });
         await this.page.setViewport({
             width: 1500,
@@ -65,18 +65,12 @@ export default class Runner {
         if (step.with === 'document') {
             if (step.assert) {
                 const [pathToActual, matcher, expected] = step.assert;
-                const value = await this.page.evaluate(
-                    path => ReactAppActionsBackend.utils.get(document, path),
-                    pathToActual,
-                );
+                const value = await this.page.evaluate(path => ReactAppActions.utils.get(document, path), pathToActual);
                 await expect(value)[matcher](expected);
                 return true;
             }
         } else {
-            return await this.page.evaluate(
-                step => ReactAppActionsBackend.dispatch(ReactAppActionsBackend, step),
-                step,
-            );
+            return await this.page.evaluate(step => ReactAppActions.dispatch(ReactAppActions.renderer, step), step);
         }
     };
 

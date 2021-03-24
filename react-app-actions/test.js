@@ -13,9 +13,9 @@ async function test(page) {
     const browser = await puppeteer.launch({ headless: !!process.env.CI, devtools: true });
     const page = await browser.newPage();
 
-    await page.evaluateOnNewDocument(fs.readFileSync('./dist/backend.js', 'utf8'));
+    await page.evaluateOnNewDocument(fs.readFileSync('./dist/runtime.js', 'utf8'));
     await page.evaluateOnNewDocument(() => {
-        ReactAppActionsBackend.installBackend(window);
+        ReactAppActions.installBackend(window);
     });
 
     await page.goto(baseUrl);

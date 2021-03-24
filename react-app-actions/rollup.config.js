@@ -27,11 +27,11 @@ export default [
         plugins: [babel({ babelHelpers: 'runtime' })],
     },
     {
-        input: 'packages/backend/index.js',
+        input: 'packages/runtime/index.js',
         output: {
-            file: 'dist/backend.js',
+            file: 'dist/runtime.js',
             format: 'iife',
-            name: 'ReactAppActionsBackend',
+            name: 'ReactAppActions',
             sourcemap,
         },
         plugins: [
