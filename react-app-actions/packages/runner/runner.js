@@ -34,17 +34,9 @@ export default class Runner {
         this.page = await this.browser.newPage();
 
         this.page.on('console', msg => {
-            if (msg.type() !== 'log') {
-                return;
+            if (msg.type() === 'info') {
+                console.log('[runtime]', msg.text());
             }
-
-            const text = msg.text();
-
-            if (text.startsWith('[Fast Refresh]')) {
-                return;
-            }
-
-            console.log('[runtime:log]', msg.text());
         });
 
         await this.page.evaluateOnNewDocument(
