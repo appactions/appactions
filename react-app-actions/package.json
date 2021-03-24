@@ -35,7 +35,7 @@
         "rollup": "^2.41.4"
     },
     "scripts": {
-        "build:devtools-vendor": "./packages/backend/vendor/build-backend-renderer.sh",
+        "build:devtools-vendor": "./packages/runtime/vendor/build-backend-renderer.sh",
         "build": "rollup --config rollup.config.js",
         "postinstall": "yarn run build",
         "test": "node test.js"

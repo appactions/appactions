@@ -12,45 +12,46 @@ export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
         getDisplayNameForFiberID,
     } = devtoolsInterface;
 
-    const findFiber = element => {
-        const id = getFiberIDForNative(element);
+    // const findFiber = element => {
+    //     const id = getFiberIDForNative(element);
 
-        if (!id) {
-            throw new Error('could not locate React node for DOM element');
-        }
+    //     if (!id) {
+    //         throw new Error('could not locate React node for DOM element');
+    //     }
 
-        return findCurrentFiberUsingSlowPathById(id);
-    };
-    // use when looking for a fiber because want to run an interaction on it
-    const findFiberForInteraction = element => {
-        let fiber = findFiber(element);
+    //     return findCurrentFiberUsingSlowPathById(id);
+    // };
+    // // use when looking for a fiber because want to run an interaction on it
+    // const findFiberForInteraction = element => {
+    //     let fiber = findFiber(element);
 
-        // find the highest parent, which returns the same dom nodes as the argument
-        while (fiber.return) {
-            const els = findNativeNodes(fiber.return);
+    //     // find the highest parent, which returns the same dom nodes as the argument
+    //     while (fiber.return) {
+    //         const els = findNativeNodes(fiber.return);
 
-            if (els.length !== 1) {
-                return fiber;
-            }
+    //         if (els.length !== 1) {
+    //             return fiber;
+    //         }
 
-            if (els[0] !== element) {
-                return fiber;
-            }
+    //         if (els[0] !== element) {
+    //             return fiber;
+    //         }
 
-            fiber = fiber.return;
-        }
+    //         fiber = fiber.return;
+    //     }
 
-        return fiber;
-    };
-    const findNativeNodes = fiber => findNativeNodesForFiberID(getFiberID(getPrimaryFiber(fiber)));
-    const getOwner = fiber => {
-        if (fiber._debugOwner) {
-            return fiber._debugOwner;
-        }
+    //     return fiber;
+    // };
+    // const findNativeNodes = fiber => findNativeNodesForFiberID(getFiberID(getPrimaryFiber(fiber)));
+    // const getOwner = fiber => {
+    //     if (fiber._debugOwner) {
+    //         return fiber._debugOwner;
+    //     }
 
-        // TODO when does the `_debugOwner` missing?
-        throw new Error('`getOwner` was called on a fiber that has no owner');
-    };
+    //     // TODO when does the `_debugOwner` missing?
+    //     throw new Error('`getOwner` was called on a fiber that has no owner');
+    // };
+
     const listFibersByPredicate = (fiber, predicate) => _listFibersByPredicate(fiber, predicate, true);
     const _listFibersByPredicate = (fiber, predicate, head) => {
         const isMatch = predicate(fiber);
@@ -67,26 +68,26 @@ export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
         return results;
     };
 
-    const findAncestorElementByPredicate = (fiber, predicate) => {
-        while ((fiber = fiber.return)) {
-            if (predicate(fiber)) {
-                return fiber;
-            }
-        }
+    // const findAncestorElementByPredicate = (fiber, predicate) => {
+    //     while ((fiber = fiber.return)) {
+    //         if (predicate(fiber)) {
+    //             return fiber;
+    //         }
+    //     }
 
-        return null;
-    };
+    //     return null;
+    // };
 
     const getDisplayName = fiber => getDisplayNameForFiberID(getFiberID(getPrimaryFiber(fiber)));
 
     return {
-        findFiber,
-        findFiberForInteraction,
-        findNativeNodes,
+        // findFiber,
+        // findFiberForInteraction,
+        // findNativeNodes,
         listFibersByPredicate,
-        findAncestorElementByPredicate,
+        // findAncestorElementByPredicate,
         getDisplayName,
-        getOwner,
+        // getOwner,
 
         // react calls these i guess
         handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,

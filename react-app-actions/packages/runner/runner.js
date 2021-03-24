@@ -11,12 +11,13 @@ export default class Runner {
         this.browser = null;
         this.page = null;
         this.headless = Boolean(process.env.CI);
+        this.devtools = Boolean(process.env.DEVTOOLS);
     }
 
     init = async () => {
         this.browser = await puppeteer.launch({
             headless: this.headless,
-            devtools: true,
+            devtools: this.devtools,
             args: [
                 `--window-size=1500,1300`,
                 `--remote-debugging-address=0.0.0.0`,

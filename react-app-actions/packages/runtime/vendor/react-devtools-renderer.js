@@ -12110,7 +12110,11 @@ function attach(hook, rendererID, renderer, global) {
     startProfiling: startProfiling,
     stopProfiling: stopProfiling,
     storeAsGlobal: storeAsGlobal,
-    updateComponentFilters: updateComponentFilters
+    updateComponentFilters: updateComponentFilters,
+    // added for React App Actions
+    findCurrentFiberUsingSlowPathById: findCurrentFiberUsingSlowPathById,
+    getFiberID: getFiberID,
+    getPrimaryFiber: getPrimaryFiber
   };
 }
 
