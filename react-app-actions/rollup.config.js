@@ -3,6 +3,8 @@ import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 
+const sourcemap = process.env.NODE_ENV === 'production' ? false : 'inline';
+
 export default [
     {
         input: 'packages/driver/index.js',
@@ -10,7 +12,7 @@ export default [
         output: {
             file: 'dist/driver.js',
             format: 'cjs',
-            sourcemap: true,
+            sourcemap,
         },
         plugins: [babel({ babelHelpers: 'runtime' })],
     },
@@ -20,7 +22,7 @@ export default [
         output: {
             file: 'dist/runner.js',
             format: 'cjs',
-            sourcemap: true,
+            sourcemap,
         },
         plugins: [babel({ babelHelpers: 'runtime' })],
     },
@@ -30,7 +32,7 @@ export default [
             file: 'dist/backend.js',
             format: 'iife',
             name: 'ReactAppActionsBackend',
-            sourcemap: true,
+            sourcemap,
         },
         plugins: [
             commonjs(),
