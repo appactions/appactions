@@ -1,11 +1,17 @@
-import { read, validate, flatten, resolve } from './flow';
+import { read, validate, flatten, parse, resolve } from './flow';
 import Runner from './runner';
 
 export async function run() {
-    const flows = await read().then(flows => flows.filter(validate).map(flatten).map(resolve));
+    const flows = await read().then(flows =>
+        flows
+            .filter(flow => Boolean(flow.content))
+            .map(parse)
+            .map(flatten)
+            .map(resolve)
+            .filter(validate),
+    );
 
     let error;
-
     try {
         for await (let flow of flows) {
             const runner = new Runner(flow);

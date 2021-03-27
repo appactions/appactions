@@ -5,8 +5,9 @@ import fs from 'fs';
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
 export default class Runner {
-    constructor(flow) {
-        this.flow = flow;
+    constructor({ content, fileName }) {
+        this.flow = content;
+        this.fileName = fileName;
         this.currentVariant = null;
         this.browser = null;
         this.page = null;
@@ -28,7 +29,7 @@ export default class Runner {
     };
 
     startVariant = async variant => {
-        const startUrl = `${baseUrl}${this.flow.get('start').get('route')}`;
+        const startUrl = `${baseUrl}${this.flow['start']['route']}`;
         console.log('=== running variant:', { variant, startUrl });
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
@@ -52,10 +53,8 @@ export default class Runner {
         await this.page.goto(startUrl);
     };
 
-    processStep = async stepMap => {
-        const step = Object.fromEntries(stepMap);
-
-        if (step.with === 'document') {
+    processStep = async step => {
+        if (step.with.role === 'document') {
             if (step.assert) {
                 const [pathToActual, matcher, expected] = step.assert;
                 const value = await this.page.evaluate(path => ReactAppActions.utils.get(document, path), pathToActual);
@@ -76,14 +75,13 @@ export default class Runner {
 
     run = async () => {
         await this.init();
-
-        for await (let [variant, steps] of Object.entries(this.flow.get('flattenedSteps'))) {
+        for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
             await this.startVariant(variant);
 
             for await (let step of steps) {
                 const result = await this.processStep(step);
                 if (result === true) {
-                    console.log('-', step.get('with'), '✓');
+                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✓');
                 } else {
                     console.log('-', step);
                 }
