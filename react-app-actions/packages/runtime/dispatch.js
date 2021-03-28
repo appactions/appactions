@@ -12,7 +12,7 @@ export async function dispatch(renderer, command) {
         if (fiber.stateNode instanceof HTMLElement) {
             console.log('visited:', {
                 displayName: renderer.getDisplayName(fiber),
-                role: getRole(fiber.stateNode, roles),
+                role: getRole(fiber.stateNode),
                 name: computeAccessibleName(fiber.stateNode),
             });
         }
@@ -196,31 +196,42 @@ const roles = [
     { element: 'textarea', role: 'textbox' },
 ];
 
-function getRole(element) {
+export function getRole(element) {
     const tag = element.nodeName.toLowerCase();
     const match = roles.find(role => {
-        if (tag !== role.role) {
+        if (tag !== role.element) {
             return false;
         }
 
         if (role.attributes) {
-            for (let { attributeName, value, shouldNotExist } of role.attributes) {
-                const attr = element.getAttribute(attributeName);
+            return role.attributes.every(({ attributeName, value, shouldNotExist }) => {
+                const hasAttribute = element.hasAttribute(attributeName);
 
-                if (shouldNotExist && attr) {
+                if (shouldNotExist) {
+                    if (hasAttribute) {
+                        return false;
+                    }
+                } else if (value) {
+                    if (element.getAttribute(attributeName) !== value) {
+                        return false;
+                    }
+                } else if (!hasAttribute) {
                     return false;
                 }
 
-                if (attr !== value) {
-                    return false;
-                }
-            }
+                return true;
+            });
         }
 
         return true;
     });
 
     if (match) {
+        // let's not handle generic roles (div and span) for now
+        if (match.role === 'generic') {
+            return null;
+        }
+
         return match.role;
     }
 
