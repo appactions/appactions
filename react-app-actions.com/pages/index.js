@@ -12,7 +12,13 @@ export default function Home() {
                     </h2>
                     <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
                         E2E testing is a high reward, high cost way to test. It gives more cofidence to the developer
-                        than any other approach.
+                        than any other approach. However getting it right is extremely hard.{' '}
+                        <span className="fadeout">
+                            E2E tests are flaky, cumbersome to write, executes slowly, needs constant maintanence, best
+                            practices are scarce, developers required to write explicit wait logic, or the retryability
+                            is limited, needs web development experience to write good tests, fixing broken tests are
+                            hard work...
+                        </span>
                     </p>
                 </div>
             </section>
