@@ -12,7 +12,7 @@ function Hero() {
                                     Leave behind flaky E2E tests <span className="text-teal-500">forever</span>.
                                 </span>
                             </h1>
-                            <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                            <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                                 Be incredibly productive in testing. Record user sessions inside the browser, keep
                                 result in source control. Achieve incredible stability thanks to the React-aware test
                                 runner.

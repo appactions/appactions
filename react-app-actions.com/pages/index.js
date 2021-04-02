@@ -210,8 +210,8 @@ export default function Home() {
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
                                             Enjoy the high-level nature of in-browser solutions, while utilizing all
-                                            benefits of Selenium. Develop with a sharp high-level API, test with a
-                                            mature browser automator.
+                                            benefits of Selenium. Develop with an effective high-level API, test with a
+                                            mature browser automation tool.
                                         </p>
                                     </div>
                                 </div>
