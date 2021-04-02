@@ -4,7 +4,7 @@ function Header() {
     const onClickCTA = event => {
         event.preventDefault();
 
-        const cta = document.querySelector('[data-cta="main-input"]');
+        const cta = document.querySelector('[data-cta="cta-input"]');
         cta.scrollIntoView({ behavior: 'smooth' });
         cta.focus();
     };
