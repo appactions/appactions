@@ -9,6 +9,22 @@ module.exports = {
                 teal: colors.teal,
                 cyan: colors.cyan,
             },
+            fontFamily: {
+                // reorder list to resembe more to VSCode
+                mono: [
+                    'Monaco', // Monaco is the VSCode font on Mac
+                    'Menlo', // Menlo is on Window (I think)
+                    'ui-monospace',
+                    'SFMono-Regular',
+                    'Consolas',
+                    '"Liberation Mono"',
+                    '"Courier New"',
+                    'monospace',
+                ],
+            },
+            width: {
+                192: '48rem',
+            },
         },
     },
     variants: {

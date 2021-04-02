@@ -1,4 +1,5 @@
 import SignUp from 'components/signup';
+import Demo from 'components/demo';
 
 function Hero() {
     return (
@@ -29,9 +30,9 @@ function Hero() {
                         </div>
                     </div>
                     <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
-                        <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg sm:overflow-hidden">
+                        <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg">
                             <div className="px-4 py-8 sm:px-10">
-                                <div className="block bg-gray-800 border rounded-xl w-96 h-96"></div>
+                                <Demo />
                             </div>
                         </div>
                     </div>
