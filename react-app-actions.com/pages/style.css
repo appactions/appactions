@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer base {
+@layer base {
     body {
-        @apply bg-fixed bg-gradient-to-br from-black to-blue-900;
+        @apply min-h-screen antialiased bg-white text-gray-900;
     }
-} */
+}
+
+@layer utilities {
+    .backdrop {
+        @apply flex flex-grow;
+        background: linear-gradient(0deg, #00000065 30%, #ffffff44 100%);
+        z-index: 1;
+    }
+}
