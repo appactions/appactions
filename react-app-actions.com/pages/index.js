@@ -360,12 +360,22 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div className="px-8 py-12 overflow-hidden bg-teal-400 rounded-lg shadow-xl lg:grid lg:grid-cols-2 lg:gap-4">
-                    <h3 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-white sm:text-2xl lg:text-4xl">
-                        What to be an early adopter? Join the wait list:
-                    </h3>
-                    <SignUp label="Sign Up" />
+            <section className="relative">
+                <div className="absolute left-0 right-0 h-1/2 bg-warm-gray-50" aria-hidden="true" />
+                <div className="relative px-4 mx-auto max-w-7xl lg:px-8">
+                    <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-teal-500 sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
+                        <div className="lg:w-0 lg:flex-1">
+                            <h2 className="text-3xl font-extrabold tracking-tight text-white">
+                                What to be an early adopter?
+                            </h2>
+                            <p className="max-w-3xl mt-4 text-lg text-cyan-100">
+                                Join the wait list to get notified when React App Actions is available.
+                            </p>
+                        </div>
+                        <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
+                            <SignUp label="Sign Up" />
+                        </div>
+                    </div>
                 </div>
             </section>
         </>

@@ -22,4 +22,9 @@
     .fadeout::selection {
         @apply text-gray-900 bg-indigo-200;
     }
+
+    .dark-scrollbar {
+        /* this will only work on FireFox */
+        scrollbar-color: theme('colors.gray.500') transparent;
+    }
 }

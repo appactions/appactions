@@ -1,4 +1,5 @@
 import Logo from 'components/logo';
+import Link from 'next/link';
 
 function Header() {
     const onClickCTA = event => {
@@ -13,10 +14,12 @@ function Header() {
             <div className="px-4 mx-auto max-w-7xl sm:px-6">
                 <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
                     <div className="flex justify-start lg:w-0 lg:flex-1">
-                        <a href="#">
-                            <span className="sr-only">Workflow</span>
-                            <Logo />
-                        </a>
+                        <Link href="/">
+                            <a>
+                                <span className="sr-only">Workflow</span>
+                                <Logo />
+                            </a>
+                        </Link>
                     </div>
                     <div className="-my-2 -mr-2 md:hidden">
                         <button
@@ -37,11 +40,14 @@ function Header() {
                         <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
                             Benefits
                         </a>
+                        <Link href="/about">
+                            <a className="text-base font-medium text-gray-500 hover:text-gray-900">About</a>
+                        </Link>
                     </nav>
                     <div className="items-center justify-end hidden md:flex md:flex-1 lg:w-0">
                         <button
                             onClick={onClickCTA}
-                            className="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-gray-900 border-4 rounded-full"
+                            className="block px-4 py-3 font-medium text-white bg-teal-500 rounded-full shadow hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-300 focus:ring-offset-gray-900"
                         >
                             Join wait list
                         </button>

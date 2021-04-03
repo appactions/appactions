@@ -6,7 +6,7 @@ function Hero() {
         <main className="mt-16 sm:mt-24">
             <div className="mx-auto max-w-7xl">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    <div className="px-4 sm:px-6 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
+                    {/* <div className="px-4 sm:px-6 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
                         <div>
                             <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
                                 <span className="md:block">
@@ -28,7 +28,7 @@ function Hero() {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
                         <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg">
                             <div className="px-4 py-8 sm:px-10">
