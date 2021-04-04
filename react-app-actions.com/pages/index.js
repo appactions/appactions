@@ -22,7 +22,7 @@ export default function Home() {
                     </p>
                 </div>
             </section>
-            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl">
+            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl" id="vision">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                         React App Action introduces a <span className="text-teal-500">holistic&nbsp;change</span> to
@@ -33,7 +33,7 @@ export default function Home() {
                     </p>
                 </div>
             </section>
-            <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl">
+            <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl" id="how-does-it-work">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-center text-gray-900 sm:text-2xl lg:text-4xl lg:text-left">
                         This is how it works:
@@ -127,7 +127,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="relative py-16 bg-white sm:py-24 lg:py-32">
+            <section className="relative py-16 bg-white sm:py-24 lg:py-32" id="benefits">
                 <div className="max-w-md px-4 mx-auto text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                     <h2 className="text-base font-semibold tracking-wider text-indigo-600 uppercase">Benefits</h2>
                     <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -357,7 +357,7 @@ export default function Home() {
                     <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-teal-500 sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
                         <div className="lg:w-0 lg:flex-1">
                             <h2 className="text-3xl font-extrabold tracking-tight text-white">
-                                What to be an early adopter?
+                                Want to be an early adopter?
                             </h2>
                             <p className="max-w-3xl mt-4 text-lg">
                                 Join the waitlist to get notified when React App Actions is available.

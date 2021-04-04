@@ -13,9 +13,13 @@ const animation = [
     { code: '  - with: { form }####', cursorTarget: '[data-demo="submit"]' },
     { code: '    do: submit####', submit: true },
     { submitted: true },
-    { submitted: true },
-    { submitted: true },
-    { submitted: true },
+    { cursorTarget: '[data-demo="alert"]' },
+    { code: '  - with: { alert }####' },
+    { code: '    assert: [message, toBe, Success!]####' },
+    {},
+    {},
+    {},
+    {},
 ].reduce(
     (acc, curr) => {
         const last = acc[acc.length - 1];
@@ -196,7 +200,7 @@ function AppMockup({ step }) {
             </div>
         </form>
     ) : (
-        <div className="p-4 rounded-md bg-green-50">
+        <div className="p-4 rounded-md bg-green-50" data-demo="alert">
             <div className="flex">
                 <div className="flex-shrink-0">
                     {/* Heroicon name: solid/check-circle */}
