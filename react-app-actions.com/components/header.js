@@ -15,7 +15,7 @@ function Header() {
                 <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
                     <div className="flex justify-start lg:w-0 lg:flex-1">
                         <Link href="/">
-                            <a>
+                            <a className="block w-40 text-brand-green">
                                 <span className="sr-only">Workflow</span>
                                 <Logo />
                             </a>
@@ -49,7 +49,7 @@ function Header() {
                             onClick={onClickCTA}
                             className="block px-4 py-3 font-medium text-white bg-teal-500 rounded-full shadow hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
                         >
-                            Join wait list
+                            Join waitlist
                         </button>
                     </div>
                 </div>

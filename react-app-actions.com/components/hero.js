@@ -20,7 +20,7 @@ function HeroText() {
                     <p className="mt-3 text-sm text-gray-400 sm:mt-4">
                         React App Actions is not ready for public release, but it's close!
                         <br />
-                        Join the wait list to be notified when it's available.
+                        Join the waitlist to be notified when it's available.
                     </p>
                 </div>
             </div>

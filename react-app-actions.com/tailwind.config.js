@@ -7,7 +7,13 @@ module.exports = {
         extend: {
             colors: {
                 teal: colors.teal,
-                cyan: colors.cyan,
+                brand: {
+                    red: '#DF2935',
+                    green: '#86BA90',
+                    yellow: '#F5F3BB',
+                    tan: '#DFA06E',
+                    brown: '#412722',
+                },
             },
             fontFamily: {
                 // reorder list to resembe more to VSCode

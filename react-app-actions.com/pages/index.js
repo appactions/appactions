@@ -359,8 +359,8 @@ export default function Home() {
                             <h2 className="text-3xl font-extrabold tracking-tight text-white">
                                 What to be an early adopter?
                             </h2>
-                            <p className="max-w-3xl mt-4 text-lg text-cyan-100">
-                                Join the wait list to get notified when React App Actions is available.
+                            <p className="max-w-3xl mt-4 text-lg">
+                                Join the waitlist to get notified when React App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
