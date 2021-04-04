@@ -6,6 +6,10 @@
     body {
         @apply min-h-screen antialiased bg-white text-gray-900;
     }
+
+    ol li::marker {
+        @apply text-gray-500;
+    }
 }
 
 @layer utilities {

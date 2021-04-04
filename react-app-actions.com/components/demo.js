@@ -10,7 +10,7 @@ const animation = [
     { code: '    do: { type##: foo bar## }', input: 'foo bar' },
     { code: '  - with: { textarea: Review }####', cursorTarget: '[data-demo="textarea"]' },
     { code: '    do: { type##: qwe asd wedf sadf as## }', textarea: 'qwe asd wedf sadf as' },
-    { code: '  - with: { button: Submit }####', cursorTarget: '[data-demo="submit"]' },
+    { code: '  - with: { form }####', cursorTarget: '[data-demo="submit"]' },
     { code: '    do: submit####', submit: true },
     { submitted: true },
 ].reduce(

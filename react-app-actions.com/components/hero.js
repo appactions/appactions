@@ -33,7 +33,7 @@ function Hero() {
         <main className="mt-16 sm:mt-24">
             <div className="mx-auto max-w-7xl">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                    {/* <HeroText /> */}
+                    <HeroText />
                     <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
                         <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg">
                             <div className="px-4 py-8 sm:px-10">
