@@ -103,6 +103,53 @@ function Demo() {
     );
 }
 
+function useTyping(str) {
+    const [pos, setPos] = useState(0);
+    useEffect(() => {
+        let i = 0;
+        let interval = setInterval(() => {
+            if (i < str.length) {
+                setPos(++i);
+            } else {
+                clearInterval(interval);
+            }
+        }, 30);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return pos;
+}
+
+function TypingInput({ value }) {
+    const pos = useTyping(value);
+    return (
+        <input
+            type="text"
+            className="flex-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+            placeholder="www.example.com"
+            value={value.slice(0, pos)}
+            readOnly
+            data-demo="input"
+        />
+    );
+}
+
+function TypingTextarea({ value }) {
+    const pos = useTyping(value);
+    return (
+        <textarea
+            id="about"
+            name="about"
+            rows={3}
+            className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            value={value.slice(0, pos)}
+            readOnly
+            data-demo="textarea"
+        />
+    );
+}
+
 function AppMockup({ step }) {
     const [state, setState] = useState(animation[0]);
     useEffect(() => setState(animation[step]));
@@ -116,14 +163,7 @@ function AppMockup({ step }) {
                                 Website
                             </label>
                             <div className="flex mt-1 rounded-md shadow-sm">
-                                <input
-                                    type="text"
-                                    className="flex-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
-                                    placeholder="www.example.com"
-                                    value={state.input}
-                                    readOnly
-                                    data-demo="input"
-                                />
+                                <TypingInput value={state.input} key={state.input} />
                             </div>
                         </div>
                     </div>
@@ -132,15 +172,7 @@ function AppMockup({ step }) {
                             Review
                         </label>
                         <div className="mt-1">
-                            <textarea
-                                id="about"
-                                name="about"
-                                rows={3}
-                                className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                value={state.textarea}
-                                readOnly
-                                data-demo="textarea"
-                            />
+                            <TypingTextarea key={state.textarea} value={state.textarea} />
                         </div>
                     </div>
                 </div>
