@@ -115,7 +115,7 @@ function SignUp({ label = 'Join wait list' }) {
                         name="email"
                         placeholder="Enter your email"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="block w-full px-4 py-3 text-base text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-300 focus:ring-offset-gray-900"
+                        className="block w-full px-4 py-3 text-base text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
                         data-cta="cta-input"
                     />
                 </div>
@@ -123,7 +123,7 @@ function SignUp({ label = 'Join wait list' }) {
                     <button
                         type="submit"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="block w-full px-4 py-3 font-medium text-white bg-teal-500 shadow rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-300 focus:ring-offset-gray-900"
+                        className="block w-full px-4 py-3 font-medium text-white bg-teal-500 shadow rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
                     >
                         {label}
                     </button>

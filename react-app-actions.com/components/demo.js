@@ -133,7 +133,7 @@ function TypingInput({ value }) {
     return (
         <input
             type="text"
-            className="flex-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+            className="flex-1 block w-full border-gray-300 rounded-md focus:ring-teal-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
             placeholder="www.example.com"
             value={value.slice(0, pos)}
             readOnly
@@ -149,7 +149,7 @@ function TypingTextarea({ value }) {
             id="about"
             name="about"
             rows={3}
-            className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-teal-500 focus:border-indigo-500 sm:text-sm rounded-md"
             value={value.slice(0, pos)}
             readOnly
             data-demo="textarea"
@@ -186,7 +186,7 @@ function AppMockup({ step }) {
                 <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
                     <button
                         type="submit"
-                        className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                         disabled={state.submit}
                         data-demo="submit"
                     >
