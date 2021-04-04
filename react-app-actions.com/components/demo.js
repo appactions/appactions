@@ -39,17 +39,16 @@ function Cursor({ step }) {
 
     return (
         <svg
-            x="0px"
-            y="0px"
-            viewBox="0 0 28 28"
-            xmlSpace="preserve"
+            viewBox="0 0 22 24"
+            fill="none"
             className="fixed block w-8 h-8"
             style={{ top: position.top + position.height * 0.3, left: position.left + position.width * 0.7 }}
         >
-            <path fill="#FFF" d="M8.2 20.9L8.2 4.9 19.8 16.5 13 16.5 12.6 16.6z" />
-            <path fill="#FFF" d="M17.3 21.6L13.7 23.1 9 12 12.7 10.5z" />
-            <path transform="rotate(-22.773 13.483 17.596)" d="M12.5 13.6H14.5V21.6H12.5z" />
-            <path d="M9.2 7.3L9.2 18.5 12.2 15.6 12.6 15.5 17.4 15.5z" />
+            <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
+            <path
+                d="M7 17.1l.26 1.28.67-1.12 2.9-4.83 5.3-1.45 1.14-.3-1.02-.61-11-6.5-.95-.56.2 1.08 2.5 13z"
+                stroke="#fff"
+            />
         </svg>
     );
 }
