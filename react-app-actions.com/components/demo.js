@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 
+// the /##(.*)##/ thing means that part will be "typed in the animation"
+// #### at the end indicates the whole line should appear instantly
 const animation = [
     { code: 'name: Feedback form' },
     { code: 'description: General user flows.' },
     { code: 'steps:' },
-    { code: '  - with: { input: Website }', cursorTarget: '[data-demo="input"]' },
-    { code: '    do: { type: foo bar }', input: 'foo bar' },
-    { code: '  - with: { textarea##: Review## }', cursorTarget: '[data-demo="textarea"]' },
+    { code: '  - with: { input: Website }####', cursorTarget: '[data-demo="input"]' },
+    { code: '    do: { type##: foo bar## }', input: 'foo bar' },
+    { code: '  - with: { textarea: Review }####', cursorTarget: '[data-demo="textarea"]' },
     { code: '    do: { type##: qwe asd wedf sadf as## }', textarea: 'qwe asd wedf sadf as' },
-    { code: '  - with: { button: Submit }', cursorTarget: '[data-demo="submit"]' },
-    { code: '    do: submit', submit: true },
+    { code: '  - with: { button: Submit }####', cursorTarget: '[data-demo="submit"]' },
+    { code: '    do: submit####', submit: true },
     { submitted: true },
 ].reduce(
     (acc, curr) => {
@@ -28,7 +30,7 @@ const animation = [
 
 function Cursor({ step }) {
     const { cursorTarget } = animation[step];
-    const [position, setPosition] = useState({ x: -100, y: -100, width: 0 });
+    const [position, setPosition] = useState(null);
 
     useEffect(() => {
         const el = document.querySelector(cursorTarget);
@@ -37,13 +39,12 @@ function Cursor({ step }) {
         }
     }, [cursorTarget]);
 
+    const style = position
+        ? { top: position.top + position.height * 0.3, left: position.left + position.width * 0.7 }
+        : { display: 'none' };
+
     return (
-        <svg
-            viewBox="0 0 22 24"
-            fill="none"
-            className="fixed block w-8 h-8"
-            style={{ top: position.top + position.height * 0.3, left: position.left + position.width * 0.7 }}
-        >
+        <svg viewBox="0 0 22 24" fill="none" className="fixed block w-8 h-8" style={style}>
             <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
             <path
                 d="M7 17.1l.26 1.28.67-1.12 2.9-4.83 5.3-1.45 1.14-.3-1.02-.61-11-6.5-.95-.56.2 1.08 2.5 13z"
@@ -163,21 +164,19 @@ function AppMockup({ step }) {
 
 function TypingLine({ line }) {
     const [pos, setPos] = useState(0);
-    const [typeStr, setTypeStr] = useState('');
+    const [substringToType, setTypeStr] = useState(null);
 
     useEffect(() => {
-        console.log(line);
         const typeMatch = line.match(/##(.*)##/);
-        if (typeMatch) {
-            setTypeStr(typeMatch[1]);
-        } else {
-            setTypeStr(line);
+        const substringToType = typeMatch && typeMatch[1];
+
+        if (typeof substringToType === 'string') {
+            setTypeStr(substringToType);
         }
 
-        console.log(typeStr);
         let i = 0;
         let interval = setInterval(() => {
-            if (i < typeStr.length) {
+            if (i < typeof substringToType === 'string' ? substringToType.length : line.length) {
                 setPos(++i);
             } else {
                 clearInterval(interval);
@@ -187,8 +186,11 @@ function TypingLine({ line }) {
         return () => clearInterval(interval);
     }, []);
 
-    const typing = typeStr.slice(0, pos);
-    return <li>{line.replace(/##.*##/, typing).replace(/ /g, '\u00a0')}</li>;
+    const typing =
+        typeof substringToType === 'string'
+            ? line.replace(/##.*##/, substringToType.slice(0, pos))
+            : line.slice(0, pos);
+    return <li>{typing.replace(/ /g, '\u00a0')}</li>;
 }
 
 function TestCode({ step }) {
