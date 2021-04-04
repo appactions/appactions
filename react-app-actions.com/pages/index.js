@@ -38,7 +38,7 @@ export default function Home() {
                     <h2 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-center text-gray-900 sm:text-2xl lg:text-4xl lg:text-left">
                         This is how it works:
                     </h2>
-                    <p className="mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
+                    <div className="mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
                         <div className="relative mx-auto max-w-7xl">
                             <div className="max-w-lg mx-auto mt-12 grid gap-5 lg:grid-cols-4 lg:max-w-none">
                                 <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
@@ -46,7 +46,7 @@ export default function Home() {
                                         <img
                                             className="object-cover w-full h-32"
                                             src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
-                                            alt
+                                            alt=""
                                         />
                                     </div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
@@ -70,7 +70,7 @@ export default function Home() {
                                         <img
                                             className="object-cover w-full h-32"
                                             src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
-                                            alt
+                                            alt=""
                                         />
                                     </div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
@@ -93,7 +93,7 @@ export default function Home() {
                                         <img
                                             className="object-cover w-full h-32"
                                             src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
-                                            alt
+                                            alt=""
                                         />
                                     </div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
@@ -110,7 +110,7 @@ export default function Home() {
                                         <img
                                             className="object-cover w-full h-32"
                                             src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
-                                            alt
+                                            alt=""
                                         />
                                     </div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
@@ -124,7 +124,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                    </p>
+                    </div>
                 </div>
             </section>
             <section className="relative py-16 bg-white sm:py-24 lg:py-32">

@@ -27,4 +27,10 @@
         /* this will only work on FireFox */
         scrollbar-color: theme('colors.gray.500') transparent;
     }
+
+    .cursor-transition {
+        transition-property: left, top;
+        transition-timing-function: ease-out;
+        transition-duration: 250ms;
+    }
 }

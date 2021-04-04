@@ -44,7 +44,7 @@ function Cursor({ step }) {
         : { display: 'none' };
 
     return (
-        <svg viewBox="0 0 22 24" fill="none" className="fixed block w-8 h-8" style={style}>
+        <svg viewBox="0 0 22 24" fill="none" className="fixed block w-8 h-8 cursor-transition" style={style}>
             <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
             <path
                 d="M7 17.1l.26 1.28.67-1.12 2.9-4.83 5.3-1.45 1.14-.3-1.02-.61-11-6.5-.95-.56.2 1.08 2.5 13z"
@@ -57,22 +57,26 @@ function Cursor({ step }) {
 function Demo() {
     const [step, setStep] = useState(0);
     useEffect(() => {
-        const onStep = event => {
-            event.preventDefault();
-            setStep(step => {
-                let result = step;
-                if (event.key === 'ArrowRight') {
-                    result = step + 1;
-                } else if (event.key === 'ArrowLeft') {
-                    result = step - 1;
-                }
+        const interval = setInterval(() => {
+            setStep(step => (step + 1) % animation.length);
+        }, 1000);
+        return () => clearInterval(interval);
+        // const onStep = event => {
+        //     event.preventDefault();
+        //     setStep(step => {
+        //         let result = step;
+        //         if (event.key === 'ArrowRight') {
+        //             result = step + 1;
+        //         } else if (event.key === 'ArrowLeft') {
+        //             result = step - 1;
+        //         }
 
-                return Math.max(0, result % animation.length);
-            });
-        };
-        document.addEventListener('keyup', onStep);
+        //         return Math.max(0, result % animation.length);
+        //     });
+        // };
+        // document.addEventListener('keyup', onStep);
 
-        return () => document.removeEventListener('keyup', onStep);
+        // return () => document.removeEventListener('keyup', onStep);
     }, []);
     return (
         <>
