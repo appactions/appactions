@@ -2,12 +2,6 @@ import Logo from 'components/logo';
 import Link from 'next/link';
 
 function Header() {
-    const onClickCTA = event => {
-        event.preventDefault();
-
-        const cta = Array.from(document.querySelectorAll('[data-cta="cta-input"]')).slice(-1).pop();
-        cta.scrollIntoView({ behavior: 'smooth' });
-    };
     return (
         <div className="relative bg-white">
             <div className="px-4 mx-auto max-w-7xl sm:px-6">
@@ -52,12 +46,11 @@ function Header() {
                         </Link>
                     </nav>
                     <div className="items-center justify-end hidden md:flex md:flex-1 lg:w-0">
-                        <button
-                            onClick={onClickCTA}
-                            className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300"
-                        >
-                            Request access
-                        </button>
+                        <Link href="/about">
+                            <a className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300">
+                                Request access
+                            </a>
+                        </Link>
                     </div>
                 </div>
             </div>
