@@ -1,10 +1,45 @@
-import Hero from 'components/hero';
 import SignUp from 'components/signup';
+import Demo from 'components/demo';
 
 export default function Home() {
     return (
         <>
-            <Hero />
+            <section className="mt-16 sm:mt-24">
+                <div className="mx-auto max-w-7xl">
+                    <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+                        <div className="px-4 sm:px-6 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
+                            <div>
+                                <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
+                                    <span className="md:block">
+                                        Leave behind flaky E2E tests <span className="text-brand-green">forever</span>.
+                                    </span>
+                                </h1>
+                                <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                    Be incredibly productive in testing. Record user sessions inside your browser, keep
+                                    the result in source control. Achieve incredible stability thanks to the React-aware
+                                    test runner.
+                                </p>
+                                <div className="mt-10 sm:mt-12">
+                                    <SignUp />
+
+                                    <p className="mt-3 text-sm text-gray-400 sm:mt-4">
+                                        React App Actions is not ready for public release, but it's close!
+                                        <br />
+                                        Join the newsletter to be notified when it's available.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
+                            <div className="sm:max-w-md sm:w-full">
+                                <div className="sm:px-10">
+                                    <Demo />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
@@ -55,7 +90,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1496128858413-b36217c2ce36.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -79,7 +114,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1547586696-ea22b4d4235d.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -103,7 +138,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1492724441997-5dc865305da7.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -128,7 +163,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1498049860654-af1a5c566876.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -385,7 +420,7 @@ export default function Home() {
                                 Want to be an early adopter?
                             </h2>
                             <p className="max-w-3xl mt-4 text-lg text-white">
-                                Join the waitlist to get notified when React App Actions is available.
+                                Join the newletter to get notified when React App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">

@@ -42,18 +42,20 @@ function Cursor({ step }) {
     const [position, setPosition] = useState(null);
 
     useEffect(() => {
-        const el = document.querySelector(cursorTarget);
-        if (el) {
-            setPosition(el.getBoundingClientRect());
-        }
+        try {
+            const parent = document.querySelector('[data-demo="container"]').getBoundingClientRect();
+            const el = document.querySelector(cursorTarget).getBoundingClientRect();
+            setPosition({
+                left: el.left - parent.left + el.width * 0.7,
+                top: el.top - parent.top + el.height * 0.3,
+            });
+        } catch (e) {}
     }, [cursorTarget]);
 
-    const style = position
-        ? { top: position.top + position.height * 0.3, left: position.left + position.width * 0.7 }
-        : { display: 'none' };
+    const style = position ? { top: position.top, left: position.left } : { display: 'none' };
 
     return (
-        <svg viewBox="0 0 22 24" fill="none" className="fixed block w-8 h-8 cursor-transition" style={style}>
+        <svg viewBox="0 0 22 24" fill="none" className="absolute block w-8 h-8 cursor-transition" style={style}>
             <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
             <path
                 d="M7 17.1l.26 1.28.67-1.12 2.9-4.83 5.3-1.45 1.14-.3-1.02-.61-11-6.5-.95-.56.2 1.08 2.5 13z"
@@ -88,7 +90,7 @@ function Demo() {
         // return () => document.removeEventListener('keyup', onStep);
     }, []);
     return (
-        <>
+        <div className="relative" data-demo="container">
             <Cursor step={step} />
             <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl demo-window-size">
                 <div className="flex w-full h-8 pl-2 bg-gray-300">
@@ -114,7 +116,7 @@ function Demo() {
                     <TestCode step={step} />
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
