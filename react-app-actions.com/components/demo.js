@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // the /##(.*)##/ thing means that part will be "typed in the animation"
 // #### at the end indicates the whole line should appear instantly
 const animation = [
-    { code: 'name: Submit form' },
+    { code: 'name: Submit page' },
     { code: 'description: Should be able to submit links.' },
     { code: 'steps:' },
     { code: '  - with: { input: Website }####', cursorTarget: '[data-demo="input"]' },
@@ -107,7 +107,7 @@ function Demo() {
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
                     <span className="flex-1 font-sans text-center text-gray-300 leading-8 -ml-28">
-                        feedback.yml — IDE
+                        submit-page.yml — IDE
                     </span>
                 </div>
                 <div className="py-2 overflow-hidden text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
