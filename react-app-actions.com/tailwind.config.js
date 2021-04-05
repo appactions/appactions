@@ -28,9 +28,6 @@ module.exports = {
                     'monospace',
                 ],
             },
-            width: {
-                192: '40rem',
-            },
         },
     },
     variants: {

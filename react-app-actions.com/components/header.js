@@ -24,7 +24,7 @@ function Header() {
                 <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
                     <div className="flex justify-start lg:w-0 lg:flex-1">
                         <Link href="/">
-                            <a className="block w-40 text-brand-green">
+                            <a className="block w-52 text-brand-green">
                                 <span className="sr-only">Workflow</span>
                                 <Logo />
                             </a>

@@ -88,7 +88,7 @@ function Demo() {
     return (
         <>
             <Cursor step={step} />
-            <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl w-192">
+            <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl demo-window-size">
                 <div className="flex w-full h-8 pl-2 bg-gray-300">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
@@ -99,7 +99,7 @@ function Demo() {
                     <AppMockup step={step} />
                 </div>
             </div>
-            <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl w-192">
+            <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl demo-window-size">
                 <div className="flex w-full h-8 pl-2 bg-gray-700">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
