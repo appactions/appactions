@@ -359,12 +359,12 @@ export default function Home() {
                             <h2 className="text-3xl font-extrabold tracking-tight text-white">
                                 Want to be an early adopter?
                             </h2>
-                            <p className="max-w-3xl mt-4 text-lg">
+                            <p className="max-w-3xl mt-4 text-lg text-white">
                                 Join the waitlist to get notified when React App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
-                            <SignUp label="Sign Up" />
+                            <SignUp label="Sign Up" light />
                         </div>
                     </div>
                 </div>

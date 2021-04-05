@@ -7,7 +7,7 @@ const STATUSES = {
     SUCCESS: 'SUCCESS',
 };
 
-function SignUp({ label = 'Join waitlist' }) {
+function SignUp({ label = 'Join waitlist', light }) {
     const [status, setStatus] = useState(STATUSES.INIT);
     const onSubmit = event => {
         event.preventDefault();
@@ -23,8 +23,12 @@ function SignUp({ label = 'Join waitlist' }) {
                 'Content-Type': 'application/json',
             },
         })
-            .then(() => {
-                setStatus(STATUSES.SUCCESS);
+            .then(res => {
+                if (res.ok) {
+                    setStatus(STATUSES.SUCCESS);
+                } else {
+                    setStatus(STATUSES.ERROR);
+                }
             })
             .catch(() => {
                 setStatus(STATUSES.ERROR);
@@ -115,7 +119,11 @@ function SignUp({ label = 'Join waitlist' }) {
                         name="email"
                         placeholder="Enter your email"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="block w-full px-4 py-3 text-base text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
+                        className={
+                            light
+                                ? 'shadow block w-full px-4 py-3 text-base text-white placeholder-teal-400 border-4 border-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300'
+                                : 'shadow block w-full px-4 py-3 text-base text-gray-900 placeholder-teal-400 border-4 border-brand-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300'
+                        }
                         data-cta="cta-input"
                     />
                 </div>
@@ -123,7 +131,11 @@ function SignUp({ label = 'Join waitlist' }) {
                     <button
                         type="submit"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="block w-full px-4 py-3 font-medium text-white bg-teal-500 shadow rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
+                        className={
+                            light
+                                ? 'block px-4 py-3 font-medium border-4 shadow border-white text-white hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 disabled:opacity-50'
+                                : 'block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 disabled:opacity-50'
+                        }
                     >
                         {label}
                     </button>

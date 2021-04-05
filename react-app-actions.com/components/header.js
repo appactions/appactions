@@ -68,7 +68,7 @@ function Header() {
                     <div className="items-center justify-end hidden md:flex md:flex-1 lg:w-0">
                         <button
                             onClick={onClickCTA}
-                            className="block px-4 py-3 font-medium text-white bg-teal-500 rounded-full shadow hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:ring-offset-gray-900"
+                            className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300"
                         >
                             Join waitlist
                         </button>
