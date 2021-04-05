@@ -89,22 +89,24 @@ function Demo() {
         <>
             <Cursor step={step} />
             <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl w-192">
-                <div className="block w-full h-8 pl-2 bg-gray-300">
+                <div className="flex w-full h-8 pl-2 bg-gray-300">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
-                    <span className="inline-block font-sans text-center text-gray-700">AwesomeReactApp</span>
+                    <span className="flex-1 font-sans text-center text-gray-600 leading-8 -ml-28">AwesomeReactApp</span>
                 </div>
                 <div className="p-4 overflow-hidden h-96">
                     <AppMockup step={step} />
                 </div>
             </div>
             <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl w-192">
-                <div className="block w-full h-8 pl-2 bg-gray-700">
+                <div className="flex w-full h-8 pl-2 bg-gray-700">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
-                    <span className=" inline-block  font-sans text-center text-gray-300">feedback.yml — IDE</span>
+                    <span className="flex-1 font-sans text-center text-gray-300 leading-8 -ml-28">
+                        feedback.yml — IDE
+                    </span>
                 </div>
                 <div className="py-2 overflow-hidden text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
                     <TestCode step={step} />
