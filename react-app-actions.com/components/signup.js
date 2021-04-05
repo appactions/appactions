@@ -121,7 +121,7 @@ function SignUp({ label = 'Join waitlist', light }) {
                         disabled={status === STATUSES.SUBMITTING}
                         className={
                             light
-                                ? 'shadow block w-full px-4 py-3 text-base text-white placeholder-teal-400 border-4 border-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300'
+                                ? 'shadow block w-full px-4 py-3 text-base text-gray-900 placeholder-teal-400 border-4 border-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300'
                                 : 'shadow block w-full px-4 py-3 text-base text-gray-900 placeholder-teal-400 border-4 border-brand-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300'
                         }
                         data-cta="cta-input"
