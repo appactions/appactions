@@ -25,7 +25,7 @@ export default function Home() {
             <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl" id="vision">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                        React App Action introduces a <span className="text-teal-500">holistic&nbsp;change</span> to
+                        React App Action introduces a <span className="text-brand-green">holistic&nbsp;change</span> to
                         E2E.
                     </h2>
                     <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
@@ -143,7 +143,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/lock-closed */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -177,7 +177,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/refresh */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -211,7 +211,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/cloud-upload */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -244,7 +244,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/shield-check */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -278,7 +278,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/cog */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -318,7 +318,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/server */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -354,7 +354,7 @@ export default function Home() {
             <section className="relative">
                 <div className="absolute left-0 right-0 h-1/2 bg-warm-gray-50" aria-hidden="true" />
                 <div className="relative px-4 mx-auto max-w-7xl lg:px-8">
-                    <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-teal-500 sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
+                    <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-brand-green sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
                         <div className="lg:w-0 lg:flex-1">
                             <h2 className="text-3xl font-extrabold tracking-tight text-white">
                                 Want to be an early adopter?

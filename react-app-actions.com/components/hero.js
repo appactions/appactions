@@ -7,7 +7,7 @@ function HeroText() {
             <div>
                 <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
                     <span className="md:block">
-                        Leave behind flaky E2E tests <span className="text-teal-500">forever</span>.
+                        Leave behind flaky E2E tests <span className="text-brand-green">forever</span>.
                     </span>
                 </h1>
                 <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
