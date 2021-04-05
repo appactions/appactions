@@ -55,7 +55,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1496128858413-b36217c2ce36.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -79,7 +79,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1547586696-ea22b4d4235d?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1547586696-ea22b4d4235d.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -103,7 +103,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1492724441997-5dc865305da7.jpeg"
                                             alt=""
                                         />
                                     </div>
@@ -128,7 +128,7 @@ export default function Home() {
                                     <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
-                                            src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?ixlib=rb-1.2.1&ixqx=J6502672yF&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1679&q=80"
+                                            src="/img/photo-1498049860654-af1a5c566876.jpeg"
                                             alt=""
                                         />
                                     </div>
