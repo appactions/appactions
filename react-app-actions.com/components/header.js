@@ -7,16 +7,6 @@ function Header() {
 
         const cta = Array.from(document.querySelectorAll('[data-cta="cta-input"]')).slice(-1).pop();
         cta.scrollIntoView({ behavior: 'smooth' });
-        // cta.focus();
-    };
-    const smootScroll = event => {
-        const hash = event.target.getAttribute('href');
-        const el = document.querySelector(hash);
-        if (el) {
-            event.preventDefault();
-            el.scrollIntoView({ behavior: 'smooth' });
-            history.replaceState({}, '', hash);
-        }
     };
     return (
         <div className="relative bg-white">
@@ -40,27 +30,21 @@ function Header() {
                         </button>
                     </div> */}
                     <nav className="hidden md:flex space-x-10">
-                        <a
-                            href="#vision"
-                            onClick={smootScroll}
-                            className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green"
-                        >
-                            Vision
-                        </a>
-                        <a
-                            href="#how-does-it-work"
-                            onClick={smootScroll}
-                            className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green"
-                        >
-                            How does it work
-                        </a>
-                        <a
-                            href="#benefits"
-                            onClick={smootScroll}
-                            className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green"
-                        >
-                            Benefits
-                        </a>
+                        <Link href="/#vision">
+                            <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
+                                Vision
+                            </a>
+                        </Link>
+                        <Link href="/#how-does-it-work">
+                            <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
+                                How does it work
+                            </a>
+                        </Link>
+                        <Link href="/#benefits">
+                            <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
+                                Benefits
+                            </a>
+                        </Link>
                         <Link href="/about">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
                                 About
