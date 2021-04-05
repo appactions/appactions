@@ -47,6 +47,7 @@
         padding: 0.6em 13.7px;
         margin: 0;
         border-radius: 7.5px;
+        box-decoration-break: clone;
         background: linear-gradient(
                 104deg,
                 rgba(130, 255, 173, 0) 0.9%,

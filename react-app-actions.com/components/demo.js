@@ -3,16 +3,18 @@ import { useState, useEffect } from 'react';
 // the /##(.*)##/ thing means that part will be "typed in the animation"
 // #### at the end indicates the whole line should appear instantly
 const animation = [
-    { code: 'name: Feedback form' },
-    { code: 'description: General user flows.' },
+    { code: 'name: Submit form' },
+    { code: 'description: Should be able to submit links.' },
     { code: 'steps:' },
     { code: '  - with: { input: Website }####', cursorTarget: '[data-demo="input"]' },
-    { code: '    do: { type##: foo bar## }', input: 'foo bar' },
-    { code: '  - with: { textarea: Review }####', cursorTarget: '[data-demo="textarea"]' },
-    { code: '    do: { type##: qwe asd wedf sadf as## }', textarea: 'qwe asd wedf sadf as' },
+    { code: '    do: { type##: https://pioneer.app## }', input: 'https://pioneer.app' },
+    { code: '  - with: { textarea: Description }####', cursorTarget: '[data-demo="textarea"]' },
+    {
+        code: '    do: { type##: Founders track progress.## }',
+        textarea: 'Founders track progress.',
+    },
     { code: '  - with: { form }####', cursorTarget: '[data-demo="submit"]' },
-    { code: '    do: submit####', submit: true },
-    { submitted: true },
+    { code: '    do: submit####', submitted: true },
     { cursorTarget: '[data-demo="alert"]' },
     { code: '  - with: { alert }####' },
     { code: '    assert: [message, toBe, Success!]####' },
@@ -32,7 +34,7 @@ const animation = [
             },
         ];
     },
-    [{ input: '', textarea: '', submit: false, submitted: false, code: '', cursorTarget: '[data-demo="code"]' }],
+    [{ input: '', textarea: '', submitted: false, code: '', cursorTarget: '[data-demo="code"]' }],
 );
 
 function Cursor({ step }) {
@@ -66,7 +68,7 @@ function Demo() {
     useEffect(() => {
         const interval = setInterval(() => {
             setStep(step => (step + 1) % animation.length);
-        }, 1000);
+        }, 1200);
         return () => clearInterval(interval);
         // const onStep = event => {
         //     event.preventDefault();
@@ -126,7 +128,7 @@ function useTyping(str) {
             } else {
                 clearInterval(interval);
             }
-        }, 30);
+        }, 20);
 
         return () => clearInterval(interval);
     }, []);
@@ -182,7 +184,7 @@ function AppMockup({ step }) {
                     </div>
                     <div>
                         <label htmlFor="about" className="block text-sm font-medium text-gray-700">
-                            Review
+                            Description
                         </label>
                         <div className="mt-1">
                             <TypingTextarea key={state.textarea} value={state.textarea} />
@@ -193,7 +195,6 @@ function AppMockup({ step }) {
                     <button
                         type="submit"
                         className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                        disabled={state.submit}
                         data-demo="submit"
                     >
                         Submit
@@ -248,7 +249,7 @@ function TypingLine({ line }) {
             } else {
                 clearInterval(interval);
             }
-        }, 30);
+        }, 20);
 
         return () => clearInterval(interval);
     }, []);
