@@ -4,10 +4,10 @@ function AboutPage() {
     return (
         <div className="max-w-xl mx-auto">
             <div className="block w-32 h-32 my-12 overflow-hidden border-4 rounded-full border-brand-green">
-                <img src="/img/profile.jpg" alt="Avatar of Miklos" />
+                <img src="/img/profile.jpg" alt="Avatar of Nick" />
             </div>
             <p className="my-8 text-lg font-medium text-gray-600">
-                Hi! My name is Miklos, and I've been working on the problem of E2E for a few years now.
+                Hi! My name is Nick Aczel, and I've been working on the problem of E2E for a few years now.
             </p>
             <p className="my-8 text-lg font-medium text-gray-600">
                 E2E testing is a high reward, high-cost way to test. High reward, because a relatively simple test can
