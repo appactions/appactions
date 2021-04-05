@@ -7,7 +7,7 @@ const STATUSES = {
     SUCCESS: 'SUCCESS',
 };
 
-function SignUp({ label = 'Join waitlist', light }) {
+function SignUp({ label = 'Sign up', light }) {
     const [status, setStatus] = useState(STATUSES.INIT);
     const onSubmit = event => {
         event.preventDefault();

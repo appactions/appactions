@@ -72,7 +72,7 @@ function Header() {
                             onClick={onClickCTA}
                             className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300"
                         >
-                            Join waitlist
+                            Request access
                         </button>
                     </div>
                 </div>

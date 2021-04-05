@@ -385,7 +385,7 @@ export default function Home() {
                                 Want to be an early adopter?
                             </h2>
                             <p className="max-w-3xl mt-4 text-lg text-white">
-                                Join the waitlist to get notified when React App Actions is available.
+                                Join the newletter to get notified when React App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
