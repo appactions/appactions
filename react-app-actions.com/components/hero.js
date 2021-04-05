@@ -11,8 +11,8 @@ function HeroText() {
                     </span>
                 </h1>
                 <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                    Be incredibly productive in testing. Record user sessions inside the browser, keep result in source
-                    control. Achieve incredible stability thanks to the React-aware test runner.
+                    Be incredibly productive in testing. Record user sessions inside your browser, keep the result in
+                    source control. Achieve incredible stability thanks to the React-aware test runner.
                 </p>
                 <div className="mt-10 sm:mt-12">
                     <SignUp />
