@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Header from 'components/header';
 import Footer from 'components/footer';
+import Main from 'components/main';
 import './style.css';
 
 function MyApp({ Component, pageProps }) {
@@ -27,7 +28,9 @@ function MyApp({ Component, pageProps }) {
 
             <Header />
 
-            <Component {...pageProps} />
+            <Main>
+                <Component {...pageProps} />
+            </Main>
 
             <Footer />
         </>

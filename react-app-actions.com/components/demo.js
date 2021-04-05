@@ -3,16 +3,25 @@ import { useState, useEffect } from 'react';
 // the /##(.*)##/ thing means that part will be "typed in the animation"
 // #### at the end indicates the whole line should appear instantly
 const animation = [
-    { code: 'name: Feedback form' },
-    { code: 'description: General user flows.' },
+    { code: 'name: Submit form' },
+    { code: 'description: Should be able to submit links.' },
     { code: 'steps:' },
     { code: '  - with: { input: Website }####', cursorTarget: '[data-demo="input"]' },
-    { code: '    do: { type##: foo bar## }', input: 'foo bar' },
-    { code: '  - with: { textarea: Review }####', cursorTarget: '[data-demo="textarea"]' },
-    { code: '    do: { type##: qwe asd wedf sadf as## }', textarea: 'qwe asd wedf sadf as' },
+    { code: '    do: { type##: https://pioneer.app## }', input: 'https://pioneer.app' },
+    { code: '  - with: { textarea: Description }####', cursorTarget: '[data-demo="textarea"]' },
+    {
+        code: '    do: { type##: Founders track progress.## }',
+        textarea: 'Founders track progress.',
+    },
     { code: '  - with: { form }####', cursorTarget: '[data-demo="submit"]' },
-    { code: '    do: submit####', submit: true },
-    { submitted: true },
+    { code: '    do: submit####', submitted: true },
+    { cursorTarget: '[data-demo="alert"]' },
+    { code: '  - with: { alert }####' },
+    { code: '    assert: [message, toBe, Success!]####' },
+    {},
+    {},
+    {},
+    {},
 ].reduce(
     (acc, curr) => {
         const last = acc[acc.length - 1];
@@ -25,7 +34,7 @@ const animation = [
             },
         ];
     },
-    [{ input: '', textarea: '', submit: false, submitted: false, code: '', cursorTarget: '[data-demo="code"]' }],
+    [{ input: '', textarea: '', submitted: false, code: '', cursorTarget: '[data-demo="code"]' }],
 );
 
 function Cursor({ step }) {
@@ -59,7 +68,7 @@ function Demo() {
     useEffect(() => {
         const interval = setInterval(() => {
             setStep(step => (step + 1) % animation.length);
-        }, 1000);
+        }, 1200);
         return () => clearInterval(interval);
         // const onStep = event => {
         //     event.preventDefault();
@@ -81,23 +90,25 @@ function Demo() {
     return (
         <>
             <Cursor step={step} />
-            <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl w-192">
-                <div className="block w-full h-8 pl-2 bg-gray-300">
+            <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl demo-window-size">
+                <div className="flex w-full h-8 pl-2 bg-gray-300">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
-                    <span className="inline-block font-sans text-center text-gray-700">AwesomeReactApp</span>
+                    <span className="flex-1 font-sans text-center text-gray-600 leading-8 -ml-28">AwesomeReactApp</span>
                 </div>
                 <div className="p-4 overflow-hidden h-96">
                     <AppMockup step={step} />
                 </div>
             </div>
-            <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl w-192">
-                <div className="block w-full h-8 pl-2 bg-gray-700">
+            <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl demo-window-size">
+                <div className="flex w-full h-8 pl-2 bg-gray-700">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
-                    <span className=" inline-block  font-sans text-center text-gray-300">feedback.yml — IDE</span>
+                    <span className="flex-1 font-sans text-center text-gray-300 leading-8 -ml-28">
+                        feedback.yml — IDE
+                    </span>
                 </div>
                 <div className="py-2 overflow-hidden text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
                     <TestCode step={step} />
@@ -117,7 +128,7 @@ function useTyping(str) {
             } else {
                 clearInterval(interval);
             }
-        }, 30);
+        }, 20);
 
         return () => clearInterval(interval);
     }, []);
@@ -130,7 +141,7 @@ function TypingInput({ value }) {
     return (
         <input
             type="text"
-            className="flex-1 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
+            className="flex-1 block w-full border-gray-300 rounded-md focus:ring-teal-500 focus:border-indigo-500 rounded-r-md sm:text-sm"
             placeholder="www.example.com"
             value={value.slice(0, pos)}
             readOnly
@@ -146,7 +157,7 @@ function TypingTextarea({ value }) {
             id="about"
             name="about"
             rows={3}
-            className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="block w-full mt-1 border-gray-300 shadow-sm focus:ring-teal-500 focus:border-indigo-500 sm:text-sm rounded-md"
             value={value.slice(0, pos)}
             readOnly
             data-demo="textarea"
@@ -173,7 +184,7 @@ function AppMockup({ step }) {
                     </div>
                     <div>
                         <label htmlFor="about" className="block text-sm font-medium text-gray-700">
-                            Review
+                            Description
                         </label>
                         <div className="mt-1">
                             <TypingTextarea key={state.textarea} value={state.textarea} />
@@ -183,8 +194,7 @@ function AppMockup({ step }) {
                 <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
                     <button
                         type="submit"
-                        className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        disabled={state.submit}
+                        className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                         data-demo="submit"
                     >
                         Submit
@@ -193,7 +203,29 @@ function AppMockup({ step }) {
             </div>
         </form>
     ) : (
-        <h4>submitted</h4>
+        <div className="p-4 rounded-md bg-green-50" data-demo="alert">
+            <div className="flex">
+                <div className="flex-shrink-0">
+                    {/* Heroicon name: solid/check-circle */}
+                    <svg
+                        className="w-5 h-5 text-green-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div className="ml-3">
+                    <p className="text-sm font-medium text-green-800">Success!</p>
+                </div>
+            </div>
+        </div>
     );
     return <div className="mt-5 md:mt-0 md:col-span-2">{content}</div>;
 }
@@ -217,7 +249,7 @@ function TypingLine({ line }) {
             } else {
                 clearInterval(interval);
             }
-        }, 30);
+        }, 20);
 
         return () => clearInterval(interval);
     }, []);

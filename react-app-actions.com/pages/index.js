@@ -11,29 +11,39 @@ export default function Home() {
                         Current E2E tools don’t actually&nbsp;work.
                     </h2>
                     <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        E2E testing is a high reward, high cost way to test. It gives more cofidence to the developer
-                        than any other approach. However getting it right is extremely hard.{' '}
+                        <span className="highlight">E2E testing is a high reward, high-cost way to test.</span> It gives
+                        more confidence to the developer than any other approach. However, getting it right is extremely
+                        hard.{' '}
                         <span className="fadeout">
-                            E2E tests are flaky, cumbersome to write, executes slowly, needs constant maintanence, best
-                            practices are scarce, developers required to write explicit wait logic, or the retryability
-                            is limited, needs web development experience to write good tests, fixing broken tests are
-                            hard work...
+                            E2E tests are flaky, cumbersome to write, execute slowly, need constant maintenance, best
+                            practices are scarce, developers are required to write explicit wait logic or the
+                            retryability is limited, needs web development experience to write good tests, fixing broken
+                            tests is hard work...
                         </span>
                     </p>
                 </div>
             </section>
-            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl">
+            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl" id="vision">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                        React App Action introduces a <span className="text-teal-500">holistic&nbsp;change</span> to
-                        E2E.
+                        Introducing a <span className="text-brand-green">holistic&nbsp;change</span> to E2E.
                     </h2>
                     <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        lorem ipsum
+                        Being React-aware means React App Actions is having direct access to React internals. This
+                        enables a <span className="highlight">declarative interface:</span> tests are fully separated
+                        from any form of implementation details,{' '}
+                        <span className="highlight">
+                            test code only declares the expected behavior from the user's perspective.
+                        </span>{' '}
+                        This results in more maintainable test code, superior stability, excellent performance, and many
+                        more.
+                    </p>
+                    <p className="max-w-4xl mx-auto mb-6 text-lg italic font-medium sm:text-2xl sm:leading-10 space-y-6">
+                        “React App Actions does the same to testing, what React did to UI.”
                     </p>
                 </div>
             </section>
-            <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl">
+            <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl" id="how-does-it-work">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-center text-gray-900 sm:text-2xl lg:text-4xl lg:text-left">
                         This is how it works:
@@ -59,8 +69,8 @@ export default function Home() {
                                                 do. This is it.
                                             </p>
                                             <p className="mt-3 text-base text-gray-500">
-                                                All of this happens in your own browser. No second browser to eat up
-                                                your CPU. No CORS issues. No jumping between windows.
+                                                All of this happens in your own browser. No jumping between windows. No
+                                                CORS issues. No second browser to eat up your CPU.
                                             </p>
                                         </div>
                                     </div>
@@ -79,11 +89,12 @@ export default function Home() {
                                                 2. Save the test as a Flow
                                             </p>
                                             <p className="mt-3 text-base text-gray-500">
-                                                A Flow is just a YAML file, that you generate by the browser extension.
-                                                A Flow defines what an user supposed to do at a certain feature. This is
-                                                our test! These Flows only contain information that relevant in the
-                                                user's perspective. <span className="bold">All</span> implementation
-                                                details separated, thanks to the React-aware test runner.
+                                                A Flow is a YAML file, generated by the browser extension. It's a very
+                                                human-friendly way to declare test logic.
+                                            </p>
+                                            <p className="mt-3 text-base text-gray-500">
+                                                Easy to manually edit, if you want to. Works great with version control
+                                                systems, like Git.
                                             </p>
                                         </div>
                                     </div>
@@ -99,9 +110,17 @@ export default function Home() {
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">
-                                                3. Add custom User Patterns (optional)
+                                                3. Add custom Roles (optional)
                                             </p>
-                                            <p className="mt-3 text-base text-gray-500"></p>
+                                            <p className="mt-3 text-base text-gray-500">
+                                                Element selection happens by roles. This way even a non-technical person
+                                                can read and understand what does the test code (a Flow) is saying.
+                                            </p>
+                                            <p className="mt-3 text-base text-gray-500">
+                                                In React App Actions, batteries are included. By default, selection
+                                                happens by Aria Roles, but you can declare custom ones relevant for your
+                                                app.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -115,10 +134,15 @@ export default function Home() {
                                     </div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
-                                            <p className="text-xl font-semibold text-gray-900">
-                                                4. Easy to understand error messages
+                                            <p className="text-xl font-semibold text-gray-900">4. Add it to CI/CD</p>
+                                            <p className="mt-3 text-base text-gray-500">
+                                                React App Actions is the tool, that brings your CI/CD to the next level.
                                             </p>
-                                            <p className="mt-3 text-base text-gray-500"></p>
+                                            <p className="mt-3 text-base text-gray-500">
+                                                No more false positives, no more cryptic errors. The unmatched stability
+                                                and clear error messages on real issues will change how you develop
+                                                React apps.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -127,23 +151,23 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="relative py-16 bg-white sm:py-24 lg:py-32">
+            <section className="relative py-16 bg-white sm:py-24 lg:py-32" id="benefits">
                 <div className="max-w-md px-4 mx-auto text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                     <h2 className="text-base font-semibold tracking-wider text-indigo-600 uppercase">Benefits</h2>
                     <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                         Sharp Tool for an Important Job
                     </p>
-                    <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
+                    {/* <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
                         Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc,
                         ullamcorper malesuada. Eleifend condimentum id viverra nulla.
-                    </p>
+                    </p> */}
                     <div className="mt-12">
                         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                             <div className="pt-6">
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/lock-closed */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -166,8 +190,8 @@ export default function Home() {
                                             Unbeatable stability
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
-                                            Having aware of React internals enables the test runner to know exatly what
-                                            is going on. From being patient with slow network, to realise fatal states
+                                            Having aware of React internals enables the test runner to know exactly what
+                                            is going on. From being patient with a slow network, to realize fatal states
                                             early.
                                         </p>
                                     </div>
@@ -177,7 +201,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/refresh */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -211,7 +235,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/cloud-upload */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -244,7 +268,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/shield-check */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -264,7 +288,7 @@ export default function Home() {
                                             </span>
                                         </div>
                                         <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Low maintanence
+                                            Low maintenance
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
                                             Tests are only changing when the feature change. Implementation details are
@@ -278,7 +302,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/cog */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -307,8 +331,8 @@ export default function Home() {
                                             Effective Architecture
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
-                                            Overhead is super tiny. Development environments will only grow by a lean
-                                            browser extension. Unlike other tools, requires no dedicated browser to
+                                            The overhead is super tiny. Development environments will only grow by a
+                                            lean browser extension. Unlike other tools, requires no dedicated browser to
                                             develop tests.
                                         </p>
                                     </div>
@@ -318,7 +342,7 @@ export default function Home() {
                                 <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
                                     <div className="-mt-6">
                                         <div>
-                                            <span className="inline-flex items-center justify-center p-3 bg-teal-500 shadow-lg rounded-md">
+                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
                                                 {/* Heroicon name: outline/server */}
                                                 <svg
                                                     className="w-6 h-6 text-white"
@@ -338,10 +362,11 @@ export default function Home() {
                                             </span>
                                         </div>
                                         <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Scales great
+                                            Starts simple, scales great
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
-                                            Works well with any complexity, from landing pages to large enterprise apps.
+                                            Works well with any size of React app. Developer experience is the same on
+                                            landing pages and enterprise apps.
                                         </p>
                                     </div>
                                 </div>
@@ -354,17 +379,17 @@ export default function Home() {
             <section className="relative">
                 <div className="absolute left-0 right-0 h-1/2 bg-warm-gray-50" aria-hidden="true" />
                 <div className="relative px-4 mx-auto max-w-7xl lg:px-8">
-                    <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-teal-500 sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
+                    <div className="px-6 py-10 rounded-lg bg-gradient-to-l from-teal-400 to-brand-green sm:py-16 sm:px-12 lg:py-20 lg:px-20 lg:flex lg:items-center">
                         <div className="lg:w-0 lg:flex-1">
                             <h2 className="text-3xl font-extrabold tracking-tight text-white">
-                                What to be an early adopter?
+                                Want to be an early adopter?
                             </h2>
-                            <p className="max-w-3xl mt-4 text-lg text-cyan-100">
-                                Join the wait list to get notified when React App Actions is available.
+                            <p className="max-w-3xl mt-4 text-lg text-white">
+                                Join the waitlist to get notified when React App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
-                            <SignUp label="Sign Up" />
+                            <SignUp label="Sign Up" light />
                         </div>
                     </div>
                 </div>
