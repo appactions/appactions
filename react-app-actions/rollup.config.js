@@ -3,7 +3,8 @@ import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 
-const sourcemap = process.env.NODE_ENV === 'production' ? false : 'inline';
+// const sourcemap = process.env.NODE_ENV === 'production' ? false : 'inline';
+const sourcemap = false;
 
 export default [
     {

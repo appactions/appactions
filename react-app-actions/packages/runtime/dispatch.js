@@ -1,29 +1,92 @@
-import { computeAccessibleName } from 'dom-accessibility-api';
-import { roles as allRoles, elementRoles } from 'aria-query';
+import { computeAccessibleName as getHostSpecifier } from 'dom-accessibility-api';
 
 export async function dispatch(renderer, command) {
-    const roots = renderer.getFiberRoots();
+    return retryable(() => {
+        const roots = renderer.getFiberRoots();
 
-    renderer.listFibersByPredicate(roots[0].current, fiber => {
-        // if (fiber.type && fiber.type.__REACT_APP_ACTIONS__) {
-        //     console.log('visited:', renderer.getDisplayName(fiber), fiber.type.__REACT_APP_ACTIONS__);
-        // }
+        const matches = renderer.listFibersByPredicate(roots[0].current, fiber => {
+            const normalized = normalize(renderer, fiber);
+            if (normalized) {
+                // console.log('visited:', normalized.displayName, normalized.role, JSON.stringify(normalized.specifier));
 
-        if (fiber.stateNode instanceof HTMLElement) {
-            console.info('visited:', {
-                displayName: renderer.getDisplayName(fiber),
-                role: getRole(fiber.stateNode),
-                name: computeAccessibleName(fiber.stateNode),
-            });
+                if (command.with.role === normalized.role) {
+                    if (command.with.specifier) {
+                        // TODO add regex here
+                        return command.with.specifier === normalized.specifier;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        if (matches.length === 0) {
+            throw new Error(`No matches: ${command.with.role}`);
         }
 
-        return false;
-    });
+        if (matches.length > 1) {
+            throw new Error(`Too much matches: ${command.with.role}`);
+        }
 
-    return false;
+        return true;
+    });
 }
 
-const roles = [
+async function retryable(fn, triesLeft = 20) {
+    try {
+        return await fn();
+    } catch (e) {
+        if (!triesLeft) {
+            throw e;
+        }
+        await new Promise(res => setTimeout(res, 200));
+        return retryable(fn, triesLeft - 1);
+    }
+}
+
+function normalize(renderer, fiber) {
+    const displayName = renderer.getDisplayName(fiber);
+    if (hasAppAction(fiber)) {
+        const role = getRole(fiber);
+        if (role) {
+            return {
+                displayName,
+                role,
+                specifier: getSpecifier(fiber),
+            };
+        }
+    } else if (fiber.stateNode instanceof HTMLElement) {
+        const role = getHostRole(fiber.stateNode);
+        if (role) {
+            return {
+                displayName,
+                role,
+                specifier: getHostSpecifier(fiber.stateNode) || null,
+            };
+        }
+    }
+
+    return null;
+}
+
+function hasAppAction(fiber) {
+    return Boolean(fiber.type && fiber.type.__REACT_APP_ACTIONS__);
+}
+
+function getRole(fiber) {
+    return fiber.type.__REACT_APP_ACTIONS__.roles.get(fiber.type);
+}
+function getSpecifier(fiber) {
+    const drivers = fiber.type.__REACT_APP_ACTIONS__.drivers.get(fiber.type);
+    if (drivers && drivers.getSpecifier) {
+        return drivers.getSpecifier(fiber);
+    }
+    return null;
+}
+
+const hostRoles = [
     { element: 'menuitem', role: 'menuitem' },
     { element: 'rel', role: 'roletype' },
     { element: 'article', role: 'article' },
@@ -196,9 +259,9 @@ const roles = [
     { element: 'textarea', role: 'textbox' },
 ];
 
-export function getRole(element) {
+export function getHostRole(element) {
     const tag = element.nodeName.toLowerCase();
-    const match = roles.find(role => {
+    const match = hostRoles.find(role => {
         if (tag !== role.element) {
             return false;
         }

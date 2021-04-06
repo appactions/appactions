@@ -10,4 +10,4 @@ export default function Logo() {
     );
 }
 
-register(Logo, { role: 'Logo' });
+register(Logo, { role: 'Logo', getSpecifier: () => 'Restaurant Reviewer Logo' });

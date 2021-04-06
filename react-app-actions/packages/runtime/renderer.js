@@ -54,7 +54,7 @@ export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
 
     const listFibersByPredicate = (fiber, predicate) => _listFibersByPredicate(fiber, predicate, true);
     const _listFibersByPredicate = (fiber, predicate, head) => {
-        const isMatch = predicate(fiber);
+        const isMatch = fiber && predicate(fiber);
         const results = isMatch ? [fiber] : [];
         if (isMatch && head) {
             return results;

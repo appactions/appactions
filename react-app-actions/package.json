@@ -12,7 +12,6 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.13.10",
-        "aria-query": "^4.2.2",
         "dom-accessibility-api": "^0.5.4",
         "glob": "^7.1.6",
         "lodash.get": "^4.4.2",
