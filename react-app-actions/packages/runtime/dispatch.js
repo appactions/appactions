@@ -10,7 +10,7 @@ export async function dispatch(renderer, command) {
         // }
 
         if (fiber.stateNode instanceof HTMLElement) {
-            console.log('visited:', {
+            console.info('visited:', {
                 displayName: renderer.getDisplayName(fiber),
                 role: getRole(fiber.stateNode),
                 name: computeAccessibleName(fiber.stateNode),

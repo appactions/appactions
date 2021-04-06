@@ -34,10 +34,10 @@ export default class Runner {
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
 
-        this.page.on('console', msg => {
-            if (msg.type() === 'info') {
-                console.log('[runtime]', msg.text());
-            }
+        this.page.on('console', async msg => {
+            const args = await Promise.all(msg.args().map(arg => arg.jsonValue()));
+            const rendered = args.map(v => (typeof v === 'object' ? JSON.stringify(v, null, 2) : v)).join(' ');
+            console.log(rendered);
         });
 
         await this.page.evaluateOnNewDocument(
