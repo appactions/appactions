@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import expect from 'expect';
 import fs from 'fs';
+import { StackTraceConfig, formatStackTrace } from 'jest-message-util';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
@@ -35,6 +36,9 @@ export default class Runner {
         this.page = await this.browser.newPage();
 
         this.page.on('console', async msg => {
+            if (msg.type() !== 'info') {
+                return;
+            }
             const args = await Promise.all(msg.args().map(arg => arg.jsonValue()));
             const rendered = args.map(v => (typeof v === 'object' ? JSON.stringify(v, null, 2) : v)).join(' ');
             console.log(rendered);
@@ -78,13 +82,40 @@ export default class Runner {
         for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
             await this.startVariant(variant);
 
+            let error = null;
+
             for await (let step of steps) {
-                const result = await this.processStep(step);
-                if (result === true) {
-                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✓');
+                let result = null;
+
+                if (!error) {
+                    try {
+                        result = await this.processStep(step);
+                    } catch (e) {
+                        error = e;
+                    }
+                }
+
+                if (error) {
+                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✖');
+                } else if (result === true) {
+                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✔');
                 } else {
                     console.log('-', step);
                 }
+            }
+
+            if (error) {
+                console.log(
+                    formatStackTrace(
+                        error.stack,
+                        {
+                            rootDir: '',
+                            testMatch: [],
+                        },
+                        { noStackTrace: true },
+                    ),
+                    '\n',
+                );
             }
 
             // leave the browser open in headful mode

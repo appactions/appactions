@@ -30,8 +30,6 @@ test('native roles', () => {
         };
     });
 
-    console.log(result);
-
     expect(result).toMatchInlineSnapshot(`
         Array [
           Object {

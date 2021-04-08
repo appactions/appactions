@@ -14,6 +14,7 @@
         "@babel/runtime": "^7.13.10",
         "dom-accessibility-api": "^0.5.4",
         "glob": "^7.1.6",
+        "jest-message-util": "^26.6.2",
         "lodash.get": "^4.4.2",
         "yaml": "^1.10.2"
     },
