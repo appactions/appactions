@@ -23,7 +23,7 @@ function Header() {
                             <span className="sr-only">Open menu</span>
                         </button>
                     </div> */}
-                    <nav className="hidden md:flex space-x-10">
+                    <nav className="hidden lg:flex space-x-10">
                         <Link href="/#vision">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
                                 Vision
@@ -45,7 +45,7 @@ function Header() {
                             </a>
                         </Link>
                     </nav>
-                    <div className="items-center justify-end hidden md:flex md:flex-1 lg:w-0">
+                    <div className="items-center justify-end hidden sm:flex md:flex-1 lg:w-0">
                         <Link href="/about">
                             <a className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300">
                                 Request access

@@ -30,10 +30,12 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
-                            <div className="sm:max-w-md sm:w-full">
-                                <div className="sm:px-10">
-                                    <Demo />
+                        <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6 sm:w-full sm:mx-auto">
+                            <div className="w-full">
+                                <div className="">
+                                    <div className="relative w-full">
+                                        <Demo />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +192,7 @@ export default function Home() {
                 <div className="max-w-md px-4 mx-auto text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                     <h2 className="text-base font-semibold tracking-wider text-indigo-600 uppercase">Benefits</h2>
                     <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                        Sharp Tool for an Important Job
+                        Sharp Tool for an Important Task
                     </p>
                     {/* <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
                         Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc,

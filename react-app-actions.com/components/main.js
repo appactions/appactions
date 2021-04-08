@@ -1,5 +1,5 @@
 function Main({ children }) {
-    return <main className="container px-4 mx-auto my-8 sm:px-6 lg:px-8">{children}</main>;
+    return <main className="container mx-auto my-8 overflow-x-hidden">{children}</main>;
 }
 
 export default Main;

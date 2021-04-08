@@ -5,23 +5,27 @@ import { useState, useEffect } from 'react';
 const animation = [
     { code: 'name: Submit page' },
     { code: 'description: Should be able to submit links.' },
-    { code: 'steps:' },
-    { code: '  - with: { input: Website }####', cursorTarget: '[data-demo="input"]' },
-    { code: '    do: { type##: https://pioneer.app## }', input: 'https://pioneer.app' },
-    { code: '  - with: { textarea: Description }####', cursorTarget: '[data-demo="textarea"]' },
+    { code: 'steps:', cursorTarget: '[data-demo="input"]' },
+    { code: '  - with: { input: Website }####' },
+    {
+        code: '    do: { type##: https://pioneer.app## }',
+        input: 'https://pioneer.app',
+        cursorTarget: '[data-demo="textarea"]',
+    },
+    { code: '  - with: { textarea: Description }####' },
     {
         code: '    do: { type##: Founders track progress.## }',
         textarea: 'Founders track progress.',
+        cursorTarget: '[data-demo="submit"]',
     },
-    { code: '  - with: { form }####', cursorTarget: '[data-demo="submit"]' },
-    { code: '    do: submit####', submitted: true },
+    // { code: '  - with: { form }####' },
+    { code: '  - with: { form }####\n    do: submit####', submitted: true },
     { cursorTarget: '[data-demo="alert"]' },
-    { code: '  - with: { alert }####' },
-    { code: '    assert: [message, toBe, Success!]####' },
+    { code: '  - with: { alert }####\n    assert: [message, toBe, Success!]####' },
     {},
     {},
     {},
-    {},
+    { code: '', cursorTarget: '[data-demo="code"]' },
 ].reduce(
     (acc, curr) => {
         const last = acc[acc.length - 1];
@@ -72,27 +76,11 @@ function Demo() {
             setStep(step => (step + 1) % animation.length);
         }, 1200);
         return () => clearInterval(interval);
-        // const onStep = event => {
-        //     event.preventDefault();
-        //     setStep(step => {
-        //         let result = step;
-        //         if (event.key === 'ArrowRight') {
-        //             result = step + 1;
-        //         } else if (event.key === 'ArrowLeft') {
-        //             result = step - 1;
-        //         }
-
-        //         return Math.max(0, result % animation.length);
-        //     });
-        // };
-        // document.addEventListener('keyup', onStep);
-
-        // return () => document.removeEventListener('keyup', onStep);
     }, []);
     return (
-        <div className="relative" data-demo="container">
+        <div className="relative lg:pr-4" data-demo="container">
             <Cursor step={step} />
-            <div className="block mb-8 overflow-hidden font-mono bg-gray-200 border pointer-events-none rounded-xl demo-window-size">
+            <div className="block mx-auto mb-8 overflow-hidden font-mono bg-gray-200 border shadow-xl pointer-events-none rounded-xl demo-window-size ">
                 <div className="flex w-full h-8 pl-2 bg-gray-300">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
@@ -103,7 +91,7 @@ function Demo() {
                     <AppMockup step={step} />
                 </div>
             </div>
-            <div className="block overflow-hidden font-mono bg-gray-800 border rounded-xl demo-window-size">
+            <div className="block mx-auto overflow-hidden font-mono bg-gray-800 border shadow-xl rounded-xl demo-window-size sm:mx-auto">
                 <div className="flex w-full h-8 pl-2 bg-gray-700">
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
@@ -265,7 +253,7 @@ function TypingLine({ line }) {
 
 function TestCode({ step }) {
     return (
-        <ol className="list-decimal">
+        <ol className="text-sm list-decimal md:text-base">
             {animation[step].code.split('\n').map((line, index) => (
                 <TypingLine key={line} line={line} />
             ))}

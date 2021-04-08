@@ -35,12 +35,14 @@
     .cursor-transition {
         transition-property: left, top;
         transition-timing-function: ease-out;
-        transition-duration: 250ms;
+        transition-duration: 300ms;
+        transition-delay: 800ms;
     }
 
     .demo-window-size {
-        width: 540px;
-        height: 380px;
+        width: 100%;
+        max-width: 540px;
+        max-height: 380px;
     }
 
     .highlight {
