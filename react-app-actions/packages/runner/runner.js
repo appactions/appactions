@@ -31,7 +31,7 @@ export default class Runner {
 
     startVariant = async variant => {
         const startUrl = `${baseUrl}${this.flow['start']['route']}`;
-        console.log('=== running variant:', { variant, startUrl });
+        console.log('=== variant:', variant);
         this.currentVariant = variant;
         this.page = await this.browser.newPage();
 
@@ -74,33 +74,40 @@ export default class Runner {
         await this.browser.close();
         this.browser = null;
 
-        console.log('done.');
+        console.log('===\n');
     };
 
     run = async () => {
         await this.init();
         for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
+            console.log('=== name:', this.flow.name);
             await this.startVariant(variant);
 
             let error = null;
 
             for await (let step of steps) {
                 let result = null;
+                let errorHappenedNow = false;
 
                 if (!error) {
                     try {
                         result = await this.processStep(step);
                     } catch (e) {
                         error = e;
+                        errorHappenedNow = true;
                     }
                 }
 
-                if (error) {
-                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✖');
+                const stepName = `${step['with']['role']} ${
+                    step['with']['specifier'] ? `"${step['with']['specifier']}"` : ''
+                }`;
+
+                if (errorHappenedNow) {
+                    console.log('[✖]', stepName);
                 } else if (result === true) {
-                    console.log('-', step['with']['role'], step['with']['specifier'] || '', '✔');
+                    console.log('[✔]', stepName);
                 } else {
-                    console.log('-', step);
+                    console.log('[ ]', stepName);
                 }
             }
 
@@ -125,6 +132,10 @@ export default class Runner {
         }
 
         await this.cleanup();
+
+        if (error) {
+            throw error;
+        }
     };
 }
 
