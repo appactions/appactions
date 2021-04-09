@@ -29,10 +29,8 @@ export default class Runner {
         });
     };
 
-    startVariant = async variant => {
+    startFlow = async () => {
         const startUrl = `${baseUrl}${this.flow['start']['route']}`;
-        console.log('=== variant:', variant);
-        this.currentVariant = variant;
         this.page = await this.browser.newPage();
 
         this.page.on('console', async msg => {
@@ -81,7 +79,9 @@ export default class Runner {
         await this.init();
         for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
             console.log('=== name:', this.flow.name);
-            await this.startVariant(variant);
+            console.log('=== variant:', variant);
+
+            await this.startFlow();
 
             let error = null;
 
