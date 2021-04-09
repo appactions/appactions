@@ -42,7 +42,7 @@ export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
 
     //     return fiber;
     // };
-    // const findNativeNodes = fiber => findNativeNodesForFiberID(getFiberID(getPrimaryFiber(fiber)));
+    const findNativeNodes = fiber => findNativeNodesForFiberID(getFiberID(getPrimaryFiber(fiber)));
     // const getOwner = fiber => {
     //     if (fiber._debugOwner) {
     //         return fiber._debugOwner;
@@ -83,7 +83,7 @@ export function attachAppActionsRenderer(hook, rendererID, renderer, global) {
     return {
         // findFiber,
         // findFiberForInteraction,
-        // findNativeNodes,
+        findNativeNodes,
         listFibersByPredicate,
         // findAncestorElementByPredicate,
         getDisplayName,

@@ -88,7 +88,7 @@ export function resolve({ content, fileName = 'Unnamed' }) {
                                                 throw new Error('Invalid shape for "do" value in step');
                                             }
 
-                                            return [key, { method: doValue[0][0], specifier: doValue[0][1] }];
+                                            return [key, { method: doValue[0][0], args: doValue[0][1] }];
                                         }
 
                                         throw new Error('Invalid value for "with" key in step');

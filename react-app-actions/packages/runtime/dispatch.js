@@ -30,6 +30,15 @@ export async function dispatch(renderer, command) {
             throw new Error(`Too much matches: ${command.with.role}`);
         }
 
+        const subjectFiber = matches[0];
+
+        if (command.do) {
+            if (command.do.method === 'click') {
+                const els = renderer.findNativeNodes(subjectFiber);
+                els[0].click();
+            }
+        }
+
         return true;
     });
 }
