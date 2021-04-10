@@ -11,20 +11,21 @@ export async function run() {
             .filter(validate),
     );
 
-    let error;
+    let errors = null;
     try {
         for await (let flow of flows) {
             const runner = new Runner(flow);
-            await runner.run();
+            errors = await runner.run();
         }
     } catch (e) {
-        error = e;
+        console.log('Error occured outside of test scope');
+        throw e;
     }
 
-    if (error) {
+    if (errors) {
         console.log('Tests are failing.');
+        console.log('There are', errors.length, 'error(s).');
         console.log();
-        console.log(error);
         process.exit(1);
     } else {
         console.log('Tests are passing.');

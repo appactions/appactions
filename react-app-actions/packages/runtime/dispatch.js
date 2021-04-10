@@ -7,7 +7,7 @@ export async function dispatch(renderer, command) {
         const matches = renderer.listFibersByPredicate(roots[0].current, fiber => {
             const normalized = normalize(renderer, fiber);
             if (normalized) {
-                // console.info('visited:', normalized.displayName, normalized.role, JSON.stringify(normalized.specifier));
+                console.info('visited:', normalized.displayName, normalized.role, JSON.stringify(normalized.specifier));
 
                 if (command.with.role === normalized.role) {
                     if (command.with.specifier) {
@@ -35,10 +35,10 @@ export async function dispatch(renderer, command) {
         if (command.do) {
             if (command.do.method === 'click') {
                 const els = renderer.findNativeNodes(subjectFiber);
-                // setTimeout(() => {
-                // console.log('clicking...');
-                els[0].click();
-                // }, 5000);
+                setTimeout(() => {
+                    console.log('clicking...');
+                    els[0].click();
+                }, 5000);
             }
         }
 

@@ -77,6 +77,9 @@ export default class Runner {
 
     run = async () => {
         await this.init();
+
+        const errors = [];
+
         for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
             console.log('=== name:', this.flow.name);
             console.log('=== variant:', variant);
@@ -123,6 +126,8 @@ export default class Runner {
                     ),
                     '\n',
                 );
+
+                errors.push(error);
             }
 
             // leave the browser open in headful mode
@@ -133,9 +138,7 @@ export default class Runner {
 
         await this.cleanup();
 
-        if (error) {
-            throw error;
-        }
+        return errors;
     };
 }
 

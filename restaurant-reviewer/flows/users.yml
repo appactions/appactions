@@ -11,7 +11,8 @@ steps:
     assert: [title, toBe, Restaurant Reviewer]
   - with: { button: Sign in }
     do: click
-  - with: { input: Email }
+  # - with: { input: Email }
+  - with: input
     do: { type: $data.user.email }
   - with: { button: Sign in with TestLogin }
     do: click
