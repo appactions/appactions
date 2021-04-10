@@ -35,7 +35,10 @@ export async function dispatch(renderer, command) {
         if (command.do) {
             if (command.do.method === 'click') {
                 const els = renderer.findNativeNodes(subjectFiber);
+                // setTimeout(() => {
+                // console.log('clicking...');
                 els[0].click();
+                // }, 5000);
             }
         }
 
