@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 // the /##(.*)##/ thing means that part will be "typed in the animation"
 // #### at the end indicates the whole line should appear instantly
 const animation = [
-    { code: 'name: Submit page' },
-    { code: 'description: Should be able to submit links.' },
-    { code: 'steps:', cursorTarget: '[data-demo="input"]' },
+    { cursorTarget: '[data-demo="input"]' },
     { code: '  - with: { input: Website }####' },
     {
         code: '    do: { type##: https://pioneer.app## }',
@@ -18,14 +16,13 @@ const animation = [
         textarea: 'Founders track progress.',
         cursorTarget: '[data-demo="submit"]',
     },
-    // { code: '  - with: { form }####' },
     { code: '  - with: { form }####\n    do: submit####', submitted: true },
     { cursorTarget: '[data-demo="alert"]' },
     { code: '  - with: { alert }####\n    assert: [message, toBe, Success!]####' },
     {},
     {},
     {},
-    { code: '', cursorTarget: '[data-demo="code"]' },
+    { cursorTarget: '[data-demo="header"]' },
 ].reduce(
     (acc, curr) => {
         const last = acc[acc.length - 1];
@@ -38,7 +35,15 @@ const animation = [
             },
         ];
     },
-    [{ input: '', textarea: '', submitted: false, code: '', cursorTarget: '[data-demo="code"]' }],
+    [
+        {
+            input: '',
+            textarea: '',
+            submitted: false,
+            code: 'name: Submit page\ndescription: Should be able to submit links.\nsteps:',
+            cursorTarget: '[data-demo="header"]',
+        },
+    ],
 );
 
 function Cursor({ step }) {
@@ -85,7 +90,9 @@ function Demo() {
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-red-400 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-yellow-300 rounded-full"></span>
                     <span className="inline-block w-4 h-4 my-2 ml-2 bg-green-500 rounded-full"></span>
-                    <span className="flex-1 font-sans text-center text-gray-600 leading-8 -ml-28">AwesomeReactApp</span>
+                    <span className="flex-1 font-sans text-center text-gray-600 leading-8 -ml-28" data-demo="header">
+                        AwesomeReactApp
+                    </span>
                 </div>
                 <div className="p-4 overflow-hidden h-96">
                     <AppMockup step={step} />

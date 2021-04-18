@@ -15,9 +15,8 @@ export default function Home() {
                                     </span>
                                 </h1>
                                 <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                    Be incredibly productive in testing. Record user sessions inside your browser, keep
-                                    the result in source control. Achieve incredible stability thanks to the React-aware
-                                    test runner.
+                                    Be incredibly productive in testing. Record user sessions inside your browser. Store
+                                    results in source control. React-aware test runners score incredible stability.
                                 </p>
                                 <div className="mt-10 sm:mt-12">
                                     <SignUp />
@@ -55,8 +54,9 @@ export default function Home() {
                             E2E tests are flaky, cumbersome to write, execute slowly, need constant maintenance, best
                             practices are scarce, developers are required to write explicit wait logic or the
                             retryability is limited, needs web development experience to write good tests, fixing broken
-                            tests is hard work...
-                        </span>
+                            tests is hard work
+                        </span>{' '}
+                        ... just an endless array of chores.
                     </p>
                 </div>
             </section>
@@ -66,9 +66,9 @@ export default function Home() {
                         Introducing a <span className="text-brand-green">holistic&nbsp;change</span> to E2E.
                     </h2>
                     <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        Being React-aware means React App Actions is having direct access to React internals. This
-                        enables a <span className="highlight">declarative interface:</span> tests are fully separated
-                        from any form of implementation details,{' '}
+                        First testing tool accessing React internals. This enables a{' '}
+                        <span className="highlight">declarative interface:</span> tests are fully separated from any
+                        form of implementation details,{' '}
                         <span className="highlight">
                             test code only declares the expected behavior from the user's perspective.
                         </span>{' '}
@@ -76,26 +76,27 @@ export default function Home() {
                         more.
                     </p>
                     <p className="max-w-4xl mx-auto mb-6 text-lg italic font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        “React App Actions does the same to testing, what React did to UI.”
+                        “React App Actions does to testing what React did to UI.”
                     </p>
                 </div>
             </section>
             <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl" id="how-does-it-work">
                 <div className="px-4 sm:px-6 md:px-8">
                     <h2 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-center text-gray-900 sm:text-2xl lg:text-4xl lg:text-left">
-                        This is how it works:
+                        How it works:
                     </h2>
                     <div className="mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
                         <div className="relative mx-auto max-w-7xl">
                             <div className="max-w-lg mx-auto mt-12 grid gap-5 lg:grid-cols-4 lg:max-w-none">
                                 <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    <div className="flex-shrink-0">
+                                    {/* <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
                                             src="/img/photo-1496128858413-b36217c2ce36.jpeg"
                                             alt=""
                                         />
-                                    </div>
+                                    </div> */}
+                                    <div className="w-full h-4 bg-brand-yellow"></div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">
@@ -113,13 +114,14 @@ export default function Home() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    <div className="flex-shrink-0">
+                                    {/* <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
                                             src="/img/photo-1547586696-ea22b4d4235d.jpeg"
                                             alt=""
                                         />
-                                    </div>
+                                    </div> */}
+                                    <div className="w-full h-4 bg-brand-yellow"></div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">
@@ -137,13 +139,14 @@ export default function Home() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    <div className="flex-shrink-0">
+                                    {/* <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
                                             src="/img/photo-1492724441997-5dc865305da7.jpeg"
                                             alt=""
                                         />
-                                    </div>
+                                    </div> */}
+                                    <div className="w-full h-4 bg-brand-yellow"></div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">
@@ -162,13 +165,14 @@ export default function Home() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    <div className="flex-shrink-0">
+                                    {/* <div className="flex-shrink-0">
                                         <img
                                             className="object-cover w-full h-32"
                                             src="/img/photo-1498049860654-af1a5c566876.jpeg"
                                             alt=""
                                         />
-                                    </div>
+                                    </div> */}
+                                    <div className="w-full h-4 bg-brand-tan"></div>
                                     <div className="flex flex-col justify-between flex-1 p-6 bg-white">
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">4. Add it to CI/CD</p>
@@ -191,9 +195,9 @@ export default function Home() {
             <section className="relative py-16 bg-white sm:py-24 lg:py-32" id="benefits">
                 <div className="max-w-md px-4 mx-auto text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
                     <h2 className="text-base font-semibold tracking-wider text-indigo-600 uppercase">Benefits</h2>
-                    <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                        Sharp Tool for an Important Task
-                    </p>
+                    {/* <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        A sharp tool for an important task
+                    </p> */}
                     {/* <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
                         Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc,
                         ullamcorper malesuada. Eleifend condimentum id viverra nulla.
@@ -258,7 +262,7 @@ export default function Home() {
                                             </span>
                                         </div>
                                         <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Best of Two Worlds
+                                            Best of two worlds
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
                                             Enjoy the high-level nature of in-browser solutions, while utilizing all
@@ -365,7 +369,7 @@ export default function Home() {
                                             </span>
                                         </div>
                                         <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Effective Architecture
+                                            Effective architecture
                                         </h3>
                                         <p className="mt-5 text-base text-gray-500">
                                             The overhead is super tiny. Development environments will only grow by a

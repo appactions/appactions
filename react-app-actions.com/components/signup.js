@@ -56,7 +56,7 @@ function SignUp({ label = 'Sign up', light }) {
                         </svg>
                     </div>
                     <div className="ml-3">
-                        <h3 className="text-sm font-medium text-green-800">Please check your email to confirm</h3>
+                        <h3 className="text-sm font-medium text-green-800">Success! Thank you for your interest.</h3>
                         {/* <div className="mt-2 text-sm text-green-700">
                             <p>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum
