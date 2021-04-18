@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import expect from 'expect';
 import fs from 'fs';
+import chalk from 'chalk';
 import { StackTraceConfig, formatStackTrace } from 'jest-message-util';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
@@ -81,8 +82,8 @@ export default class Runner {
         const errors = [];
 
         for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
-            console.log('=== name:', this.flow.name);
-            console.log('=== variant:', variant);
+            console.log('=== Flow name:', chalk.bold(this.flow.name), `(variant: ${chalk.bold(variant)})`);
+            console.log();
 
             await this.startFlow();
 
