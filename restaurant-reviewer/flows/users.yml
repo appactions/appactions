@@ -2,7 +2,7 @@ description: General user flows.
 variants: [regular, owner]
 usage: 100%
 data:
-  { user, restaurant }: generate.js
+  { user, restaurant }: generate-user-data.js
 start:
   route: '/'
   auth: false
@@ -11,8 +11,7 @@ steps:
     assert: [title, toBe, Restaurant Reviewer]
   - with: { button: Sign in }
     do: click
-  # - with: { input: Email }
-  - with: input
+  - with: { input: Email }
     do: { type: $data.user.email }
   - with: { button: Sign in with TestLogin }
     do: click

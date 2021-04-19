@@ -73,7 +73,7 @@ export default class Runner {
         await this.browser.close();
         this.browser = null;
 
-        console.log('===\n');
+        console.log('=== Finished.\n');
     };
 
     run = async () => {
@@ -103,7 +103,11 @@ export default class Runner {
                 }
 
                 const stepName = `${step['with']['role']} ${
-                    step['with']['specifier'] ? `"${step['with']['specifier']}"` : ''
+                    step['with']['specifier']
+                        ? `"${step['with']['specifier']}"`
+                        : step['assert']
+                        ? `"${step['assert'][2]}"`
+                        : ''
                 }`;
 
                 if (errorHappenedNow) {
@@ -129,6 +133,8 @@ export default class Runner {
                 );
 
                 errors.push(error);
+            } else {
+                console.log();
             }
 
             // leave the browser open in headful mode

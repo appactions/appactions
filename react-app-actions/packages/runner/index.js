@@ -22,7 +22,7 @@ export async function run() {
         throw e;
     }
 
-    if (errors) {
+    if (errors.length) {
         console.log('Tests are failing.');
         console.log('There are', errors.length, 'error(s).');
         console.log();
