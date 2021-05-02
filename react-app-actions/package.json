@@ -17,6 +17,7 @@
         "glob": "^7.1.6",
         "jest-message-util": "^26.6.2",
         "lodash.get": "^4.4.2",
+        "xstate": "^4.18.0",
         "yaml": "^1.10.2"
     },
     "devDependencies": {

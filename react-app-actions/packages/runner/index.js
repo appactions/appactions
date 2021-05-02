@@ -11,11 +11,15 @@ export async function run() {
             .filter(validate),
     );
 
-    let errors = null;
+    let errors = [];
     try {
         for await (let flow of flows) {
             const runner = new Runner(flow);
-            errors = await runner.run();
+            const results = await runner.run();
+
+            if (results.length) {
+                errors = errors.concat(results);
+            }
         }
     } catch (e) {
         console.log('Error occured outside of test scope');
