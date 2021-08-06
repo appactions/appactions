@@ -4,7 +4,7 @@ function AboutPage() {
     return (
         <div className="max-w-xl mx-auto">
             <div className="block w-32 h-32 my-12 overflow-hidden border-4 rounded-full border-brand-green">
-                <img src="/img/avatar.jpg" alt="Avatar of Miklos" />
+                <img src="/img/profile.jpg" alt="Avatar of Miklos" />
             </div>
             <p className="my-8 text-lg font-medium text-gray-600">
                 Hi! My name is Miklos, and I've been working on the problem of E2E for a few years now.
