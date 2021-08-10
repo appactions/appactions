@@ -1,0 +1,184 @@
+if (!Cypress.AppActions) {
+    Cypress.AppActions = {
+        drivers: {},
+        componentByRole: {},
+        roles: new Set(),
+        overrides: {},
+    };
+}
+
+const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
+
+export function register(componentName, driverConfig) {
+    if (drivers[componentName]) {
+        throw new Error(`name collision: ${componentName} already has drivers registered`);
+    }
+
+    // some drivers don't implement actual drivers, just registered for a role
+    if (driverConfig.drivers) {
+        drivers[componentName] = driverConfig.drivers;
+    }
+
+    // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
+    if (driverConfig.role) {
+        componentByRole[componentName] = driverConfig.role;
+        roles.add(driverConfig.role);
+    }
+
+    if (driverConfig.override) {
+        overrides[componentName] = driverConfig.override;
+    }
+}
+
+const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
+
+export function getDisplayName(fiber) {
+    return Cypress.AppActions.reactApi.getDisplayName(fiber);
+}
+
+export function isRole(name) {
+    return roles.has(name);
+}
+
+function unwrapJQuery(el) {
+    if (isJquery(el)) {
+        if (!el.length) {
+            throw new Error('empty jQuery selector were passed to App Actions API');
+        }
+        if (el.length > 1) {
+            throw new Error(
+                'jQuery selector were passed to App Actions API with multiple element selected. Only one supported.',
+            );
+        }
+    }
+
+    return isJquery(el) ? el.get(0) : el;
+}
+
+const isPartOfRole = role => fiber => {
+    const displayName = getDisplayName(fiber);
+    return componentByRole[displayName] === role;
+};
+
+const hasMatchingName = componentName => fiber => {
+    const displayName = getDisplayName(fiber);
+    return displayName === componentName;
+};
+
+const findInstancesWithSpecificInteraction = (fiber, methodName) => {
+    const isMatching = fiber => {
+        const displayName = getDisplayName(fiber);
+
+        if (drivers[displayName]) {
+            if (drivers[displayName][methodName]) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isMatching);
+};
+
+const findClosestStateNode = fiber => {
+    if (fiber.stateNode) {
+        return fiber.stateNode;
+    }
+
+    let current = fiber.child;
+    while (current !== null) {
+        const instance = findClosestStateNode(current);
+        if (instance) {
+            return instance;
+        }
+        current = current.sibling;
+    }
+
+    return null;
+};
+
+export function callInteraction($el, methodName, ...args) {
+    const el = unwrapJQuery($el);
+    const rootFiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
+
+    const matches = findInstancesWithSpecificInteraction(rootFiber, methodName);
+
+    if (matches.length === 0) {
+        throw new Error(`Couldn't find instance with "${methodName}" interaction`);
+    }
+
+    if (matches.length > 1) {
+        throw new Error(
+            `Found more then one instances with "${methodName}" interaction. Narrow down the selection to match exactly a single element.`,
+        );
+    }
+
+    const [fiber] = matches;
+
+    const componentName = getDisplayName(fiber);
+
+    if (!drivers[componentName]) {
+        throw new Error(`Component ${componentName} has no drivers registered`);
+    }
+
+    const componentMap = drivers[componentName];
+    if (!componentMap[methodName]) {
+        throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
+    }
+
+    // TODO this will find any stateNode among the children, when we are adding function component support, return a null here in that case
+    const stateNode = findClosestStateNode(fiber);
+    const DOMNode = Cypress.AppActions.reactApi.findNativeNodes(fiber);
+
+    return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+}
+
+export function findElementByPredicate($root, predicate) {
+    const el = unwrapJQuery($root);
+    const fiber = Cypress.AppActions.reactApi.findFiber(el);
+    const matches = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, predicate);
+    return matches.flatMap(Cypress.AppActions.reactApi.findNativeNodes);
+}
+
+export function findElementByRole($root, role) {
+    return findElementByPredicate($root, isPartOfRole(role));
+}
+
+export function findElementByReactComponentName($root, componentName) {
+    return findElementByPredicate($root, hasMatchingName(componentName));
+}
+
+export function findAncestorElementByPredicate($root, predicate) {
+    const el = unwrapJQuery($root);
+    const fiber = Cypress.AppActions.reactApi.findFiber(el);
+    const parent = Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, predicate);
+    if (!parent) {
+        return [];
+    }
+    return Cypress.AppActions.reactApi.findNativeNodes(parent);
+}
+
+export function findAncestorElementByRole($root, role) {
+    return findAncestorElementByPredicate($root, isPartOfRole(role));
+}
+
+export function findAncestorElementByReactComponentName($root, componentName) {
+    return findAncestorElementByPredicate($root, hasMatchingName(componentName));
+}
+
+export function findOverride($root, role) {
+    const el = unwrapJQuery($root);
+    const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
+
+    // only care for a single match
+    // maybe we should do something smarter?
+    const [matchingFiber] = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(role));
+    if (!matchingFiber) {
+        return null;
+    }
+
+    const componentName = getDisplayName(matchingFiber);
+
+    return overrides[componentName] || null;
+}
