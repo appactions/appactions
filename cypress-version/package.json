@@ -13,8 +13,8 @@
     "test:ci": "start-server-and-test webpack-dev-server http://localhost:12000 cy:run:record",
     "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js"
   },
-  "author": "Miklos Megyes <miklos@eclecticiq.com>",
-  "license": "MIT",
+  "author": "Miklos Megyes <hello@miklos.dev>",
+  "license": "unlicensed",
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
