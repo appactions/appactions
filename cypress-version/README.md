@@ -1,3 +1,3 @@
-# React App Actions
+# Cypress Version
 
-Framework to create App Actions for React projects.
+This is the original, Cypress dependant version of React App Actions.
