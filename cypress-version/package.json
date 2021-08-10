@@ -1,0 +1,48 @@
+{
+  "name": "react-app-actions",
+  "version": "1.0.0",
+  "description": "Framework to create App Actions for a React project",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:record": "cypress run --record --key $CYPRESS_RECORD_KEY_FOR_APP_ACTIONS",
+    "test": "start-server-and-test webpack-dev-server http://localhost:12000 cy:open",
+    "test:headless": "start-server-and-test webpack-dev-server http://localhost:12000 cy:run",
+    "test:ci": "start-server-and-test webpack-dev-server http://localhost:12000 cy:run:record",
+    "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js"
+  },
+  "author": "Miklos Megyes <miklos@eclecticiq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-export-default-from": "^7.8.3",
+    "@babel/plugin-proposal-export-namespace-from": "^7.8.3",
+    "@babel/polyfill": "^7.8.3",
+    "@babel/preset-flow": "^7.9.0",
+    "@babel/preset-react": "^7.8.3",
+    "@cypress/webpack-preprocessor": "^5.4.1",
+    "@rollup/plugin-alias": "^3.0.1",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "cypress": "^4.6.0",
+    "html-webpack-plugin": "^4.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.0.0",
+    "rollup": "^2.4.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "semver": "^7.1.3",
+    "start-server-and-test": "^1.9.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "@cypress/unique-selector": "^0.4.2"
+  }
+}
