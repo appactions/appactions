@@ -3,53 +3,8 @@ import expect from 'expect';
 import fs from 'fs';
 import chalk from 'chalk';
 import { formatStackTrace } from 'jest-message-util';
-import { createMachine, interpret, assign } from 'xstate';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
-
-const runnerMachine = createMachine(
-    {
-        initial: 'step',
-        context: {
-            stepIndex: 0,
-            stepStartedAt: null,
-            steps: [],
-            errors: [],
-        },
-        states: {
-            step: {
-                on: {
-                    RESULT: 'result',
-                },
-            },
-            result: {
-                // ???
-                always: [{ target: 'step', cond: 'canRetry' }, 'passing'],
-            },
-            done: {
-                always: [{ target: 'failing', cond: 'hasErrors' }, 'passing'],
-            },
-            passing: {},
-            failing: {},
-        },
-    },
-    {
-        guards: {
-            hasErrors: context => !!context.errors.length,
-            isTimeout: context => Date.now() - context.stepStartedAt > 4000,
-            isQueueEmpty: context => context.stepIndex >= context.steps.length,
-        },
-        delays: {
-            RETRY: 200,
-        },
-    },
-);
-
-//   const dogService = interpret(fetchMachine)
-//     .onTransition((state) => console.log(state.value))
-//     .start();
-
-//   dogService.send('FETCH');
 
 export default class Runner {
     constructor({ content, fileName }) {
