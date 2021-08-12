@@ -12,9 +12,10 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.13.10",
-        "aria-query": "^4.2.2",
+        "chalk": "^4.1.0",
         "dom-accessibility-api": "^0.5.4",
         "glob": "^7.1.6",
+        "jest-message-util": "^26.6.2",
         "lodash.get": "^4.4.2",
         "yaml": "^1.10.2"
     },
@@ -31,13 +32,23 @@
         "@rollup/plugin-replace": "^2.4.1",
         "clipboard-js": "^0.3.6",
         "error-stack-parser": "^2.0.6",
+        "jest": "^26.6.3",
         "puppeteer": "^8.0.0",
         "rollup": "^2.41.4"
     },
     "scripts": {
-        "build:devtools-vendor": "./packages/backend/vendor/build-backend-renderer.sh",
+        "build:devtools-vendor": "./packages/runtime/vendor/build-backend-renderer.sh",
         "build": "rollup --config rollup.config.js",
         "postinstall": "yarn run build",
-        "test": "node test.js"
+        "test": "yarn test:unit && yarn test:e2e",
+        "test:unit": "jest",
+        "test:e2e": "node e2e/test.js"
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "<rootDir>/packages/runtime/vendor",
+            "<rootDir>/e2e"
+        ]
     }
 }

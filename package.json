@@ -17,5 +17,9 @@
     },
     "lint-staged": {
         "*.{js,css,md}": "prettier --write"
+    },
+    "scripts": {
+        "dev": "cd react-app-actions && rollup --config rollup.config.js --watch",
+        "test": "CI=true yarn --silent workspace restaurant-reviewer react-app-actions"
     }
 }

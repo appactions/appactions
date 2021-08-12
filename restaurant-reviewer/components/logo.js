@@ -1,4 +1,4 @@
-import { register } from 'react-app-actions';
+import { actionPlan } from 'react-app-actions';
 
 export default function Logo() {
     return (
@@ -10,4 +10,4 @@ export default function Logo() {
     );
 }
 
-register(Logo, { role: 'Logo' });
+actionPlan(Logo, { role: 'Logo', getSpecifier: () => 'Restaurant Reviewer Logo' });

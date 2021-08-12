@@ -1,40 +1,71 @@
 import puppeteer from 'puppeteer';
 import expect from 'expect';
+import fs from 'fs';
+import chalk from 'chalk';
+import { formatStackTrace } from 'jest-message-util';
 
 const baseUrl = process.env.REACT_APP_ACTIONS_BASE_URL || 'http://localhost:3000';
 
 export default class Runner {
-    constructor(flow, { headless = true } = {}) {
-        this.flow = flow;
+    constructor({ content, fileName }) {
+        this.flow = content;
+        this.fileName = fileName;
         this.currentVariant = null;
         this.browser = null;
         this.page = null;
-        this.headless = headless;
+        this.headless = Boolean(process.env.CI);
+        this.devtools = Boolean(process.env.DEVTOOLS);
     }
 
     init = async () => {
-        this.browser = await puppeteer.launch({ headless: this.headless });
+        this.browser = await puppeteer.launch({
+            headless: this.headless,
+            devtools: this.devtools,
+            args: [
+                `--window-size=1500,1300`,
+                `--remote-debugging-address=0.0.0.0`,
+                `--remote-debugging-port=9333`,
+                // '--wait-for-debugger',
+            ],
+        });
     };
 
-    startVariant = async variant => {
-        const startUrl = `${baseUrl}${this.flow.get('start').get('route')}`;
-        console.log('=== running variant:', { variant, startUrl });
-        this.currentVariant = variant;
+    startFlow = async () => {
+        const startUrl = `${baseUrl}${this.flow['start']['route']}`;
         this.page = await this.browser.newPage();
+
+        this.page.on('console', async msg => {
+            if (msg.type() !== 'info') {
+                return;
+            }
+            const args = await Promise.all(msg.args().map(arg => arg.jsonValue()));
+            const rendered = args.map(v => (typeof v === 'object' ? JSON.stringify(v, null, 2) : v)).join(' ');
+            console.log(rendered);
+        });
+
+        await this.page.evaluateOnNewDocument(
+            fs.readFileSync(require.resolve('react-app-actions/dist/runtime.js'), 'utf8'),
+        );
+        await this.page.evaluateOnNewDocument(() => {
+            ReactAppActions.installBackend(window);
+        });
+        await this.page.setViewport({
+            width: 1500,
+            height: 1300,
+        });
         await this.page.goto(startUrl);
-        await this.page.addScriptTag({ path: require.resolve('lodash.get/index.js') });
     };
 
-    processStep = async stepMap => {
-        const step = Object.fromEntries(stepMap);
-
-        if (step.with === 'document') {
+    processStep = async step => {
+        if (step.with.role === 'document') {
             if (step.assert) {
                 const [pathToActual, matcher, expected] = step.assert;
-                const value = await this.page.evaluate(path => get(document, path), pathToActual);
+                const value = await this.page.evaluate(path => ReactAppActions.utils.get(document, path), pathToActual);
                 await expect(value)[matcher](expected);
                 return true;
             }
+        } else {
+            return await this.page.evaluate(step => ReactAppActions.dispatch(ReactAppActions.renderer, step), step);
         }
     };
 
@@ -42,26 +73,79 @@ export default class Runner {
         await this.browser.close();
         this.browser = null;
 
-        console.log('done.');
+        console.log('=== Finished.\n');
     };
 
     run = async () => {
         await this.init();
 
-        for await (let [variant, steps] of Object.entries(this.flow.get('flattenedSteps'))) {
-            await this.startVariant(variant);
+        const errors = [];
+
+        for await (let [variant, steps] of Object.entries(this.flow['steps'])) {
+            console.log('=== Flow name:', chalk.bold(this.flow.name), `(variant: ${chalk.bold(variant)})`);
+            console.log();
+
+            await this.startFlow();
+
+            let error = null;
 
             for await (let step of steps) {
-                const result = await this.processStep(step);
-                if (result === true) {
-                    console.log('-', step.get('with'), '✓');
-                } else {
-                    console.log('-', step);
+                let result = null;
+                let errorHappenedNow = false;
+
+                if (!error) {
+                    try {
+                        result = await this.processStep(step);
+                    } catch (e) {
+                        error = e;
+                        errorHappenedNow = true;
+                    }
                 }
+
+                const stepName = `${step['with']['role']} ${
+                    step['with']['specifier']
+                        ? `"${step['with']['specifier']}"`
+                        : step['assert']
+                        ? `"${step['assert'][2]}"`
+                        : ''
+                }`;
+
+                if (errorHappenedNow) {
+                    console.log('[✖]', stepName);
+                } else if (result === true) {
+                    console.log('[✔]', stepName);
+                } else {
+                    console.log('[ ]', stepName);
+                }
+            }
+
+            if (error) {
+                console.log(
+                    formatStackTrace(
+                        error.stack,
+                        {
+                            rootDir: '',
+                            testMatch: [],
+                        },
+                        { noStackTrace: true },
+                    ),
+                    '\n',
+                );
+
+                errors.push(error);
+            } else {
+                console.log();
+            }
+
+            // leave the browser open in headful mode
+            if (!this.headless) {
+                await new Promise(() => {});
             }
         }
 
         await this.cleanup();
+
+        return errors;
     };
 }
 

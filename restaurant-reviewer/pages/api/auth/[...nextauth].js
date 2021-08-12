@@ -67,5 +67,6 @@ export default NextAuth({
     },
     pages: {
         error: '/auth/error',
+        signIn: process.env.NEXT_PUBLIC_TEST_MODE ? '/auth/login' : undefined,
     },
 });

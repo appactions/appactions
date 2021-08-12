@@ -132,15 +132,9 @@ export function installBackend(target) {
             if (typeof renderer.findFiberByHostInstance === 'function') {
                 // react-reconciler v16+
                 const appActionsRenderer = attachAppActionsRenderer(hook, id, renderer, target);
+                appActionsRenderer.getFiberRoots = () => Array.from(getFiberRoots(id));
 
-                target.ReactAppActionsBackend.renderer = appActionsRenderer;
-
-                // Object.defineProperty(target, 'ReactAppActionsRenderer', {
-                //     enumerable: false,
-                //     get() {
-                //         return appActionsRenderer;
-                //     },
-                // });
+                target.ReactAppActions.renderer = appActionsRenderer;
 
                 hook.rendererInterfaces.set(id, rendererInterface);
             } else if (renderer.ComponentTree) {

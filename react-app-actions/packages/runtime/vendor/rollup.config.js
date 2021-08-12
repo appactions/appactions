@@ -6,9 +6,9 @@ import replace from '@rollup/plugin-replace';
 import path from 'path';
 
 export default {
-    input: 'packages/backend/vendor/react-devtools-shared/src/backend/renderer.js',
+    input: 'packages/runtime/vendor/react-devtools-shared/src/backend/renderer.js',
     output: {
-        file: 'packages/backend/vendor/react-devtools-renderer.js',
+        file: 'packages/runtime/vendor/react-devtools-renderer.js',
         format: 'es',
     },
     plugins: [
@@ -28,11 +28,11 @@ export default {
                 },
                 {
                     find: 'react-devtools-feature-flags',
-                    replacement: 'packages/backend/vendor/mocked/react-devtools-feature-flags.js',
+                    replacement: 'packages/runtime/vendor/mocked/react-devtools-feature-flags.js',
                 },
                 {
                     find: /^shared\/(.*)/,
-                    replacement: 'packages/backend/vendor/shared/$1.js',
+                    replacement: 'packages/runtime/vendor/shared/$1.js',
                 },
             ],
         }),

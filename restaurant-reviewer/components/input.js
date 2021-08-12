@@ -1,5 +1,5 @@
 import React from 'react';
-import { register } from 'react-app-actions';
+import { actionPlan } from 'react-app-actions';
 
 const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, error }, ref) => {
     return (
@@ -46,7 +46,7 @@ const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, 
 
 export default Input;
 
-register(Input, {
+actionPlan(Input, {
     role: 'Input',
     fill(text) {
         this.ref.value = text;

@@ -1,0 +1,15 @@
+diff --git a/react-app-actions/packages/runtime/vendor/react-devtools-shared/src/backend/renderer.js b/react-app-actions/packages/runtime/vendor/react-devtools-shared/src/backend/renderer.js
+index 3bc2abe..c1befac 100644
+--- a/react-app-actions/packages/runtime/vendor/react-devtools-shared/src/backend/renderer.js
++++ b/react-app-actions/packages/runtime/vendor/react-devtools-shared/src/backend/renderer.js
+@@ -3858,5 +3858,10 @@ export function attach(
+     stopProfiling,
+     storeAsGlobal,
+     updateComponentFilters,
++
++    // added for React App Actions
++    findCurrentFiberUsingSlowPathById,
++    getFiberID,
++    getPrimaryFiber,
+   };
+ }

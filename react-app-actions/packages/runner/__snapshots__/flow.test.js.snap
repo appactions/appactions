@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should work 1`] = `
+Object {
+  "content": Object {
+    "data": Array [
+      Object {
+        "default": null,
+        "file": "generate.js",
+        "namedExports": Array [],
+      },
+    ],
+    "description": "General user flows.",
+    "name": "Unnamed",
+    "start": Object {
+      "auth": false,
+      "route": "/",
+    },
+    "steps": Object {
+      "owner": Array [
+        Object {
+          "assert": Array [
+            "title",
+            "toBe",
+            "Restaurant Reviewer",
+          ],
+          "with": Object {
+            "role": "document",
+            "specifier": null,
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Sign in",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "type",
+            "specifier": "$data.user.email",
+          },
+          "with": Object {
+            "role": "input",
+            "specifier": "Email",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Sign in with TestLogin",
+          },
+        },
+        Object {
+          "with": Object {
+            "role": "heading",
+            "specifier": "Welcome to Restaurant Reviewer!",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "input",
+            "specifier": "Restaurant owner",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Continue",
+          },
+        },
+      ],
+      "regular": Array [
+        Object {
+          "assert": Array [
+            "title",
+            "toBe",
+            "Restaurant Reviewer",
+          ],
+          "with": Object {
+            "role": "document",
+            "specifier": null,
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Sign in",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "type",
+            "specifier": "$data.user.email",
+          },
+          "with": Object {
+            "role": "input",
+            "specifier": "Email",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Sign in with TestLogin",
+          },
+        },
+        Object {
+          "with": Object {
+            "role": "heading",
+            "specifier": "Welcome to Restaurant Reviewer!",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "input",
+            "specifier": "Restaurant goer",
+          },
+        },
+        Object {
+          "do": Object {
+            "method": "click",
+            "specifier": null,
+          },
+          "with": Object {
+            "role": "button",
+            "specifier": "Continue",
+          },
+        },
+      ],
+    },
+    "usage": "100%",
+    "variants": Array [
+      "regular",
+      "owner",
+    ],
+  },
+  "fileName": "Unnamed",
+}
+`;
