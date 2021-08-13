@@ -1,5 +1,7 @@
 const { App } = require('@aws-cdk/core');
-const { CdkStack } = require('./cdk-stack');
+const { DBStack } = require('./db-stack');
 
 const app = new App();
-new CdkStack(app, 'CdkStack');
+
+const stackName = `RestaurantReviewer-DBStack-${process.env.STAGE}`;
+new DBStack(app, stackName);
