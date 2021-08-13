@@ -40,6 +40,11 @@ jobs:
         id: cdk_deploy
         run: yarn cdk:deploy
 
+      - name: add preview env vars to vercel
+        run: |
+          echo ${{ steps.cdk_deploy.outputs.restaurant_table }} | vercel env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
+          echo ${{ steps.cdk_deploy.outputs.user_table }} | vercel env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
+
       - name: update the github deployment status
         uses: bobheadxi/deployments@v0.5.2
         if: always()

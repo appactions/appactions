@@ -19,7 +19,7 @@
         "cypress:open": "cypress open",
         "cdk:bootstrap": "CDK_NEW_BOOTSTRAP=1 cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess",
         "cdk:deploy": "cdk deploy \"RestaurantReviewer-DBStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
-        "postcdk:deploy": "node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['RestaurantReviewer-DBStack-${STAGE}'].DeploymentUrl)\"",
+        "postcdk:deploy": "node --eval \"console.log('::set-output name=user_table::' + require('./cdk.out.json')['RestaurantReviewer-DBStack-${STAGE}'].UserTableName);console.log('::set-output name=restaurant_table::' + require('./cdk.out.json')['RestaurantReviewer-DBStack-${STAGE}'].RestaurantTableName);\"",
         "cdk:destroy": "cdk destroy \"RestaurantReviewer-DBStack-${STAGE}\" --force"
     },
     "dependencies": {
