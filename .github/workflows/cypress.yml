@@ -4,6 +4,7 @@ jobs:
   tests:
     if: github.event.deployment_status.environment == 'kitchensink' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
+    concurrency: deploy-${{ github.head_ref }}
     steps:
       - uses: actions/github-script@v3
         with:
