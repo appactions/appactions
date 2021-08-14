@@ -23,8 +23,6 @@
         "cdk:destroy": "cdk destroy \"RestaurantReviewer-DBStack-${STAGE}\" --force"
     },
     "dependencies": {
-        "@aws-cdk/aws-dynamodb": "^1.91.0",
-        "@aws-cdk/core": "^1.91.0",
         "@headlessui/react": "^0.3.1",
         "@tailwindcss/forms": "^0.2.1",
         "autoprefixer": "^10.2.1",
@@ -43,7 +41,10 @@
         "uuid": "^8.3.2"
     },
     "devDependencies": {
+        "@aws-cdk/aws-dynamodb": "^1.91.0",
+        "@aws-cdk/core": "^1.91.0",
         "@testing-library/cypress": "^7.0.4",
+        "aws-cdk": "^1.118.0",
         "cypress": "^6.6.0",
         "eslint-plugin-tailwind": "^0.2.1",
         "expect": "^26.6.2",
