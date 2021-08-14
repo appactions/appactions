@@ -53,7 +53,7 @@ jobs:
           echo -n ${{ steps.cdk_deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
 
       - name: Deploy to Vercel Staging 
-        id: deploy-vercel-staging
+        id: vercel_deploy
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
