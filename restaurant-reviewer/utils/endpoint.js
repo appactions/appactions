@@ -6,8 +6,8 @@ const requestMethods = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'CONNECT', 'OPTI
 
 function createDb(tableName) {
     const client = new aws.DynamoDB.DocumentClient({
-        accessKeyId: process.env.APP_AWS_ACCESS_KEY,
-        secretAccessKey: process.env.APP_AWS_SECRET_KEY,
+        accessKeyId: process.env.APP_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.APP_AWS_SECRET_ACCESS_KEY,
         region: process.env.APP_AWS_REGION,
         params: {
             TableName: tableName,
