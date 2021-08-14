@@ -6,18 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
-      - uses: actions/github-script@v3
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'pending',
-              context: 'Cypress',
-              description: 'Waiting...',
-            })
-
       - name: Checkout
         uses: actions/checkout@v1
 
@@ -30,33 +18,3 @@ jobs:
         env:
           CYPRESS_BASE_URL: ${{ steps.vercel_deploy.outputs.preview-url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-
-      - name: Cypress tests
-        uses: actions/github-script@v3
-        if: ${{ success() }}
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'success',
-              context: 'Cypress',
-              description: 'Cypress tests passed',
-              target_url: '${{ steps.cypress.outputs.dashboardUrl }}'
-            })
-
-      - name: Cypress tests
-        uses: actions/github-script@v3
-        if: ${{ failure() }}
-        with:
-          script: |
-            github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ github.sha }}',
-              state: 'failure',
-              context: 'Cypress',
-              description: 'Cypress tests failed',
-              target_url: '${{ steps.cypress.outputs.dashboardUrl }}'
-            })
