@@ -26,7 +26,15 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: destroy the stack on AWS
-        run: yarn cdk:destroy
+        run: yarn workspace restaurant-reviewer cdk:destroy
+
+      - name: remove vercel preview env vars
+        run: |
+          export VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }}
+          export VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}
+
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes
 
       - name: delete the github deployments and the corresponding environment
         uses: strumwolf/delete-deployment-environment@v1.1.0
