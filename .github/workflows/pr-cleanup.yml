@@ -1,4 +1,4 @@
-name: "Pull Request clean-up"
+name: "PR Cleanup"
 on:
   pull_request:
     types: [closed]
