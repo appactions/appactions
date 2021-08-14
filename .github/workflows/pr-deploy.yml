@@ -5,6 +5,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency: deploy-${{ github.head_ref }}
     steps:
       - name: inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
