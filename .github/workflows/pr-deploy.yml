@@ -14,11 +14,11 @@ jobs:
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
       - name: create a github deployment
-        uses: bobheadxi/deployments@v0.5.2
+        uses: bobheadxi/deployments@v0.6.0
         id: deployment
         with:
           step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
           env: kitchensink
           ref: ${{ github.head_ref }}
           no_override: false
@@ -52,16 +52,6 @@ jobs:
           echo -n ${{ steps.cdk_deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
           echo -n ${{ steps.cdk_deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
 
-      - name: update the github deployment status
-        uses: bobheadxi/deployments@v0.5.2
-        if: always()
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.cdk_deploy.outputs.env_url }}
-
       - name: Deploy to Vercel Staging 
         id: deploy-vercel-staging
         uses: amondnet/vercel-action@v20
@@ -69,4 +59,15 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          scope: ${{ secrets.VERCEL_ORG_ID }} 
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: update the github deployment status
+        uses: bobheadxi/deployments@v0.6.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.cdk_deploy.outputs.env_url }}
+
