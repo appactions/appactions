@@ -38,7 +38,7 @@ jobs:
 
       - name: deploy the stack on AWS
         id: cdk_deploy
-        run: yarn cdk:deploy
+        run: yarn workspace restaurant-reviewer cdk:deploy
 
       - name: add preview env vars to vercel
         run: |
