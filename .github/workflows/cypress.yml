@@ -1,0 +1,14 @@
+name: Cypress
+on: [deployment_status]
+jobs:
+  tests:
+    # if: ...
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: debug
+        run: |
+          echo ${{ github.event }}
+          
