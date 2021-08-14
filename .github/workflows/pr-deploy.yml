@@ -70,4 +70,5 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.cdk_deploy.outputs.env_url }}
+          target_url: ${{ steps.vercel_deploy.outputs.preview-url }}
 
