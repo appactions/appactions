@@ -45,8 +45,8 @@ jobs:
           export VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }}
           export VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}
 
-          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes
-          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes || true
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes || true
           
           echo -n ${{ steps.cdk_deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
           echo -n ${{ steps.cdk_deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
