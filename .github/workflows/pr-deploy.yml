@@ -19,7 +19,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ env.STAGE }}
+          env: kitchensink
           ref: ${{ github.head_ref }}
           no_override: false
           transient: true
