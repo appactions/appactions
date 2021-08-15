@@ -1,0 +1,44 @@
+name: "PR Cleanup"
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  clean-up:
+    runs-on: ubuntu-latest
+    concurrency: deploy-${{ github.head_ref }}
+    steps:
+      - name: inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: set STAGE variable in environment for next steps
+        run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
+
+      - name: checkout the files
+        uses: actions/checkout@v2
+
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: destroy the stack on AWS
+        run: yarn workspace restaurant-reviewer cdk:destroy
+
+      - name: remove vercel preview env vars
+        run: |
+          export VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }}
+          export VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}
+
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes
+
+      - name: delete the github deployments and the corresponding environment
+        uses: strumwolf/delete-deployment-environment@v1.1.0
+        with:
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          environment: ${{ env.STAGE }}

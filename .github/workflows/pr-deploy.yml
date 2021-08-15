@@ -1,0 +1,80 @@
+name: "PR Deploy"
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency: deploy-${{ github.head_ref }}
+    steps:
+      - name: inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: set STAGE variable in environment for next steps
+        run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
+
+      - name: create a github deployment
+        uses: bobheadxi/deployments@v0.6.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          env: kitchensink
+          ref: ${{ github.head_ref }}
+          no_override: false
+          transient: true
+
+      - name: checkout the files
+        uses: actions/checkout@v2
+
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: deploy the stack on AWS
+        id: cdk-deploy
+        run: yarn workspace restaurant-reviewer cdk:deploy
+
+      - name: add preview env vars to vercel
+        run: |
+          export VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }}
+          export VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}
+
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes || true
+          vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes || true
+          
+          echo -n ${{ steps.cdk-deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
+          echo -n ${{ steps.cdk-deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
+
+      - name: Deploy to Vercel Staging 
+        id: vercel-deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: update the github deployment status
+        uses: bobheadxi/deployments@v0.6.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+
+      - name: dispatch deployment-ready event
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          event-type: deployment-ready
+          client-payload: '{"preview-url": "${{ steps.vercel-deploy.outputs.preview-url }}"}'
+

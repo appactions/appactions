@@ -12,7 +12,7 @@ describe('Owner flow', () => {
         cy.visit('/');
     });
 
-    it('title', () => {
+    it.only('title', () => {
         cy.log('user', user);
         cy.document().its('title').should('eq', 'Restaurant Reviewer');
     });
