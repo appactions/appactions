@@ -23,7 +23,7 @@ jobs:
           environment: kitchensink
           state: in_progress
           transient_environment: true
-          required_contexts:
+          required_contexts: '[]'
           auto_merge: false
         env:
           GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
