@@ -96,8 +96,8 @@ jobs:
           deployment_id: ${{ fromJSON(steps.deployment.outputs.data).id }}
           state: ${{ job.status }}
           target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
-          # log_url: https://example.com/bar
-          # environment_url: https://example.com/baz
+          log_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          environment_url: ${{ steps.vercel-deploy.outputs.preview-url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
