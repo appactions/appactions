@@ -84,12 +84,6 @@ jobs:
       #     env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
       #     target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
 
-      - name: debug deployment id
-        run: echo ${{ fromJSON(steps.deployment.outputs.data).id }}"
-
-      - name: debug deployment parse
-        run: echo ${{ fromJSON(steps.deployment.outputs.data) }}"
-
       - name: update the github deployment status
         uses: octokit/request-action@v2.x
         if: always()
