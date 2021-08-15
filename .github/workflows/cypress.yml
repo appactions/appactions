@@ -19,5 +19,5 @@ jobs:
           working-directory: ./restaurant-reviewer
           record: true
         env:
-          CYPRESS_BASE_URL: ${{ github.event.deployment_status.log_url }}
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

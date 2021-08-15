@@ -14,7 +14,7 @@ jobs:
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
       - name: create a github deployment
-        uses: bobheadxi/deployments@v0.6.0
+        uses: miklosme/deployments@v0.6.0
         id: deployment
         with:
           step: start
@@ -62,7 +62,7 @@ jobs:
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
       - name: update the github deployment status
-        uses: bobheadxi/deployments@v0.6.0
+        uses: miklosme/deployments@v0.6.0
         if: always()
         with:
           step: finish
@@ -70,6 +70,6 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
-          log_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
 
 
