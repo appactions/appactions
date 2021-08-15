@@ -1,4 +1,4 @@
-name: "PR Deploy"
+name: "Deploy"
 on:
   pull_request:
     types: [opened, synchronize]
@@ -14,15 +14,19 @@ jobs:
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
       - name: create a github deployment
-        uses: bobheadxi/deployments@v0.6.0
+        uses: octokit/request-action@v2.x
         id: deployment
         with:
-          step: start
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          env: kitchensink
+          route: POST /repos/:repository/deployments
+          repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
-          no_override: false
-          transient: true
+          environment: kitchensink
+          state: in_progress
+          transient_environment: true
+          required_contexts: '[]'
+          auto_merge: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
 
       - name: checkout the files
         uses: actions/checkout@v2
@@ -52,7 +56,7 @@ jobs:
           echo -n ${{ steps.cdk-deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
           echo -n ${{ steps.cdk-deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
 
-      - name: Deploy to Vercel Staging 
+      - name: deploy to vercel staging 
         id: vercel-deploy
         uses: amondnet/vercel-action@v20
         with:
@@ -62,19 +66,17 @@ jobs:
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
       - name: update the github deployment status
-        uses: bobheadxi/deployments@v0.6.0
+        uses: octokit/request-action@v2.x
         if: always()
         with:
-          step: finish
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          route: POST /repos/:repository/deployments/:deployment_id/statuses
+          repository: ${{ github.repository }}
+          deployment_id: ${{ fromJSON(steps.deployment.outputs.data).id }}
+          state: ${{ job.status }}
+          target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          log_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          environment_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
 
-      - name: dispatch deployment-ready event
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          event-type: deployment-ready
-          client-payload: '{"preview-url": "${{ steps.vercel-deploy.outputs.preview-url }}"}'
 

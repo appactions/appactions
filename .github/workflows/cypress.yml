@@ -1,24 +1,33 @@
 name: Cypress
-on:
-  repository_dispatch:
-    types: [deployment-ready]
+on: [deployment_status]
 jobs:
   tests:
+    if: github.event.deployment_status.environment == 'kitchensink' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v1
 
-      - name: debug
-        run: echo ${{ toJSON(github.event) }}
-
-      - name: Run Cypress
+      - name: run cypress
         uses: cypress-io/github-action@v2
         id: cypress
         with:
           working-directory: ./restaurant-reviewer
           record: true
         env:
-          CYPRESS_BASE_URL: ${{ github.event.client-payload.preview-url }}
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+      - name: add results to commit
+        uses: octokit/request-action@v2.x
+        if: always()
+        with:
+          route: POST /repos/:repository/statuses/:sha
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          state: ${{ job.status }}
+          target_url: ${{ steps.cypress.outputs.dashboardUrl }}
+          context: Cypress Dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
