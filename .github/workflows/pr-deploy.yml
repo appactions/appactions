@@ -13,16 +13,28 @@ jobs:
       - name: set STAGE variable in environment for next steps
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
+      # - name: create a github deployment
+      #   uses: miklosme/deployments@v0.6.1
+      #   id: deployment
+      #   with:
+      #     step: start
+      #     token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+      #     env: kitchensink
+      #     ref: ${{ github.head_ref }}
+      #     no_override: false
+      #     transient: true
+
       - name: create a github deployment
-        uses: miklosme/deployments@v0.6.1
+        uses: octokit/request-action@v2.x
         id: deployment
         with:
-          step: start
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          env: kitchensink
+          route: POST /repos/:repository/deployments
+          repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
-          no_override: false
-          transient: true
+          environment: kitchensink
+          transient_environment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: checkout the files
         uses: actions/checkout@v2
@@ -61,15 +73,29 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
 
+      # - name: update the github deployment status
+      #   uses: miklosme/deployments@v0.6.1
+      #   if: always()
+      #   with:
+      #     step: finish
+      #     token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+      #     status: ${{ job.status }}
+      #     deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      #     env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+      #     target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+
       - name: update the github deployment status
-        uses: miklosme/deployments@v0.6.1
+        uses: octokit/request-action@v2.x
         if: always()
         with:
-          step: finish
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
-          target_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          route: POST /repos/:repository/deployments/:deployment_id/statuses
+          repository: ${{ github.repository }}
+          deployment_id: ${{ steps.deployment.outputs.data.deployment_id }}
+          state: ${{ job.status }}
+          target_url: https://example.com/foo
+          log_url: https://example.com/bar
+          environment_url: https://example.com/baz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
