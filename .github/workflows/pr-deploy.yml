@@ -37,7 +37,7 @@ jobs:
           required_contexts: '[]'
           auto_merge: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
 
       - name: checkout the files
         uses: actions/checkout@v2
@@ -99,6 +99,6 @@ jobs:
           log_url: ${{ steps.vercel-deploy.outputs.preview-url }}
           environment_url: ${{ steps.vercel-deploy.outputs.preview-url }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
 
 
