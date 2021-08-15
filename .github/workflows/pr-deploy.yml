@@ -38,7 +38,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: deploy the stack on AWS
-        id: cdk_deploy
+        id: cdk-deploy
         run: yarn workspace restaurant-reviewer cdk:deploy
 
       - name: add preview env vars to vercel
@@ -49,11 +49,11 @@ jobs:
           vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes || true
           vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes || true
           
-          echo -n ${{ steps.cdk_deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
-          echo -n ${{ steps.cdk_deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
+          echo -n ${{ steps.cdk-deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
+          echo -n ${{ steps.cdk-deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
 
       - name: Deploy to Vercel Staging 
-        id: vercel_deploy
+        id: vercel-deploy
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -69,6 +69,12 @@ jobs:
           token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          # env_url: ${{ steps.cdk_deploy.outputs.env_url }}
-          env_url: ${{ steps.vercel_deploy.outputs.preview-url }}
+          env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+
+      - name: dispatch deployment-ready event
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          event-type: deployment-ready
+          client-payload: '{"preview-url": "${{ steps.vercel-deploy.outputs.preview-url }}"}'
 
