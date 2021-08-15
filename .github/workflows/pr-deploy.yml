@@ -30,7 +30,7 @@ jobs:
         with:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
-          ref: ${{ github.sha }}
+          ref: ${{ github.head_ref }}
           environment: kitchensink
           state: in_progress
           transient_environment: true
