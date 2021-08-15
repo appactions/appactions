@@ -70,11 +70,6 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.vercel-deploy.outputs.preview-url }}
+          log_url: ${{ steps.vercel-deploy.outputs.preview-url }}
 
-      - name: dispatch deployment-ready event
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-          event-type: deployment-ready
-          client-payload: '{"preview-url": "${{ steps.vercel-deploy.outputs.preview-url }}"}'
 

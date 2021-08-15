@@ -1,9 +1,8 @@
 name: Cypress
-on:
-  repository_dispatch:
-    types: [deployment-ready]
+on: [deployment_status]
 jobs:
   tests:
+    if: github.event.deployment_status.environment == 'kitchensink' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
@@ -20,5 +19,5 @@ jobs:
           working-directory: ./restaurant-reviewer
           record: true
         env:
-          CYPRESS_BASE_URL: ${{ github.event.client-payload.preview-url }}
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.log_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
