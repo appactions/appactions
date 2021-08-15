@@ -86,7 +86,7 @@ jobs:
 
       - name: debug deployment outputs
         run: |
-          echo "deployment outputs: ${{ steps.deployment.outputs }}"
+          echo "deployment outputs: ${{ toJSON(steps.deployment.outputs) }}"
 
       - name: update the github deployment status
         uses: octokit/request-action@v2.x
