@@ -32,7 +32,10 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.sha }}
           environment: kitchensink
+          state: in_progress
           transient_environment: true
+          required_contexts: []
+          auto_merge: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
