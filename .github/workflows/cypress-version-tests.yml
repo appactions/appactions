@@ -11,7 +11,7 @@ jobs:
 
       - name: run unit tests
         id: cypress
-        run: yarn cypress
+        run: yarn workspace cypress-version cypress
         env:
           CI: true
           CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
