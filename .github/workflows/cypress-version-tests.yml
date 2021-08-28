@@ -7,7 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
 
       - name: run unit tests
         id: cypress
