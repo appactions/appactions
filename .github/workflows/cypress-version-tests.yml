@@ -28,6 +28,6 @@ jobs:
           sha: ${{ github.sha }}
           state: ${{ job.status }}
           target_url: ${{ steps.cypress.outputs.dashboardUrl }}
-          context: Cypress Version unit tests
+          context: Unit tests
         env:
           GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
