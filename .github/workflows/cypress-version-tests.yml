@@ -1,0 +1,30 @@
+name: Cypress Version Unit Tests
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: run unit tests
+        id: cypress
+        run: yarn cypress
+        env:
+          CI: true
+          CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
+
+      - name: add results to commit
+        uses: octokit/request-action@v2.x
+        if: always()
+        with:
+          route: POST /repos/:repository/statuses/:sha
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          state: ${{ job.status }}
+          target_url: ${{ steps.cypress.outputs.dashboardUrl }}
+          context: Cypress Version unit tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}

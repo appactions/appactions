@@ -5,12 +5,8 @@
   "main": "./src/index.js",
   "scripts": {
     "start": "webpack-dev-server --hot",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "cy:run:record": "cypress run --record --key $CYPRESS_RECORD_KEY_FOR_APP_ACTIONS",
-    "test": "start-server-and-test webpack-dev-server http://localhost:12000 cy:open",
-    "test:headless": "start-server-and-test webpack-dev-server http://localhost:12000 cy:run",
-    "test:ci": "start-server-and-test webpack-dev-server http://localhost:12000 cy:run:record",
+    "cypress": "node cypress.js",
+    "test": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
     "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js"
   },
   "author": "Miklos Megyes <hello@miklos.dev>",
@@ -27,6 +23,7 @@
     "@rollup/plugin-alias": "^3.0.1",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "babel-loader": "^8.2.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "cypress": "^4.6.0",
