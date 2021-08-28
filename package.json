@@ -3,7 +3,8 @@
     "workspaces": [
         "react-app-actions",
         "react-app-actions.com",
-        "restaurant-reviewer"
+        "restaurant-reviewer",
+        "cypress-version"
     ],
     "devDependencies": {
         "eslint": "^7.22.0",
