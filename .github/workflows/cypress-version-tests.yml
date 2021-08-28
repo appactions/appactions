@@ -14,10 +14,10 @@ jobs:
 
       - name: run unit tests
         id: cypress
-        run: yarn workspace cypress-version cypress
+        run: yarn workspace cypress-version test
         env:
           CI: true
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
+          CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
 
       - name: add results to commit
         uses: octokit/request-action@v2.x
