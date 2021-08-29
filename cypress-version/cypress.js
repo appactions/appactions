@@ -7,19 +7,29 @@ process.on('unhandledRejection', err => {
 
 const cypress = require('cypress');
 
-(async () => {
-    if (process.env.CI) {
-        const result = await cypress.run({
+if (process.env.CI) {
+    cypress
+        .run({
             record: !!process.env.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS,
             key: process.env.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS,
+        })
+        .then(result => {
+            if (result.failures) {
+                console.error('Could not execute tests');
+                console.error(result.message);
+                process.exit(1);
+            }
+
+            if (result.totalFailed) {
+                process.exit(1);
+            } else {
+                process.exit(0);
+            }
+        })
+        .catch(err => {
+            console.error(err.message);
+            process.exit(1);
         });
-        console.log('result keys', Object.keys(result))
-        console.log('result runUrl', result.runUrl)
-        console.log(`::set-output name=dashboardUrl::kekw.com`);
-        if (result.runUrl) {
-            console.log(`::set-output name=dashboardUrl::${result.runUrl}`);
-        }
-    } else {
-        await cypress.open();
-    }
-})();
+} else {
+    cypress.open();
+}

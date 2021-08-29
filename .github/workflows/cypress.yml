@@ -1,7 +1,7 @@
 name: Cypress
 on: [deployment_status]
 jobs:
-  tests:
+  main:
     if: github.event.deployment_status.environment == 'kitchensink' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
@@ -19,7 +19,7 @@ jobs:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
-      # - name: add results to commit
+      # - name: add a check to display the cypress dashboard
       #   uses: octokit/request-action@v2.x
       #   if: always()
       #   with:
@@ -31,17 +31,3 @@ jobs:
       #     context: Cypress Dashboard
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-
-      - name: add results to commit
-        uses: octokit/request-action@v2.x
-        if: always()
-        with:
-          route: POST /repos/:repository/check-runs
-          repository: ${{ github.repository }}
-          head_sha: ${{ github.sha }}
-          status: completed
-          conclusion: ${{ job.status }}
-          details_url: ${{ steps.cypress.outputs.dashboardUrl }}
-          name: Cypress Dashboard
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
