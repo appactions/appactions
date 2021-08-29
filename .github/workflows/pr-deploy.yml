@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  deploy:
+  main:
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
