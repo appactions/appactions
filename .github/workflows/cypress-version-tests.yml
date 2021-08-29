@@ -19,15 +19,29 @@ jobs:
           CI: true
           CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
 
+      # - name: add results to commit
+      #   uses: octokit/request-action@v2.x
+      #   if: always()
+      #   with:
+      #     route: POST /repos/:repository/statuses/:sha
+      #     repository: ${{ github.repository }}
+      #     sha: ${{ github.sha }}
+      #     state: ${{ job.status }}
+      #     target_url: ${{ steps.cypress.outputs.dashboardUrl }}
+      #     context: Unit tests
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+
       - name: add results to commit
         uses: octokit/request-action@v2.x
         if: always()
         with:
-          route: POST /repos/:repository/statuses/:sha
+          route: POST /repos/:repository/check-runs
           repository: ${{ github.repository }}
-          sha: ${{ github.sha }}
-          state: ${{ job.status }}
-          target_url: ${{ steps.cypress.outputs.dashboardUrl }}
-          context: Unit tests
+          head_sha: ${{ github.sha }}
+          status: completed
+          conclusion: ${{ job.status }}
+          details_url: ${{ steps.cypress.outputs.dashboardUrl }}
+          name: Unit tests
         env:
           GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
