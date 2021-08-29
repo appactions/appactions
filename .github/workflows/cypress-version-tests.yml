@@ -44,4 +44,4 @@ jobs:
           details_url: ${{ steps.cypress.outputs.dashboardUrl }}
           name: Unit tests
         env:
-          GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
