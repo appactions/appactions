@@ -14,7 +14,7 @@ function AboutPage() {
                 cover a large number of features. However, it is high cost, because it's very hard to get it right.
             </p>
             <p className="my-8 text-lg font-medium text-gray-600">
-                For this reason, I started working on React App Actions. I believe I'm after something big with this
+                For this reason, I started working on App Actions. I believe I'm after something big with this
                 simple idea: this is a testing tool that hooks into the internal state of React, which opens a window to
                 a lot of smart tricks.
             </p>

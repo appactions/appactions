@@ -1,3 +1,3 @@
-## React App Actions Landing Page
+## App Actions Landing Page
 
 `yarn dev`

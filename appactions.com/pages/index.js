@@ -22,7 +22,7 @@ export default function Home() {
                                     <SignUp />
 
                                     <p className="mt-3 text-sm text-gray-400 sm:mt-4">
-                                        React App Actions is not ready for public release, but it's close!
+                                        App Actions is not ready for public release, but it's close!
                                         <br />
                                         Join the newsletter to be notified when it's available.
                                     </p>
@@ -76,7 +76,7 @@ export default function Home() {
                         more.
                     </p>
                     <p className="max-w-4xl mx-auto mb-6 text-lg italic font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        “React App Actions does to testing what React did to UI.”
+                        “App Actions does to testing what React did to UI.”
                     </p>
                 </div>
             </section>
@@ -157,7 +157,7 @@ export default function Home() {
                                                 can read and understand what does the test code (a Flow) is saying.
                                             </p>
                                             <p className="mt-3 text-base text-gray-500">
-                                                In React App Actions, batteries are included. By default, selection
+                                                In App Actions, batteries are included. By default, selection
                                                 happens by Aria Roles, but you can declare custom ones relevant for your
                                                 app.
                                             </p>
@@ -177,7 +177,7 @@ export default function Home() {
                                         <div className="flex-1">
                                             <p className="text-xl font-semibold text-gray-900">4. Add it to CI/CD</p>
                                             <p className="mt-3 text-base text-gray-500">
-                                                React App Actions is the tool, that brings your CI/CD to the next level.
+                                                App Actions is the tool, that brings your CI/CD to the next level.
                                             </p>
                                             <p className="mt-3 text-base text-gray-500">
                                                 No more false positives, no more cryptic errors. The unmatched stability
@@ -426,7 +426,7 @@ export default function Home() {
                                 Want to be an early adopter?
                             </h2>
                             <p className="max-w-3xl mt-4 text-lg text-white">
-                                Join the newletter to get notified when React App Actions is available.
+                                Join the newletter to get notified when App Actions is available.
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">

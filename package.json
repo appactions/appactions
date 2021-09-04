@@ -2,7 +2,7 @@
     "private": true,
     "workspaces": [
         "react-app-actions",
-        "react-app-actions.com",
+        "appactions.com",
         "restaurant-reviewer",
         "cypress-version"
     ],

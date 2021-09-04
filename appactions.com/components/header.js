@@ -8,7 +8,7 @@ function Header() {
                 <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
                     <div className="flex justify-start lg:w-0 lg:flex-1">
                         <Link href="/">
-                            <a className="block p-2 border-4 shadow w-52 text-brand-green border-brand-green">
+                            <a className="block p-2 w-52 text-brand-green">
                                 <span className="sr-only">Workflow</span>
                                 <Logo />
                             </a>
@@ -45,13 +45,6 @@ function Header() {
                             </a>
                         </Link>
                     </nav>
-                    <div className="items-center justify-end hidden sm:flex md:flex-1 lg:w-0">
-                        <Link href="/about">
-                            <a className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300">
-                                Request access
-                            </a>
-                        </Link>
-                    </div>
                 </div>
             </div>
         </div>

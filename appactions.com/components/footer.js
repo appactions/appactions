@@ -5,7 +5,7 @@ function Footer() {
             <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6">
                 <div className="pt-8 mt-12">
                     <p className="text-base text-center text-gray-400">
-                        © 2021 React App Actions. All rights reserved.<span className="mx-8">|</span>
+                        © 2021 App Actions. All rights reserved.<span className="mx-8">|</span>
                         <a
                             href="https://twitter.com/miklosxyz"
                             target="_blank"
