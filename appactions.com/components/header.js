@@ -24,22 +24,17 @@ function Header() {
                         </button>
                     </div> */}
                     <nav className="hidden lg:flex space-x-10">
-                        <Link href="/#vision">
+                        <Link href="/#what">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                Vision
+                                What
                             </a>
                         </Link>
-                        <Link href="/#how-does-it-work">
+                        <Link href="/#how">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                How does it work
+                                How
                             </a>
                         </Link>
-                        <Link href="/#benefits">
-                            <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                Benefits
-                            </a>
-                        </Link>
-                        <Link href="/about">
+                        <Link href="/#about">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
                                 About
                             </a>

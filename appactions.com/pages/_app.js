@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
             </Head>
 
             <div className="flex flex-col justify-between min-h-screen">
-                <Header />
+                {/* <Header /> */}
 
                 <Main>
                     <Component {...pageProps} />

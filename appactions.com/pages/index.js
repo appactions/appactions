@@ -1,5 +1,6 @@
 import SignUp from 'components/signup';
 import Demo from 'components/demo';
+import FloatElement from 'components/float-element';
 
 export default function Home() {
     return (
@@ -27,13 +28,48 @@ export default function Home() {
                                         Join the newsletter to be notified when it's available.
                                     </p>
                                 </div>
+
+                                <div className="px-4 my-52">
+                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                        Headline foo bar
+                                    </h2>
+                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
+                                        Foo bar
+                                    </p>
+                                </div>
+                                <div className="px-4 my-52">
+                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                        Headline foo bar
+                                    </h2>
+                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
+                                        Foo bar
+                                    </p>
+                                </div>
+                                <div className="px-4 my-52">
+                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                        Headline foo bar
+                                    </h2>
+                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
+                                        Foo bar
+                                    </p>
+                                </div>
+                                <div className="px-4 my-52">
+                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                        Headline foo bar
+                                    </h2>
+                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
+                                        Foo bar
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6 sm:w-full sm:mx-auto">
                             <div className="w-full">
                                 <div className="">
                                     <div className="relative w-full">
-                                        <Demo />
+                                        <FloatElement>
+                                            <Demo />
+                                        </FloatElement>
                                     </div>
                                 </div>
                             </div>
@@ -41,380 +77,317 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl">
-                <div className="px-4 sm:px-6 md:px-8">
-                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                        Current E2E tools don’t actually&nbsp;work.
-                    </h2>
-                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        <span className="highlight">E2E testing is a high reward, high-cost way to test.</span> It gives
-                        more confidence to the developer than any other approach. However, getting it right is extremely
-                        hard.{' '}
-                        <span className="fadeout">
-                            E2E tests are flaky, cumbersome to write, execute slowly, need constant maintenance, best
-                            practices are scarce, developers are required to write explicit wait logic or the
-                            retryability is limited, needs web development experience to write good tests, fixing broken
-                            tests is hard work
-                        </span>{' '}
-                        ... just an endless array of chores.
-                    </p>
-                </div>
-            </section>
-            <section className="relative z-10 mx-auto text-center mt-28 max-w-screen-lg xl:max-w-screen-xl" id="vision">
-                <div className="px-4 sm:px-6 md:px-8">
-                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                        Introducing a <span className="text-brand-green">holistic&nbsp;change</span> to E2E.
-                    </h2>
-                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        First testing tool accessing React internals. This enables a{' '}
-                        <span className="highlight">declarative interface:</span> tests are fully separated from any
-                        form of implementation details,{' '}
-                        <span className="highlight">
-                            test code only declares the expected behavior from the user's perspective.
-                        </span>{' '}
-                        This results in more maintainable test code, superior stability, excellent performance, and many
-                        more.
-                    </p>
-                    <p className="max-w-4xl mx-auto mb-6 text-lg italic font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        “App Actions does to testing what React did to UI.”
-                    </p>
-                </div>
-            </section>
-            <section className="relative z-10 mx-auto mt-28 max-w-screen-lg xl:max-w-screen-xl" id="how-does-it-work">
-                <div className="px-4 sm:px-6 md:px-8">
-                    <h2 className="mb-8 text-xl font-extrabold leading-none tracking-tight text-center text-gray-900 sm:text-2xl lg:text-4xl lg:text-left">
-                        How it works:
-                    </h2>
-                    <div className="mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                        <div className="relative mx-auto max-w-7xl">
-                            <div className="max-w-lg mx-auto mt-12 grid gap-5 lg:grid-cols-4 lg:max-w-none">
-                                <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    {/* <div className="flex-shrink-0">
-                                        <img
-                                            className="object-cover w-full h-32"
-                                            src="/img/photo-1496128858413-b36217c2ce36.jpeg"
-                                            alt=""
-                                        />
-                                    </div> */}
-                                    <div className="w-full h-4 bg-brand-yellow"></div>
-                                    <div className="flex flex-col justify-between flex-1 p-6 bg-white">
-                                        <div className="flex-1">
-                                            <p className="text-xl font-semibold text-gray-900">
-                                                1. Record the user flow
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                Just manually test your app. Our browser extension will record what you
-                                                do. This is it.
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                All of this happens in your own browser. No jumping between windows. No
-                                                CORS issues. No second browser to eat up your CPU.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    {/* <div className="flex-shrink-0">
-                                        <img
-                                            className="object-cover w-full h-32"
-                                            src="/img/photo-1547586696-ea22b4d4235d.jpeg"
-                                            alt=""
-                                        />
-                                    </div> */}
-                                    <div className="w-full h-4 bg-brand-yellow"></div>
-                                    <div className="flex flex-col justify-between flex-1 p-6 bg-white">
-                                        <div className="flex-1">
-                                            <p className="text-xl font-semibold text-gray-900">
-                                                2. Save the test as a Flow
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                A Flow is a YAML file, generated by the browser extension. It's a very
-                                                human-friendly way to declare test logic.
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                Easy to manually edit, if you want to. Works great with version control
-                                                systems, like Git.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    {/* <div className="flex-shrink-0">
-                                        <img
-                                            className="object-cover w-full h-32"
-                                            src="/img/photo-1492724441997-5dc865305da7.jpeg"
-                                            alt=""
-                                        />
-                                    </div> */}
-                                    <div className="w-full h-4 bg-brand-yellow"></div>
-                                    <div className="flex flex-col justify-between flex-1 p-6 bg-white">
-                                        <div className="flex-1">
-                                            <p className="text-xl font-semibold text-gray-900">
-                                                3. Add custom Roles (optional)
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                Element selection happens by roles. This way even a non-technical person
-                                                can read and understand what does the test code (a Flow) is saying.
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                In App Actions, batteries are included. By default, selection
-                                                happens by Aria Roles, but you can declare custom ones relevant for your
-                                                app.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col overflow-hidden rounded-lg shadow-lg">
-                                    {/* <div className="flex-shrink-0">
-                                        <img
-                                            className="object-cover w-full h-32"
-                                            src="/img/photo-1498049860654-af1a5c566876.jpeg"
-                                            alt=""
-                                        />
-                                    </div> */}
-                                    <div className="w-full h-4 bg-brand-tan"></div>
-                                    <div className="flex flex-col justify-between flex-1 p-6 bg-white">
-                                        <div className="flex-1">
-                                            <p className="text-xl font-semibold text-gray-900">4. Add it to CI/CD</p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                App Actions is the tool, that brings your CI/CD to the next level.
-                                            </p>
-                                            <p className="mt-3 text-base text-gray-500">
-                                                No more false positives, no more cryptic errors. The unmatched stability
-                                                and clear error messages on real issues will change how you develop
-                                                React apps.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+            <section className="relative px-4 py-16 mx-auto bg-white sm:py-24 lg:py-32 max-w-7xl lg:px-8" id="benefits">
+                <p class="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                    Everything you need to know
+                </p>
+                <h2 class="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">Contents</h2>
+                <dl class="pt-10 mt-6 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-12">
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g>
+                                        <path fill="none" d="M0 0h24v24H0z"></path>
+                                        <path d="M5.455 15L1 18.5V3a1 1 0 0 1 1-1h15a1 1 0 0 1 1 1v12H5.455zm-.692-2H16V4H3v10.385L4.763 13zM8 17h10.237L20 18.385V8h1a1 1 0 0 1 1 1v13.5L17.545 19H9a1 1 0 0 1-1-1v-1z"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Why Rust?</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">
+                            Learn what makes Rust unique and makes it fast and reliable
+                        </dd>
                     </div>
-                </div>
-            </section>
-            <section className="relative py-16 bg-white sm:py-24 lg:py-32" id="benefits">
-                <div className="max-w-md px-4 mx-auto text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
-                    <h2 className="text-base font-semibold tracking-wider text-indigo-600 uppercase">Benefits</h2>
-                    {/* <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                        A sharp tool for an important task
-                    </p> */}
-                    {/* <p className="mx-auto mt-5 text-xl text-gray-500 max-w-prose">
-                        Phasellus lorem quam molestie id quisque diam aenean nulla in. Accumsan in quis quis nunc,
-                        ullamcorper malesuada. Eleifend condimentum id viverra nulla.
-                    </p> */}
-                    <div className="mt-12">
-                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/lock-closed */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Unbeatable stability
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            Having aware of React internals enables the test runner to know exactly what
-                                            is going on. From being patient with a slow network, to realize fatal states
-                                            early.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/refresh */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Best of two worlds
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            Enjoy the high-level nature of in-browser solutions, while utilizing all
-                                            benefits of Selenium. Develop with an effective high-level API, test with a
-                                            mature browser automation tool.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/cloud-upload */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Incredible productivity
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            You. Can. Create. These. Tests. Just. By. Manually. Performing. It. Once.
-                                            <br />I have nothing else to say.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/shield-check */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Low maintenance
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            Tests are only changing when the feature change. Implementation details are
-                                            radically separated from the test code. Unrelated development will never
-                                            break a test.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/cog */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                                    />
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Effective architecture
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            The overhead is super tiny. Development environments will only grow by a
-                                            lean browser extension. Unlike other tools, requires no dedicated browser to
-                                            develop tests.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pt-6">
-                                <div className="px-6 pb-8 rounded-lg flow-root bg-gray-50">
-                                    <div className="-mt-6">
-                                        <div>
-                                            <span className="inline-flex items-center justify-center p-3 shadow-lg bg-brand-green rounded-md">
-                                                {/* Heroicon name: outline/server */}
-                                                <svg
-                                                    className="w-6 h-6 text-white"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
-                                                    aria-hidden="true"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth={2}
-                                                        d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
-                                                    />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <h3 className="mt-8 text-lg font-medium tracking-tight text-gray-900">
-                                            Starts simple, scales great
-                                        </h3>
-                                        <p className="mt-5 text-base text-gray-500">
-                                            Works well with any size of React app. Developer experience is the same on
-                                            landing pages and enterprise apps.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Cargo</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">
+                            Installing dependencies and compiling using the package manager
+                        </dd>
                     </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M16.018,3.815L15.232,8h-4.966l0.716-3.815L9.018,3.815L8.232,8H4v2h3.857l-0.751,4H3v2h3.731l-0.714,3.805l1.965,0.369 L8.766,16h4.966l-0.714,3.805l1.965,0.369L15.766,16H20v-2h-3.859l0.751-4H21V8h-3.733l0.716-3.815L16.018,3.815z M14.106,14H9.141 l0.751-4h4.966L14.106,14z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Numbers, Booleans and Strings
+                            </p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Basic Rust data types and their behaviour</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M5,16h3v3c0,1.103,0.897,2,2,2h9c1.103,0,2-0.897,2-2v-9c0-1.103-0.897-2-2-2h-3V5c0-1.103-0.897-2-2-2H5 C3.897,3,3,3.897,3,5v9C3,15.103,3.897,16,5,16z M14.001,14L14.001,14L14,10h0.001V14z M19,10l0.001,9H10v-3h4c1.103,0,2-0.897,2-2 v-4H19z M5,5h9v3h-4c-1.103,0-2,0.897-2,2v4H5V5z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Structs and Traits</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Abstractions to make your own data types</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Functions and Closures</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Functions, methods and closures in depth</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g>
+                                        <path fill="none" d="M0 0h24v24H0z"></path>
+                                        <path d="M19 22H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v12h4v4a3 3 0 0 1-3 3zm-1-5v2a1 1 0 0 0 2 0v-2h-2zm-2 3V4H4v15a1 1 0 0 0 1 1h11zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2z"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Common Data Structures in Rust
+                            </p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Vectors, linked lists, tries and more</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g>
+                                        <path fill="none" d="M0 0h24v24H0z"></path>
+                                        <path d="M12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.811 5.741L17 12h3a8 8 0 1 0-2.46 5.772l.998 1.795A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2zm0 5a3 3 0 0 1 3 3v1h1v5H8v-5h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-.993.883L11 10v1h2v-1a1 1 0 0 0-.883-.993L12 9z"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Mutability and Ownership
+                            </p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">The magic Rust memory model simplified</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v2h2V1h-2v2zm0 15H5l5-6v6zm9-15h-5v2h5v13l-5-6v9h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Pattern Matching</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Switch cases on steroids</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M11.001 10H13.001V15H11.001zM11 16H13V18H11z"></path>
+                                    <path d="M13.768,4.2C13.42,3.545,12.742,3.138,12,3.138s-1.42,0.407-1.768,1.063L2.894,18.064 c-0.331,0.626-0.311,1.361,0.054,1.968C3.313,20.638,3.953,21,4.661,21h14.678c0.708,0,1.349-0.362,1.714-0.968 c0.364-0.606,0.385-1.342,0.054-1.968L13.768,4.2z M4.661,19L12,5.137L19.344,19H4.661z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Errors</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Handling and recovering from errors in your Rust program</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    version="1.2"
+                                    baseProfile="tiny"
+                                    viewBox="0 0 24 24"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <g>
+                                        <path d="M18 16.184v-8.368c1.161-.415 2-1.514 2-2.816 0-1.654-1.346-3-3-3s-3 1.346-3 3c0 1.302.839 2.401 2 2.815v8.369c-1.161.415-2 1.514-2 2.816 0 1.654 1.346 3 3 3s3-1.346 3-3c0-1.302-.839-2.401-2-2.816zm-1-12.184c.552 0 1 .449 1 1s-.448 1-1 1-1-.449-1-1 .448-1 1-1zm0 16c-.552 0-1-.449-1-1s.448-1 1-1 1 .449 1 1-.448 1-1 1zM10 5c0-1.654-1.346-3-3-3s-3 1.346-3 3c0 1.302.839 2.401 2 2.815v8.369c-1.161.415-2 1.514-2 2.816 0 1.654 1.346 3 3 3s3-1.346 3-3c0-1.302-.839-2.401-2-2.816v-8.368c1.161-.415 2-1.514 2-2.816zm-3-1c.552 0 1 .449 1 1s-.448 1-1 1-1-.449-1-1 .448-1 1-1zm0 16c-.552 0-1-.449-1-1s.448-1 1-1 1 .449 1 1-.448 1-1 1z"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Concurrency</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">Stress free concurrency, work stealing and more</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="currentColor"
+                                    stroke-width="0"
+                                    viewBox="0 0 16 16"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                        d="M14.25 5.75v-4h-1.5v2.542c-1.145-1.359-2.911-2.209-4.84-2.209-3.177 0-5.92 2.307-6.16 5.398l-.02.269h1.501l.022-.226c.212-2.195 2.202-3.94 4.656-3.94 1.736 0 3.244.875 4.05 2.166h-2.83v1.5h4.163l.962-.975V5.75h-.004zM8 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                                    ></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Testing and Debugging</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">
+                            Helpful patterns and tools to test and debug your Rust code
+                        </dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </span>
+                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Ecosystem Packages</p>
+                        </dt>
+                        <dd class="mt-2 font-sans text-lg">
+                            Equivalent packages to the most popular JavaScript libraries
+                        </dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section className="px-4 mx-auto max-w-7xl lg:px-8">
+                <div className="block w-32 h-32 my-12 overflow-hidden border-4 rounded-full border-brand-green">
+                    <img src="/img/profile.jpg" alt="Avatar of Miklos" />
                 </div>
+                <p className="my-8 text-lg font-medium text-gray-600">
+                    Hi! My name is Miklos, and I've been working on the problem of E2E for a few years now.
+                </p>
+                <p className="my-8 text-lg font-medium text-gray-600">
+                    E2E testing is a high reward, high-cost way to test. High reward, because a relatively simple test
+                    can cover a large number of features. However, it is high cost, because it's very hard to get it
+                    right.
+                </p>
+                <p className="my-8 text-lg font-medium text-gray-600">
+                    For this reason, I started working on App Actions. I believe I'm after something big with this
+                    simple idea: this is a testing tool that hooks into the internal state of React, which opens a
+                    window to a lot of smart tricks.
+                </p>
+                <p className="my-8 text-lg font-medium text-gray-600">
+                    If you’re interested, lend me your email and I’ll keep you updated!
+                </p>
             </section>
 
             <section className="relative">
