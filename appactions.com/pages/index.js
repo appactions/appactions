@@ -10,7 +10,7 @@ export default function Home() {
                     <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                         <div className="px-4 sm:px-6 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
                             <div>
-                                <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
+                                <h1 className="mt-8 text-4xl font-extrabold tracking-tight sm:mt-12 sm:leading-none lg:mt-24 lg:text-5xl xl:text-6xl">
                                     <span className="md:block">
                                         Leave behind flaky E2E tests <span className="text-brand-green">forever</span>.
                                     </span>
@@ -30,36 +30,36 @@ export default function Home() {
                                 </div>
 
                                 <div className="px-4 my-52">
-                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                                        foo bar
+                                    </p>
+                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                         Headline foo bar
                                     </h2>
-                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                                        Foo bar
-                                    </p>
                                 </div>
                                 <div className="px-4 my-52">
-                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                                        foo bar
+                                    </p>
+                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                         Headline foo bar
                                     </h2>
-                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                                        Foo bar
-                                    </p>
                                 </div>
                                 <div className="px-4 my-52">
-                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                                        foo bar
+                                    </p>
+                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                         Headline foo bar
                                     </h2>
-                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                                        Foo bar
-                                    </p>
                                 </div>
                                 <div className="px-4 my-52">
-                                    <h2 className="mb-8 text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                                        foo bar
+                                    </p>
+                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                         Headline foo bar
                                     </h2>
-                                    <p className="max-w-4xl mx-auto mb-6 text-lg font-medium sm:text-2xl sm:leading-10 space-y-6">
-                                        Foo bar
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -79,20 +79,20 @@ export default function Home() {
             </section>
 
             <section className="relative px-4 py-16 mx-auto bg-white sm:py-24 lg:py-32 max-w-7xl lg:px-8" id="benefits">
-                <p class="font-sans text-lg font-bold tracking-widest text-black uppercase">
+                <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
                     Everything you need to know
                 </p>
-                <h2 class="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">Contents</h2>
-                <dl class="pt-10 mt-6 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-12">
-                    <div class="relative">
+                <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">Benefits</h2>
+                <dl className="pt-10 mt-6 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-12">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -103,15 +103,15 @@ export default function Home() {
                                     </g>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Why Rust?</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Why Rust?</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">
+                        <dd className="mt-2 font-sans text-lg">
                             Learn what makes Rust unique and makes it fast and reliable
                         </dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="none"
@@ -119,7 +119,7 @@ export default function Home() {
                                     viewBox="0 0 24 24"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -130,21 +130,21 @@ export default function Home() {
                                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Cargo</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Cargo</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">
+                        <dd className="mt-2 font-sans text-lg">
                             Installing dependencies and compiling using the package manager
                         </dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -152,21 +152,21 @@ export default function Home() {
                                     <path d="M16.018,3.815L15.232,8h-4.966l0.716-3.815L9.018,3.815L8.232,8H4v2h3.857l-0.751,4H3v2h3.731l-0.714,3.805l1.965,0.369 L8.766,16h4.966l-0.714,3.805l1.965,0.369L15.766,16H20v-2h-3.859l0.751-4H21V8h-3.733l0.716-3.815L16.018,3.815z M14.106,14H9.141 l0.751-4h4.966L14.106,14z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
                                 Numbers, Booleans and Strings
                             </p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Basic Rust data types and their behaviour</dd>
+                        <dd className="mt-2 font-sans text-lg">Basic Rust data types and their behaviour</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -174,19 +174,19 @@ export default function Home() {
                                     <path d="M5,16h3v3c0,1.103,0.897,2,2,2h9c1.103,0,2-0.897,2-2v-9c0-1.103-0.897-2-2-2h-3V5c0-1.103-0.897-2-2-2H5 C3.897,3,3,3.897,3,5v9C3,15.103,3.897,16,5,16z M14.001,14L14.001,14L14,10h0.001V14z M19,10l0.001,9H10v-3h4c1.103,0,2-0.897,2-2 v-4H19z M5,5h9v3h-4c-1.103,0-2,0.897-2,2v4H5V5z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Structs and Traits</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Structs and Traits</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Abstractions to make your own data types</dd>
+                        <dd className="mt-2 font-sans text-lg">Abstractions to make your own data types</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -194,19 +194,19 @@ export default function Home() {
                                     <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Functions and Closures</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Functions and Closures</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Functions, methods and closures in depth</dd>
+                        <dd className="mt-2 font-sans text-lg">Functions, methods and closures in depth</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -217,21 +217,21 @@ export default function Home() {
                                     </g>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
                                 Common Data Structures in Rust
                             </p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Vectors, linked lists, tries and more</dd>
+                        <dd className="mt-2 font-sans text-lg">Vectors, linked lists, tries and more</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -242,21 +242,21 @@ export default function Home() {
                                     </g>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
                                 Mutability and Ownership
                             </p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">The magic Rust memory model simplified</dd>
+                        <dd className="mt-2 font-sans text-lg">The magic Rust memory model simplified</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -264,19 +264,19 @@ export default function Home() {
                                     <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v2h2V1h-2v2zm0 15H5l5-6v6zm9-15h-5v2h5v13l-5-6v9h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Pattern Matching</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Pattern Matching</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Switch cases on steroids</dd>
+                        <dd className="mt-2 font-sans text-lg">Switch cases on steroids</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -285,13 +285,13 @@ export default function Home() {
                                     <path d="M13.768,4.2C13.42,3.545,12.742,3.138,12,3.138s-1.42,0.407-1.768,1.063L2.894,18.064 c-0.331,0.626-0.311,1.361,0.054,1.968C3.313,20.638,3.953,21,4.661,21h14.678c0.708,0,1.349-0.362,1.714-0.968 c0.364-0.606,0.385-1.342,0.054-1.968L13.768,4.2z M4.661,19L12,5.137L19.344,19H4.661z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Errors</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Errors</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Handling and recovering from errors in your Rust program</dd>
+                        <dd className="mt-2 font-sans text-lg">Handling and recovering from errors in your Rust program</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
@@ -299,7 +299,7 @@ export default function Home() {
                                     version="1.2"
                                     baseProfile="tiny"
                                     viewBox="0 0 24 24"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -309,19 +309,19 @@ export default function Home() {
                                     </g>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Concurrency</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Concurrency</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">Stress free concurrency, work stealing and more</dd>
+                        <dd className="mt-2 font-sans text-lg">Stress free concurrency, work stealing and more</dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
                                     stroke-width="0"
                                     viewBox="0 0 16 16"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -333,15 +333,15 @@ export default function Home() {
                                     ></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Testing and Debugging</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Testing and Debugging</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">
+                        <dd className="mt-2 font-sans text-lg">
                             Helpful patterns and tools to test and debug your Rust code
                         </dd>
                     </div>
-                    <div class="relative">
+                    <div className="relative">
                         <dt>
-                            <span class="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
                                     stroke="currentColor"
                                     fill="none"
@@ -349,7 +349,7 @@ export default function Home() {
                                     viewBox="0 0 24 24"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    class="w-6 h-6"
+                                    className="w-6 h-6"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -359,35 +359,13 @@ export default function Home() {
                                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                 </svg>
                             </span>
-                            <p class="font-sans text-lg font-semibold text-black lg:text-xl">Ecosystem Packages</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Ecosystem Packages</p>
                         </dt>
-                        <dd class="mt-2 font-sans text-lg">
+                        <dd className="mt-2 font-sans text-lg">
                             Equivalent packages to the most popular JavaScript libraries
                         </dd>
                     </div>
                 </dl>
-            </section>
-
-            <section className="px-4 mx-auto max-w-7xl lg:px-8">
-                <div className="block w-32 h-32 my-12 overflow-hidden border-4 rounded-full border-brand-green">
-                    <img src="/img/profile.jpg" alt="Avatar of Miklos" />
-                </div>
-                <p className="my-8 text-lg font-medium text-gray-600">
-                    Hi! My name is Miklos, and I've been working on the problem of E2E for a few years now.
-                </p>
-                <p className="my-8 text-lg font-medium text-gray-600">
-                    E2E testing is a high reward, high-cost way to test. High reward, because a relatively simple test
-                    can cover a large number of features. However, it is high cost, because it's very hard to get it
-                    right.
-                </p>
-                <p className="my-8 text-lg font-medium text-gray-600">
-                    For this reason, I started working on App Actions. I believe I'm after something big with this
-                    simple idea: this is a testing tool that hooks into the internal state of React, which opens a
-                    window to a lot of smart tricks.
-                </p>
-                <p className="my-8 text-lg font-medium text-gray-600">
-                    If you’re interested, lend me your email and I’ll keep you updated!
-                </p>
             </section>
 
             <section className="relative">

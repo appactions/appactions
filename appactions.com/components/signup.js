@@ -113,31 +113,39 @@ function SignUp({ label = 'Sign up', light }) {
                     <label htmlFor="email" className="sr-only">
                         Email address
                     </label>
+                    <label for="email-address" className="sr-only">
+                        Email address
+                    </label>
                     <input
                         id="email"
                         type="email"
                         name="email"
                         placeholder="Enter your email"
                         disabled={status === STATUSES.SUBMITTING}
-                        className={
-                            light
-                                ? 'shadow block w-full px-4 py-3 text-base text-gray-900 placeholder-teal-400 border-4 border-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:border-white focus:ring-offset-transparent'
-                                : 'shadow block w-full px-4 py-3 text-base text-gray-900 placeholder-teal-400 border-4 border-brand-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 focus:border-brand-green'
-                        }
+                        className="py-2 font-sans text-lg font-medium placeholder-gray-400 border-2 rounded-l-lg text-gray border-brand-green w-44 sm:w-72"
                         data-cta="cta-input"
                     />
-                </div>
-                <div className="mt-3 sm:mt-0 sm:ml-3">
                     <button
                         type="submit"
                         disabled={status === STATUSES.SUBMITTING}
-                        className={
-                            light
-                                ? 'block px-4 py-3 font-medium border-4 shadow border-white text-white hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 disabled:opacity-50 focus:ring-offset-transparent'
-                                : 'block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300 disabled:opacity-50'
-                        }
+                        className="inline-flex items-center px-3 py-2 font-sans text-lg font-bold tracking-wider text-white uppercase border-2 rounded-r-lg bg-brand-green border-brand-green"
                     >
                         {label}
+                        <svg
+                            stroke="currentColor"
+                            fill="currentColor"
+                            stroke-width="0"
+                            viewBox="0 0 24 24"
+                            className="ml-2"
+                            height="1em"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g>
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path d="M3 13h6v-2H3V1.846a.5.5 0 0 1 .741-.438l18.462 10.154a.5.5 0 0 1 0 .876L3.741 22.592A.5.5 0 0 1 3 22.154V13z"></path>
+                            </g>
+                        </svg>
                     </button>
                 </div>
             </div>
