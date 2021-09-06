@@ -5,61 +5,68 @@ import FloatElement from 'components/float-element';
 export default function Home() {
     return (
         <>
-            <section className="mt-16 sm:mt-24">
+            <section className="mt-16 mb-32 sm:mt-24">
                 <div className="mx-auto max-w-7xl">
                     <div className="lg:grid lg:grid-cols-12 lg:gap-8">
                         <div className="px-4 sm:px-6 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
                             <div>
-                                <h1 className="mt-8 text-4xl font-extrabold tracking-tight sm:mt-12 sm:leading-none lg:mt-24 lg:text-5xl xl:text-6xl">
+                                <h3 className="mt-8 font-sans text-lg font-bold tracking-widest text-black uppercase sm:mt-12 lg:mt-24">
+                                    App Actions
+                                </h3>
+                                <h1 className="text-4xl font-extrabold tracking-tight sm:leading-none lg:text-5xl xl:text-6xl">
                                     <span className="md:block">
-                                        Leave behind flaky E2E tests <span className="text-brand-green">forever</span>.
+                                        Effortless E2E testing for <span className="text-brand-green">React</span>.
                                     </span>
                                 </h1>
-                                <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                    Be incredibly productive in testing. Record user sessions inside your browser. Store
-                                    results in source control. React-aware test runners score incredible stability.
+                                <p className="mt-3 text-base text-gray-900 mb-28 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                    "Write" tests in a no-code browser extension. Store results in source control. Tests
+                                    are entirely implementation details free. Update them only when UX changes.
                                 </p>
                                 <div className="mt-10 sm:mt-12">
+                                    <p className="my-3 font-sans font-bold tracking-wider text-black uppercase text-md md:text-lg">
+                                        SIGN UP TO HEAR AS SOON AS WE LAUNCH!
+                                    </p>
                                     <SignUp />
-
-                                    <p className="mt-3 text-sm text-gray-400 sm:mt-4">
-                                        App Actions is not ready for public release, but it's close!
-                                        <br />
-                                        Join the newsletter to be notified when it's available.
-                                    </p>
                                 </div>
 
-                                <div className="px-4 my-52">
-                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
-                                        foo bar
-                                    </p>
+                                <div className="px-4 mt-32">
                                     <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Headline foo bar
+                                        High level
                                     </h2>
+                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                        <span className="text-brand-green">App Actions</span> is an abstraction on
+                                        Selenium to test React apps. It frees you from dealing with the low-level API
+                                        issues, so you can focus on creating great tests.
+                                    </p>
                                 </div>
-                                <div className="px-4 my-52">
-                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
-                                        foo bar
-                                    </p>
+                                <div className="px-4 my-32">
                                     <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Headline foo bar
+                                        Session-recording
                                     </h2>
+                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                        Perform the user behavior once; our browser extension generates the test. Just
+                                        check in the resulting code in your version control system, and you are done!
+                                    </p>
                                 </div>
-                                <div className="px-4 my-52">
-                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
-                                        foo bar
-                                    </p>
+                                <div className="px-4 my-32">
                                     <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Headline foo bar
+                                        Pattern-based selection
                                     </h2>
+                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                        Selecting elements by CSS selectors is not just a pain, it makes tests go out of
+                                        date pretty fast. Instead, App Actions select elements by patterns. Default
+                                        patterns are WAI-ARIA roles, but you can define custom ones.
+                                    </p>
                                 </div>
-                                <div className="px-4 my-52">
-                                    <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
-                                        foo bar
-                                    </p>
+                                <div className="px-4 my-32">
                                     <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Headline foo bar
+                                        Low maintenance
                                     </h2>
+                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                        App Actions tests are entirely free of implementation details. This way, you
+                                        only have to touch a test next time when business logic changes. Because tests
+                                        are defined in YAML format, editing them does not require programming skills.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +74,7 @@ export default function Home() {
                             <div className="w-full">
                                 <div className="">
                                     <div className="relative w-full">
-                                        <FloatElement>
+                                        <FloatElement unLockAt={1150}>
                                             <Demo />
                                         </FloatElement>
                                     </div>
@@ -78,7 +85,10 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="relative px-4 py-16 mx-auto bg-white sm:py-24 lg:py-32 max-w-7xl lg:px-8" id="benefits">
+            <section
+                className="relative px-4 pt-8 pb-16 mx-auto bg-white sm:pb-24 lg:pb-32 max-w-7xl lg:px-8"
+                id="benefits"
+            >
                 <p className="font-sans text-lg font-bold tracking-widest text-black uppercase">
                     Everything you need to know
                 </p>
@@ -194,7 +204,9 @@ export default function Home() {
                                     <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7z"></path>
                                 </svg>
                             </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Functions and Closures</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Functions and Closures
+                            </p>
                         </dt>
                         <dd className="mt-2 font-sans text-lg">Functions, methods and closures in depth</dd>
                     </div>
@@ -287,7 +299,9 @@ export default function Home() {
                             </span>
                             <p className="font-sans text-lg font-semibold text-black lg:text-xl">Errors</p>
                         </dt>
-                        <dd className="mt-2 font-sans text-lg">Handling and recovering from errors in your Rust program</dd>
+                        <dd className="mt-2 font-sans text-lg">
+                            Handling and recovering from errors in your Rust program
+                        </dd>
                     </div>
                     <div className="relative">
                         <dt>
@@ -333,7 +347,9 @@ export default function Home() {
                                     ></path>
                                 </svg>
                             </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Testing and Debugging</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Testing and Debugging
+                            </p>
                         </dt>
                         <dd className="mt-2 font-sans text-lg">
                             Helpful patterns and tools to test and debug your Rust code
