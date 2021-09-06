@@ -26,7 +26,7 @@ export default function Home() {
                                     <p className="my-3 font-sans font-bold tracking-wider text-black uppercase text-md md:text-lg">
                                         SIGN UP TO HEAR AS SOON AS WE LAUNCH!
                                     </p>
-                                    <SignUp />
+                                    <SignUp light />
                                 </div>
 
                                 <div className="px-4 mt-32">
@@ -98,287 +98,170 @@ export default function Home() {
                         <dt>
                             <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
+                                    xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     className="w-6 h-6"
                                     height="1em"
                                     width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <g>
-                                        <path fill="none" d="M0 0h24v24H0z"></path>
-                                        <path d="M5.455 15L1 18.5V3a1 1 0 0 1 1-1h15a1 1 0 0 1 1 1v12H5.455zm-.692-2H16V4H3v10.385L4.763 13zM8 17h10.237L20 18.385V8h1a1 1 0 0 1 1 1v13.5L17.545 19H9a1 1 0 0 1-1-1v-1z"></path>
-                                    </g>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Why Rust?</p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">
-                            Learn what makes Rust unique and makes it fast and reliable
-                        </dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
+                                    strokeWidth={1.5}
                                     stroke="currentColor"
-                                    fill="none"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
+                                    fill="transparent"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                    <path d="M0 0h24v24H0z" stroke="none" />
+                                    <path d="M3 17L9 11 13 15 21 7" />
+                                    <path d="M14 7L21 7 21 14" />
                                 </svg>
                             </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Cargo</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Fast</p>
                         </dt>
                         <dd className="mt-2 font-sans text-lg">
-                            Installing dependencies and compiling using the package manager
+                            Thanks to the under the hood optimization, test running performance will always be faster
+                            than the same test written in plain Selenium.
                         </dd>
                     </div>
                     <div className="relative">
                         <dt>
                             <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
                                 <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
+                                    xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
                                     className="w-6 h-6"
                                     height="1em"
                                     width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M16.018,3.815L15.232,8h-4.966l0.716-3.815L9.018,3.815L8.232,8H4v2h3.857l-0.751,4H3v2h3.731l-0.714,3.805l1.965,0.369 L8.766,16h4.966l-0.714,3.805l1.965,0.369L15.766,16H20v-2h-3.859l0.751-4H21V8h-3.733l0.716-3.815L16.018,3.815z M14.106,14H9.141 l0.751-4h4.966L14.106,14z"></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
-                                Numbers, Booleans and Strings
-                            </p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Basic Rust data types and their behaviour</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
+                                    strokeWidth={1.5}
                                     stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M5,16h3v3c0,1.103,0.897,2,2,2h9c1.103,0,2-0.897,2-2v-9c0-1.103-0.897-2-2-2h-3V5c0-1.103-0.897-2-2-2H5 C3.897,3,3,3.897,3,5v9C3,15.103,3.897,16,5,16z M14.001,14L14.001,14L14,10h0.001V14z M19,10l0.001,9H10v-3h4c1.103,0,2-0.897,2-2 v-4H19z M5,5h9v3h-4c-1.103,0-2,0.897-2,2v4H5V5z"></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Structs and Traits</p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Abstractions to make your own data types</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7z"></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
-                                Functions and Closures
-                            </p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Functions, methods and closures in depth</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <g>
-                                        <path fill="none" d="M0 0h24v24H0z"></path>
-                                        <path d="M19 22H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v12h4v4a3 3 0 0 1-3 3zm-1-5v2a1 1 0 0 0 2 0v-2h-2zm-2 3V4H4v15a1 1 0 0 0 1 1h11zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2z"></path>
-                                    </g>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
-                                Common Data Structures in Rust
-                            </p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Vectors, linked lists, tries and more</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <g>
-                                        <path fill="none" d="M0 0h24v24H0z"></path>
-                                        <path d="M12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.811 5.741L17 12h3a8 8 0 1 0-2.46 5.772l.998 1.795A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2zm0 5a3 3 0 0 1 3 3v1h1v5H8v-5h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-.993.883L11 10v1h2v-1a1 1 0 0 0-.883-.993L12 9z"></path>
-                                    </g>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
-                                Mutability and Ownership
-                            </p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">The magic Rust memory model simplified</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M10 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h5v2h2V1h-2v2zm0 15H5l5-6v6zm9-15h-5v2h5v13l-5-6v9h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Pattern Matching</p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Switch cases on steroids</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M11.001 10H13.001V15H11.001zM11 16H13V18H11z"></path>
-                                    <path d="M13.768,4.2C13.42,3.545,12.742,3.138,12,3.138s-1.42,0.407-1.768,1.063L2.894,18.064 c-0.331,0.626-0.311,1.361,0.054,1.968C3.313,20.638,3.953,21,4.661,21h14.678c0.708,0,1.349-0.362,1.714-0.968 c0.364-0.606,0.385-1.342,0.054-1.968L13.768,4.2z M4.661,19L12,5.137L19.344,19H4.661z"></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Errors</p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">
-                            Handling and recovering from errors in your Rust program
-                        </dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    version="1.2"
-                                    baseProfile="tiny"
-                                    viewBox="0 0 24 24"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <g>
-                                        <path d="M18 16.184v-8.368c1.161-.415 2-1.514 2-2.816 0-1.654-1.346-3-3-3s-3 1.346-3 3c0 1.302.839 2.401 2 2.815v8.369c-1.161.415-2 1.514-2 2.816 0 1.654 1.346 3 3 3s3-1.346 3-3c0-1.302-.839-2.401-2-2.816zm-1-12.184c.552 0 1 .449 1 1s-.448 1-1 1-1-.449-1-1 .448-1 1-1zm0 16c-.552 0-1-.449-1-1s.448-1 1-1 1 .449 1 1-.448 1-1 1zM10 5c0-1.654-1.346-3-3-3s-3 1.346-3 3c0 1.302.839 2.401 2 2.815v8.369c-1.161.415-2 1.514-2 2.816 0 1.654 1.346 3 3 3s3-1.346 3-3c0-1.302-.839-2.401-2-2.816v-8.368c1.161-.415 2-1.514 2-2.816zm-3-1c.552 0 1 .449 1 1s-.448 1-1 1-1-.449-1-1 .448-1 1-1zm0 16c-.552 0-1-.449-1-1s.448-1 1-1 1 .449 1 1-.448 1-1 1z"></path>
-                                    </g>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Concurrency</p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">Stress free concurrency, work stealing and more</dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="currentColor"
-                                    strokeWidth="0"
-                                    viewBox="0 0 16 16"
-                                    className="w-6 h-6"
-                                    height="1em"
-                                    width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        d="M14.25 5.75v-4h-1.5v2.542c-1.145-1.359-2.911-2.209-4.84-2.209-3.177 0-5.92 2.307-6.16 5.398l-.02.269h1.501l.022-.226c.212-2.195 2.202-3.94 4.656-3.94 1.736 0 3.244.875 4.05 2.166h-2.83v1.5h4.163l.962-.975V5.75h-.004zM8 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-                                    ></path>
-                                </svg>
-                            </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
-                                Testing and Debugging
-                            </p>
-                        </dt>
-                        <dd className="mt-2 font-sans text-lg">
-                            Helpful patterns and tools to test and debug your Rust code
-                        </dd>
-                    </div>
-                    <div className="relative">
-                        <dt>
-                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
-                                <svg
-                                    stroke="currentColor"
-                                    fill="none"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
+                                    fill="transparent"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
+                                >
+                                    <path d="M0 0h24v24H0z" stroke="none" />
+                                    <path d="M4 21V8a3 3 0 013-3h10a3 3 0 013 3v6a3 3 0 01-3 3H8l-4 4" />
+                                    <path d="M8 9L16 9" />
+                                    <path d="M8 13L14 13" />
+                                </svg>
+                            </span>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Clear error messages
+                            </p>
+                        </dt>
+                        <dd className="mt-2 font-sans text-lg">
+                            When a test fails, errors messages are always clarified. Understanding the issue will never
+                            be a problem.
+                        </dd>
+                    </div>
+                    <div className="relative">
+                        <dt>
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 32 32"
                                     className="w-6 h-6"
                                     height="1em"
                                     width="1em"
-                                    xmlns="http://www.w3.org/2000/svg"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    fill="transparent"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                 >
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                    <g transform="translate(.648 2.438) scale(.05696)" fill="none" fillRule="evenodd">
+                                        <circle r={50.167} cy={237.628} cx={269.529} fill="currentColor" />
+                                        <g stroke="currentColor" strokeWidth={24}>
+                                            <path d="M269.53 135.628c67.356 0 129.928 9.665 177.107 25.907 56.844 19.57 91.794 49.233 91.794 76.093 0 27.99-37.04 59.503-98.083 79.728-46.15 15.29-106.88 23.272-170.818 23.272-65.554 0-127.63-7.492-174.3-23.44C36.184 297.006.62 265.085.62 237.628c0-26.642 33.37-56.076 89.415-75.616 47.355-16.51 111.472-26.384 179.486-26.384z" />
+                                            <path d="M180.736 186.922c33.65-58.348 73.28-107.724 110.92-140.48C337.006 6.976 380.163-8.48 403.43 4.937c24.248 13.983 33.042 61.814 20.067 124.796-9.8 47.618-33.234 104.212-65.176 159.6-32.75 56.788-70.25 106.82-107.377 139.272-46.98 41.068-92.4 55.93-116.185 42.213-23.08-13.3-31.906-56.92-20.834-115.233 9.355-49.27 32.832-109.745 66.8-168.664z" />
+                                            <path d="M180.82 289.482c-33.745-58.282-56.72-117.287-66.31-166.255-11.544-59-3.382-104.11 19.864-117.566 24.224-14.024 70.055 2.244 118.14 44.94 36.356 32.28 73.688 80.837 105.723 136.173 32.844 56.733 57.46 114.21 67.036 162.582 12.117 61.213 2.31 107.984-21.453 121.74-23.057 13.348-65.25-.784-110.24-39.5-38.013-32.71-78.682-83.253-112.76-142.115z" />
+                                        </g>
+                                    </g>
                                 </svg>
                             </span>
-                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Ecosystem Packages</p>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Any React framework</p>
                         </dt>
                         <dd className="mt-2 font-sans text-lg">
-                            Equivalent packages to the most popular JavaScript libraries
+                            Next, Redwood, or any other, we support all of them. Even R3F!
+                        </dd>
+                    </div>
+                    <div className="relative">
+                        <dt>
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    className="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    fill="transparent"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M0 0h24v24H0z" stroke="none" />
+                                    <rect x={4} y={4} width={16} height={16} rx={1} />
+                                    <path d="M4 8L20 8" />
+                                    <path d="M8 4L8 8" />
+                                </svg>
+                            </span>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">
+                                Same browser for dev and test
+                            </p>
+                        </dt>
+                        <dd className="mt-2 font-sans text-lg">
+                            Unlike other tools, it requires no dedicated browser to develop tests. At development time,
+                            the browser extension will handle everything in your everyday browser.
+                        </dd>
+                    </div>
+                    <div className="relative">
+                        <dt>
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    className="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    fill="transparent"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M0 0h24v24H0z" stroke="none" />
+                                    <path d="M3 12h4l3 8 4-16 3 8h4" />
+                                </svg>
+                            </span>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">No flakiness</p>
+                        </dt>
+                        <dd className="mt-2 font-sans text-lg">
+                            Our advanced retriability feature will recover tests from the most unfortunate scenarios,
+                            making sure false negatives won't waste your time.
+                        </dd>
+                    </div>
+                    <div className="relative">
+                        <dt>
+                            <span className="inline-block p-2 text-white rounded-md bg-brand-green" aria-hidden="true">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    className="w-6 h-6"
+                                    height="1em"
+                                    width="1em"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    fill="transparent"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M0 0h24v24H0z" stroke="none" />
+                                    <path d="M16 7h1a2 2 0 012 2v.5a.5.5 0 00.5.5.5.5 0 01.5.5v3a.5.5 0 01-.5.5.5.5 0 00-.5.5v.5a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v6a2 2 0 002 2h1M12 8l-2 4h3l-2 4" />
+                                </svg>
+                            </span>
+                            <p className="font-sans text-lg font-semibold text-black lg:text-xl">Batteries included</p>
+                        </dt>
+                        <dd className="mt-2 font-sans text-lg">
+                            Authentication? Data generation? You never have to wonder, the core solution has all the
+                            best practices baked in.
                         </dd>
                     </div>
                 </dl>
@@ -397,7 +280,7 @@ export default function Home() {
                             </p>
                         </div>
                         <div className="mt-12 sm:w-full sm:max-w-md lg:mt-0 lg:ml-8 lg:flex-1">
-                            <SignUp label="Sign Up" light />
+                            <SignUp label="Sign Up" />
                         </div>
                     </div>
                 </div>

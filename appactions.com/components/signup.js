@@ -119,13 +119,17 @@ function SignUp({ label = 'Sign up', light }) {
                         name="email"
                         placeholder="Enter your email"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="py-2 font-sans text-lg font-medium placeholder-gray-400 border-2 rounded-l-lg text-gray border-brand-green w-44 sm:w-72"
+                        className={`py-2 font-sans text-lg font-medium placeholder-gray-400 border-2 rounded-l-lg text-gray ${
+                            light ? 'border-brand-green' : 'border-gray-800'
+                        } w-44 sm:w-72`}
                         data-cta="cta-input"
                     />
                     <button
                         type="submit"
                         disabled={status === STATUSES.SUBMITTING}
-                        className="inline-flex items-center px-3 py-2 font-sans text-lg font-bold tracking-wider text-white uppercase border-2 rounded-r-lg bg-brand-green border-brand-green"
+                        className={`inline-flex items-center px-3 py-2 font-sans text-lg font-bold tracking-wider text-white uppercase border-2 rounded-r-lg ${
+                            light ? 'bg-brand-green border-brand-green' : 'bg-gray-800 border-gray-800'
+                        }`}
                     >
                         {label}
                         <svg
