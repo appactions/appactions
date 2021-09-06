@@ -62,7 +62,7 @@ function Cursor({ step }) {
     }, [cursorTarget]);
 
     const style = position ? { top: position.top, left: position.left } : { display: 'none' };
-
+console.log('Cursor', style)
     return (
         <svg viewBox="0 0 22 24" fill="none" className="absolute block w-8 h-8 cursor-transition" style={style}>
             <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
@@ -107,7 +107,7 @@ function Demo() {
                         submit-page.yml — IDE
                     </span>
                 </div>
-                <div className="py-2 overflow-hidden text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
+                <div className="py-2 overflow-hidden text-left text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
                     <TestCode step={step} />
                 </div>
             </div>

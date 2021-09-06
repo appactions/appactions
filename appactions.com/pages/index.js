@@ -23,6 +23,9 @@ export default function Home() {
                                     "Write" tests in a no-code browser extension. Store results in source control. Tests
                                     are entirely implementation details free. Update them only when UX changes.
                                 </p>
+                                <div className="mb-32 lg:hidden">
+                                    <Demo />
+                                </div>
                                 <div className="mt-10 sm:mt-12">
                                     <p className="my-3 font-sans font-bold tracking-wider text-black uppercase text-md md:text-lg">
                                         SIGN UP TO HEAR AS SOON AS WE LAUNCH!
@@ -80,16 +83,10 @@ export default function Home() {
                                 </FadeInSection>
                             </div>
                         </div>
-                        <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6 sm:w-full sm:mx-auto">
-                            <div className="w-full">
-                                <div className="">
-                                    <div className="relative w-full">
-                                        <FloatElement unLockAt={1150}>
-                                            <Demo />
-                                        </FloatElement>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="hidden mt-16 sm:mt-24 lg:mt-0 lg:col-span-6 lg:block">
+                            <FloatElement unLockAt={1150}>
+                                <Demo />
+                            </FloatElement>
                         </div>
                     </div>
                 </div>

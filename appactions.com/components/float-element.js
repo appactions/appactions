@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 
 export default function FloatElement({ children, unLockAt = 1000 }) {
-    const [isLocked, setIsLocked] = useState(true);
+    const [top, setTop] = useState(true);
     const onScroll = useCallback(() => {
-        // console.log(window.scrollY)
-        setIsLocked(unLockAt > window.scrollY);
+        console.log(window.scrollY)
+        setTop(Math.min(window.scrollY, unLockAt));
     }, [unLockAt]);
     useEffect(() => {
         document.addEventListener('scroll', onScroll);
@@ -12,5 +12,5 @@ export default function FloatElement({ children, unLockAt = 1000 }) {
             document.removeEventListener('scroll', onScroll);
         };
     });
-    return <div style={isLocked ? { position: 'fixed' } : { position: 'relative', top: unLockAt }}>{children}</div>;
+    return <div style={{ position: 'relative', top }}>{children}</div>;
 }
