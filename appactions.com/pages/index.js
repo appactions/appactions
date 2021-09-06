@@ -1,6 +1,7 @@
 import SignUp from 'components/signup';
 import Demo from 'components/demo';
 import FloatElement from 'components/float-element';
+import FadeInSection from 'components/fade-in-section';
 
 export default function Home() {
     return (
@@ -28,46 +29,55 @@ export default function Home() {
                                     </p>
                                     <SignUp light />
                                 </div>
-
-                                <div className="px-4 mt-32">
-                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        High level
-                                    </h2>
-                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                        <span className="text-brand-green">App Actions</span> is an abstraction on
-                                        Selenium to test React apps. It frees you from dealing with the low-level API
-                                        issues, so you can focus on creating great tests.
-                                    </p>
-                                </div>
-                                <div className="px-4 my-32">
-                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Session-recording
-                                    </h2>
-                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                        Perform the user behavior once; our browser extension generates the test. Just
-                                        check in the resulting code in your version control system, and you are done!
-                                    </p>
-                                </div>
-                                <div className="px-4 my-32">
-                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Pattern-based selection
-                                    </h2>
-                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                        Selecting elements by CSS selectors is not just a pain, it makes tests go out of
-                                        date pretty fast. Instead, App Actions select elements by patterns. Default
-                                        patterns are WAI-ARIA roles, but you can define custom ones.
-                                    </p>
-                                </div>
-                                <div className="px-4 my-32">
-                                    <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
-                                        Low maintenance
-                                    </h2>
-                                    <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                                        App Actions tests are entirely free of implementation details. This way, you
-                                        only have to touch a test next time when business logic changes. Because tests
-                                        are defined in YAML format, editing them does not require programming skills.
-                                    </p>
-                                </div>
+                                <FadeInSection>
+                                    <div className="px-4 mt-32">
+                                        <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
+                                            High level
+                                        </h2>
+                                        <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                            <span className="text-brand-green">App Actions</span> is an abstraction on
+                                            Selenium to test React apps. It frees you from dealing with the low-level
+                                            API issues, so you can focus on creating great tests.
+                                        </p>
+                                    </div>
+                                </FadeInSection>
+                                <FadeInSection>
+                                    <div className="px-4 my-32">
+                                        <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
+                                            Session-recording
+                                        </h2>
+                                        <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                            Perform the user behavior once; our browser extension generates the test.
+                                            Just check in the resulting code in your version control system, and you are
+                                            done!
+                                        </p>
+                                    </div>
+                                </FadeInSection>
+                                <FadeInSection>
+                                    <div className="px-4 my-32">
+                                        <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
+                                            Pattern-based selection
+                                        </h2>
+                                        <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                            Selecting elements by CSS selectors is not just a pain, it makes tests go
+                                            out of date pretty fast. Instead, App Actions select elements by patterns.
+                                            Default patterns are WAI-ARIA roles, but you can define custom ones.
+                                        </p>
+                                    </div>
+                                </FadeInSection>
+                                <FadeInSection>
+                                    <div className="px-4 my-32">
+                                        <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
+                                            Low maintenance
+                                        </h2>
+                                        <p className="mt-3 text-base text-gray-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                                            App Actions tests are entirely free of implementation details. This way, you
+                                            only have to touch a test next time when business logic changes. Because
+                                            tests are defined in YAML format, editing them does not require programming
+                                            skills.
+                                        </p>
+                                    </div>
+                                </FadeInSection>
                             </div>
                         </div>
                         <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6 sm:w-full sm:mx-auto">
