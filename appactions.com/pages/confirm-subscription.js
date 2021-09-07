@@ -22,7 +22,7 @@ function ConfirmSubscription() {
                     <h3 className="text-sm font-medium text-green-800">You are on the list!</h3>
                     <div className="mt-2 text-sm text-green-700">
                         <p>
-                            Thank you for being interested in React App Actions! We will notify you as soon as we open
+                            Thank you for being interested in App Actions! We will notify you as soon as we open
                             up for the public.
                         </p>
                     </div>

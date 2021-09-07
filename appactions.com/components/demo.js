@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // the /##(.*)##/ thing means that part will be "typed in the animation"
 // #### at the end indicates the whole line should appear instantly
@@ -49,11 +49,12 @@ const animation = [
 function Cursor({ step }) {
     const { cursorTarget } = animation[step];
     const [position, setPosition] = useState(null);
+    const ref = useRef();
 
     useEffect(() => {
         try {
-            const parent = document.querySelector('[data-demo="container"]').getBoundingClientRect();
-            const el = document.querySelector(cursorTarget).getBoundingClientRect();
+            const parent = ref.current.parentElement.getBoundingClientRect();
+            const el = ref.current.parentElement.querySelector(cursorTarget).getBoundingClientRect();
             setPosition({
                 left: el.left - parent.left + el.width * 0.7,
                 top: el.top - parent.top + el.height * 0.3,
@@ -62,9 +63,8 @@ function Cursor({ step }) {
     }, [cursorTarget]);
 
     const style = position ? { top: position.top, left: position.left } : { display: 'none' };
-
     return (
-        <svg viewBox="0 0 22 24" fill="none" className="absolute block w-8 h-8 cursor-transition" style={style}>
+        <svg viewBox="0 0 22 24" fill="none" className="absolute block w-8 h-8 cursor-transition" style={style} ref={ref}>
             <path d="M7.5 17L5 4l11 6.5-5.5 1.5-3 5z" fill="currentColor" />
             <path
                 d="M7 17.1l.26 1.28.67-1.12 2.9-4.83 5.3-1.45 1.14-.3-1.02-.61-11-6.5-.95-.56.2 1.08 2.5 13z"
@@ -107,7 +107,7 @@ function Demo() {
                         submit-page.yml — IDE
                     </span>
                 </div>
-                <div className="py-2 overflow-hidden text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
+                <div className="py-2 overflow-hidden text-left text-gray-200 pl-14 h-96 dark-scrollbar" data-demo="code">
                     <TestCode step={step} />
                 </div>
             </div>

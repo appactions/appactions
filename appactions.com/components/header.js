@@ -8,7 +8,7 @@ function Header() {
                 <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
                     <div className="flex justify-start lg:w-0 lg:flex-1">
                         <Link href="/">
-                            <a className="block p-2 border-4 shadow w-52 text-brand-green border-brand-green">
+                            <a className="block p-2 w-52 text-brand-green">
                                 <span className="sr-only">Workflow</span>
                                 <Logo />
                             </a>
@@ -24,34 +24,22 @@ function Header() {
                         </button>
                     </div> */}
                     <nav className="hidden lg:flex space-x-10">
-                        <Link href="/#vision">
+                        <Link href="/#what">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                Vision
+                                What
                             </a>
                         </Link>
-                        <Link href="/#how-does-it-work">
+                        <Link href="/#how">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                How does it work
+                                How
                             </a>
                         </Link>
-                        <Link href="/#benefits">
-                            <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
-                                Benefits
-                            </a>
-                        </Link>
-                        <Link href="/about">
+                        <Link href="/#about">
                             <a className="text-xl font-medium text-gray-500 border-b-4 border-transparent hover:text-brand-green hover:border-brand-green">
                                 About
                             </a>
                         </Link>
                     </nav>
-                    <div className="items-center justify-end hidden sm:flex md:flex-1 lg:w-0">
-                        <Link href="/about">
-                            <a className="block px-4 py-3 font-medium border-4 shadow border-brand-green text-brand-green hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-300">
-                                Request access
-                            </a>
-                        </Link>
-                    </div>
                 </div>
             </div>
         </div>

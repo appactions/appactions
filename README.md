@@ -4,7 +4,7 @@
 
 Radically different testing experience.
 
-## react-app-actions.com
+## appactions.com
 
 The landing page.
 

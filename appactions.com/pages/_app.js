@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     return (
         <>
             <Head>
-                <title>React App Actions</title>
+                <title>App Actions</title>
                 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
                 {/* Hotjar Tracking Code for react-app-actions.com */}
                 <script
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
             </Head>
 
             <div className="flex flex-col justify-between min-h-screen">
-                <Header />
+                {/* <Header /> */}
 
                 <Main>
                     <Component {...pageProps} />
