@@ -10,14 +10,22 @@ jobs:
         uses: actions/checkout@v1
 
       - name: run cypress
-        uses: cypress-io/github-action@v2
         id: cypress
-        with:
-          working-directory: ./restaurant-reviewer
-          record: true
+        run: yarn workspace restaurant-reviewer test
         env:
+          CI: true
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+      # - name: run cypress
+      #   uses: cypress-io/github-action@v2
+      #   id: cypress
+      #   with:
+      #     working-directory: ./restaurant-reviewer
+      #     record: true
+      #   env:
+      #     CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+      #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       # - name: add a check to display the cypress dashboard
       #   uses: octokit/request-action@v2.x
