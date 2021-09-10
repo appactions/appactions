@@ -4,7 +4,8 @@
         "react-app-actions",
         "appactions.com",
         "restaurant-reviewer",
-        "cypress-app-actions"
+        "cypress-app-actions",
+        "browser-extension"
     ],
     "devDependencies": {
         "eslint": "^7.22.0",
