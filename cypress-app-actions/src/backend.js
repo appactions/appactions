@@ -91,5 +91,8 @@ export function renderer(hook, rendererID, renderer, global) {
         // react calls these i guess
         handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,
         handleCommitFiberRoot: devtoolsInterface.handleCommitFiberRoot,
+
+        // for debug only
+        devtoolsInterface,
     };
 }

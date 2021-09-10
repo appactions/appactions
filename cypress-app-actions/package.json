@@ -1,5 +1,5 @@
 {
-  "name": "cypress-version",
+  "name": "cypress-app-actions",
   "version": "1.0.0",
   "description": "Framework to create App Actions for a React project",
   "main": "./src/index.js",
