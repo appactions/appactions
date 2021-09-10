@@ -1,4 +1,5 @@
 const faker = require('faker');
+const { addPlugin } = require('cypress-app-actions/src/cypress/plugin');
 
 module.exports = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
@@ -21,4 +22,6 @@ module.exports = on => {
             };
         },
     });
+
+    addPlugin(on);
 };

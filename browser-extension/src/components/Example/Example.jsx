@@ -16,7 +16,7 @@ export default () => {
     <Example>
       <Box display="flex" alignItems="center">
         <Logo width="50px" height="50px" />
-        {greeting}
+        Hi there!!!
       </Box>
     </Example>
   );
