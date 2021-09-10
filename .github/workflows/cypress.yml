@@ -9,6 +9,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v1
 
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
+
       - name: run cypress
         id: cypress
         run: yarn workspace restaurant-reviewer cypress
