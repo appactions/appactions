@@ -11,7 +11,7 @@ jobs:
 
       - name: run cypress
         id: cypress
-        run: yarn workspace restaurant-reviewer test
+        run: yarn workspace restaurant-reviewer cypress
         env:
           CI: true
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

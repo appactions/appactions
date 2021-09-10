@@ -1,4 +1,4 @@
-import { Logo } from '../../support/testables/logo';
+import { Logo } from '../support/testables/logo';
 
 describe('Hello App Actions', () => {
     beforeEach(() => {

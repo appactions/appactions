@@ -6,6 +6,7 @@ process.on('unhandledRejection', err => {
 });
 
 const cypress = require('cypress');
+const execSync = require('child_process').execSync;
 
 if (process.env.CI) {
     cypress
@@ -31,9 +32,20 @@ if (process.env.CI) {
             process.exit(1);
         });
 } else {
-    // cypress.open({
-    //     config: {
-    //         baseUrl: 
-    //     }
-    // });
+    const command = 'vercel list restaurant-reviewer --meta githubCommitRef=$(git rev-parse --abbrev-ref HEAD)';
+    const vercelList = execSync(command).toString();
+    const vercelUrl = vercelList.match(/[a-zA-Z0-9-]+\.vercel\.app/);
+    if (vercelUrl) {
+        const baseUrl = vercelUrl[0];
+
+        cypress.open({
+            config: {
+                baseUrl: `https://${baseUrl}`,
+            },
+        });
+    } else {
+        console.error('Could not fetch Vercel deployment');
+        console.error(vercelList);
+        process.exit(1);
+    }
 }
