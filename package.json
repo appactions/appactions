@@ -8,6 +8,7 @@
         "browser-extension"
     ],
     "devDependencies": {
+        "concurrently": "^6.2.1",
         "eslint": "^7.22.0",
         "husky": "^5.1.3",
         "lint-staged": "^10.5.4"
@@ -22,6 +23,7 @@
     },
     "scripts": {
         "dev": "cd react-app-actions && rollup --config rollup.config.js --watch",
+        "dev:cypress": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace restaurant-reviewer cypress'",
         "test": "CI=true yarn --silent workspace restaurant-reviewer react-app-actions"
     }
 }
