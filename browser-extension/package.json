@@ -2,8 +2,8 @@
   "version": "0.0.1",
   "name": "browser-extension",
   "scripts": {
-    "build": "NODE_ENV=production yarn webpack -c webpack.config.js --mode production",
-    "dev": "NODE_ENV=development yarn webpack -c webpack.config.js --mode development -w"
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack --config webpack.config.dev.js --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",

@@ -3,10 +3,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
 const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         popup: ['core-js/stable', 'regenerator-runtime/runtime', './src/popup.js'],
         content: ['core-js/stable', 'regenerator-runtime/runtime', './src/content.js'],
@@ -46,10 +45,12 @@ module.exports = {
         new HTMLPlugin({
             chunks: ['popup'],
             filename: 'popup.html',
+            showErrors: true,
         }),
         new HTMLPlugin({
             chunks: ['devtools'],
             filename: 'devtools.html',
+            showErrors: true,
         }),
         new CopyPlugin([
             { from: './src/assets', to: './assets' },
@@ -63,10 +64,6 @@ module.exports = {
             },
         }),
         new ManifestVersionSyncPlugin(),
-        new CleanWebpackPlugin()
     ],
-    optimization: {
-        minimize: true,
-    },
     stats: 'minimal',
 };

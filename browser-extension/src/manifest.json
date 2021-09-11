@@ -1,10 +1,9 @@
 {
   "manifest_version": 2,
   "version": "1.0.0",
-  "name": "__MSG_appName__",
-  "short_name": "__MSG_appShortName__",
-  "description": "__MSG_appDesc__",
-  "default_locale": "en",
+  "name": "App Actions",
+  "short_name": "App Actions",
+  "description": "Test runner and recorder for App Actions",
   "background": {
     "scripts": ["background.js"]
   },
