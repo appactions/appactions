@@ -6,10 +6,10 @@ const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin'
 
 module.exports = {
   entry: {
-    options: './src/options.js',
-    popup: './src/popup.js',
-    content: './src/content.js',
-    background: './src/background.js',
+    popup: ['core-js/stable', 'regenerator-runtime/runtime', './src/popup.js'],
+    content: ['core-js/stable', 'regenerator-runtime/runtime', './src/content.js'],
+    devtools: ['core-js/stable', 'regenerator-runtime/runtime', './src/devtools.js'],
+    background: ['core-js/stable', 'regenerator-runtime/runtime', './src/background.js'],
   },
   output: {
     filename: '[name].js',
@@ -38,13 +38,12 @@ module.exports = {
   },
   plugins: [
     new HTMLPlugin({
-      chunks: ['options'],
-      filename: 'options.html',
-      title: 'Options page title',
-    }),
-    new HTMLPlugin({
       chunks: ['popup'],
       filename: 'popup.html',
+    }),
+    new HTMLPlugin({
+      chunks: ['devtools'],
+      filename: 'devtools.html',
     }),
     new CopyPlugin([
       { from: './src/assets', to: './assets' },
