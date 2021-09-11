@@ -3,6 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
 const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -62,6 +63,7 @@ module.exports = {
             }
         }),
         new ManifestVersionSyncPlugin(),
+        new CleanWebpackPlugin(),
     ],
     optimization: {
         minimize: true,
