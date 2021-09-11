@@ -34,7 +34,7 @@ if (process.env.CI) {
 } else {
     const command = 'vercel list restaurant-reviewer --meta githubCommitRef=$(git rev-parse --abbrev-ref HEAD)';
     const vercelList = execSync(command).toString();
-    const vercelUrl = vercelList.match(/[a-zA-Z0-9-]+\.vercel\.app/);
+    const vercelUrl = vercelList.match(/restaurant-reviewer-[a-zA-Z0-9-]+\.vercel\.app/);
     if (vercelUrl) {
         const baseUrl = vercelUrl[0];
 
