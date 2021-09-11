@@ -18,10 +18,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat',
-    },
   },
   module: {
     rules: [
@@ -51,7 +47,6 @@ module.exports = {
       filename: 'popup.html',
     }),
     new CopyPlugin([
-      { from: './src/_locales/', to: './_locales' },
       { from: './src/assets', to: './assets' },
       { from: './src/manifest.json', to: './manifest.json' },
     ]),
