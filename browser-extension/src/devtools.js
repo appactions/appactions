@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Tree, { TreeNode } from 'rc-tree';
+import Tree from 'rc-tree';
 import './style.css';
 
 const treeData = [
@@ -31,20 +31,21 @@ const treeData = [
 ];
 
 const DevTools = () => {
-    const ref = useRef();
+    const switcherIcon = node => {
+        if (node.isLeaf) {
+            return null;
+        }
+        return node.expanded ? '▼' : '▶';
+    };
     return (
         <>
-            <h2>Select</h2>
-            <div style={{ border: 'solid 2px black', margin: 10 }}>
-                <Tree
-                    ref={ref}
-                    className=""
-                    defaultExpandAll
-                    treeData={treeData}
-                    onSelect={(...args) => console.log(...args)}
-                    height={150}
-                />
-            </div>
+            <Tree
+                defaultExpandAll
+                treeData={treeData}
+                onSelect={(...args) => console.log(...args)}
+                showIcon={false}
+                switcherIcon={switcherIcon}
+            />
         </>
     );
 };

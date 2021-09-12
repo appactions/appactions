@@ -57,6 +57,7 @@ module.exports = {
             { from: './src/manifest.json', to: './manifest.json' },
         ]),
         new ExtensionReloader({
+            reloadPage: false,
             entries: {
                 contentScript: ['content', 'devtools'],
                 background: 'background',

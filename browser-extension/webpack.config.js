@@ -55,15 +55,8 @@ module.exports = {
             { from: './src/assets', to: './assets' },
             { from: './src/manifest.json', to: './manifest.json' },
         ]),
-        new ExtensionReloader({
-            entries: {
-                contentScript: ['content', 'devtools'],
-                background: 'background',
-                extensionPage: ['popup'],
-            },
-        }),
         new ManifestVersionSyncPlugin(),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
     ],
     optimization: {
         minimize: true,
