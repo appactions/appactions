@@ -1,42 +1,57 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
+import Tree, { TreeNode } from 'rc-tree';
 import './style.css';
 
-const App = () => {
+const treeData = [
+    {
+        key: '0-0',
+        title: 'parent 1',
+        children: [
+            { key: '0-0-0', title: 'parent 1-1', children: [{ key: '0-0-0-0', title: 'parent 1-1-0' }] },
+            {
+                key: '0-0-1',
+                title: 'parent 1-2',
+                children: [
+                    { key: '0-0-1-0', title: 'parent 1-2-0', disableCheckbox: true },
+                    { key: '0-0-1-1', title: 'parent 1-2-1' },
+                    { key: '0-0-1-2', title: 'parent 1-2-2' },
+                    { key: '0-0-1-3', title: 'parent 1-2-3' },
+                    { key: '0-0-1-4', title: 'parent 1-2-4' },
+                    { key: '0-0-1-5', title: 'parent 1-2-5' },
+                    { key: '0-0-1-6', title: 'parent 1-2-6' },
+                    { key: '0-0-1-7', title: 'parent 1-2-7' },
+                    { key: '0-0-1-8', title: 'parent 1-2-8' },
+                    { key: '0-0-1-9', title: 'parent 1-2-9' },
+                    { key: 1128, title: 1128 },
+                ],
+            },
+        ],
+    },
+];
+
+const DevTools = () => {
+    const ref = useRef();
     return (
-        <div className="w-48 p-8 text-center">
-            <svg
-                className="w-12 h-12 mx-auto text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-            >
-                <path
-                    vectorEffect="non-scaling-stroke"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+        <>
+            <h2>Select</h2>
+            <div style={{ border: 'solid 2px black', margin: 10 }}>
+                <Tree
+                    ref={ref}
+                    className=""
+                    defaultExpandAll
+                    treeData={treeData}
+                    onSelect={(...args) => console.log(...args)}
+                    height={150}
                 />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No projects</h3>
-            <p className="mt-1 text-sm text-gray-500">Get started by creating a new project.</p>
-            <div className="mt-6">
-                <button
-                    type="button"
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent bg-brand-green shadow-sm rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    New Project
-                </button>
             </div>
-        </div>
+        </>
     );
 };
 
 const root = document.createElement('div');
 document.body.appendChild(root);
-ReactDOM.render(<App />, root);
+ReactDOM.render(<DevTools />, root);
 
 chrome.devtools.panels.create('App Actions', 'assets/img/icon-128x128.png', 'devtools.html', function (panel) {
     console.log('waddup', panel);
