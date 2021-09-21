@@ -59,7 +59,7 @@ export default function Home() {
                                     <SignUp light />
                                 </div>
                                 <FadeInSection>
-                                    <div className="px-4 mt-32">
+                                    <div className="mt-32">
                                         <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                             High level
                                         </h2>
@@ -71,7 +71,7 @@ export default function Home() {
                                     </div>
                                 </FadeInSection>
                                 <FadeInSection>
-                                    <div className="px-4 my-32">
+                                    <div className="my-32">
                                         <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                             Session-recording
                                         </h2>
@@ -83,7 +83,7 @@ export default function Home() {
                                     </div>
                                 </FadeInSection>
                                 <FadeInSection>
-                                    <div className="px-4 my-32">
+                                    <div className="my-32">
                                         <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                             Pattern-based selection
                                         </h2>
@@ -95,7 +95,7 @@ export default function Home() {
                                     </div>
                                 </FadeInSection>
                                 <FadeInSection>
-                                    <div className="px-4 my-32">
+                                    <div className="my-32">
                                         <h2 className="my-4 text-4xl font-slab text-gray md:text-5xl lg:text-6xl">
                                             Low maintenance
                                         </h2>
