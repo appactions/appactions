@@ -7,7 +7,7 @@ function Footer() {
                     <p className="text-base text-center text-gray-400">
                         © 2021 App Actions. All rights reserved.<span className="mx-8">|</span>
                         <a
-                            href="https://twitter.com/miklosxyz"
+                            href="https://twitter.com/miklosme"
                             target="_blank"
                             rel="noreferrer noopener"
                             className="inline-block text-gray-400 align-middle hover:text-gray-500"
