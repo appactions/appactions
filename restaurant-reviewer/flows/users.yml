@@ -1,6 +1,5 @@
-description: General user flows.
+description: User onboarding flow.
 variants: [regular, owner]
-usage: 100%
 data:
   { user, restaurant }: generate-user-data.js
 start:

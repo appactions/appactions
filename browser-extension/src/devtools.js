@@ -1,52 +1,105 @@
-import React from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import ReactDOM from 'react-dom';
-import Tree from 'rc-tree';
+import Tree from './panel/tree';
+import { DevtoolsContext } from './panel/context';
 import './style.css';
 
-const treeData = [
-    {
-        key: '0-0',
-        title: 'parent 1',
-        children: [
-            { key: '0-0-0', title: 'parent 1-1', children: [{ key: '0-0-0-0', title: 'parent 1-1-0' }] },
-            {
-                key: '0-0-1',
-                title: 'parent 1-2',
-                children: [
-                    { key: '0-0-1-0', title: 'parent 1-2-0', disableCheckbox: true },
-                    { key: '0-0-1-1', title: 'parent 1-2-1' },
-                    { key: '0-0-1-2', title: 'parent 1-2-2' },
-                    { key: '0-0-1-3', title: 'parent 1-2-3' },
-                    { key: '0-0-1-4', title: 'parent 1-2-4' },
-                    { key: '0-0-1-5', title: 'parent 1-2-5' },
-                    { key: '0-0-1-6', title: 'parent 1-2-6' },
-                    { key: '0-0-1-7', title: 'parent 1-2-7' },
-                    { key: '0-0-1-8', title: 'parent 1-2-8' },
-                    { key: '0-0-1-9', title: 'parent 1-2-9' },
-                    { key: 1128, title: 1128 },
-                ],
-            },
-        ],
-    },
-];
+const createConnection = () => {
+    const connection = chrome.runtime.connect({
+        name: 'devtools',
+    });
+
+    return connection;
+};
+
+let index = 0;
 
 const DevTools = () => {
-    const switcherIcon = node => {
-        if (node.isLeaf) {
-            return null;
+    const [client, setClient] = useState({
+        connected: false,
+    });
+    const connection = useRef(createConnection());
+
+    /** Collection of operation events */
+    const messageHandlers = useRef({});
+
+    const sendMessage = useCallback(msg => connection.current.postMessage(msg), []);
+
+    const addMessageHandler = useCallback(callback => {
+        const i = index++;
+        messageHandlers.current[i] = callback;
+
+        return () => {
+            delete messageHandlers.current[i];
+        };
+    }, []);
+
+    // Send init message on mount
+    useEffect(() => {
+        connection.current.postMessage({
+            type: 'connection-init',
+            source: 'devtools',
+            tabId: chrome?.devtools?.inspectedWindow?.tabId,
+        });
+    }, []);
+
+    // Forward exchange messages to subscribers
+    useEffect(() => {
+        const handleMessage = msg => {
+            if (msg?.source !== 'exchange') {
+                return;
+            }
+
+            return Object.values(messageHandlers.current).forEach(h => h(msg));
+        };
+
+        connection.current.onMessage.addListener(handleMessage);
+        return () => connection.current.onMessage.removeListener(handleMessage);
+    }, []);
+
+    // Listen for client connect
+    useEffect(() => {
+        if (client.connected) {
+            return;
         }
-        return node.expanded ? '▼' : '▶';
-    };
+
+        return addMessageHandler(message => {
+            if (message.type !== 'connection-acknowledge' && message.type !== 'connection-init') {
+                return;
+            }
+
+            if (message.type === 'connection-init') {
+                connection.current.postMessage({
+                    type: 'connection-acknowledge',
+                    source: 'devtools',
+                });
+            }
+
+            return setClient({
+                connected: true,
+            });
+        });
+    }, [addMessageHandler, client.connected]);
+
+    // Listen for client disconnect
+    useEffect(() => {
+        if (!client.connected) {
+            return;
+        }
+
+        return addMessageHandler(message => {
+            if (message.type !== 'connection-disconnect') {
+                return;
+            }
+
+            setClient({ connected: false });
+        });
+    }, [addMessageHandler, client.connected]);
+
     return (
-        <>
-            <Tree
-                defaultExpandAll
-                treeData={treeData}
-                onSelect={(...args) => console.log(...args)}
-                showIcon={false}
-                switcherIcon={switcherIcon}
-            />
-        </>
+        <DevtoolsContext.Provider value={{ sendMessage, addMessageHandler, client }}>
+            <Tree />
+        </DevtoolsContext.Provider>
     );
 };
 
@@ -54,7 +107,4 @@ const root = document.createElement('div');
 document.body.appendChild(root);
 ReactDOM.render(<DevTools />, root);
 
-chrome.devtools.panels.create('App Actions', 'assets/img/icon-128x128.png', 'devtools.html', function (panel) {
-    console.log('waddup', panel);
-    // code invoked on panel creation
-});
+chrome.devtools.panels.create('App Actions', '', 'devtools.html');

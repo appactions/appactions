@@ -1,17 +1,17 @@
 const HTMLPlugin = require('html-webpack-plugin');
+const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
 const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        popup: ['core-js/stable', 'regenerator-runtime/runtime', './src/popup.js'],
-        content: ['core-js/stable', 'regenerator-runtime/runtime', './src/content.js'],
-        devtools: ['core-js/stable', 'regenerator-runtime/runtime', './src/devtools.js'],
-        background: ['core-js/stable', 'regenerator-runtime/runtime', './src/background.js'],
+        popup: './src/popup.js',
+        content: './src/content.js',
+        devtools: './src/devtools.js',
+        background: './src/background.js',
     },
     output: {
         filename: '[name].js',
@@ -46,20 +46,37 @@ module.exports = {
         new HTMLPlugin({
             chunks: ['popup'],
             filename: 'popup.html',
+            showErrors: true,
         }),
         new HTMLPlugin({
             chunks: ['devtools'],
             filename: 'devtools.html',
+            showErrors: true,
+        }),
+        new CspHtmlWebpackPlugin({
+            "default-src": "'self'",
+            "script-src": "'self'",
+            "style-src": "'self' 'unsafe-inline' https://fonts.googleapis.com",
+            "font-src": "'self' https://fonts.gstatic.com",
+            "img-src": "'self' data:",
         }),
         new CopyPlugin([
             { from: './src/assets', to: './assets' },
             { from: './src/manifest.json', to: './manifest.json' },
         ]),
+        new ExtensionReloader({
+            reloadPage: false,
+            entries: {
+                contentScript: ['content', 'devtools'],
+                background: 'background',
+                extensionPage: ['popup'],
+            },
+        }),
         new ManifestVersionSyncPlugin(),
-        new CleanWebpackPlugin(),
     ],
-    optimization: {
+    devtool: 'cheap-module-source-map',
+    optimization: process.env.NODE_ENV === 'production' ? {
         minimize: true,
-    },
+    } : undefined,
     stats: 'minimal',
 };
