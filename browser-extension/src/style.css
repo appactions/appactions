@@ -1,30 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.rc-tree {
-    margin: 4px;
-}
-.rc-tree-indent-unit {
-    width: 16px;
-    display: inline-block;
-}
-
-.rc-tree-switcher {
-    margin-right: 2px;
-    color: rgb(77, 80, 85);
-}
-
-.rc-tree-treenode {
-    cursor: pointer;
-    padding-left: 16px;
-}
-
-.rc-tree-treenode-selected {
-    background-color: rgb(197, 226, 251) !important;
-}
-
-.rc-tree-treenode:hover {
-    background-color: rgb(230, 237, 250);
-    border-radius: 4px;
-}

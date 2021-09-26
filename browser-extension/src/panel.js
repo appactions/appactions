@@ -1,8 +1,19 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import ReactDOM from 'react-dom';
 import Tree from './panel/tree';
 import { DevtoolsContext } from './panel/context';
 import './style.css';
+
+const ErrorFallback = ({ error, resetErrorBoundary }) => {
+    return (
+        <div role="alert">
+            <p>Something went wrong:</p>
+            <pre>{error.message}</pre>
+            <button onClick={resetErrorBoundary}>Try again</button>
+        </div>
+    );
+};
 
 const createConnection = () => {
     const connection = chrome.runtime.connect({ name: 'devtools' });
@@ -99,7 +110,9 @@ const DevTools = () => {
 
     return (
         <DevtoolsContext.Provider value={{ sendMessage, addMessageHandler, client }}>
-            <Tree />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Tree />
+            </ErrorBoundary>
         </DevtoolsContext.Provider>
     );
 };
