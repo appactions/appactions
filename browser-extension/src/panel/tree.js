@@ -97,7 +97,7 @@ export default function Tree() {
             <RcTree
                 defaultExpandAll
                 treeData={tree}
-                onMouseEnter={({ node }) => sendMessage({ type: 'APP_ACTIONS_NODE_HOVER', position: node.pos })}
+                onMouseEnter={({ node }) => sendMessage({ position: node.pos })}
                 showIcon={false}
                 switcherIcon={switcherIcon}
             />

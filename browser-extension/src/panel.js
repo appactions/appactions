@@ -21,7 +21,7 @@ const DevTools = () => {
     /** Collection of operation events */
     const messageHandlers = useRef({});
 
-    const sendMessage = useCallback(msg => connection.current.postMessage(msg), []);
+    const sendMessage = useCallback(payload => connection.current.postMessage({ source: 'devtools', payload }), []);
 
     const addMessageHandler = useCallback(callback => {
         const i = index++;
