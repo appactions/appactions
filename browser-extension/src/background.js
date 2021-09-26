@@ -17,6 +17,7 @@ class BackgroundEventTarget {
     /** Dispatches event to all listeners excluding source */
     dispatchEvent(source, event) {
         const targets = { ...this.listeners, [source]: undefined };
+        console.log('dispatching an event from', source, 'to', Object.keys(targets).filter(key => targets[key]), event);
         Object.values(targets).forEach(f => f && f(event));
     }
 
@@ -73,8 +74,8 @@ const handleDevtoolsPanelConnection = port => {
         }
 
         // tabId is required when working with chrome extension
-        if (msg.tabId === undefined) {
-            console.error('Recieved devtools panel connection but no tabId was specified.');
+        if (!msg.tabId) {
+            console.error('Recieved devtools panel connection but no tabId was specified.', msg);
             return;
         }
 

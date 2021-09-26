@@ -15,4 +15,16 @@ export function registerCypressCommands(config = {}) {
     registerDo(doCommandName);
 
     addVDOMUtilsToJQuery($);
+
+    window.parent.postMessage({
+        type: 'connection-init',
+        source: 'exchange',
+    });
+
+    Cypress.AppActions.sendMessage = payload => {
+        window.parent.postMessage({
+            source: 'exchange',
+            payload,
+        });
+    };
 }

@@ -15,7 +15,7 @@ window.addEventListener('message', ({ data, isTrusted }) => {
         connection.onDisconnect.addListener(handleDisconnect);
     }
 
-    if (connection === undefined) {
+    if (!connection) {
         return console.warn('Unable to send message to App Actions extension');
     }
 

@@ -5,9 +5,7 @@ import { DevtoolsContext } from './panel/context';
 import './style.css';
 
 const createConnection = () => {
-    const connection = chrome.runtime.connect({
-        name: 'devtools',
-    });
+    const connection = chrome.runtime.connect({ name: 'devtools' });
 
     return connection;
 };
@@ -36,6 +34,9 @@ const DevTools = () => {
 
     // Send init message on mount
     useEffect(() => {
+        // chrome.devtools.inspectedWindow.eval(
+        //     'console.log("devtools!!!, ' + chrome?.devtools?.inspectedWindow?.tabId + '");',
+        // );
         connection.current.postMessage({
             type: 'connection-init',
             source: 'devtools',
