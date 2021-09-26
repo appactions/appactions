@@ -18,12 +18,12 @@ export function registerCypressCommands(config = {}) {
 
     window.parent.postMessage({
         type: 'connection-init',
-        source: 'exchange',
+        source: 'agent',
     });
 
     Cypress.AppActions.sendMessage = payload => {
         window.parent.postMessage({
-            source: 'exchange',
+            source: 'agent',
             payload,
         });
     };

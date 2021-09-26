@@ -11,6 +11,7 @@ module.exports = {
         popup: './src/popup.js',
         content: './src/content.js',
         devtools: './src/devtools.js',
+        panel: './src/panel.js',
         background: './src/background.js',
     },
     output: {
@@ -51,6 +52,11 @@ module.exports = {
         new HTMLPlugin({
             chunks: ['devtools'],
             filename: 'devtools.html',
+            showErrors: true,
+        }),
+        new HTMLPlugin({
+            chunks: ['panel'],
+            filename: 'panel.html',
             showErrors: true,
         }),
         new CspHtmlWebpackPlugin({

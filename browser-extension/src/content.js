@@ -1,8 +1,8 @@
 let connection;
 
 window.addEventListener('message', ({ data, isTrusted }) => {
-    // Filter messages not from the exchange
-    if (!isTrusted || data?.source !== 'exchange') {
+    // Filter messages not from the agent
+    if (!isTrusted || data?.source !== 'agent') {
         return;
     }
 
@@ -10,7 +10,7 @@ window.addEventListener('message', ({ data, isTrusted }) => {
 
     // Setup connection on init message
     if (message.type === 'connection-init') {
-        connection = chrome.runtime.connect({ name: 'exchange' });
+        connection = chrome.runtime.connect({ name: 'agent' });
         connection.onMessage.addListener(handleMessage);
         connection.onDisconnect.addListener(handleDisconnect);
     }

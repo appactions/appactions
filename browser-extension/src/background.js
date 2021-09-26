@@ -51,7 +51,7 @@ const handleContentScriptConnection = port => {
     if (port?.sender?.tab?.id) {
         const tabId = port.sender.tab.id;
 
-        addToTarget({ tabId, port, source: 'exchange' });
+        addToTarget({ tabId, port, source: 'agent' });
         // chrome.pageAction.setIcon({ tabId, path: "/assets/icon-32.png" });
         // port.onDisconnect.addListener(() => {
         //   chrome.pageAction.setIcon(
@@ -89,7 +89,7 @@ const handleDevtoolsPanelConnection = port => {
 };
 
 const connectionHandlers = {
-    exchange: handleContentScriptConnection,
+    agent: handleContentScriptConnection,
     devtools: handleDevtoolsPanelConnection,
 };
 
