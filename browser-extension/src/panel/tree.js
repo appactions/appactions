@@ -44,45 +44,56 @@ const treeData = [
     },
 ];
 
-const TreeNode = ({ tree, onClick: _onClick, onMouseEnter: _onMouseEnter }) => {
-    const isLeaf = tree.children?.length === 0;
-    const [isHovered, setHovered] = useState(false);
-    const [isClosed, setClosed] = useState(false);
+const TreeNode = ({ tree, indent, isClosed, setClosed }) => {
+    const { sendMessage, addMessageHandler } = useDevtoolsContext();
+    const onMouseEnter = useCallback(() => {
+        sendMessage({ type: 'ELEMENT_HOVER', key: tree.key });
+    }, []);
     const onClick = useCallback(() => {
         setClosed(closed => !closed);
     }, []);
-    const onMouseEnter = useCallback(() => {
-        setHovered(hovered => !hovered);
-    }, []);
 
-    if (tree.children && tree.children.length) {
+    if (tree.children?.length) {
         return (
-            <div className="w-full pl-4 cursor-pointer ">
-                <div className="w-full hover:bg-blue-300" onClick={onClick}>
-                    <span className="w-2">{isClosed ? '▶' : '▼'}</span>
-                    {tree.title}
-                    {tree.description ? <span className="pl-4 text-gray-400">{tree.description}</span> : null}
-                    {isClosed ? null : tree.children.map(node => <TreeNode key={node.key} tree={node} />)}
-                </div>
+            <div
+                className="w-full p-px m-px font-mono rounded cursor-pointer select-none hover:bg-blue-200"
+                onClick={onClick}
+                onMouseEnter={onMouseEnter}
+            >
+                <span className="whitespace-pre-wrap">
+                    {'  '.repeat(indent)}
+                    {isClosed ? '▶ ' : '▼ '}
+                </span>
+                {tree.title}
+                {tree.description ? <span className="pl-4 text-gray-400">{tree.description}</span> : null}
             </div>
         );
     }
-    return <div className="w-full cursor-pointer">{tree.title}</div>;
+
+    return (
+        <div
+            className="w-full p-px m-px font-mono rounded cursor-pointer select-none hover:bg-blue-200"
+            onMouseEnter={onMouseEnter}
+        >
+            <span className="whitespace-pre-wrap">{'  '.repeat(indent)}</span>
+            {tree.title}
+        </div>
+    );
 };
 
-export default function Tree() {
-    const { sendMessage, addMessageHandler } = useDevtoolsContext();
+function Tree({ data, indent = 0 }) {
+    const [isClosed, setClosed] = useState(false);
+    return data.map(node => {
+        return (
+            <>
+                <TreeNode key={node.key} tree={node} indent={indent} isClosed={isClosed} setClosed={setClosed} />
+                {!isClosed && node.children?.length ? <Tree data={node.children} indent={indent + 1} /> : null}
+            </>
+        );
+    });
+}
+
+export default function TreePanel() {
     const [tree, setTree] = useState(treeData);
-    return tree.map(node => <TreeNode key={node.key} tree={node} />);
-    // return (
-    //     <>
-    //         <RcTree
-    //             defaultExpandAll
-    //             treeData={tree}
-    //             onMouseEnter={({ node }) => sendMessage({ position: node.pos })}
-    //             showIcon={false}
-    //             switcherIcon={switcherIcon}
-    //         />
-    //     </>
-    // );
+    return <Tree data={tree} />;
 }
