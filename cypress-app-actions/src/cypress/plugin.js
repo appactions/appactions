@@ -5,6 +5,8 @@ module.exports.addPlugin = on => {
         if (browser.name === 'chrome') {
             launchOptions.extensions.push(path.resolve('../browser-extension/build'));
             launchOptions.args.push('--auto-open-devtools-for-tabs');
+            launchOptions.args.push('--enable-logging');
+            launchOptions.args.push('--v=1');
             return launchOptions;
         }
     });
