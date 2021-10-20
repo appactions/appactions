@@ -2,7 +2,6 @@
     "private": true,
     "workspaces": [
         "react-app-actions",
-        "appactions.com",
         "kitchensink-nextjs",
         "cypress-app-actions",
         "browser-extension"
