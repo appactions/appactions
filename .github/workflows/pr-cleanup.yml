@@ -27,7 +27,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: destroy the stack on AWS
-        run: yarn workspace restaurant-reviewer cdk:destroy
+        run: yarn workspace kitchensink-nextjs cdk:destroy
 
       - name: remove vercel preview env vars
         run: |

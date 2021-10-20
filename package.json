@@ -3,7 +3,7 @@
     "workspaces": [
         "react-app-actions",
         "appactions.com",
-        "restaurant-reviewer",
+        "kitchensink-nextjs",
         "cypress-app-actions",
         "browser-extension"
     ],
@@ -23,7 +23,7 @@
     },
     "scripts": {
         "dev": "cd react-app-actions && rollup --config rollup.config.js --watch",
-        "dev:cypress": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace restaurant-reviewer cypress' --kill-others",
-        "test": "CI=true yarn --silent workspace restaurant-reviewer react-app-actions"
+        "dev:cypress": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
+        "test": "CI=true yarn --silent workspace kitchensink-nextjs react-app-actions"
     }
 }

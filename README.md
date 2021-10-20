@@ -8,9 +8,9 @@ Radically different testing experience.
 
 The landing page.
 
-## restaurant-reviewer
+## kitchensink-nextjs
 
-Kitchen sink app.
+Kitchen sink app for NextJS.
 
 ## Cypress Version (and Cypress Version Kitchensink)
 
