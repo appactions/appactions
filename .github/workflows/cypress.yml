@@ -6,8 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
-      - name: checkout
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v1
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
 
       - name: install node dependencies
         uses: bahmutov/npm-install@v1
