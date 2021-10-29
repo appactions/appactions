@@ -32,9 +32,9 @@ if (process.env.CI) {
             process.exit(1);
         });
 } else {
-    const command = 'vercel list restaurant-reviewer --meta githubCommitRef=$(git rev-parse --abbrev-ref HEAD)';
+    const command = 'vercel list kitchensink-nextjs --meta githubCommitRef=$(git rev-parse --abbrev-ref HEAD)';
     const vercelList = execSync(command).toString();
-    const vercelUrl = vercelList.match(/restaurant-reviewer-[a-zA-Z0-9-]+\.vercel\.app/);
+    const vercelUrl = vercelList.match(/kitchensink-nextjs-[a-zA-Z0-9-]+\.vercel\.app/);
     if (vercelUrl) {
         const baseUrl = vercelUrl[0];
 

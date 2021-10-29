@@ -13,8 +13,11 @@ jobs:
       - name: set STAGE variable in environment for next steps
         run: echo "STAGE=pr-${{ github.event.number }}-${{ env.GITHUB_HEAD_REF_SLUG }}" >> $GITHUB_ENV
 
-      - name: checkout the files
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: install node dependencies
         uses: bahmutov/npm-install@v1
@@ -27,7 +30,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: destroy the stack on AWS
-        run: yarn workspace restaurant-reviewer cdk:destroy
+        run: yarn workspace kitchensink-nextjs cdk:destroy
 
       - name: remove vercel preview env vars
         run: |

@@ -4,14 +4,10 @@
 
 Radically different testing experience.
 
-## appactions.com
+## kitchensink-nextjs
 
-The landing page.
+Kitchen sink app for NextJS.
 
-## restaurant-reviewer
-
-Kitchen sink app.
-
-## Cypress Version (and Cypress Version Kitchensink)
+## cypress-app-actions
 
 This is the original, Cypress dependant version of React App Actions.

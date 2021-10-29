@@ -6,15 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
-      - name: checkout
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v1
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: install node dependencies
         uses: bahmutov/npm-install@v1
 
       - name: run cypress
         id: cypress
-        run: yarn workspace restaurant-reviewer cypress
+        run: yarn workspace kitchensink-nextjs cypress
         env:
           CI: true
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
@@ -24,7 +27,7 @@ jobs:
       #   uses: cypress-io/github-action@v2
       #   id: cypress
       #   with:
-      #     working-directory: ./restaurant-reviewer
+      #     working-directory: ./kitchensink-nextjs
       #     record: true
       #   env:
       #     CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
