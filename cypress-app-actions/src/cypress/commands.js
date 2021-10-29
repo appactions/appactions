@@ -1,4 +1,3 @@
-import '../polyfill';
 import { register as registerDo } from './cypress-do';
 import { register as registerWith } from './cypress-with';
 import { addVDOMUtilsToJQuery } from '../add-vdom-utils-to-jquery';
