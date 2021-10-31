@@ -1,39 +1,9 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var semver = require('semver');
-var LRU = require('lru-cache');
-var reactIs = require('react-is');
-var clipboardJs = require('clipboard-js');
-var ErrorStackParser = require('error-stack-parser');
-var React = require('react');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-function _interopNamespace(e) {
-  if (e && e.__esModule) return e;
-  var n = Object.create(null);
-  if (e) {
-    Object.keys(e).forEach(function (k) {
-      if (k !== 'default') {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () {
-            return e[k];
-          }
-        });
-      }
-    });
-  }
-  n['default'] = e;
-  return Object.freeze(n);
-}
-
-var LRU__default = /*#__PURE__*/_interopDefaultLegacy(LRU);
-var ErrorStackParser__default = /*#__PURE__*/_interopDefaultLegacy(ErrorStackParser);
-var React__namespace = /*#__PURE__*/_interopNamespace(React);
+import { gt, gte } from 'semver';
+import LRU from 'lru-cache';
+import { isElement, typeOf, Suspense, StrictMode, Profiler, Portal, Memo, Lazy, Fragment, ForwardRef as ForwardRef$1, ContextProvider as ContextProvider$1, ContextConsumer } from 'react-is';
+import { copy } from 'clipboard-js';
+import ErrorStackParser from 'error-stack-parser';
+import * as React from 'react';
 
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -390,7 +360,7 @@ const isArray$1 = Array.isArray;
 const cachedDisplayNames = new WeakMap(); // On large trees, encoding takes significant time.
 // Try to reuse the already encoded strings.
 
-const encodedStringCache = new LRU__default['default']({
+const encodedStringCache = new LRU({
   max: 1000
 });
 function alphaSortKeys(a, b) {
@@ -563,7 +533,7 @@ function getDataType(data) {
     return 'undefined';
   }
 
-  if (reactIs.isElement(data)) {
+  if (isElement(data)) {
     return 'react_element';
   }
 
@@ -641,37 +611,37 @@ function getDataType(data) {
   }
 }
 function getDisplayNameForReactElement(element) {
-  const elementType = reactIs.typeOf(element);
+  const elementType = typeOf(element);
 
   switch (elementType) {
-    case reactIs.ContextConsumer:
+    case ContextConsumer:
       return 'ContextConsumer';
 
-    case reactIs.ContextProvider:
+    case ContextProvider$1:
       return 'ContextProvider';
 
-    case reactIs.ForwardRef:
+    case ForwardRef$1:
       return 'ForwardRef';
 
-    case reactIs.Fragment:
+    case Fragment:
       return 'Fragment';
 
-    case reactIs.Lazy:
+    case Lazy:
       return 'Lazy';
 
-    case reactIs.Memo:
+    case Memo:
       return 'Memo';
 
-    case reactIs.Portal:
+    case Portal:
       return 'Portal';
 
-    case reactIs.Profiler:
+    case Profiler:
       return 'Profiler';
 
-    case reactIs.StrictMode:
+    case StrictMode:
       return 'StrictMode';
 
-    case reactIs.Suspense:
+    case Suspense:
       return 'Suspense';
 
     case REACT_SUSPENSE_LIST_TYPE:
@@ -951,7 +921,7 @@ function copyToClipboard(value) {
   if (typeof clipboardCopyText === 'function') {
     clipboardCopyText(text).catch(err => {});
   } else {
-    clipboardJs.copy(text);
+    copy(text);
   }
 }
 function copyWithDelete(obj, path, index = 0) {
@@ -1120,7 +1090,7 @@ const NoMode =
  *
  * 
  */
-const ReactSharedInternals = React__namespace.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+const ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -1183,7 +1153,7 @@ function getPrimitiveStackCache() {
 
     for (let i = 0; i < readHookLog.length; i++) {
       const hook = readHookLog[i];
-      cache.set(hook.primitive, ErrorStackParser__default['default'].parse(hook.stackError));
+      cache.set(hook.primitive, ErrorStackParser.parse(hook.stackError));
     }
 
     primitiveStackCache = cache;
@@ -1563,7 +1533,7 @@ function findPrimitiveIndex(hookStack, hook) {
 function parseTrimmedStack(rootStack, hook) {
   // Get the stack trace between the primitive hook function and
   // the root function call. I.e. the stack frames of custom hooks.
-  const hookStack = ErrorStackParser__default['default'].parse(hook.stackError);
+  const hookStack = ErrorStackParser.parse(hook.stackError);
   const rootIndex = findCommonAncestorIndex(rootStack, hookStack);
   const primitiveIndex = findPrimitiveIndex(hookStack, hook);
 
@@ -1758,7 +1728,7 @@ function inspectHooks(renderFunction, props, currentDispatcher, includeHooksSour
     currentDispatcher.current = previousDispatcher;
   }
 
-  const rootStack = ErrorStackParser__default['default'].parse(ancestorStackError);
+  const rootStack = ErrorStackParser.parse(ancestorStackError);
   return buildTree(rootStack, readHookLog, includeHooksSource);
 }
 
@@ -1801,7 +1771,7 @@ function inspectHooksOfForwardRef(renderFunction, props, ref, currentDispatcher,
     currentDispatcher.current = previousDispatcher;
   }
 
-  const rootStack = ErrorStackParser__default['default'].parse(ancestorStackError);
+  const rootStack = ErrorStackParser.parse(ancestorStackError);
   return buildTree(rootStack, readHookLog, includeHooksSource);
 }
 
@@ -2020,25 +1990,11 @@ function describeBuiltInComponentFrame(name, source, ownerFn) {
   return '\n' + prefix + name;
 }
 let reentry = false;
-let componentFrameCache;
-
-if (__DEV__) {
-  const PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
-  componentFrameCache = new PossiblyWeakMap();
-}
 
 function describeNativeComponentFrame(fn, construct, currentDispatcherRef) {
   // If something asked for a stack inside a fake render, it should get ignored.
   if (!fn || reentry) {
     return '';
-  }
-
-  if (__DEV__) {
-    const frame = componentFrameCache.get(fn);
-
-    if (frame !== undefined) {
-      return frame;
-    }
   }
 
   let control;
@@ -2139,12 +2095,6 @@ function describeNativeComponentFrame(fn, construct, currentDispatcherRef) {
                 // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
                 const frame = '\n' + sampleLines[s].replace(' at new ', ' at ');
 
-                if (__DEV__) {
-                  if (typeof fn === 'function') {
-                    componentFrameCache.set(fn, frame);
-                  }
-                } // Return the line we found.
-
 
                 return frame;
               }
@@ -2165,12 +2115,6 @@ function describeNativeComponentFrame(fn, construct, currentDispatcherRef) {
 
   const name = fn ? fn.displayName || fn.name : '';
   const syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
-
-  if (__DEV__) {
-    if (typeof fn === 'function') {
-      componentFrameCache.set(fn, syntheticFrame);
-    }
-  }
 
   return syntheticFrame;
 }
@@ -2202,8 +2146,8 @@ function describeFiber(workTagMap, workInProgress, currentDispatcherRef) {
     ForwardRef,
     ClassComponent
   } = workTagMap;
-  const owner = __DEV__ ? workInProgress._debugOwner ? workInProgress._debugOwner.type : null : null;
-  const source = __DEV__ ? workInProgress._debugSource : null;
+  const owner = null;
+  const source = null;
 
   switch (workInProgress.tag) {
     case HostComponent:
@@ -2600,7 +2544,7 @@ function getInternalReactConstants(version) {
     NoPriority: 90
   };
 
-  if (semver.gt(version, '17.0.2')) {
+  if (gt(version, '17.0.2')) {
     ReactPriorityLevels = {
       ImmediatePriority: 1,
       UserBlockingPriority: 2,
@@ -2618,7 +2562,7 @@ function getInternalReactConstants(version) {
   // TODO Update the gt() check below to be gte() whichever the next version number is.
   // Currently the version in Git is 17.0.2 (but that version has not been/may not end up being released).
 
-  if (semver.gt(version, '17.0.1')) {
+  if (gt(version, '17.0.1')) {
     ReactTypeOfWork = {
       CacheComponent: 24,
       // Experimental
@@ -2656,7 +2600,7 @@ function getInternalReactConstants(version) {
       YieldComponent: -1 // Removed
 
     };
-  } else if (semver.gte(version, '17.0.0-alpha')) {
+  } else if (gte(version, '17.0.0-alpha')) {
     ReactTypeOfWork = {
       CacheComponent: -1,
       // Doesn't exist yet
@@ -2694,7 +2638,7 @@ function getInternalReactConstants(version) {
       YieldComponent: -1 // Removed
 
     };
-  } else if (semver.gte(version, '16.6.0-beta.0')) {
+  } else if (gte(version, '16.6.0-beta.0')) {
     ReactTypeOfWork = {
       CacheComponent: -1,
       // Doesn't exist yet
@@ -2732,7 +2676,7 @@ function getInternalReactConstants(version) {
       YieldComponent: -1 // Removed
 
     };
-  } else if (semver.gte(version, '16.4.3-alpha')) {
+  } else if (gte(version, '16.4.3-alpha')) {
     ReactTypeOfWork = {
       CacheComponent: -1,
       // Doesn't exist yet
@@ -3882,11 +3826,6 @@ function attach(hook, rendererID, renderer, global) {
   let pendingUnmountedRootID = null;
 
   function pushOperation(op) {
-    if (__DEV__) {
-      if (!Number.isInteger(op)) {
-        console.error('pushOperation() was called but the value is not an integer.', op);
-      }
-    }
 
     pendingOperations.push(op);
   }
@@ -6407,5 +6346,4 @@ function attach(hook, rendererID, renderer, global) {
   };
 }
 
-exports.attach = attach;
-exports.getInternalReactConstants = getInternalReactConstants;
+export { attach, getInternalReactConstants };

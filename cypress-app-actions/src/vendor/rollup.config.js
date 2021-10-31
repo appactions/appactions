@@ -2,13 +2,14 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
+import replace from '@rollup/plugin-replace';
 import path from 'path';
 
 export default {
     input: 'src/vendor/react/packages/react-devtools-shared/src/backend/renderer.js',
     output: {
         file: 'src/vendor/react-devtools-renderer-build/index.js',
-        format: 'cjs',
+        format: 'es',
     },
     plugins: [
         resolve({
@@ -41,27 +42,35 @@ export default {
                 },
             ],
         }),
-        babel({
-            exclude: 'node_modules/**',
-        }),
         commonjs({
-            include: ['node_modules/**', 'react/packages/**'],
-            namedExports: {
-                '../node_modules/react-is/index.js': [
-                    'isElement',
-                    'typeOf',
-                    'ContextConsumer',
-                    'ContextProvider',
-                    'ForwardRef',
-                    'Fragment',
-                    'Lazy',
-                    'Memo',
-                    'Portal',
-                    'Profiler',
-                    'StrictMode',
-                    'Suspense',
-                ],
-                '../node_modules/clipboard-js/clipboard.js': ['copy'],
+            include: /node_modules/,
+            // include: ['node_modules/**', 'react/packages/**'],
+            // namedExports: {
+            //     '../node_modules/react-is/index.js': [
+            //         'isElement',
+            //         'typeOf',
+            //         'ContextConsumer',
+            //         'ContextProvider',
+            //         'ForwardRef',
+            //         'Fragment',
+            //         'Lazy',
+            //         'Memo',
+            //         'Portal',
+            //         'Profiler',
+            //         'StrictMode',
+            //         'Suspense',
+            //     ],
+            //     '../node_modules/clipboard-js/clipboard.js': ['copy'],
+            // },
+        }),
+        babel({
+            babelHelpers: 'bundled',
+            // exclude: 'node_modules/**',
+        }),
+        replace({
+            preventAssignment: true,
+            values: {
+                __DEV__: false,
             },
         }),
     ],

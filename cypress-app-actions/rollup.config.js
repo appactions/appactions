@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 // import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
 import multiInput from 'rollup-plugin-multi-input';
+import replace from '@rollup/plugin-replace';
 // import path from 'path';
 
 export default {
@@ -23,26 +24,35 @@ export default {
         //     ],
         // }),
         babel({
-            exclude: 'node_modules/**',
+            // exclude: 'node_modules/**',
+            babelHelpers: 'bundled',
         }),
         commonjs({
             // include: /node_modules/,
-            // namedExports: {
-            //     'node_modules/react-is/index.js': [
-            //         'isElement',
-            //         'typeOf',
-            //         'ContextConsumer',
-            //         'ContextProvider',
-            //         'ForwardRef',
-            //         'Fragment',
-            //         'Lazy',
-            //         'Memo',
-            //         'Portal',
-            //         'Profiler',
-            //         'StrictMode',
-            //         'Suspense',
-            //     ],
-            // },
+            namedExports: {
+                '../node_modules/react-is/index.js': [
+                    'isElement',
+                    'typeOf',
+                    'ContextConsumer',
+                    'ContextProvider',
+                    'ForwardRef',
+                    'Fragment',
+                    'Lazy',
+                    'Memo',
+                    'Portal',
+                    'Profiler',
+                    'StrictMode',
+                    'Suspense',
+                ],
+                '../node_modules/clipboard-js/clipboard.js': ['copy'],
+            },
+        }),
+        replace({
+            preventAssignment: true,
+            values: {
+                process: false,
+                'process.env.NODE_ENV': JSON.stringify('production'),
+            },
         }),
     ],
 };
