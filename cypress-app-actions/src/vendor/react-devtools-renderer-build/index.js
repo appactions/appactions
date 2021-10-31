@@ -6342,7 +6342,11 @@ function attach(hook, rendererID, renderer, global) {
     stopProfiling,
     storeAsGlobal,
     unpatchConsoleForStrictMode: unpatchForStrictMode,
-    updateComponentFilters
+    updateComponentFilters,
+    // added for React App Actions
+    findCurrentFiberUsingSlowPathById,
+    getFiberID,
+    getPrimaryFiber
   };
 }
 

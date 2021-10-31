@@ -1,67 +1,15 @@
-diff --git a/src/vendor/react-app-actions/src/vendor/react-devtools-shared/src/backend/renderer.js b/src/vendor/react-app-actions/src/vendor/react-devtools-shared/src/backend/renderer.js
-index 17e5930f2..6cc37b514 100644
---- a/src/vendor/react-app-actions/src/vendor/react-devtools-shared/src/backend/renderer.js
-+++ b/src/vendor/react-app-actions/src/vendor/react-devtools-shared/src/backend/renderer.js
-@@ -34,7 +34,6 @@ import {
-   utfEncodeString,
- } from 'react-devtools-shared/src/utils';
- import {sessionStorageGetItem} from 'react-devtools-shared/src/storage';
--import {cleanForBridge, copyToClipboard, copyWithSet} from './utils';
- import {
-   __DEBUG__,
-   SESSION_STORAGE_RELOAD_AND_PROFILE_KEY,
-@@ -44,13 +43,24 @@ import {
-   TREE_OPERATION_REORDER_CHILDREN,
-   TREE_OPERATION_UPDATE_TREE_BASE_DURATION,
- } from '../constants';
--import {inspectHooksOfFiber} from 'react-debug-tools';
--import {
--  patch as patchConsole,
--  registerRenderer as registerRendererWithConsole,
--} from './console';
- 
--import type {Fiber} from 'react-reconciler/src/ReactFiber';
-+// === react-app-actions changes ===
+diff --git a/react-original/packages/react-devtools-shared/src/backend/renderer.js b/react/packages/react-devtools-shared/src/backend/renderer.js
+index 218b255..67eaaa4 100644
+--- a/react-original/packages/react-devtools-shared/src/backend/renderer.js
++++ b/react/packages/react-devtools-shared/src/backend/renderer.js
+@@ -4288,5 +4288,10 @@ export function attach(
+     storeAsGlobal,
+     unpatchConsoleForStrictMode,
+     updateComponentFilters,
 +
-+// import { cleanForBridge, copyToClipboard, copyWithSet } from './utils';
-+// import { inspectHooksOfFiber } from 'react-debug-tools';
-+// import { patch as patchConsole, registerRenderer as registerRendererWithConsole } from './console';
-+// import type { Fiber } from 'react-reconciler/src/ReactFiber';
-+
-+const cleanForBridge = () => {};
-+const copyToClipboard = () => {};
-+const copyWithSet = () => {};
-+const inspectHooksOfFiber = () => null;
-+const patchConsole = () => {};
-+const registerRendererWithConsole = () => {};
-+type Fiber = {};
-+
-+// === end of react-app-action-changes ===
-+
- import type {
-   ChangeDescription,
-   CommitDataBackend,
-@@ -1003,7 +1013,10 @@ export function attach(
-   let pendingUnmountedRootID: number | null = null;
- 
-   function pushOperation(op: number): void {
--    if (__DEV__) {
-+    // === react-app-action-changes ===
-+    // if (__DEV__) {
-+    if (true) {
-+      // === end of react-app-action-changes ===
-       if (!Number.isInteger(op)) {
-         console.error(
-           'pushOperation() was called but the value is not an integer.',
-@@ -3179,6 +3192,11 @@ export function attach(
-   }
- 
-   return {
-+    // === react-app-actions changes ===
++    // added for React App Actions
 +    findCurrentFiberUsingSlowPathById,
 +    getFiberID,
 +    getPrimaryFiber,
-+    // === end of react-app-actions changes ===
-     cleanup,
-     copyElementPath,
-     findNativeNodesForFiberID,
+   };
+ }
