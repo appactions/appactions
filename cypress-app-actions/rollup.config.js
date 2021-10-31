@@ -1,12 +1,12 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 // import alias from '@rollup/plugin-alias';
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import multiInput from 'rollup-plugin-multi-input';
 // import path from 'path';
 
 export default {
-    input: ['src/*.js', 'src/cypress/*.js'],
+    input: ['src/index.js', 'src/cypress/plugin.js'],
     output: {
         dir: 'dist',
         format: 'cjs',

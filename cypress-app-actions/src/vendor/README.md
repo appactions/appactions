@@ -6,7 +6,7 @@ We want to own as little code duplication from React as possible. We only need a
 
 How to upgrade the build:
 
-1. Copy `react-devtools-shared` from `react/packages` into the vendor folder. It is a gitignored folder.
+1. Run `git clone git@github.com:facebook/react.git --depth 1` in this (vendor) folder. It is gitignored.
 2. Apply `react-devtools-renderer.patch` to have our custom tweaks. Ideally it won't have git conflict. If it has, use the patch as a guide to see what needs to be manually updated. Please don't forget to update the patch.
 3. Build the custom build with `yarn build:react-devtools-renderer` from the `react-app-actions` folder.
 4. Done, test and commit the new build in `vendor/react-devtools-renderer-build`.
