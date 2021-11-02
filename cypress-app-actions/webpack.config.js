@@ -1,3 +1,5 @@
+/* This config is only to start the React app that unit tests will depend on. */
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { resolve } = require('path');
 

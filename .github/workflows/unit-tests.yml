@@ -15,6 +15,9 @@ jobs:
       - name: install node dependencies
         uses: bahmutov/npm-install@v1
 
+      - name: build package
+        run: yarn workspace cypress-app-actions build
+
       - name: run unit tests
         id: cypress
         run: yarn workspace cypress-app-actions test
