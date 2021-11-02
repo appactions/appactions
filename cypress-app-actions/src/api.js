@@ -4,6 +4,17 @@ if (!Cypress.AppActions) {
         componentByRole: {},
         roles: new Set(),
         overrides: {},
+        setFiberRoots: fiberRoots => {
+            Cypress.AppActions.__fiberRoots = fiberRoots;
+        },
+        getAllRoots: () => {
+            if (!Cypress.AppActions.__fiberRoots) {
+                throw new Error('Failed to list fiber roots');
+            }
+            return Object.values(Cypress.AppActions.__fiberRoots)
+                .flatMap(set => Array.from(set))
+                .flatMap(fiber => Array.from(fiber.containerInfo.childNodes));
+        },
     };
 }
 

@@ -133,10 +133,7 @@ export function installReactDevtoolsHook(target) {
                 // react-reconciler v16+
                 rendererInterface = reactAppActionsRenderer(hook, id, renderer, target);
                 Cypress.AppActions.reactApi = rendererInterface;
-                Cypress.AppActions.getAllRoots = () =>
-                    Object.values(fiberRoots)
-                        .flatMap(set => Array.from(set))
-                        .flatMap(fiber => Array.from(fiber.containerInfo.childNodes));
+                Cypress.AppActions.setFiberRoots(fiberRoots);
                 hook.rendererInterfaces.set(id, rendererInterface);
             } else if (renderer.ComponentTree) {
                 // react-dom v15
