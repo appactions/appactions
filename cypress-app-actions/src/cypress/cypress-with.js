@@ -72,7 +72,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             if ($subject) {
                 $subject = refreshSubject($subject);
             }
-
+            
             const $head = $subject ? $subject : Cypress.$(Cypress.AppActions.getAllRoots());
 
             const candidates = Array.from($head).flatMap(el => findElementByRole(el, testable.role));

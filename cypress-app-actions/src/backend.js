@@ -7,8 +7,7 @@ export function renderer(hook, rendererID, renderer, global) {
         getFiberIDForNative,
         findCurrentFiberUsingSlowPathById,
         findNativeNodesForFiberID,
-        getFiberID,
-        getPrimaryFiber,
+        getOrGenerateFiberID,
         getDisplayNameForFiberID,
     } = devtoolsInterface;
 
@@ -42,7 +41,7 @@ export function renderer(hook, rendererID, renderer, global) {
 
         return fiber;
     };
-    const findNativeNodes = fiber => findNativeNodesForFiberID(getFiberID(getPrimaryFiber(fiber)));
+    const findNativeNodes = fiber => findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
     const getOwner = fiber => {
         if (fiber._debugOwner) {
             return fiber._debugOwner;
@@ -77,7 +76,7 @@ export function renderer(hook, rendererID, renderer, global) {
         return null;
     };
 
-    const getDisplayName = fiber => getDisplayNameForFiberID(getFiberID(getPrimaryFiber(fiber)));
+    const getDisplayName = fiber => getDisplayNameForFiberID(getOrGenerateFiberID(fiber));
 
     return {
         findFiber,

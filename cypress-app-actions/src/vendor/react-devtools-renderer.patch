@@ -1,15 +1,14 @@
 diff --git a/react-original/packages/react-devtools-shared/src/backend/renderer.js b/react/packages/react-devtools-shared/src/backend/renderer.js
-index 218b255..67eaaa4 100644
+index 218b255..2a38447 100644
 --- a/react-original/packages/react-devtools-shared/src/backend/renderer.js
 +++ b/react/packages/react-devtools-shared/src/backend/renderer.js
-@@ -4288,5 +4288,10 @@ export function attach(
+@@ -4288,5 +4288,9 @@ export function attach(
      storeAsGlobal,
      unpatchConsoleForStrictMode,
      updateComponentFilters,
 +
 +    // added for React App Actions
 +    findCurrentFiberUsingSlowPathById,
-+    getFiberID,
-+    getPrimaryFiber,
++    getOrGenerateFiberID,
    };
  }

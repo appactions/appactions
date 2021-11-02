@@ -6345,8 +6345,7 @@ function attach(hook, rendererID, renderer, global) {
     updateComponentFilters,
     // added for React App Actions
     findCurrentFiberUsingSlowPathById,
-    getFiberID,
-    getPrimaryFiber
+    getOrGenerateFiberID
   };
 }
 
