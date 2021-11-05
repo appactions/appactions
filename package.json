@@ -3,6 +3,7 @@
     "workspaces": [
         "react-app-actions",
         "kitchensink-nextjs",
+        "kitchensink-r3f",
         "cypress-app-actions",
         "browser-extension"
     ],
