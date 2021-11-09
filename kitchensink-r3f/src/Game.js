@@ -64,15 +64,15 @@ export default function Game() {
                         <Title currentState={currentState} send={send} />
                     </Html>
                 </mesh>
-                <Cell currentState={currentState} send={send} index={0} position={[0, 0, 0]} shadow />
-                <Cell currentState={currentState} send={send} index={1} position={[0, 1, 0]} shadow />
-                <Cell currentState={currentState} send={send} index={2} position={[0, 2, 0]} shadow />
-                <Cell currentState={currentState} send={send} index={3} position={[-1, 0, 0]} />
-                <Cell currentState={currentState} send={send} index={4} position={[-1, 1, 0]} />
-                <Cell currentState={currentState} send={send} index={5} position={[-1, 2, 0]} />
-                <Cell currentState={currentState} send={send} index={6} position={[1, 0, 0]} />
-                <Cell currentState={currentState} send={send} index={7} position={[1, 1, 0]} />
-                <Cell currentState={currentState} send={send} index={8} position={[1, 2, 0]} />
+                <Cell currentState={currentState} send={send} index={0} position={[-1, 2, 0]} shadow />
+                <Cell currentState={currentState} send={send} index={1} position={[0, 2, 0]} shadow />
+                <Cell currentState={currentState} send={send} index={2} position={[1, 2, 0]} shadow />
+                <Cell currentState={currentState} send={send} index={3} position={[-1, 1, 0]} />
+                <Cell currentState={currentState} send={send} index={4} position={[0, 1, 0]} />
+                <Cell currentState={currentState} send={send} index={5} position={[1, 1, 0]} />
+                <Cell currentState={currentState} send={send} index={6} position={[-1, 0, 0]} />
+                <Cell currentState={currentState} send={send} index={7} position={[0, 0, 0]} />
+                <Cell currentState={currentState} send={send} index={8} position={[1, 0, 0]} />
             </Suspense>
         </>
     );

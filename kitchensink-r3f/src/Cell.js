@@ -18,7 +18,7 @@ export default function Cell({ currentState, send, index, position, shadow }) {
 
     const [{ wobble, coat, color, env }] = useSpring(
         {
-            wobble: down ? 1.2 : hovered ? 1.05 : 1,
+            wobble: player ? 1 : hovered ? 1.1 : 1,
             coat: mode && !hovered ? 0.04 : 1,
             env: mode && !hovered ? 0.4 : 1,
             color: player ? (player === 'x' ? 'red' : 'blue') : 'white',
