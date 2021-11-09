@@ -1,10 +1,4 @@
-import { createMachine, assign, send } from 'xstate';
-
-function range(start, end) {
-    return Array(end - start)
-        .fill(null)
-        .map((_, i) => i + start);
-}
+import { createMachine, assign } from 'xstate';
 
 const winningLines = [
     [0, 1, 2],
