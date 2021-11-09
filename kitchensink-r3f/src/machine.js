@@ -1,20 +1,12 @@
-const { Machine, actions } = require("xstate");
-const { assign } = actions;
+import { createMachine, assign, send } from 'xstate';
 
-const initialContext = {
-  board: Array(9).fill(null),
-  moves: 0,
-  player: "x",
-  winner: undefined
-};
+function range(start, end) {
+    return Array(end - start)
+        .fill(null)
+        .map((_, i) => i + start);
+}
 
-const isValidMove = (ctx, e) => {
-  return ctx.board[e.value] === null;
-};
-
-function checkWin(ctx) {
-  const { board } = ctx;
-  const winningLines = [
+const winningLines = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -22,86 +14,82 @@ function checkWin(ctx) {
     [1, 4, 7],
     [2, 5, 8],
     [0, 4, 8],
-    [2, 4, 6]
-  ];
+    [2, 4, 6],
+];
 
-  for (let line of winningLines) {
-    const xWon = line.every(index => {
-      return board[index] === "x";
-    });
+function checkWin(board) {
+    for (let line of winningLines) {
+        const xWon = line.every(index => {
+            return board[index] === 'x';
+        });
 
-    if (xWon) {
-      return true;
-    }
-
-    const oWon = line.every(index => {
-      return board[index] === "o";
-    });
-
-    if (oWon) {
-      return true;
-    }
-  }
-}
-
-function checkDraw(ctx) {
-  return ctx.moves === 9;
-}
-
-const ticTacToeMachine = Machine(
-  {
-    initial: "playing",
-    states: {
-      playing: {
-        on: {
-          "": [
-            { target: "winner", cond: "checkWin" },
-            { target: "draw", cond: "checkDraw" }
-          ],
-          PLAY: [
-            {
-              target: "playing",
-              cond: "isValidMove",
-              actions: "updateBoard"
-            }
-          ]
+        if (xWon) {
+            return ['x', line];
         }
-      },
-      winner: {
-        onEntry: "setWinner"
-      },
-      draw: {}
+
+        const oWon = line.every(index => {
+            return board[index] === 'o';
+        });
+
+        if (oWon) {
+            return ['o', line];
+        }
+    }
+
+    return false;
+}
+
+const initialContext = {
+    board: Array(9).fill(null),
+    player: 'x', // or 'o'
+    winner: null,
+    winningLine: null,
+    moves: 0,
+};
+
+export const ticTacToeMachine = createMachine({
+    initial: 'playing',
+    context: initialContext,
+    states: {
+        playing: {
+            always: [
+                {
+                    target: 'winner',
+                    cond: ctx => !!checkWin(ctx.board),
+                    actions: assign({
+                        winner: ctx => checkWin(ctx.board)[0],
+                        winningLine: ctx => checkWin(ctx.board)[1],
+                    }),
+                },
+                {
+                    target: 'draw',
+                    cond: ctx => ctx.board.every(item => item),
+                },
+            ],
+            on: {
+                PLAY: {
+                    target: 'playing',
+                    actions: assign({
+                        board: (ctx, e) => {
+                            const updatedBoard = [...ctx.board];
+                            updatedBoard[e.value] = ctx.player;
+                            return updatedBoard;
+                        },
+                        player: ctx => (ctx.player === 'x' ? 'o' : 'x'),
+                        moves: ctx => ctx.moves + 1,
+                    }),
+                    cond: (ctx, e) => ctx.board[e.value] === null,
+                },
+                RESET: undefined,
+            },
+        },
+        winner: {},
+        draw: {},
     },
     on: {
-      RESET: {
-        target: "playing",
-        actions: "resetGame"
-      }
-    }
-  },
-  {
-    actions: {
-      updateBoard: assign({
-        board: (ctx, e) => {
-          const updatedBoard = [...ctx.board];
-          updatedBoard[e.value] = ctx.player;
-          return updatedBoard;
+        RESET: {
+            target: '.playing',
+            actions: assign(initialContext),
         },
-        moves: ctx => ctx.moves + 1,
-        player: ctx => (ctx.player === "x" ? "o" : "x")
-      }),
-      resetGame: assign(initialContext),
-      setWinner: assign({
-        winner: ctx => (ctx.player === "x" ? "o" : "x")
-      })
     },
-    guards: {
-      checkWin,
-      checkDraw,
-      isValidMove
-    }
-  },
-  initialContext
-);
-
-export { ticTacToeMachine };
+});

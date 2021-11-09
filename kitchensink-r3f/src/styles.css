@@ -25,9 +25,16 @@ main {
 }
 
 .title {
-  color: #6e89e0;
   pointer-events: none;
   user-select: none;
+}
+
+.title.blue {
+  color: #6e89e0;
+}
+
+.title.red {
+  color: #f14848;
 }
 
 svg {
