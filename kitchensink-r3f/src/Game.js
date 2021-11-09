@@ -10,18 +10,18 @@ import Cell from './Cell';
 function Title({ currentState, send }) {
     if (currentState.matches('playing')) {
         const player = currentState.context.player.toUpperCase();
-        const className = player === 'X' ? 'title red' : 'title blue'
+        const className = player === 'X' ? 'title red' : 'title blue';
         return <h2 className={className}>Player {player}</h2>;
     }
 
     if (currentState.matches('winner')) {
         const player = currentState.context.winner.toUpperCase();
-        const className = player === 'X' ? 'title red' : 'title blue'
+        const className = player === 'X' ? 'title red' : 'title blue';
         return (
-            <h2 className={className}>
-                Player {player} wins!{' '}
+            <>
+                <h2 className={className}>Player {player} wins! </h2>
                 <button onClick={() => send('RESET')}>Reset</button>
-            </h2>
+            </>
         );
     }
 

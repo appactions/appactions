@@ -24,7 +24,7 @@ export default function Cell({ currentState, send, index, position, shadow }) {
             color: player ? (player === 'x' ? 'red' : 'blue') : 'white',
             config: n => n === 'wobble' && hovered && { mass: 2, tension: 1000, friction: 10 },
         },
-        [mode, hovered, down],
+        [player, mode, hovered, down],
     );
 
     return (
