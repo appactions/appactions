@@ -24,12 +24,9 @@ export default function Cell({ onClick, hoverColor = '#E8B059', position, shadow
         [mode, hovered, down],
     );
 
-    const sphere = useRef();
-
     return (
         <>
             <a.mesh
-                ref={sphere}
                 scale={wobble}
                 position={position}
                 onPointerOver={() => setHovered(true)}

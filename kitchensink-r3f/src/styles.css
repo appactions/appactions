@@ -24,11 +24,10 @@ main {
   height: 100%;
 }
 
-.overlay {
-  position: relative;
-  order: 1;
-  flex: 1;
+.title {
+  color: #6e89e0;
   pointer-events: none;
+  user-select: none;
 }
 
 svg {
