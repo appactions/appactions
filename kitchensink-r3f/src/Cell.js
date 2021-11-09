@@ -49,12 +49,12 @@ export default function Cell({ onClick, hoverColor = '#E8B059', position, shadow
             {shadow ? (
                 <ContactShadows
                     rotation={[Math.PI / 2, 0, 0]}
-                    position={[0, -1.6, 0]}
+                    position={[0, -1, 0]}
                     opacity={mode ? 0.8 : 0.4}
                     width={15}
                     height={15}
-                    blur={2.5}
-                    far={1.6}
+                    blur={3.5}
+                    far={2.6}
                 />
             ) : null}
         </>

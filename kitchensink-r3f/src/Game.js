@@ -1,14 +1,45 @@
 import React, { Suspense, useRef } from 'react';
-import { PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera, Html } from '@react-three/drei';
 import { useSpring } from '@react-spring/core';
 import { a } from '@react-spring/three';
+
+import { useMachine } from '@xstate/react';
+import { ticTacToeMachine } from "./machine";
 import Cell from './Cell';
 
-export default function Scene() {
+function Title({ currentState, send}) {
+
+    if (currentState.matches("playing")) {
+      return <h2>Player {currentState.context.player.toUpperCase()}</h2>;
+    }
+
+    if (currentState.matches("winner")) {
+      return (
+        <h2>
+          Player {currentState.context.winner.toUpperCase()} wins!{" "}
+          <button onClick={() => send("RESET")}>Reset</button>
+        </h2>
+      );
+    }
+
+    if (currentState.matches("draw")) {
+      return (
+        <h2>
+          Draw <button onClick={() => send("RESET")}>Reset</button>
+        </h2>
+      );
+    }
+
+    return null;
+}
+
+
+export default function Game() {
     const mode = false; // light or dark mode of scene
     const hovered = false;
 
     const light = useRef();
+    const [current, send] = useMachine(ticTacToeMachine);
 
     const [{ ambient, env }] = useSpring(
         {
@@ -21,11 +52,14 @@ export default function Scene() {
 
     return (
         <>
-            <PerspectiveCamera makeDefault position={[-2, 0, 4]} fov={75}>
+            <PerspectiveCamera makeDefault position={[0, 1, 4]} fov={75}>
                 <a.ambientLight intensity={ambient} />
                 <a.pointLight ref={light} position-z={-15} intensity={env} color="#F8C069" />
             </PerspectiveCamera>
             <Suspense fallback={null}>
+                <Html>
+                    <Title currentState={current} send={send} />
+                </Html>
                 <Cell position={[0, 0, 0]} shadow />
                 <Cell position={[0, 1, 0]} shadow />
                 <Cell position={[0, 2, 0]} shadow />
