@@ -6,7 +6,15 @@ Use this when there is an existing Cypress based E2E solution.
 
 1. `yarn add -D cypress-app-actions`
 
-2. 
+2. Add plugin to plugin file.
+
+3. Register the Cypress commands in the support file.
+
+4. Create the testables in the support folder.
+
+5. Create the driver files.
+
+Ready to write tests.
 
 ## react-app-actions (alpha)
 

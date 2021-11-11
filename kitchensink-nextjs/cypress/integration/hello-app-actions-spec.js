@@ -5,7 +5,7 @@ describe('Hello App Actions', () => {
         cy.visit('/');
     });
 
-    it('Alert.getTitle', () => {
+    it('Alert should exist', () => {
         cy.with(Logo).should('exist');
     });
 });
