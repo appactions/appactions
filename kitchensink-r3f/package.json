@@ -14,12 +14,17 @@
     "three": "0.127.0",
     "xstate": "^4.26.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "cypress": "^9.0.0",
+    "cypress-app-actions": "./cypress-app-actions",
+    "start-server-and-test": "^1.14.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "cypress": "start-server-and-test 3000 'cypress open'",
+    "cypress:ci": "start-server-and-test 3000 'cypress run'"
   },
   "browserslist": [
     ">0.2%",
