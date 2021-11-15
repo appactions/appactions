@@ -11,6 +11,7 @@
         "concurrently": "^6.2.1",
         "eslint": "^7.22.0",
         "husky": "^5.1.3",
+        "inquirer": "^8.2.0",
         "lint-staged": "^10.5.4"
     },
     "husky": {
@@ -22,8 +23,11 @@
         "*.{js,css,md}": "prettier --write"
     },
     "scripts": {
-        "dev": "cd react-app-actions && rollup --config rollup.config.js --watch",
-        "dev:cypress": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
+        "dev": "node dev.js | jq .project | xargs yarn run",
+        "dev:app-actions": "cd react-app-actions && rollup --config rollup.config.js --watch",
+        "dev:cypress:nextjs": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
+        "dev:cypress:r3f": "concurrently -n 'browser-ext,kitchensink' -c 'yellow,green' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-r3f cypress' --kill-others",
+        "dev:cypress-app-actions": "yarn workspace cypress-app-actions build:react-devtools-renderer && yarn workspace cypress-app-actions build && yarn dev:cypress",
         "test": "CI=true yarn --silent workspace kitchensink-nextjs react-app-actions"
     }
 }
