@@ -23,7 +23,7 @@
         "*.{js,css,md}": "prettier --write"
     },
     "scripts": {
-        "dev": "node dev.js | jq .project | xargs yarn run",
+        "dev": "node dev.js",
         "dev:app-actions": "cd react-app-actions && rollup --config rollup.config.js --watch",
         "dev:cypress:nextjs": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
         "dev:cypress:r3f": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-r3f cypress' --kill-others",
