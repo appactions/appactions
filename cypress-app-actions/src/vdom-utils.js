@@ -6,7 +6,7 @@ import {
     findAncestorElementByRole,
     findAncestorElementByReactComponentName,
     isRole,
-} from './index';
+} from './api';
 
 export const vDomCallDriver = ($el, methodName, ...args) => {
     return callInteraction($el, methodName, ...args);
