@@ -9,17 +9,17 @@ const choices = [
     {
         label: 'Cypress version with Nextjs kitchensink',
         concurrently: [
-            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions build --watch', prefixColor: 'blue' },
+            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
-            { name: 'kitchensink', command: 'yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
+            { name: 'kitchensink-nextjs', command: 'yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
         ],
     },
     {
         label: 'Cypress version with R3F kitchensink',
         concurrently: [
-            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions build --watch', prefixColor: 'blue' },
+            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
-            { name: 'kitchensink', command: 'yarn workspace kitchensink-r3f cypress', prefixColor: 'green' },
+            { name: 'kitchensink-r3f', command: 'yarn workspace kitchensink-r3f cypress', prefixColor: 'green' },
         ],
     },
     {

@@ -7,6 +7,7 @@
     "start": "webpack-dev-server --hot",
     "cypress": "node cypress.js",
     "test": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
+    "dev": "rollup --config rollup.config.js --watch",
     "build": "rollup --config rollup.config.js",
     "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js"
   },

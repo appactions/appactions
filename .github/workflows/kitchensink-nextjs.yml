@@ -1,0 +1,27 @@
+name: Kitchensink NextJS
+on: [deployment_status]
+jobs:
+  main:
+    if: github.event.deployment_status.environment == 'kitchensink' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    concurrency: deploy-${{ github.head_ref }}
+    steps:
+      - uses: actions/checkout@v1
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: build package
+        run: yarn workspace cypress-app-actions build
+
+      - name: run cypress
+        id: cypress
+        run: yarn workspace kitchensink-nextjs cypress
+        env:
+          CI: true
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
