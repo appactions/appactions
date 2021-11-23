@@ -5,11 +5,8 @@ context('Hello App Actions', () => {
         cy.visit('/');
     });
 
-    it('42 is 42', () => {
-        cy.wrap(42).should('equal', 42);
-    });
-
     it('Game should exist', () => {
+        cy.get('#root canvas').should('exist')
         cy.with(Game).should('exist');
     });
 });
