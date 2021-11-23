@@ -23,6 +23,14 @@ const choices = [
         ],
     },
     {
+        label: 'Cypress App Actions unit tests',
+        concurrently: [
+            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
+            { name: 'test-app', command: 'yarn workspace cypress-app-actions start', prefixColor: 'yellow' },
+            { name: 'cypress', command: 'yarn workspace cypress-app-actions cypress', prefixColor: 'green' },
+        ],
+    },
+    {
         label: 'Standalone React App Actions',
         concurrently: [
             // TODO: improve this once react-app-actions is developed again

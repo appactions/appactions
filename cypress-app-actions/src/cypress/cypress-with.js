@@ -1,5 +1,5 @@
 import { findElementByRole, isJquery } from '../api';
-import { AppActionsError, refreshSubject, formatArguments } from './cypress-utils';
+import { AppActionsError, refreshSubject, formatArguments, isDOMNode } from './cypress-utils';
 import getUniqueSelector from '@cypress/unique-selector';
 
 export const register = (name, { defaultIsLoading = () => false } = {}) => {
@@ -98,7 +98,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             }
 
             const evaluatedCandidates = candidates.map((node, index, array) => {
-                const el = node instanceof Element ? Cypress.$(node) : node;
+                const el = isDOMNode(node) ? Cypress.$(node) : node;
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
@@ -152,8 +152,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 if (maybeFilterIssue) throw maybeFilterIssue.filterResult;
             }
             
-            // deciding if this is a DOM node, because "instanceof Element" is not working on all elements for some reason
-            if (result.every(el => typeof el.querySelector)) {
+            if (result.every(isDOMNode)) {
                 result.forEach(el => {
                     const uniqueSelector = getUniqueSelector(el);
                     el.dataset.uniqueSelector = uniqueSelector;

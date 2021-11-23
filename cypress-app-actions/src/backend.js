@@ -14,14 +14,15 @@ export function renderer(hook, rendererID, renderer, global) {
     const findFiber = subject => {
         let id;
 
-        if (subject instanceof Element) {
-            id = getFiberIDForNative(element);
+        // hack, instanceof Element is not working reliably
+        if (typeof subject.querySelector === 'function') {
+            id = getFiberIDForNative(subject);
 
             if (!id) {
                 // try the getOrGenerateFiberID way instead
-                const fiberProp = Object.keys(element).find(prop => prop.startsWith('__reactFiber$'));
+                const fiberProp = Object.keys(subject).find(prop => prop.startsWith('__reactFiber$'));
                 if (fiberProp) {
-                    id = getOrGenerateFiberID(element[fiberProp]);
+                    id = getOrGenerateFiberID(subject[fiberProp]);
                 }
             }
         } else {
