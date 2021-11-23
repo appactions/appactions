@@ -1,9 +1,9 @@
-import { findElementByRole } from '../api';
-import { AppActionsError, refreshSubject, formatArguments } from './cypress-utils';
+import { findElementByRole, isJquery } from '../api';
+import { AppActionsError, refreshSubject, formatArguments, isDOMNode } from './cypress-utils';
 import getUniqueSelector from '@cypress/unique-selector';
 
 export const register = (name, { defaultIsLoading = () => false } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: 'optional' }, ($subject, testable, ...pickerData) => {
+    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, testable, ...pickerData) => {
         if (!testable.isTestable) {
             throw new AppActionsError(`value passed to cy.${name} is not a testable`);
         }
@@ -39,7 +39,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
 
         const getConsolePropsWithoutResult = () => ({
             Command: name,
-            Subject: $subject,
+            Subject: subject,
             Selection: selector,
             Duration: performance.now() - start,
         });
@@ -69,20 +69,40 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 });
             }
 
-            if ($subject) {
-                $subject = refreshSubject($subject);
+            let head;
+
+            if (!subject) {
+                head = Cypress.AppActions.getAllRoots();
+            } else if (isJquery(subject)) {
+                head = Array.from(refreshSubject(subject));
+            } else if (!Array.isArray(subject)) {
+                head = [subject];
+            } else {
+                head = subject;
             }
-            
-            const $head = $subject ? $subject : Cypress.$(Cypress.AppActions.getAllRoots());
 
-            const candidates = Array.from($head).flatMap(el => findElementByRole(el, testable.role));
+            let maybeCandidateError = null;
 
-            const evaluatedCandidates = candidates.map((el, index, array) => {
-                const $el = Cypress.$(el);
+            const candidates = head.flatMap(node => {
+                try {
+                    const fiber = Cypress.AppActions.reactApi.findFiber(node);
+                    return findElementByRole(fiber, testable.role);
+                } catch (e) {
+                    maybeCandidateError = e;
+                    return [];
+                }
+            });
+
+            if (maybeCandidateError && candidates.length === 0) {
+                throw maybeCandidateError;
+            }
+
+            const evaluatedCandidates = candidates.map((node, index, array) => {
+                const el = isDOMNode(node) ? Cypress.$(node) : node;
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
-                    loadingResult = Boolean(isTestableLoading($el));
+                    loadingResult = Boolean(isTestableLoading(el));
                 } catch (error) {
                     loadingResult = error;
                 }
@@ -90,12 +110,14 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 let filterResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "picked" if it has an explicit true
-                    filterResult = Boolean(filterFn($el, index, array));
+                    filterResult = Boolean(filterFn(el, index, array));
                 } catch (error) {
                     filterResult = error;
                 }
                 return {
-                    el,
+                    // TODO not sure what would be the best to return here, host node, fiber, or jquery?
+                    // following logic will expect what comes from findElementByRole
+                    el: node,
                     loadingResult,
                     filterResult,
                 };
@@ -129,27 +151,39 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 // if we couldn't come up with any items to select, throw an error from filtering, that will help the user to understand what's wrong
                 if (maybeFilterIssue) throw maybeFilterIssue.filterResult;
             }
-
-            result.forEach(el => {
-                const uniqueSelector = getUniqueSelector(el);
-                el.dataset.uniqueSelector = uniqueSelector;
-            });
-
-            const $result = Cypress.$(result);
-            $result.selector = selector;
-
-            if (options._log) {
-                const candidatesLoading = new Map(
-                    evaluatedCandidates.map(({ el, loadingResult }) => [el, loadingResult]),
-                );
-                const candidatesFilter = new Map(evaluatedCandidates.map(({ el, filterResult }) => [el, filterResult]));
-                options._log.set({
-                    $el: $result,
-                    consoleProps: getConsoleProps({ selector, $result, candidatesLoading, candidatesFilter }),
+            
+            if (result.every(isDOMNode)) {
+                result.forEach(el => {
+                    const uniqueSelector = getUniqueSelector(el);
+                    el.dataset.uniqueSelector = uniqueSelector;
                 });
-            }
 
-            return $result;
+                const $result = Cypress.$(result);
+                $result.selector = selector;
+
+                if (options._log) {
+                    const candidatesLoading = new Map(
+                        evaluatedCandidates.map(({ el, loadingResult }) => [el, loadingResult]),
+                    );
+                    const candidatesFilter = new Map(
+                        evaluatedCandidates.map(({ el, filterResult }) => [el, filterResult]),
+                    );
+                    options._log.set({
+                        $el: $result,
+                        consoleProps: getConsoleProps({ selector, $result, candidatesLoading, candidatesFilter }),
+                    });
+                }
+
+                return $result;
+            } else {
+                if (options._log) {
+                    options._log.set({
+                        result,
+                    });
+                }
+
+                return result;
+            }
         };
 
         const retryValue = () => {

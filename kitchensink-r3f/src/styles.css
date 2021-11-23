@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+main {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: row;
+}
+
+.canvas {
+  order: 2;
+  flex: 1;
+  height: 100%;
+}
+
+.title {
+  pointer-events: none;
+  user-select: none;
+}
+
+.title.blue {
+  color: #6e89e0;
+}
+
+.title.red {
+  color: #f14848;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media only screen and (max-aspect-ratio: 8/7) {
+  main {
+    flex-direction: column;
+  }
+  .canvas {
+    order: 1;
+  }
+  svg {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    height: 60vh;
+  }
+}

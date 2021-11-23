@@ -9,11 +9,13 @@ if (!Cypress.AppActions) {
         },
         getAllRoots: () => {
             if (!Cypress.AppActions.__fiberRoots) {
-                throw new Error('Failed to list fiber roots');
+                throw new Error('Could not find any React roots');
             }
+
+            // this logic cannot go to the setter, because of mutation
             return Object.values(Cypress.AppActions.__fiberRoots)
                 .flatMap(set => Array.from(set))
-                .flatMap(fiber => Array.from(fiber.containerInfo.childNodes));
+                .map(rootNode => rootNode.current);
         },
     };
 }
@@ -41,7 +43,7 @@ export function register(componentName, driverConfig) {
     }
 }
 
-const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
+export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
 
 export function getDisplayName(fiber) {
     return Cypress.AppActions.reactApi.getDisplayName(fiber);
@@ -145,24 +147,20 @@ export function callInteraction($el, methodName, ...args) {
     return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
 }
 
-export function findElementByPredicate($root, predicate) {
-    const el = unwrapJQuery($root);
-    const fiber = Cypress.AppActions.reactApi.findFiber(el);
+export function findElementByPredicate(fiber, predicate) {
     const matches = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, predicate);
     return matches.flatMap(Cypress.AppActions.reactApi.findNativeNodes);
 }
 
-export function findElementByRole($root, role) {
-    return findElementByPredicate($root, isPartOfRole(role));
+export function findElementByRole(fiber, role) {
+    return findElementByPredicate(fiber, isPartOfRole(role));
 }
 
-export function findElementByReactComponentName($root, componentName) {
-    return findElementByPredicate($root, hasMatchingName(componentName));
+export function findElementByReactComponentName(fiber, componentName) {
+    return findElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
-export function findAncestorElementByPredicate($root, predicate) {
-    const el = unwrapJQuery($root);
-    const fiber = Cypress.AppActions.reactApi.findFiber(el);
+export function findAncestorElementByPredicate(fiber, predicate) {
     const parent = Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, predicate);
     if (!parent) {
         return [];
@@ -170,14 +168,15 @@ export function findAncestorElementByPredicate($root, predicate) {
     return Cypress.AppActions.reactApi.findNativeNodes(parent);
 }
 
-export function findAncestorElementByRole($root, role) {
-    return findAncestorElementByPredicate($root, isPartOfRole(role));
+export function findAncestorElementByRole(fiber, role) {
+    return findAncestorElementByPredicate(fiber, isPartOfRole(role));
 }
 
-export function findAncestorElementByReactComponentName($root, componentName) {
-    return findAncestorElementByPredicate($root, hasMatchingName(componentName));
+export function findAncestorElementByReactComponentName(fiber, componentName) {
+    return findAncestorElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
+// TODO expect fiber instead of $root
 export function findOverride($root, role) {
     const el = unwrapJQuery($root);
     const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);

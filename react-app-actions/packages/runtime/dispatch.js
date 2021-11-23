@@ -69,7 +69,7 @@ function normalize(renderer, fiber) {
                 specifier: getSpecifier(fiber),
             };
         }
-    } else if (fiber.stateNode instanceof HTMLElement) {
+    } else if (fiber.stateNode instanceof Element) {
         const role = getHostRole(fiber.stateNode);
         if (role) {
             return {

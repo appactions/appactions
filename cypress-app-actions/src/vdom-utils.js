@@ -6,7 +6,7 @@ import {
     findAncestorElementByRole,
     findAncestorElementByReactComponentName,
     isRole,
-} from './index';
+} from './api';
 
 export const vDomCallDriver = ($el, methodName, ...args) => {
     return callInteraction($el, methodName, ...args);
@@ -27,11 +27,12 @@ export const vDomFind = ($el, selector) => {
             .reduce((selection, currentSelector) => {
                 return selection
                     .flatMap(el => {
+                        const fiber = Cypress.AppActions.reactApi.findFiber(el);
                         return currentSelector.split(',').flatMap(name => {
                             if (isRole(name)) {
-                                return findElementByRole(el, name);
+                                return findElementByRole(fiber, name);
                             }
-                            return findElementByReactComponentName(el, name);
+                            return findElementByReactComponentName(fiber, name);
                         });
                     })
                     .filter(Boolean);
@@ -52,11 +53,12 @@ export const vDomClosest = ($el, selector) => {
     }
     return Array.from($el)
         .flatMap(el => {
+            const fiber = Cypress.AppActions.reactApi.findFiber(el);
             if (isRole(selector)) {
-                return findAncestorElementByRole(el, selector);
+                return findAncestorElementByRole(fiber, selector);
             }
 
-            return findAncestorElementByReactComponentName(el, selector);
+            return findAncestorElementByReactComponentName(fiber, selector);
         })
         .filter(Boolean);
 };

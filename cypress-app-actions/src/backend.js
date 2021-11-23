@@ -11,8 +11,24 @@ export function renderer(hook, rendererID, renderer, global) {
         getDisplayNameForFiberID,
     } = devtoolsInterface;
 
-    const findFiber = element => {
-        const id = getFiberIDForNative(element);
+    const findFiber = subject => {
+        let id;
+
+        // hack, instanceof Element is not working reliably
+        if (typeof subject.querySelector === 'function') {
+            id = getFiberIDForNative(subject);
+
+            if (!id) {
+                // try the getOrGenerateFiberID way instead
+                const fiberProp = Object.keys(subject).find(prop => prop.startsWith('__reactFiber$'));
+                if (fiberProp) {
+                    id = getOrGenerateFiberID(subject[fiberProp]);
+                }
+            }
+        } else {
+            // assume it's a fiber already
+            id = getOrGenerateFiberID(subject);
+        }
 
         if (!id) {
             throw new Error('could not locate React node for DOM element');
@@ -20,6 +36,14 @@ export function renderer(hook, rendererID, renderer, global) {
 
         return findCurrentFiberUsingSlowPathById(id);
     };
+
+    const getParentFiber = subject => {
+        // TODO find the oldest parent, which returns the same host nodes as the argument
+        // this should replace findFiberForInteraction
+
+        throw new Error('not implemented');
+    };
+
     // use when looking for a fiber because want to run an interaction on it
     const findFiberForInteraction = element => {
         let fiber = findFiber(element);
@@ -80,6 +104,7 @@ export function renderer(hook, rendererID, renderer, global) {
 
     return {
         findFiber,
+        getParentFiber, // going to replace findFiberForInteraction
         findFiberForInteraction,
         findNativeNodes,
         listFibersByPredicate,

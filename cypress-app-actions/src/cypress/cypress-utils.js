@@ -80,3 +80,8 @@ const formatArgument = arg => {
 export const formatArguments = args => args.map(formatArgument).join(', ');
 
 export class AppActionsError extends Error {}
+
+// "instanceof Element" seems like not working reliably, using this hack for now
+export function isDOMNode(node) {
+    return node && typeof node === 'object' && typeof node.querySelector === 'function';
+}
