@@ -14,7 +14,7 @@ export function renderer(hook, rendererID, renderer, global) {
     const findFiber = subject => {
         let id;
 
-        if (subject instanceof HTMLElement) {
+        if (subject instanceof Element) {
             id = getFiberIDForNative(element);
 
             if (!id) {

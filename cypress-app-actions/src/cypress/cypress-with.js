@@ -98,7 +98,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             }
 
             const evaluatedCandidates = candidates.map((node, index, array) => {
-                const el = node instanceof HTMLElement ? Cypress.$(node) : node;
+                const el = node instanceof Element ? Cypress.$(node) : node;
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
@@ -151,8 +151,9 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 // if we couldn't come up with any items to select, throw an error from filtering, that will help the user to understand what's wrong
                 if (maybeFilterIssue) throw maybeFilterIssue.filterResult;
             }
-
-            if (result.every(el => el instanceof HTMLElement)) {
+            
+            // deciding if this is a DOM node, because "instanceof Element" is not working on all elements for some reason
+            if (result.every(el => typeof el.querySelector)) {
                 result.forEach(el => {
                     const uniqueSelector = getUniqueSelector(el);
                     el.dataset.uniqueSelector = uniqueSelector;
