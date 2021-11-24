@@ -9,6 +9,7 @@ export function renderer(hook, rendererID, renderer, global) {
         findNativeNodesForFiberID,
         getOrGenerateFiberID,
         getDisplayNameForFiberID,
+        flushInitialOperations,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -111,6 +112,7 @@ export function renderer(hook, rendererID, renderer, global) {
         findAncestorElementByPredicate,
         getDisplayName,
         getOwner,
+        flushInitialOperations,
 
         // react calls these i guess
         handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,
