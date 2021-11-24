@@ -2,9 +2,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 // import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
-import multiInput from 'rollup-plugin-multi-input';
+import multi from 'rollup-plugin-multi-input';
 import replace from '@rollup/plugin-replace';
-// import path from 'path';
 
 export default {
     input: ['src/index.js', 'src/cypress/plugin.js'],
@@ -13,7 +12,7 @@ export default {
         format: 'cjs',
     },
     plugins: [
-        multiInput(),
+        multi(),
         resolve(),
         // alias({
         //     entries: [
