@@ -1,4 +1,4 @@
-import { attach } from './vendor/react-devtools-renderer-build';
+import { attach } from './vendor/react-devtools-renderer-build/renderer';
 
 export function renderer(hook, rendererID, renderer, global) {
     const devtoolsInterface = attach(hook, rendererID, renderer, global);
