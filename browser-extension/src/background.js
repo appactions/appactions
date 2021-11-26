@@ -73,14 +73,16 @@ const handleDevtoolsPanelConnection = port => {
             return;
         }
 
+        const tabId = msg?.payload?.tabId;
+
         // tabId is required when working with chrome extension
-        if (!msg.tabId) {
+        if (!tabId) {
             console.error('Recieved devtools panel connection but no tabId was specified.', msg);
             return;
         }
 
-        addToTarget({ tabId: msg.tabId, port, source });
-        targets[msg.tabId].dispatchEvent(source, msg);
+        addToTarget({ tabId, port, source });
+        targets[tabId].dispatchEvent(source, msg);
 
         port.onMessage.removeListener(initialListener);
     };
