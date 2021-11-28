@@ -3,40 +3,29 @@ import { useDevtoolsContext } from './context';
 
 export default function Logger() {
     const { bridge, store } = useDevtoolsContext();
+    const [messages, setMessages] = useState(['-']);
+
+    useEffect(() => {
+        bridge.addListener('__debug', msg => {
+            setMessages(messages => [...messages, JSON.stringify(msg)]);
+        });
+    }, []);
 
     return (
         <>
-            {/* <button
-                onClick={() => {
-                    bridge.debugMessage({ foo: 42424444 });
-                }}
-            >
-                bridge.debugMessage
-            </button>
-            <br /> */}
             <button
                 onClick={() => {
-                    bridge.send('__debug', { foo: 42 });
+                    bridge.send('__debug', { foo: messages.length });
                 }}
             >
                 bridge.send
             </button>
+            <br />
+            <ol>
+                {messages.map((message, index) => (
+                    <li key={index}>{message}</li>
+                ))}
+            </ol>
         </>
     );
-
-    // const [messages, setMessages] = useState([]);
-
-    // useEffect(() => {
-    //     bridge.addListener('__message', () => {
-    //         setMessages(() => bridge.__messages);
-    //     });
-    // }, []);
-
-    // return (
-    //     <ul>
-    //         {messages.map((message, index) => (
-    //             <li key={index}>{message}</li>
-    //         ))}
-    //     </ul>
-    // );
 }
