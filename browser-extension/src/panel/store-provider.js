@@ -22,8 +22,8 @@ const initProvider = () => {
             connection.onMessage.addListener(handleMessage);
             return () => connection.onMessage.removeListener(handleMessage);
         },
-        send(type, payload, transferable) {
-            connection.postMessage({ source: 'devtools', type, payload }, '*', transferable);
+        send(type, payload) {
+            connection.postMessage({ source: 'devtools', type, payload });
         },
     });
 

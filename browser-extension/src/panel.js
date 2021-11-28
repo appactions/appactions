@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-import Tree from './panel/tree';
+// import Tree from './panel/tree';
+import Logger from './panel/logger';
 import StoreProvider from './panel/store-provider';
 import './style.css';
 
@@ -20,7 +21,8 @@ const DevTools = () => {
     return (
         <ErrorBoundary FallbackComponent={ErrorFallback}>
             <StoreProvider>
-                <Tree />
+                {/* <Tree /> */}
+                <Logger />
             </StoreProvider>
         </ErrorBoundary>
     );
