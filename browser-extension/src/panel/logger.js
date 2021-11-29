@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDevtoolsContext } from './context';
+import { useSubscription } from './hooks';
 
 export default function Logger() {
     const { bridge, store } = useDevtoolsContext();
@@ -11,21 +12,47 @@ export default function Logger() {
         });
     }, []);
 
-    return (
-        <>
-            <button
-                onClick={() => {
-                    bridge.send('__debug', { foo: messages.length });
-                }}
-            >
-                bridge.send
-            </button>
-            <br />
-            <ol>
-                {messages.map((message, index) => (
-                    <li key={index}>{message}</li>
-                ))}
-            </ol>
-        </>
+    const getStoreState = useMemo(
+        () => ({
+            getCurrentValue: () => {
+                let numElements = 0;
+                store.roots.forEach(rootID => {
+                    const { weight } = store.getElementByID(rootID);
+                    numElements += weight;
+                });
+
+                return {
+                    numElements,
+                };
+            },
+            subscribe: callback => {
+                store.addListener('mutated', callback);
+                return () => store.removeListener('mutated', callback);
+            },
+        }),
+        [store],
     );
+    const { numElements } = useSubscription(getStoreState);
+
+    return (
+        <ol>
+            {Array(numElements)
+                .fill(0)
+                .map((_, index) => (
+                    <Element key={index} index={index} />
+                ))}
+        </ol>
+    );
+}
+
+function Element({ index }) {
+    const { store } = useDevtoolsContext();
+    const element = store.getElementAtIndex(index);
+
+    if (!element) {
+        return null;
+    }
+    
+    const { depth, displayName, hocDisplayNames, key, type } = element;
+    return <li style={{ marginLeft: depth * 2 }}>{displayName}</li>;
 }

@@ -45,11 +45,11 @@ const initProvider = () => {
 
     return { bridge, store, handleConnection };
 };
-let count = 0;
+
 export default function StoreProvider({ children }) {
     const [{ bridge, store, handleConnection }] = useState(initProvider);
 
     useEffect(handleConnection, []);
 
-    return <DevtoolsContext.Provider value={{ bridge, store }}><h2>Rerender: {++count}</h2>{children}</DevtoolsContext.Provider>;
+    return <DevtoolsContext.Provider value={{ bridge, store }}>{children}</DevtoolsContext.Provider>;
 }

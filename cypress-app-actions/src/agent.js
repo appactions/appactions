@@ -177,9 +177,9 @@ export function installReactDevtoolsHook(target) {
         rendererInterface.flushInitialOperations();
     });
 
-    // hook.sub('operations', (...args) => {
-    //     console.log('operations', ...args);
-    // });
+    hook.sub('operations', (...args) => {
+        Cypress.AppActions.sendMessage('operations', ...args);
+    });
 
     return hook;
 }
