@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDevtoolsContext } from './context';
 import { useSubscription } from './hooks';
 
-export default function Logger() {
+export default function ComponentTree() {
     const { bridge, store } = useDevtoolsContext();
     const [messages, setMessages] = useState(['-']);
 

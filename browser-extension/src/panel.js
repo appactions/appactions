@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 // import Tree from './panel/tree';
-import Logger from './panel/logger';
+import ComponentTree from './panel/component-tree';
 import StoreProvider from './panel/store-provider';
 import './style.css';
 
@@ -22,7 +22,7 @@ const DevTools = () => {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
             <StoreProvider>
                 {/* <Tree /> */}
-                <Logger />
+                <ComponentTree />
             </StoreProvider>
         </ErrorBoundary>
     );
