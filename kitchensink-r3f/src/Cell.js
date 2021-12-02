@@ -48,7 +48,7 @@ export default function Cell({ currentState, send, index, position, shadow }) {
                     metalness={0.1}
                 />
             </a.mesh>
-            <Environment preset="warehouse" />
+            <Environment files="empty_warehouse_01_1k.hdr" />
             {shadow ? (
                 <ContactShadows
                     rotation={[Math.PI / 2, 0, 0]}
