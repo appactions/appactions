@@ -8,7 +8,7 @@ export function renderer(hook, rendererID, renderer, global) {
         findCurrentFiberUsingSlowPathById,
         findNativeNodesForFiberID,
         getOrGenerateFiberID,
-        getDisplayNameForFiberID,
+        getDisplayNameForFiber,
         flushInitialOperations,
     } = devtoolsInterface;
 
@@ -101,7 +101,10 @@ export function renderer(hook, rendererID, renderer, global) {
         return null;
     };
 
-    const getDisplayName = fiber => getDisplayNameForFiberID(getOrGenerateFiberID(fiber));
+    const isRepresentingRole = fiber => {
+
+        return true;
+    }
 
     return {
         findFiber,
@@ -110,9 +113,10 @@ export function renderer(hook, rendererID, renderer, global) {
         findNativeNodes,
         listFibersByPredicate,
         findAncestorElementByPredicate,
-        getDisplayName,
+        getDisplayNameForFiber,
         getOwner,
         flushInitialOperations,
+        isRepresentingRole,
 
         // react calls these i guess
         handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,

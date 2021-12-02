@@ -1,16 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useDevtoolsContext } from './context';
 import { useSubscription } from './hooks';
 
-export default function ComponentTree() {
+export default function RoleTree() {
     const { bridge, store } = useDevtoolsContext();
-    const [messages, setMessages] = useState(['-']);
-
-    useEffect(() => {
-        bridge.addListener('__debug', msg => {
-            setMessages(messages => [...messages, JSON.stringify(msg)]);
-        });
-    }, []);
 
     const getStoreState = useMemo(
         () => ({

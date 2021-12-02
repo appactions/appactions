@@ -46,7 +46,7 @@ export function register(componentName, driverConfig) {
 export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
 
 export function getDisplayName(fiber) {
-    return Cypress.AppActions.reactApi.getDisplayName(fiber);
+    return Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
 }
 
 export function isRole(name) {

@@ -9415,38 +9415,40 @@ function attach(hook, rendererID, renderer, global) {
 
     }
 
-    const elementType = getElementTypeForFiber(fiber);
+    return !Cypress.AppActions.reactApi.isRepresentingRole(fiber);
 
-    if (hideElementsWithTypes.has(elementType)) {
-      return true;
-    }
+    // const elementType = getElementTypeForFiber(fiber);
 
-    if (hideElementsWithDisplayNames.size > 0) {
-      const displayName = getDisplayNameForFiber(fiber);
+    // if (hideElementsWithTypes.has(elementType)) {
+    //   return true;
+    // }
 
-      if (displayName != null) {
-        // eslint-disable-next-line no-for-of-loops/no-for-of-loops
-        for (const displayNameRegExp of hideElementsWithDisplayNames) {
-          if (displayNameRegExp.test(displayName)) {
-            return true;
-          }
-        }
-      }
-    }
+    // if (hideElementsWithDisplayNames.size > 0) {
+    //   const displayName = getDisplayNameForFiber(fiber);
 
-    if (_debugSource != null && hideElementsWithPaths.size > 0) {
-      const {
-        fileName
-      } = _debugSource; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
+    //   if (displayName != null) {
+    //     // eslint-disable-next-line no-for-of-loops/no-for-of-loops
+    //     for (const displayNameRegExp of hideElementsWithDisplayNames) {
+    //       if (displayNameRegExp.test(displayName)) {
+    //         return true;
+    //       }
+    //     }
+    //   }
+    // }
 
-      for (const pathRegExp of hideElementsWithPaths) {
-        if (pathRegExp.test(fileName)) {
-          return true;
-        }
-      }
-    }
+    // if (_debugSource != null && hideElementsWithPaths.size > 0) {
+    //   const {
+    //     fileName
+    //   } = _debugSource; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
 
-    return false;
+    //   for (const pathRegExp of hideElementsWithPaths) {
+    //     if (pathRegExp.test(fileName)) {
+    //       return true;
+    //     }
+    //   }
+    // }
+
+    // return false;
   } // NOTICE Keep in sync with shouldFilterFiber() and other get*ForFiber methods
 
 
@@ -12476,7 +12478,8 @@ function attach(hook, rendererID, renderer, global) {
     updateComponentFilters,
     // added for React App Actions
     findCurrentFiberUsingSlowPathById,
-    getOrGenerateFiberID
+    getOrGenerateFiberID,
+    getDisplayNameForFiber
   };
 }
 
