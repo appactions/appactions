@@ -9415,7 +9415,7 @@ function attach(hook, rendererID, renderer, global) {
 
     }
 
-    return !Cypress.AppActions.reactApi.isRepresentingRole(fiber);
+    return !Cypress.AppActions.isRepresentingRole(fiber);
 
     // const elementType = getElementTypeForFiber(fiber);
 

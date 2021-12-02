@@ -17,6 +17,11 @@ if (!Cypress.AppActions) {
                 .flatMap(set => Array.from(set))
                 .map(rootNode => rootNode.current);
         },
+        isRepresentingRole: fiber => {
+            const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
+            const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
+            return hasRole;
+        }
     };
 }
 

@@ -10,6 +10,8 @@ export function renderer(hook, rendererID, renderer, global) {
         getOrGenerateFiberID,
         getDisplayNameForFiber,
         flushInitialOperations,
+        handleCommitFiberUnmount,
+        handleCommitFiberRoot,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -101,11 +103,6 @@ export function renderer(hook, rendererID, renderer, global) {
         return null;
     };
 
-    const isRepresentingRole = fiber => {
-
-        return true;
-    }
-
     return {
         findFiber,
         getParentFiber, // going to replace findFiberForInteraction
@@ -116,11 +113,10 @@ export function renderer(hook, rendererID, renderer, global) {
         getDisplayNameForFiber,
         getOwner,
         flushInitialOperations,
-        isRepresentingRole,
 
-        // react calls these i guess
-        handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,
-        handleCommitFiberRoot: devtoolsInterface.handleCommitFiberRoot,
+        // react calls these to communicate the component tree
+        handleCommitFiberUnmount,
+        handleCommitFiberRoot,
 
         // for debug only
         devtoolsInterface,
