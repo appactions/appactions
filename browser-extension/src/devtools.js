@@ -1,4 +1,4 @@
-import { createRoot, flushSync } from 'react-dom';
+import ReactDOM from 'react-dom';
 import Store from 'cypress-app-actions/src/vendor/react-devtools-renderer-build/storage';
 import Bridge from './bridge/bridge';
 import App from './panel/app';
@@ -58,20 +58,14 @@ function createPanelIfReactLoaded() {
         });
 
         bridge.send('connection-init', {
-            tabId: chrome?.devtools?.inspectedWindow?.tabId,
+            tabId: chrome.devtools.inspectedWindow.tabId,
         });
 
         render = () => {
             // this won't be appended to any document, content will be portaled to portalContainer
-            root = createRoot(document.createElement('div'));
+            root = document.createElement('div');
 
-            // try {
-
-            root.render(<App bridge={bridge} store={store} portalContainer={portalContainer} />);
-            // } catch (e) {
-            //     console.error(e);
-            //     bridge.send('__error', e, !!bridge, !!store)
-            // }
+            ReactDOM.render(<App store={store} bridge={bridge} portalContainer={portalContainer} />, root);
         };
     }
 
@@ -139,7 +133,10 @@ function createPanelIfReactLoaded() {
     // Re-initialize DevTools panel when a new page is loaded.
     chrome.devtools.network.onNavigated.addListener(function onNavigated() {
         // clean up potential stale state
-        flushSync(() => root.unmount());
+        if (root) {
+            ReactDOM.unmountComponentAtNode(root);
+            root = null;
+        }
 
         initBridgeAndStore();
     });

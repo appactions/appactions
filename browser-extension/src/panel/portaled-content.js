@@ -10,6 +10,6 @@ export default function portaledContent(Component) {
                 </ErrorBoundary>
             </div>
         );
-        return !portalContainer ? createPortal(children, portalContainer) : children;
+        return portalContainer ? createPortal(children, portalContainer) : children;
     };
 }

@@ -4,7 +4,11 @@ import RoleTree from './role-tree';
 import portaledContent from './portaled-content';
 
 const Panel = () => {
-    return <RoleTree />;
+    return (
+        <>
+            <RoleTree />
+        </>
+    );
 };
 
 export default portaledContent(Panel);
