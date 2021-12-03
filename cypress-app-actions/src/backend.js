@@ -1,4 +1,4 @@
-import { attach } from './vendor/react-devtools-renderer-build';
+import { attach } from './vendor/react-devtools-renderer-build/renderer';
 
 export function renderer(hook, rendererID, renderer, global) {
     const devtoolsInterface = attach(hook, rendererID, renderer, global);
@@ -8,7 +8,10 @@ export function renderer(hook, rendererID, renderer, global) {
         findCurrentFiberUsingSlowPathById,
         findNativeNodesForFiberID,
         getOrGenerateFiberID,
-        getDisplayNameForFiberID,
+        getDisplayNameForFiber,
+        flushInitialOperations,
+        handleCommitFiberUnmount,
+        handleCommitFiberRoot,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -100,8 +103,6 @@ export function renderer(hook, rendererID, renderer, global) {
         return null;
     };
 
-    const getDisplayName = fiber => getDisplayNameForFiberID(getOrGenerateFiberID(fiber));
-
     return {
         findFiber,
         getParentFiber, // going to replace findFiberForInteraction
@@ -109,12 +110,13 @@ export function renderer(hook, rendererID, renderer, global) {
         findNativeNodes,
         listFibersByPredicate,
         findAncestorElementByPredicate,
-        getDisplayName,
+        getDisplayNameForFiber,
         getOwner,
+        flushInitialOperations,
 
-        // react calls these i guess
-        handleCommitFiberUnmount: devtoolsInterface.handleCommitFiberUnmount,
-        handleCommitFiberRoot: devtoolsInterface.handleCommitFiberRoot,
+        // react calls these to communicate the component tree
+        handleCommitFiberUnmount,
+        handleCommitFiberRoot,
 
         // for debug only
         devtoolsInterface,

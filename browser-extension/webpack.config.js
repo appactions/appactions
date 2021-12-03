@@ -8,11 +8,11 @@ const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin'
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        popup: './src/popup.js',
+        main: './src/main.js',
         content: './src/content.js',
-        devtools: './src/devtools.js',
-        panel: './src/panel.js',
         background: './src/background.js',
+        panel: './src/panel.js',
+        popup: './src/popup.js',
     },
     output: {
         filename: '[name].js',
@@ -50,8 +50,8 @@ module.exports = {
             showErrors: true,
         }),
         new HTMLPlugin({
-            chunks: ['devtools'],
-            filename: 'devtools.html',
+            chunks: ['main'],
+            filename: 'main.html',
             showErrors: true,
         }),
         new HTMLPlugin({
@@ -73,7 +73,7 @@ module.exports = {
         new ExtensionReloader({
             reloadPage: false,
             entries: {
-                contentScript: ['content', 'devtools'],
+                contentScript: ['content', 'main'],
                 background: 'background',
                 extensionPage: ['popup'],
             },

@@ -1,14 +1,52 @@
 diff --git a/react-original/packages/react-devtools-shared/src/backend/renderer.js b/react/packages/react-devtools-shared/src/backend/renderer.js
-index 218b255..2a38447 100644
+index 8a89a54..79dd8ae 100644
 --- a/react-original/packages/react-devtools-shared/src/backend/renderer.js
 +++ b/react/packages/react-devtools-shared/src/backend/renderer.js
-@@ -4288,5 +4288,9 @@ export function attach(
+@@ -940,34 +940,7 @@ export function attach(
+         }
+     }
+ 
+-    const elementType = getElementTypeForFiber(fiber);
+-    if (hideElementsWithTypes.has(elementType)) {
+-      return true;
+-    }
+-
+-    if (hideElementsWithDisplayNames.size > 0) {
+-      const displayName = getDisplayNameForFiber(fiber);
+-      if (displayName != null) {
+-        // eslint-disable-next-line no-for-of-loops/no-for-of-loops
+-        for (const displayNameRegExp of hideElementsWithDisplayNames) {
+-          if (displayNameRegExp.test(displayName)) {
+-            return true;
+-          }
+-        }
+-      }
+-    }
+-
+-    if (_debugSource != null && hideElementsWithPaths.size > 0) {
+-      const {fileName} = _debugSource;
+-      // eslint-disable-next-line no-for-of-loops/no-for-of-loops
+-      for (const pathRegExp of hideElementsWithPaths) {
+-        if (pathRegExp.test(fileName)) {
+-          return true;
+-        }
+-      }
+-    }
+-
+-    return false;
++    return !Cypress.AppActions.reactApi.isRepresentingRole(fiber);
+   }
+ 
+   // NOTICE Keep in sync with shouldFilterFiber() and other get*ForFiber methods
+@@ -4323,5 +4296,11 @@ export function attach(
      storeAsGlobal,
      unpatchConsoleForStrictMode,
      updateComponentFilters,
 +
++
 +    // added for React App Actions
 +    findCurrentFiberUsingSlowPathById,
 +    getOrGenerateFiberID,
++    getDisplayNameForFiber,
    };
  }

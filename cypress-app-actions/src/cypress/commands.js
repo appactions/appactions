@@ -20,9 +20,10 @@ export function registerCypressCommands(config = {}) {
         source: 'agent',
     });
 
-    Cypress.AppActions.sendMessage = payload => {
+    Cypress.AppActions.sendMessage = (type, payload) => {
         window.parent.postMessage({
             source: 'agent',
+            type,
             payload,
         });
     };

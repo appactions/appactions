@@ -1,12 +1,10 @@
 let connection;
 
-window.addEventListener('message', ({ data, isTrusted }) => {
+window.addEventListener('message', ({ data: message, isTrusted }) => {
     // Filter messages not from the agent
-    if (!isTrusted || data?.source !== 'agent') {
+    if (!isTrusted || message?.source !== 'agent') {
         return;
     }
-
-    const message = data;
 
     // Setup connection on init message
     if (message.type === 'connection-init') {

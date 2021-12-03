@@ -5,15 +5,15 @@ import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
 import path from 'path';
 
-export default {
-    input: 'src/vendor/react/packages/react-devtools-shared/src/backend/renderer.js',
+const makeConfig = (input, output) => ({
+    input,
     output: {
-        file: 'src/vendor/react-devtools-renderer-build/index.js',
+        file: output,
         format: 'es',
     },
     plugins: [
         resolve({
-            jail: __dirname,
+            preferBuiltins: false,
         }),
         alias({
             entries: [
@@ -74,4 +74,15 @@ export default {
             },
         }),
     ],
-};
+});
+
+export default [
+    makeConfig(
+        'src/vendor/react/packages/react-devtools-shared/src/devtools/store.js',
+        'src/vendor/react-devtools-renderer-build/storage.js',
+    ),
+    makeConfig(
+        'src/vendor/react/packages/react-devtools-shared/src/backend/renderer.js',
+        'src/vendor/react-devtools-renderer-build/renderer.js',
+    ),
+];

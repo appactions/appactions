@@ -5,9 +5,11 @@ process.on('unhandledRejection', err => {
     throw err;
 });
 
+const [quick] = process.argv.slice(2);
+
 const choices = [
     {
-        label: 'Cypress version with Nextjs kitchensink',
+        choice: { name: 'Cypress version with Nextjs kitchensink', value: 'next' },
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
@@ -15,7 +17,7 @@ const choices = [
         ],
     },
     {
-        label: 'Cypress version with R3F kitchensink',
+        choice: { name: 'Cypress version with R3F kitchensink', value: 'r3f' },
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
@@ -23,7 +25,7 @@ const choices = [
         ],
     },
     {
-        label: 'Cypress App Actions unit tests',
+        choice: { name: 'Cypress App Actions unit tests', value: 'unit' },
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'test-app', command: 'yarn workspace cypress-app-actions start', prefixColor: 'yellow' },
@@ -31,7 +33,7 @@ const choices = [
         ],
     },
     {
-        label: 'Standalone React App Actions',
+        choice: { name: 'Standalone React App Actions', value: 'standalone' },
         concurrently: [
             // TODO: improve this once react-app-actions is developed again
             {
@@ -45,17 +47,29 @@ const choices = [
 
 const prompt = inquirer.createPromptModule({ output: process.stderr });
 
-prompt([
-    {
-        type: 'list',
-        name: 'project',
-        message: 'Which project do you want to develop?',
-        choices: choices.map(x => x.label),
-    },
-]).then(answers => {
-    const commands = choices.find(x => x.label === answers.project).concurrently;
+prompt(
+    [
+        {
+            type: 'list',
+            name: 'project',
+            message: 'Which project do you want to develop?',
+            choices: choices.map(({ choice }) => {
+                return {
+                    name: `${choice.name} [${choice.value}]`,
+                    value: choice.value,
+                };
+            }),
+        },
+    ],
+    quick ? { project: quick } : undefined,
+).then(answers => {
+    const picked = choices.find(x => x.choice.value === answers.project);
 
-    concurrently(commands, {
+    if (!picked) {
+        throw new Error('Could not find option');
+    }
+
+    concurrently(picked.concurrently, {
         prefix: 'name',
         killOthers: ['failure', 'success'],
     });

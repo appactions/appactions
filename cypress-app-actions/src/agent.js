@@ -143,6 +143,22 @@ export function installReactDevtoolsHook(target) {
                 throw new Error('react-app-actions does not support this react renderer');
             }
         }
+
+        if (rendererInterface != null) {
+            hook.rendererInterfaces.set(id, rendererInterface);
+        }
+
+        // Notify the DevTools frontend about new renderers.
+        // This includes any that were attached early (via __REACT_DEVTOOLS_ATTACH__).
+        if (rendererInterface != null) {
+            hook.emit('renderer-attached', {
+                id,
+                renderer,
+                rendererInterface,
+            });
+        } else {
+            hook.emit('unsupported-renderer-version', id);
+        }
     };
 
     // Connect renderers that have already injected themselves.
@@ -153,6 +169,16 @@ export function installReactDevtoolsHook(target) {
     // Connect any new renderers that injected themselves.
     hook.sub('renderer', ({ id, renderer }) => {
         attachRenderer(id, renderer);
+    });
+
+    hook.sub('renderer-attached', ({ id, renderer, rendererInterface }) => {
+        // Now that the Store and the renderer interface are connected,
+        // it's time to flush the pending operation codes to the frontend.
+        rendererInterface.flushInitialOperations();
+    });
+
+    hook.sub('operations', (...args) => {
+        Cypress.AppActions.sendMessage('operations', ...args);
     });
 
     return hook;
