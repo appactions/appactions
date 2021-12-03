@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import Store from 'cypress-app-actions/src/vendor/react-devtools-renderer-build/storage';
-import Bridge from './bridge/bridge';
-import App from './panel/app';
+import Bridge from './state/bridge';
+import App from './devtools/app';
 
 let panelCreated = false;
 
