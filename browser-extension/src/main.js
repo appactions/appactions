@@ -34,7 +34,7 @@ function createPanelIfReactLoaded() {
                     }
 
                     fn({
-                        event: msg.type, // bridge expects "event", but the extension is written for "type", not fixing that lol
+                        type: msg.type,
                         payload: msg.payload,
                     });
                 };

@@ -9,17 +9,17 @@ class Bridge extends EventEmitter {
 
         this._wallUnlisten =
             wall.listen(message => {
-                this.emit(message.event, message.payload);
+                this.emit(message.type, message.payload);
             }) || null;
     }
 
-    send(event, ...payload) {
+    send(type, ...payload) {
         if (this._isShutdown) {
-            console.warn(`Cannot send message "${event}" through a Bridge that has been shutdown.`);
+            console.warn(`Cannot send message "${type}" through a Bridge that has been shutdown.`);
             return;
         }
 
-        this._wall.send(event, ...payload);
+        this._wall.send(type, ...payload);
     }
 
     shutdown() {

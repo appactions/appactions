@@ -15,13 +15,10 @@ export default function App({ store, bridge, portalContainer }) {
     });
 
     return (
-        <>
-            <h1>test</h1>
-            <DevtoolsContext.Provider value={{ bridge, store }}>
-                <ErrorBoundary>
-                    <Panel portalContainer={portalContainer} />
-                </ErrorBoundary>
-            </DevtoolsContext.Provider>
-        </>
+        <DevtoolsContext.Provider value={{ bridge, store }}>
+            <ErrorBoundary>
+                <Panel portalContainer={portalContainer} />
+            </ErrorBoundary>
+        </DevtoolsContext.Provider>
     );
 }
