@@ -27,6 +27,10 @@ export default function RoleTree() {
     );
     const { numElements } = useSubscription(getStoreState);
 
+    if (numElements === 0) {
+        return <h4>Waiting to detect React.</h4>
+    }
+
     return (
         <ol>
             {Array(numElements)
