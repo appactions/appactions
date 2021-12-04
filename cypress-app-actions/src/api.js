@@ -18,10 +18,12 @@ if (!Cypress.AppActions) {
                 .map(rootNode => rootNode.current);
         },
         isRepresentingRole: fiber => {
-            const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
-            const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
-            return hasRole;
-        }
+            // const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
+            // const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
+            // return hasRole;
+
+            return !!fiber.type.__REACT_APP_ACTIONS__;
+        },
     };
 }
 

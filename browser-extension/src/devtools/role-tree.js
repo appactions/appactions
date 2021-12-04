@@ -51,5 +51,5 @@ function Element({ index }) {
     }
     
     const { depth, displayName, hocDisplayNames, key, type } = element;
-    return <li style={{ marginLeft: depth * 2 }}>{displayName}</li>;
+    return <li style={{ marginLeft: depth * 6 }}>{displayName} id: {element.id}</li>;
 }

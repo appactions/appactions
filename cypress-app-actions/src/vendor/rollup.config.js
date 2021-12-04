@@ -79,7 +79,7 @@ const makeConfig = (input, output) => ({
 export default [
     makeConfig(
         'src/vendor/react/packages/react-devtools-shared/src/devtools/store.js',
-        'src/vendor/react-devtools-renderer-build/storage.js',
+        'src/vendor/react-devtools-renderer-build/store.js',
     ),
     makeConfig(
         'src/vendor/react/packages/react-devtools-shared/src/backend/renderer.js',
