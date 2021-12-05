@@ -1,4 +1,5 @@
 import { renderer as reactAppActionsRenderer } from './backend';
+import Bridge from './shared/bridge'
 
 export function installReactDevtoolsHook(target) {
     if (target.hasOwnProperty('__REACT_DEVTOOLS_GLOBAL_HOOK__')) {
@@ -180,6 +181,60 @@ export function installReactDevtoolsHook(target) {
     hook.sub('operations', (...args) => {
         Cypress.AppActions.sendMessage('operations', ...args);
     });
+
+    //////
+
+
+    window.parent.postMessage({
+        type: 'connection-init',
+        source: 'agent',
+    });
+
+    Cypress.AppActions.sendMessage = (type, payload) => {
+        window.parent.postMessage({
+            source: 'agent',
+            type,
+            payload,
+        });
+    };
+
+    window.parent.addEventListener('message', ({ data, isTrusted }) => {
+        // Filter messages not from the agent
+        if (!isTrusted || data?.source !== 'devtools') {
+            return;
+        }
+
+        if (data?.type === 'connection-init' || data?.type === 'connection-disconnect') {
+            return;
+        }
+
+        console.log('[Devtools] message:', data.payload);
+    });
+
+    ///////
+
+    const bridge = new Bridge({
+        listen(fn) {
+            const handleMessage = msg => {
+                if (msg?.source !== 'agent') {
+                    return;
+                }
+
+                fn({
+                    type: msg.type,
+                    payload: msg.payload,
+                });
+            };
+
+            connection.onMessage.addListener(handleMessage);
+            return () => connection.onMessage.removeListener(handleMessage);
+        },
+        send(type, payload) {
+            connection.postMessage({ source: 'devtools', type, payload });
+        },
+    });
+
+    ///
 
     return hook;
 }

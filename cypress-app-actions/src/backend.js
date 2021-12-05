@@ -12,6 +12,7 @@ export function renderer(hook, rendererID, renderer, global) {
         flushInitialOperations,
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
+        inspectElement,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -113,6 +114,7 @@ export function renderer(hook, rendererID, renderer, global) {
         getDisplayNameForFiber,
         getOwner,
         flushInitialOperations,
+        inspectElement,
 
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,

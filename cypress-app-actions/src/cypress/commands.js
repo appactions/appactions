@@ -14,30 +14,4 @@ export function registerCypressCommands(config = {}) {
     registerDo(doCommandName);
 
     addVDOMUtilsToJQuery($);
-
-    window.parent.postMessage({
-        type: 'connection-init',
-        source: 'agent',
-    });
-
-    Cypress.AppActions.sendMessage = (type, payload) => {
-        window.parent.postMessage({
-            source: 'agent',
-            type,
-            payload,
-        });
-    };
-
-    window.parent.addEventListener('message', ({ data, isTrusted }) => {
-        // Filter messages not from the agent
-        if (!isTrusted || data?.source !== 'devtools') {
-            return;
-        }
-
-        if (data?.type === 'connection-init' || data?.type === 'connection-disconnect') {
-            return;
-        }
-
-        console.log('[Devtools] message:', data.payload);
-    });
 }

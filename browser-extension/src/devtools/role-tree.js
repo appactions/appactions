@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useDevtoolsContext } from './context';
 import { useSubscription } from './hooks';
 
@@ -28,7 +28,7 @@ export default function RoleTree() {
     const { numElements } = useSubscription(getStoreState);
 
     if (numElements === 0) {
-        return <h4>Waiting to detect React.</h4>
+        return <h4>Waiting to detect React.</h4>;
     }
 
     return (
@@ -42,14 +42,33 @@ export default function RoleTree() {
     );
 }
 
+let nextRequestID = 0;
+
 function Element({ index }) {
-    const { store } = useDevtoolsContext();
+    const { bridge, store } = useDevtoolsContext();
+
     const element = store.getElementAtIndex(index);
 
     if (!element) {
         return null;
     }
-    
+
+    const onHover = useCallback(() => {
+        const rendererID = store.getRendererIDForElement(element.id);
+
+        bridge.send('inspectElement', {
+            forceFullData: true,
+            requestID: nextRequestID++,
+            id: index,
+            path: null,
+            rendererID,
+        })
+    }, [bridge, index]);
+
     const { depth, displayName, hocDisplayNames, key, type } = element;
-    return <li style={{ marginLeft: depth * 6 }}>{displayName} id: {element.id}</li>;
+    return (
+        <li style={{ marginLeft: depth * 6 }} onPointerEnter={onHover}>
+            {displayName} id: {element.id}
+        </li>
+    );
 }

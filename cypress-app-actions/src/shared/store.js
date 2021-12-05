@@ -1,4 +1,4 @@
-import VendorStore from 'cypress-app-actions/src/vendor/react-devtools-renderer-build/store';
+import VendorStore from '../vendor/react-devtools-renderer-build/store';
 
 export default class Store extends VendorStore {
     constructor(bridge, config) {
