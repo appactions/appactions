@@ -4,6 +4,10 @@ export default class Store extends VendorStore {
     constructor(bridge, config) {
         super(bridge, config);
 
-        // this.
+        this._bridge.addListener('inspectedElement', this.inspectedElement);
+    }
+
+    inspectedElement(data) {
+        console.log('inspectedElement', data);
     }
 }

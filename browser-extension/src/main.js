@@ -49,6 +49,8 @@ function createPanelIfReactLoaded() {
 
         store = new Store(bridge);
 
+        // window.__debugBridge = bridge;
+
         bridge.addListener('syncSelectionToNativeElementsPanel', () => {
             setBrowserSelectionFromReact();
         });

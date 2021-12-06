@@ -109,8 +109,8 @@ export function activateBackend(contentWindow) {
 
                 fn(data);
             };
-            contentWindow.addEventListener('message', handleMessage);
-            return () => contentWindow.removeEventListener('message', handleMessage);
+            contentWindow.parent.addEventListener('message', handleMessage);
+            return () => contentWindow.parent.removeEventListener('message', handleMessage);
         },
         send(type, payload) {
             contentWindow.parent.postMessage({ source: 'agent', type, payload });
@@ -123,6 +123,8 @@ export function activateBackend(contentWindow) {
     });
 
     const agent = new Agent(bridge);
+
+    // contentWindow.parent.__debugBridge = bridge;
 
     const hook = contentWindow.__REACT_DEVTOOLS_GLOBAL_HOOK__;
     if (hook) {
