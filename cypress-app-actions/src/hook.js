@@ -87,10 +87,10 @@ export function installHook(target) {
     }
 
     function onPostCommitFiberRoot(rendererID, root) {
-      const rendererInterface = rendererInterfaces.get(rendererID);
-      if (rendererInterface != null) {
-        rendererInterface.handlePostCommitFiberRoot(root);
-      }
+        const rendererInterface = rendererInterfaces.get(rendererID);
+        if (rendererInterface != null) {
+            rendererInterface.handlePostCommitFiberRoot(root);
+        }
     }
 
     const fiberRoots = {};
@@ -121,6 +121,13 @@ export function installHook(target) {
         onCommitFiberUnmount,
         onCommitFiberRoot,
         onPostCommitFiberRoot,
+
+        // App Actions custom stuff
+        getAllFiberRoots() {
+            return Object.values(fiberRoots)
+                .flatMap(set => Array.from(set))
+                .map(rootNode => rootNode.current);
+        },
     };
 
     Object.defineProperty(target, '__REACT_DEVTOOLS_GLOBAL_HOOK__', {

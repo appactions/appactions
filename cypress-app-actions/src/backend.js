@@ -37,8 +37,6 @@ function initBackend(hook, agent, global) {
                 rendererInterface = attach(hook, id, renderer, global);
 
                 Cypress.AppActions.reactApi = rendererInterface;
-                const fiberRoots = hook.getFiberRoots(id);
-                Cypress.AppActions.setFiberRoots(fiberRoots);
                 hook.rendererInterfaces.set(id, rendererInterface);
             } else if (renderer.ComponentTree) {
                 // react-dom v15

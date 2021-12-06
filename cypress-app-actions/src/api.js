@@ -4,19 +4,6 @@ if (!Cypress.AppActions) {
         componentByRole: {},
         roles: new Set(),
         overrides: {},
-        setFiberRoots: fiberRoots => {
-            Cypress.AppActions.__fiberRoots = fiberRoots;
-        },
-        getAllRoots: () => {
-            if (!Cypress.AppActions.__fiberRoots) {
-                throw new Error('Could not find any React roots');
-            }
-
-            // this logic cannot go to the setter, because of mutation
-            return Object.values(Cypress.AppActions.__fiberRoots)
-                .flatMap(set => Array.from(set))
-                .map(rootNode => rootNode.current);
-        },
         isRepresentingRole: fiber => {
             // const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
             // const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)

@@ -72,7 +72,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             let head;
 
             if (!subject) {
-                head = Cypress.AppActions.getAllRoots();
+                head = Cypress.AppActions.hook.getAllFiberRoots();
             } else if (isJquery(subject)) {
                 head = Array.from(refreshSubject(subject));
             } else if (!Array.isArray(subject)) {
