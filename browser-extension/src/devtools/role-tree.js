@@ -59,7 +59,7 @@ function Element({ index }) {
         bridge.send('inspectElement', {
             forceFullData: true,
             requestID: nextRequestID++,
-            id: index,
+            id: element.id,
             path: null,
             rendererID,
         })
