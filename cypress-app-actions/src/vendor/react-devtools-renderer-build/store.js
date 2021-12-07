@@ -4395,7 +4395,7 @@ class Store extends EventEmitter {
 
     _defineProperty(this, "_supportsReloadAndProfile", false);
 
-    _defineProperty(this, "_supportsSchedulingProfiler", false);
+    _defineProperty(this, "_supportsTimeline", false);
 
     _defineProperty(this, "_supportsTraceUpdates", false);
 
@@ -4847,7 +4847,7 @@ class Store extends EventEmitter {
         supportsNativeInspection,
         supportsProfiling,
         supportsReloadAndProfile,
-        supportsSchedulingProfiler,
+        supportsTimeline,
         supportsTraceUpdates
       } = config;
       this._supportsNativeInspection = supportsNativeInspection !== false;
@@ -4860,8 +4860,8 @@ class Store extends EventEmitter {
         this._supportsReloadAndProfile = true;
       }
 
-      if (supportsSchedulingProfiler) {
-        this._supportsSchedulingProfiler = true;
+      if (supportsTimeline) {
+        this._supportsTimeline = true;
       }
 
       if (supportsTraceUpdates) {
@@ -5037,8 +5037,8 @@ class Store extends EventEmitter {
     return this._supportsReloadAndProfile && this._isBackendStorageAPISupported && this._isSynchronousXHRSupported;
   }
 
-  get supportsSchedulingProfiler() {
-    return this._supportsSchedulingProfiler;
+  get supportsTimeline() {
+    return this._supportsTimeline;
   }
 
   get supportsTraceUpdates() {

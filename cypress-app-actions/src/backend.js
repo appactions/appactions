@@ -1,124 +1,133 @@
-import { attach } from './vendor/react-devtools-renderer-build/renderer';
+import { attach } from './renderer';
+import Bridge from './shared/bridge';
+import Agent from './agent';
 
-export function renderer(hook, rendererID, renderer, global) {
-    const devtoolsInterface = attach(hook, rendererID, renderer, global);
+function initBackend(hook, agent, global) {
+    if (hook == null) {
+        // DevTools didn't get injected into this page (maybe b'c of the contentType).
+        return () => {};
+    }
+    const subs = [
+        hook.sub('renderer-attached', ({ id, renderer, rendererInterface }) => {
+            agent.setRendererInterface(id, rendererInterface);
 
-    const {
-        getFiberIDForNative,
-        findCurrentFiberUsingSlowPathById,
-        findNativeNodesForFiberID,
-        getOrGenerateFiberID,
-        getDisplayNameForFiber,
-        flushInitialOperations,
-        handleCommitFiberUnmount,
-        handleCommitFiberRoot,
-    } = devtoolsInterface;
+            // Now that the Store and the renderer interface are connected,
+            // it's time to flush the pending operation codes to the frontend.
+            rendererInterface.flushInitialOperations();
+        }),
 
-    const findFiber = subject => {
-        let id;
+        hook.sub('unsupported-renderer-version', id => {
+            agent.onUnsupportedRenderer(id);
+        }),
 
-        // hack, instanceof Element is not working reliably
-        if (typeof subject.querySelector === 'function') {
-            id = getFiberIDForNative(subject);
+        hook.sub('fastRefreshScheduled', agent.onFastRefreshScheduled),
+        hook.sub('operations', agent.onHookOperations),
+        hook.sub('traceUpdates', agent.onTraceUpdates),
 
-            if (!id) {
-                // try the getOrGenerateFiberID way instead
-                const fiberProp = Object.keys(subject).find(prop => prop.startsWith('__reactFiber$'));
-                if (fiberProp) {
-                    id = getOrGenerateFiberID(subject[fiberProp]);
-                }
+        // TODO Add additional subscriptions required for profiling mode
+    ];
+
+    const attachRenderer = (id, renderer) => {
+        let rendererInterface = hook.rendererInterfaces.get(id);
+
+        // Inject any not-yet-injected renderers (if we didn't reload-and-profile)
+        if (rendererInterface == null) {
+            if (typeof renderer.findFiberByHostInstance === 'function') {
+                // react-reconciler v16+
+                rendererInterface = attach(hook, id, renderer, global);
+
+                Cypress.AppActions.reactApi = rendererInterface;
+                hook.rendererInterfaces.set(id, rendererInterface);
+            } else if (renderer.ComponentTree) {
+                // react-dom v15
+                throw new Error('react-app-actions does not support react version older than v16');
+            } else {
+                // unsupported renderer version
+                throw new Error('react-app-actions does not support this react renderer');
             }
+
+            if (rendererInterface != null) {
+                hook.rendererInterfaces.set(id, rendererInterface);
+            }
+        }
+
+        // Notify the DevTools frontend about new renderers.
+        // This includes any that were attached early (via __REACT_DEVTOOLS_ATTACH__).
+        if (rendererInterface != null) {
+            hook.emit('renderer-attached', {
+                id,
+                renderer,
+                rendererInterface,
+            });
         } else {
-            // assume it's a fiber already
-            id = getOrGenerateFiberID(subject);
+            hook.emit('unsupported-renderer-version', id);
         }
-
-        if (!id) {
-            throw new Error('could not locate React node for DOM element');
-        }
-
-        return findCurrentFiberUsingSlowPathById(id);
     };
 
-    const getParentFiber = subject => {
-        // TODO find the oldest parent, which returns the same host nodes as the argument
-        // this should replace findFiberForInteraction
+    // Connect renderers that have already injected themselves.
+    hook.renderers.forEach((renderer, id) => {
+        attachRenderer(id, renderer);
+    });
 
-        throw new Error('not implemented');
+    // Connect any new renderers that injected themselves.
+    subs.push(
+        hook.sub('renderer', ({ id, renderer }) => {
+            attachRenderer(id, renderer);
+        }),
+    );
+
+    hook.emit('react-devtools', agent);
+    hook.reactDevtoolsAgent = agent;
+    const onAgentShutdown = () => {
+        subs.forEach(fn => fn());
+        hook.rendererInterfaces.forEach(rendererInterface => {
+            rendererInterface.cleanup();
+        });
+        hook.reactDevtoolsAgent = null;
     };
+    agent.addListener('shutdown', onAgentShutdown);
+    subs.push(() => {
+        agent.removeListener('shutdown', onAgentShutdown);
+    });
 
-    // use when looking for a fiber because want to run an interaction on it
-    const findFiberForInteraction = element => {
-        let fiber = findFiber(element);
-
-        // find the highest parent, which returns the same dom nodes as the argument
-        while (fiber.return) {
-            const els = findNativeNodes(fiber.return);
-
-            if (els.length !== 1) {
-                return fiber;
-            }
-
-            if (els[0] !== element) {
-                return fiber;
-            }
-
-            fiber = fiber.return;
-        }
-
-        return fiber;
+    return () => {
+        subs.forEach(fn => fn());
     };
-    const findNativeNodes = fiber => findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
-    const getOwner = fiber => {
-        if (fiber._debugOwner) {
-            return fiber._debugOwner;
-        }
+}
 
-        // TODO when does the `_debugOwner` missing?
-        throw new Error('`getOwner` was called on a fiber that has no owner');
-    };
-    const listFibersByPredicate = (fiber, predicate) => _listFibersByPredicate(fiber, predicate, true);
-    const _listFibersByPredicate = (fiber, predicate, head) => {
-        const isMatch = predicate(fiber);
-        const results = isMatch ? [fiber] : [];
-        if (isMatch && head) {
-            return results;
-        }
-        let next = isMatch ? fiber.sibling : fiber.child;
-        while (next !== null) {
-            const newResults = listFibersByPredicate(next, predicate, false);
-            results.push(...newResults);
-            next = next.sibling;
-        }
-        return results;
-    };
+export function activateBackend(contentWindow) {
+    const bridge = new Bridge({
+        listen(fn) {
+            const handleMessage = ({ data, isTrusted }) => {
+                if (!isTrusted || data?.source !== 'devtools') {
+                    return;
+                }
 
-    const findAncestorElementByPredicate = (fiber, predicate) => {
-        while ((fiber = fiber.return)) {
-            if (predicate(fiber)) {
-                return fiber;
-            }
-        }
+                if (data?.type === 'connection-init' || data?.type === 'connection-disconnect') {
+                    return;
+                }
 
-        return null;
-    };
+                fn(data);
+            };
+            contentWindow.parent.addEventListener('message', handleMessage);
+            return () => contentWindow.parent.removeEventListener('message', handleMessage);
+        },
+        send(type, payload) {
+            contentWindow.parent.postMessage({ source: 'agent', type, payload });
+        },
+    });
 
-    return {
-        findFiber,
-        getParentFiber, // going to replace findFiberForInteraction
-        findFiberForInteraction,
-        findNativeNodes,
-        listFibersByPredicate,
-        findAncestorElementByPredicate,
-        getDisplayNameForFiber,
-        getOwner,
-        flushInitialOperations,
+    contentWindow.parent.postMessage({
+        type: 'connection-init',
+        source: 'agent',
+    });
 
-        // react calls these to communicate the component tree
-        handleCommitFiberUnmount,
-        handleCommitFiberRoot,
+    const agent = new Agent(bridge);
 
-        // for debug only
-        devtoolsInterface,
-    };
+    // contentWindow.parent.__debugBridge = bridge;
+
+    const hook = contentWindow.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    if (hook) {
+        initBackend(hook, agent, contentWindow);
+    }
 }

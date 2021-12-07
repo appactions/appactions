@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Environment, MeshDistortMaterial, ContactShadows } from '@react-three/drei';
 import { useSpring } from '@react-spring/core';
 import { a } from '@react-spring/three';
+import { register } from 'cypress-app-actions/driver';
 
 // React-spring animates native elements, in this case <mesh/> etc,
 // but it can also handle 3rd–party objs, just wrap them in "a".
@@ -63,3 +64,7 @@ export default function Cell({ currentState, send, index, position, shadow }) {
         </>
     );
 }
+
+register(Cell, {
+    role: 'CellRole',
+});

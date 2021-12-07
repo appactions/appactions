@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
-import Store from 'cypress-app-actions/src/vendor/react-devtools-renderer-build/storage';
-import Bridge from './state/bridge';
+import Bridge from 'cypress-app-actions/src/shared/bridge';
+import Store from 'cypress-app-actions/src/shared/store';
 import App from './devtools/app';
 
 let panelCreated = false;
@@ -48,6 +48,8 @@ function createPanelIfReactLoaded() {
         });
 
         store = new Store(bridge);
+
+        // window.__debugBridge = bridge;
 
         bridge.addListener('syncSelectionToNativeElementsPanel', () => {
             setBrowserSelectionFromReact();

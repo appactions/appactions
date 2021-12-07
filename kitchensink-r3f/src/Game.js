@@ -7,6 +7,8 @@ import { useMachine } from '@xstate/react';
 import { ticTacToeMachine } from './machine';
 import Cell from './Cell';
 
+import { register } from 'cypress-app-actions/driver';
+
 function Title({ currentState, send }) {
     if (currentState.matches('playing')) {
         const player = currentState.context.player.toUpperCase();
@@ -77,3 +79,7 @@ export default function Game() {
         </>
     );
 }
+
+register(Game, {
+    role: 'GameRole',
+});
