@@ -49,34 +49,3 @@ export function useSubscription({ getCurrentValue, subscribe }) {
 
     return state.value;
 }
-
-export function useHighlightNativeElement() {
-    const { bridge, store } = useDevtoolsContext();
-
-    const highlightNativeElement = useCallback(
-        id => {
-            const element = store.getElementByID(id);
-            const rendererID = store.getRendererIDForElement(id);
-            if (element !== null && rendererID !== null) {
-                bridge.send('highlightNativeElement', {
-                    displayName: element.displayName,
-                    hideAfterTimeout: false,
-                    id,
-                    openNativeElementsPanel: false,
-                    rendererID,
-                    scrollIntoView: false,
-                });
-            }
-        },
-        [store, bridge],
-    );
-
-    const clearHighlightNativeElement = useCallback(() => {
-        bridge.send('clearNativeElementHighlight');
-    }, [bridge]);
-
-    return {
-        highlightNativeElement,
-        clearHighlightNativeElement,
-    };
-}

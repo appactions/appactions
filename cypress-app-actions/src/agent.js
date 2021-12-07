@@ -1,4 +1,5 @@
 import EventEmitter from './shared/event-emitter';
+import {setupHighlighter} from './highlighter'
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -9,6 +10,8 @@ export default class Agent extends EventEmitter {
 
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
+
+        setupHighlighter(bridge, this);
     }
 
     inspectElement = ({ forceFullData, id, path, rendererID, requestID }) => {

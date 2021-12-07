@@ -25,6 +25,11 @@ export default function RoleTree() {
         }),
         [store],
     );
+
+    const onLeave = useCallback(() => {
+        bridge.send('clearNativeElementHighlight');
+    }, [bridge]);
+
     const { numElements } = useSubscription(getStoreState);
 
     if (numElements === 0) {
@@ -32,7 +37,7 @@ export default function RoleTree() {
     }
 
     return (
-        <ol>
+        <ol onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
                 .map((_, index) => (
@@ -56,18 +61,36 @@ function Element({ index }) {
     const onHover = useCallback(() => {
         const rendererID = store.getRendererIDForElement(element.id);
 
+        bridge.send('highlightNativeElement', {
+            displayName: element.displayName,
+            hideAfterTimeout: false,
+            id: element.id,
+            openNativeElementsPanel: false,
+            rendererID,
+            scrollIntoView: false,
+        });
+    }, [bridge, element]);
+
+    const onClick = useCallback(() => {
+        const rendererID = store.getRendererIDForElement(element.id);
+
         bridge.send('inspectElement', {
             forceFullData: true,
             requestID: nextRequestID++,
             id: element.id,
             path: null,
             rendererID,
-        })
-    }, [bridge, index]);
+        });
+
+    }, [bridge, element]);
 
     const { depth, displayName, hocDisplayNames, key, type } = element;
     return (
-        <li style={{ marginLeft: depth * 6 }} onPointerEnter={onHover}>
+        <li
+            style={{ marginLeft: depth * 6, cursor: 'pointer' }}
+            onPointerEnter={onHover}
+            onPointerDown={onClick}
+        >
             {displayName} id: {element.id}
         </li>
     );
