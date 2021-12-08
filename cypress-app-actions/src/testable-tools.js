@@ -1,5 +1,4 @@
 import { formatArguments } from './cypress/cypress-utils';
-// import { findOverride } from './api';
 
 let currentFunction = null;
 
@@ -25,12 +24,8 @@ const enhanceTestableMethods = (role, methods, isSelectors) => {
                         );
                     }
 
-                    // NOTE override is not supported in this version
-                    // const overrides = findOverride($el, role);
-                    // const overridingFunction = overrides && overrides[key] ? overrides[key].apply(null, args) : null;
                     try {
                         currentFunction = enhancedFunction;
-                        // const result = (overridingFunction || innerFunction).call(null, $el);
                         const result = innerFunction.call(null, $el);
                         return isSelectors ? result : $el;
                     } finally {
