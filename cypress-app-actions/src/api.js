@@ -89,13 +89,23 @@ const hasMatchingName = componentName => fiber => {
 
 const findInstancesWithSpecificInteraction = (fiber, methodName) => {
     const isMatching = fiber => {
-        const displayName = getDisplayName(fiber);
 
-        if (drivers[displayName]) {
-            if (drivers[displayName][methodName]) {
-                return true;
-            }
+        const driver = getDriver(fiber);
+        if (!driver) {
+            return false;
         }
+
+        if (driver.drivers[methodName]) {
+            return true;
+        }
+        
+        // const displayName = getDisplayName(fiber);
+
+        // if (drivers[displayName]) {
+        //     if (drivers[displayName][methodName]) {
+        //         return true;
+        //     }
+        // }
 
         return false;
     };
@@ -140,12 +150,21 @@ export function callInteraction($el, methodName, ...args) {
 
     const componentName = getDisplayName(fiber);
 
-    if (!drivers[componentName]) {
+    // if (!drivers[componentName]) {
+    //     throw new Error(`Component ${componentName} has no drivers registered`);
+    // }
+
+    // const componentMap = drivers[componentName];
+    // if (!componentMap[methodName]) {
+    //     throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
+    // }
+
+    const driver = getDriver(fiber);
+    if (!driver) {
         throw new Error(`Component ${componentName} has no drivers registered`);
     }
-
-    const componentMap = drivers[componentName];
-    if (!componentMap[methodName]) {
+    const method = driver.drivers[methodName];
+    if (!method) {
         throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
     }
 
@@ -153,7 +172,8 @@ export function callInteraction($el, methodName, ...args) {
     const stateNode = findClosestStateNode(fiber);
     const DOMNode = Cypress.AppActions.reactApi.findNativeNodes(fiber);
 
-    return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+    // return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+    return method.apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
 }
 
 export function findElementByPredicate(fiber, predicate) {
