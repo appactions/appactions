@@ -1,7 +1,7 @@
 import { createTestable, pure } from 'cypress-app-actions';
 
 export const Cell = createTestable({
-    role: 'Cell',
+    role: 'CellRole',
 
     // interactions: {
     //     fill: value => {
