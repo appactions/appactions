@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useDevtoolsContext } from './context';
 
 export function useSubscription({ getCurrentValue, subscribe }) {
@@ -48,4 +48,21 @@ export function useSubscription({ getCurrentValue, subscribe }) {
     }, [getCurrentValue, subscribe]);
 
     return state.value;
+}
+
+export function useStore(eventType, getCurrentValue) {
+    const { store } = useDevtoolsContext();
+
+    const sub = useMemo(
+        () => ({
+            getCurrentValue: () => getCurrentValue(store),
+            subscribe: callback => {
+                store.addListener(eventType, callback);
+                return () => store.removeListener(eventType, callback);
+            },
+        }),
+        [store],
+    );
+
+    return useSubscription(sub);
 }

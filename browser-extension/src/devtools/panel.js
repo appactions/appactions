@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import RoleTree from './role-tree';
 import portaledContent from './portaled-content';
 import SplitView from './split-view';
+import SidePanel from './side-panel'
 
 const Panel = () => {
     return (
@@ -14,7 +15,7 @@ const Panel = () => {
             }
             right={
                 <div className="m-4">
-                    <h2>Sidepanel</h2>
+                    <SidePanel />
                 </div>
             }
         />
