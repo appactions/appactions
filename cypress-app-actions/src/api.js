@@ -18,33 +18,37 @@ function getDriver(fiber) {
     if (!fiber.type) {
         return null;
     }
+
+    // host components
+    if (typeof fiber.type === 'string') {
+        return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.drivers[fiber.type] || null;
+    }
+
     if (!fiber.type.__REACT_APP_ACTIONS__) {
         return null;
     }
+
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
 const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
 
 export function register(componentName, driverConfig) {
-//     if (drivers[componentName]) {
-//         throw new Error(`name collision: ${componentName} already has drivers registered`);
-//     }
-
-//     // some drivers don't implement actual drivers, just registered for a role
-//     if (driverConfig.drivers) {
-//         drivers[componentName] = driverConfig.drivers;
-//     }
-
-//     // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
-//     if (driverConfig.role) {
-//         componentByRole[componentName] = driverConfig.role;
-//         roles.add(driverConfig.role);
-//     }
-
-//     if (driverConfig.override) {
-//         overrides[componentName] = driverConfig.override;
-//     }
+    //     if (drivers[componentName]) {
+    //         throw new Error(`name collision: ${componentName} already has drivers registered`);
+    //     }
+    //     // some drivers don't implement actual drivers, just registered for a role
+    //     if (driverConfig.drivers) {
+    //         drivers[componentName] = driverConfig.drivers;
+    //     }
+    //     // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
+    //     if (driverConfig.role) {
+    //         componentByRole[componentName] = driverConfig.role;
+    //         roles.add(driverConfig.role);
+    //     }
+    //     if (driverConfig.override) {
+    //         overrides[componentName] = driverConfig.override;
+    //     }
 }
 
 export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
@@ -54,7 +58,8 @@ export function getDisplayName(fiber) {
 }
 
 export function isRole(name) {
-    return roles.has(name);
+    // return roles.has(name);
+    return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.roles.has(name);
 }
 
 function unwrapJQuery(el) {
@@ -89,7 +94,6 @@ const hasMatchingName = componentName => fiber => {
 
 const findInstancesWithSpecificInteraction = (fiber, methodName) => {
     const isMatching = fiber => {
-
         const driver = getDriver(fiber);
         if (!driver) {
             return false;
@@ -98,7 +102,7 @@ const findInstancesWithSpecificInteraction = (fiber, methodName) => {
         if (driver.drivers[methodName]) {
             return true;
         }
-        
+
         // const displayName = getDisplayName(fiber);
 
         // if (drivers[displayName]) {
