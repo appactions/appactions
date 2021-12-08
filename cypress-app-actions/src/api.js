@@ -9,32 +9,42 @@ if (!Cypress.AppActions) {
             // const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
             // return hasRole;
 
-            return !!fiber.type.__REACT_APP_ACTIONS__;
+            return !!getDriver(fiber);
         },
     };
+}
+
+function getDriver(fiber) {
+    if (!fiber.type) {
+        return null;
+    }
+    if (!fiber.type.__REACT_APP_ACTIONS__) {
+        return null;
+    }
+    return fiber.type.__REACT_APP_ACTIONS__;
 }
 
 const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
 
 export function register(componentName, driverConfig) {
-    if (drivers[componentName]) {
-        throw new Error(`name collision: ${componentName} already has drivers registered`);
-    }
+//     if (drivers[componentName]) {
+//         throw new Error(`name collision: ${componentName} already has drivers registered`);
+//     }
 
-    // some drivers don't implement actual drivers, just registered for a role
-    if (driverConfig.drivers) {
-        drivers[componentName] = driverConfig.drivers;
-    }
+//     // some drivers don't implement actual drivers, just registered for a role
+//     if (driverConfig.drivers) {
+//         drivers[componentName] = driverConfig.drivers;
+//     }
 
-    // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
-    if (driverConfig.role) {
-        componentByRole[componentName] = driverConfig.role;
-        roles.add(driverConfig.role);
-    }
+//     // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
+//     if (driverConfig.role) {
+//         componentByRole[componentName] = driverConfig.role;
+//         roles.add(driverConfig.role);
+//     }
 
-    if (driverConfig.override) {
-        overrides[componentName] = driverConfig.override;
-    }
+//     if (driverConfig.override) {
+//         overrides[componentName] = driverConfig.override;
+//     }
 }
 
 export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
@@ -63,8 +73,13 @@ function unwrapJQuery(el) {
 }
 
 const isPartOfRole = role => fiber => {
-    const displayName = getDisplayName(fiber);
-    return componentByRole[displayName] === role;
+    // const displayName = getDisplayName(fiber);
+    // return componentByRole[displayName] === role;
+    const driver = getDriver(fiber);
+    if (!driver) {
+        return false;
+    }
+    return role === driver.role;
 };
 
 const hasMatchingName = componentName => fiber => {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
+import { register } from 'cypress-app-actions/driver'
 import './style.css';
 
 class PageIndex extends Component {
@@ -304,3 +305,20 @@ class App extends Component {
 }
 
 export default App;
+
+register(Table, {
+    role: 'Table',
+    drivers: {
+        sort: (label, order) => (_, self) => {
+            self.reorder(label, order)(new Event('click'));
+        },
+    },
+});
+
+register(TableRow, {
+    role: 'TableRowTestable',
+});
+
+// register('h2', {
+//     role: 'Header',
+// });

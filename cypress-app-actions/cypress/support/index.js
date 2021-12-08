@@ -2,8 +2,8 @@ import { registerCypressCommands } from '../../src';
 
 registerCypressCommands();
 
-const req = require.context('../app', true, /\.cypress\.jsx?/);
+// const req = require.context('../app', true, /\.cypress\.jsx?/);
 
-req.keys().forEach(filename => {
-    req(filename);
-});
+// req.keys().forEach(filename => {
+//     req(filename);
+// });
