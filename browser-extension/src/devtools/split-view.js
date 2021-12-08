@@ -45,13 +45,17 @@ export default function SplitView({ left, right, minimumSize = 250 }) {
             onMouseUp={onResizeEnd}
             ref={wrapperElementRef}
         >
-            <div style={{ width: `${leftWidthPercent}%` }}>{left}</div>
+            <div className="overflow-x-hidden overflow-y-scroll" style={{ width: `${leftWidthPercent}%` }}>
+                {left}
+            </div>
             <div
                 onMouseDown={onResizeStart}
                 style={{ left: `${leftWidthPercent}%`, cursor: 'ew-resize' }}
-                className="absolute w-1 h-full border-l-2 border-gray-200 cursor-move -left-0.5"
+                className="absolute w-1 h-full cursor-move -left-0.5"
             ></div>
-            <div style={{ width: `${100 - leftWidthPercent}%` }}>{right}</div>
+            <div className="overflow-x-hidden overflow-y-scroll" style={{ width: `${100 - leftWidthPercent}%` }}>
+                {right}
+            </div>
         </div>
     );
 }

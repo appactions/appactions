@@ -37,13 +37,13 @@ export default function RoleTree() {
     }
 
     return (
-        <ol onPointerLeave={onLeave}>
+        <div onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
                 .map((_, index) => (
                     <Element key={index} index={index} />
                 ))}
-        </ol>
+        </div>
     );
 }
 
@@ -81,17 +81,17 @@ function Element({ index }) {
             path: null,
             rendererID,
         });
-
     }, [bridge, element]);
 
     const { depth, displayName, hocDisplayNames, key, type } = element;
     return (
-        <li
-            style={{ marginLeft: depth * 6, cursor: 'pointer' }}
+        <div
+            className="cursor-pointer hover:bg-blue-100"
+            style={{ paddingLeft: depth * 12 + 2 }}
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
             {displayName} id: {element.id}
-        </li>
+        </div>
     );
 }

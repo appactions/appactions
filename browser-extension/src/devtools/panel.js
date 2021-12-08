@@ -6,9 +6,18 @@ import SplitView from './split-view';
 
 const Panel = () => {
     return (
-        <>
-            <SplitView left={<RoleTree />} right={<h2>Sidepanel</h2>} />
-        </>
+        <SplitView
+            left={
+                <div className="m-4">
+                    <RoleTree />
+                </div>
+            }
+            right={
+                <div className="m-4">
+                    <h2>Sidepanel</h2>
+                </div>
+            }
+        />
     );
 };
 
