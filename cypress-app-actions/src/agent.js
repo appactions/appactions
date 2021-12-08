@@ -1,5 +1,6 @@
 import EventEmitter from './shared/event-emitter';
-import {setupHighlighter} from './highlighter'
+import { setupHighlighter } from './highlighter';
+import { getDriver } from './api';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -15,18 +16,44 @@ export default class Agent extends EventEmitter {
     }
 
     inspectElement = ({ forceFullData, id, path, rendererID, requestID }) => {
-        console.log('inspect element', {
-            forceFullData,
-            id,
-            path,
-            rendererID,
-            requestID,
-        });
         const renderer = this._rendererInterfaces[rendererID];
         if (renderer == null) {
             console.warn(`Invalid renderer id "${rendererID}" for element "${id}"`);
         } else {
-            this._bridge.send('inspectedElement', renderer.inspectElement(requestID, id, path, forceFullData));
+            try {
+                const { value: inspection = {}, ...meta } = renderer.inspectElement(requestID, id, path, forceFullData);
+                const result = {
+                    id,
+                    displayName: inspection.displayName,
+                    source: inspection.source,
+                    rendererPackageName: inspection.rendererPackageName,
+                    rendererVersion: inspection.rendererVersion,
+
+                    // driver
+                    role: null,
+                    methods: [],
+                };
+
+                const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+                const driver = getDriver(fiber);
+                if (driver) {
+                    result.role = driver.role;
+                    result.methods = Object.keys(driver.drivers || {});
+                }
+
+                this._bridge.send('inspectedElement', {
+                    ...meta,
+                    value: result,
+                });
+            } catch (error) {
+                this._bridge.send('inspectedElement', {
+                    type: 'error',
+                    id,
+                    responseID: requestID,
+                    message: error.message,
+                    stack: error.stack,
+                });
+            }
         }
     };
 
