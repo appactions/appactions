@@ -1,40 +1,54 @@
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
-        drivers: {},
-        componentByRole: {},
-        roles: new Set(),
-        overrides: {},
+        // drivers: {},
+        // componentByRole: {},
+        // roles: new Set(),
+        // overrides: {},
         isRepresentingRole: fiber => {
             // const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
             // const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
             // return hasRole;
 
-            return !!fiber.type.__REACT_APP_ACTIONS__;
+            return !!getDriver(fiber);
         },
     };
 }
 
-const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
+function getDriver(fiber) {
+    if (!fiber.type) {
+        return null;
+    }
+
+    // host components
+    if (typeof fiber.type === 'string') {
+        return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.drivers[fiber.type] || null;
+    }
+
+    if (!fiber.type.__REACT_APP_ACTIONS__) {
+        return null;
+    }
+
+    return fiber.type.__REACT_APP_ACTIONS__;
+}
+
+// const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
 
 export function register(componentName, driverConfig) {
-    if (drivers[componentName]) {
-        throw new Error(`name collision: ${componentName} already has drivers registered`);
-    }
-
-    // some drivers don't implement actual drivers, just registered for a role
-    if (driverConfig.drivers) {
-        drivers[componentName] = driverConfig.drivers;
-    }
-
-    // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
-    if (driverConfig.role) {
-        componentByRole[componentName] = driverConfig.role;
-        roles.add(driverConfig.role);
-    }
-
-    if (driverConfig.override) {
-        overrides[componentName] = driverConfig.override;
-    }
+    //     if (drivers[componentName]) {
+    //         throw new Error(`name collision: ${componentName} already has drivers registered`);
+    //     }
+    //     // some drivers don't implement actual drivers, just registered for a role
+    //     if (driverConfig.drivers) {
+    //         drivers[componentName] = driverConfig.drivers;
+    //     }
+    //     // some drivers don't have a role, for example DataTableHeader only has a driver, but not a Table itself
+    //     if (driverConfig.role) {
+    //         componentByRole[componentName] = driverConfig.role;
+    //         roles.add(driverConfig.role);
+    //     }
+    //     if (driverConfig.override) {
+    //         overrides[componentName] = driverConfig.override;
+    //     }
 }
 
 export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
@@ -44,7 +58,8 @@ export function getDisplayName(fiber) {
 }
 
 export function isRole(name) {
-    return roles.has(name);
+    // return roles.has(name);
+    return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.roles.has(name);
 }
 
 function unwrapJQuery(el) {
@@ -63,8 +78,13 @@ function unwrapJQuery(el) {
 }
 
 const isPartOfRole = role => fiber => {
-    const displayName = getDisplayName(fiber);
-    return componentByRole[displayName] === role;
+    // const displayName = getDisplayName(fiber);
+    // return componentByRole[displayName] === role;
+    const driver = getDriver(fiber);
+    if (!driver) {
+        return false;
+    }
+    return role === driver.role;
 };
 
 const hasMatchingName = componentName => fiber => {
@@ -74,13 +94,22 @@ const hasMatchingName = componentName => fiber => {
 
 const findInstancesWithSpecificInteraction = (fiber, methodName) => {
     const isMatching = fiber => {
-        const displayName = getDisplayName(fiber);
-
-        if (drivers[displayName]) {
-            if (drivers[displayName][methodName]) {
-                return true;
-            }
+        const driver = getDriver(fiber);
+        if (!driver) {
+            return false;
         }
+
+        if (driver.drivers[methodName]) {
+            return true;
+        }
+
+        // const displayName = getDisplayName(fiber);
+
+        // if (drivers[displayName]) {
+        //     if (drivers[displayName][methodName]) {
+        //         return true;
+        //     }
+        // }
 
         return false;
     };
@@ -125,12 +154,21 @@ export function callInteraction($el, methodName, ...args) {
 
     const componentName = getDisplayName(fiber);
 
-    if (!drivers[componentName]) {
+    // if (!drivers[componentName]) {
+    //     throw new Error(`Component ${componentName} has no drivers registered`);
+    // }
+
+    // const componentMap = drivers[componentName];
+    // if (!componentMap[methodName]) {
+    //     throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
+    // }
+
+    const driver = getDriver(fiber);
+    if (!driver) {
         throw new Error(`Component ${componentName} has no drivers registered`);
     }
-
-    const componentMap = drivers[componentName];
-    if (!componentMap[methodName]) {
+    const method = driver.drivers[methodName];
+    if (!method) {
         throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
     }
 
@@ -138,7 +176,8 @@ export function callInteraction($el, methodName, ...args) {
     const stateNode = findClosestStateNode(fiber);
     const DOMNode = Cypress.AppActions.reactApi.findNativeNodes(fiber);
 
-    return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+    // return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+    return method.apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
 }
 
 export function findElementByPredicate(fiber, predicate) {
@@ -170,19 +209,20 @@ export function findAncestorElementByReactComponentName(fiber, componentName) {
     return findAncestorElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
-// TODO expect fiber instead of $root
 export function findOverride($root, role) {
-    const el = unwrapJQuery($root);
-    const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
+    throw new Error('Override API is not supported in this version');
+    // TODO expect fiber instead of $root
+    // const el = unwrapJQuery($root);
+    // const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
 
-    // only care for a single match
-    // maybe we should do something smarter?
-    const [matchingFiber] = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(role));
-    if (!matchingFiber) {
-        return null;
-    }
+    // // only care for a single match
+    // // maybe we should do something smarter?
+    // const [matchingFiber] = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(role));
+    // if (!matchingFiber) {
+    //     return null;
+    // }
 
-    const componentName = getDisplayName(matchingFiber);
+    // const componentName = getDisplayName(matchingFiber);
 
-    return overrides[componentName] || null;
+    // return overrides[componentName] || null;
 }
