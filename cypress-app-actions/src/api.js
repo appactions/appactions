@@ -1,9 +1,9 @@
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
-        drivers: {},
-        componentByRole: {},
-        roles: new Set(),
-        overrides: {},
+        // drivers: {},
+        // componentByRole: {},
+        // roles: new Set(),
+        // overrides: {},
         isRepresentingRole: fiber => {
             // const displayName = Cypress.AppActions.reactApi.getDisplayNameForFiber(fiber);
             // const hasRole = Object.prototype.hasOwnProperty.call(componentByRole, displayName)
@@ -31,7 +31,7 @@ function getDriver(fiber) {
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
-const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
+// const { drivers, componentByRole, roles, overrides } = Cypress.AppActions;
 
 export function register(componentName, driverConfig) {
     //     if (drivers[componentName]) {
@@ -209,19 +209,20 @@ export function findAncestorElementByReactComponentName(fiber, componentName) {
     return findAncestorElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
-// TODO expect fiber instead of $root
 export function findOverride($root, role) {
-    const el = unwrapJQuery($root);
-    const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
+    throw new Error('Override API is not supported in this version');
+    // TODO expect fiber instead of $root
+    // const el = unwrapJQuery($root);
+    // const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
 
-    // only care for a single match
-    // maybe we should do something smarter?
-    const [matchingFiber] = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(role));
-    if (!matchingFiber) {
-        return null;
-    }
+    // // only care for a single match
+    // // maybe we should do something smarter?
+    // const [matchingFiber] = Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(role));
+    // if (!matchingFiber) {
+    //     return null;
+    // }
 
-    const componentName = getDisplayName(matchingFiber);
+    // const componentName = getDisplayName(matchingFiber);
 
-    return overrides[componentName] || null;
+    // return overrides[componentName] || null;
 }
