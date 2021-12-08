@@ -1,4 +1,9 @@
 module.exports.register = (Component, config) => {
+    // Do no run in a server side env
+    if (typeof window === 'undefined') {
+        return;
+    }
+
     if (!config || !config.role) {
         throw new Error('Role must be specified');
     }
