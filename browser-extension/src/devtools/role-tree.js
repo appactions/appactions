@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { useDevtoolsContext } from './context';
-import { useSubscription } from './hooks';
+import { useSubscription, useStore } from './hooks';
+import Delay from './components/delay'
 
 export default function RoleTree() {
     const { bridge, store } = useDevtoolsContext();
@@ -30,68 +31,70 @@ export default function RoleTree() {
         bridge.send('clearNativeElementHighlight');
     }, [bridge]);
 
+    const isBackendReady = useStore('backend-ready', store => store.isBackendReady);
     const { numElements } = useSubscription(getStoreState);
 
-    if (numElements === 0) {
+    if (!isBackendReady) {
         return <h4>Waiting to detect React.</h4>;
     }
 
+    if (numElements === 0) {
+        // TODO show link to docs
+        return <Delay key="no-elements"><h4>Could not find any roles. Annotate your components with drivers.</h4></Delay>;
+    }
+
     return (
-        <ol onPointerLeave={onLeave}>
+        <div onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
                 .map((_, index) => (
                     <Element key={index} index={index} />
                 ))}
-        </ol>
+        </div>
     );
 }
-
-let nextRequestID = 0;
 
 function Element({ index }) {
     const { bridge, store } = useDevtoolsContext();
 
-    const element = store.getElementAtIndex(index);
+    const { id, depth, displayName, hocDisplayNames, key, type } = store.getElementAtIndex(index);
 
-    if (!element) {
-        return null;
-    }
+    const roleElement = useStore('newElementAdded', store => {
+        return store.getRoleByID(id);
+    });
+    const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
 
     const onHover = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(element.id);
+        const rendererID = store.getRendererIDForElement(id);
 
         bridge.send('highlightNativeElement', {
-            displayName: element.displayName,
+            displayName,
             hideAfterTimeout: false,
-            id: element.id,
+            id,
             openNativeElementsPanel: false,
             rendererID,
             scrollIntoView: false,
         });
-    }, [bridge, element]);
+    }, [bridge, id]);
 
     const onClick = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(element.id);
+        store.selectElement(id);
+    }, [store, id]);
 
-        bridge.send('inspectElement', {
-            forceFullData: true,
-            requestID: nextRequestID++,
-            id: element.id,
-            path: null,
-            rendererID,
-        });
+    if (!roleElement) {
+        return null;
+    }
 
-    }, [bridge, element]);
+    const isSelected = selectedElementID === id;
 
-    const { depth, displayName, hocDisplayNames, key, type } = element;
     return (
-        <li
-            style={{ marginLeft: depth * 6, cursor: 'pointer' }}
+        <div
+            className={`cursor-pointer ${isSelected ? 'bg-blue-300' : 'hover:bg-blue-100'}`}
+            style={{ paddingLeft: depth * 12 + 2 }}
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {displayName} id: {element.id}
-        </li>
+            {roleElement.role}
+        </div>
     );
 }

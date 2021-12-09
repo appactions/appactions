@@ -6,7 +6,7 @@ if (!Cypress.AppActions) {
     };
 }
 
-function getDriver(fiber) {
+export function getDriver(fiber) {
     if (!fiber.type) {
         return null;
     }

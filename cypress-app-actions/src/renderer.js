@@ -115,6 +115,7 @@ export function attach(hook, rendererID, renderer, global) {
         getOwner,
         flushInitialOperations,
         inspectElement,
+        findCurrentFiberUsingSlowPathById,
 
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,
