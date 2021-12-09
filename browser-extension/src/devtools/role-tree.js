@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { useDevtoolsContext } from './context';
 import { useSubscription, useStore } from './hooks';
+import Delay from './components/delay'
 
 export default function RoleTree() {
     const { bridge, store } = useDevtoolsContext();
@@ -30,10 +31,16 @@ export default function RoleTree() {
         bridge.send('clearNativeElementHighlight');
     }, [bridge]);
 
+    const isBackendReady = useStore('backend-ready', store => store.isBackendReady);
     const { numElements } = useSubscription(getStoreState);
 
-    if (numElements === 0) {
+    if (!isBackendReady) {
         return <h4>Waiting to detect React.</h4>;
+    }
+
+    if (numElements === 0) {
+        // TODO show link to docs
+        return <Delay key="no-elements"><h4>Could not find any roles. Annotate your components with drivers.</h4></Delay>;
     }
 
     return (

@@ -7,14 +7,20 @@ export default class Store extends VendorStore {
 
         this._idToRole = {};
         this._selectedElementID = null;
+        this._isBackendReady = false;
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
+        this._bridge.addListener('backend-ready', this.onBackendReady);
 
         this.addListener('mutated', this.onMutation);
     }
 
     get selectedElementID() {
         return this._selectedElementID;
+    }
+
+    get isBackendReady() {
+        return this._isBackendReady;
     }
 
     onInspectedElement = data => {
@@ -70,4 +76,9 @@ export default class Store extends VendorStore {
             }
         });
     };
+
+    onBackendReady = () => {
+        this._isBackendReady = true;
+        this.emit('backend-ready')
+    }
 }

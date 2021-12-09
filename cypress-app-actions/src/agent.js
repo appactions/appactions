@@ -82,4 +82,8 @@ export default class Agent extends EventEmitter {
     onTraceUpdates = nodes => {
         this.emit('traceUpdates', nodes);
     };
+
+    onBackendReady = () => {
+        this._bridge.send('backend-ready');
+    }
 }

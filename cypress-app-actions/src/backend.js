@@ -10,6 +10,7 @@ function initBackend(hook, agent, global) {
     const subs = [
         hook.sub('renderer-attached', ({ id, renderer, rendererInterface }) => {
             agent.setRendererInterface(id, rendererInterface);
+            agent.onBackendReady();
 
             // Now that the Store and the renderer interface are connected,
             // it's time to flush the pending operation codes to the frontend.
