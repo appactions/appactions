@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useDevtoolsContext } from './context';
-import { useSubscription } from './hooks';
+import { useSubscription, useStore } from './hooks';
 
 export default function RoleTree() {
     const { bridge, store } = useDevtoolsContext();
@@ -47,8 +47,6 @@ export default function RoleTree() {
     );
 }
 
-let nextRequestID = 0;
-
 function Element({ index }) {
     const { bridge, store } = useDevtoolsContext();
 
@@ -58,40 +56,38 @@ function Element({ index }) {
         return null;
     }
 
+    const { id, depth, displayName, hocDisplayNames, key, type } = element;
+
+    const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
+
+    const isSelected = selectedElementID === id;
+    console.log(index, selectedElementID, id);
+
     const onHover = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(element.id);
+        const rendererID = store.getRendererIDForElement(id);
 
         bridge.send('highlightNativeElement', {
-            displayName: element.displayName,
+            displayName,
             hideAfterTimeout: false,
-            id: element.id,
+            id,
             openNativeElementsPanel: false,
             rendererID,
             scrollIntoView: false,
         });
-    }, [bridge, element]);
+    }, [bridge, id]);
 
     const onClick = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(element.id);
+        store.selectElement(id);
+    }, [store, id]);
 
-        bridge.send('inspectElement', {
-            forceFullData: true,
-            requestID: nextRequestID++,
-            id: element.id,
-            path: null,
-            rendererID,
-        });
-    }, [bridge, element]);
-
-    const { depth, displayName, hocDisplayNames, key, type } = element;
     return (
         <div
-            className="cursor-pointer hover:bg-blue-100"
+            className={`cursor-pointer ${isSelected ? 'bg-blue-300' : 'hover:bg-blue-100'}`}
             style={{ paddingLeft: depth * 12 + 2 }}
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {displayName} id: {element.id}
+            {displayName}
         </div>
     );
 }

@@ -15,13 +15,13 @@ export default class Agent extends EventEmitter {
         setupHighlighter(bridge, this);
     }
 
-    inspectElement = ({ forceFullData, id, path, rendererID, requestID }) => {
+    inspectElement = ({ id, path, rendererID, requestID }) => {
         const renderer = this._rendererInterfaces[rendererID];
         if (renderer == null) {
             console.warn(`Invalid renderer id "${rendererID}" for element "${id}"`);
         } else {
             try {
-                const { value: inspection = {}, ...meta } = renderer.inspectElement(requestID, id, path, forceFullData);
+                const { value: inspection = {}, ...meta } = renderer.inspectElement(requestID, id, path, true);
                 const result = {
                     id,
                     displayName: inspection.displayName,
