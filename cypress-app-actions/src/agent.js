@@ -22,6 +22,7 @@ export default class Agent extends EventEmitter {
         } else {
             try {
                 const { value: inspection = {}, ...meta } = renderer.inspectElement(requestID, id, path, true);
+
                 const result = {
                     id,
                     displayName: inspection.displayName,

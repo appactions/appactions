@@ -50,18 +50,12 @@ export default function RoleTree() {
 function Element({ index }) {
     const { bridge, store } = useDevtoolsContext();
 
-    const element = store.getElementAtIndex(index);
+    const { id, depth, displayName, hocDisplayNames, key, type } = store.getElementAtIndex(index);
 
-    if (!element) {
-        return null;
-    }
-
-    const { id, depth, displayName, hocDisplayNames, key, type } = element;
-
+    const roleElement = useStore('newElementAdded', store => {
+        return store.getRoleByID(id);
+    });
     const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
-
-    const isSelected = selectedElementID === id;
-    console.log(index, selectedElementID, id);
 
     const onHover = useCallback(() => {
         const rendererID = store.getRendererIDForElement(id);
@@ -80,6 +74,12 @@ function Element({ index }) {
         store.selectElement(id);
     }, [store, id]);
 
+    if (!roleElement) {
+        return null;
+    }
+
+    const isSelected = selectedElementID === id;
+
     return (
         <div
             className={`cursor-pointer ${isSelected ? 'bg-blue-300' : 'hover:bg-blue-100'}`}
@@ -87,7 +87,7 @@ function Element({ index }) {
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {displayName}
+            {roleElement.role}
         </div>
     );
 }

@@ -9,6 +9,8 @@ export default class Store extends VendorStore {
         this._selectedElementID = null;
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
+
+        this.addListener('mutated', this.onMutation);
     }
 
     get selectedElementID() {
@@ -45,5 +47,27 @@ export default class Store extends VendorStore {
         } catch (error) {
             console.error(error);
         }
+    };
+
+    onMutation = ([addedElementIDs]) => {
+        addedElementIDs.forEach(async id => {
+            if (!this._idToRole[id]) {
+                try {
+                    const rendererID = this.getRendererIDForElement(id);
+
+                    const data = await inspectElement({
+                        bridge: this._bridge,
+                        id,
+                        path: null,
+                        rendererID,
+                    });
+
+                    this._idToRole[data.id] = data.value;
+                    this.emit('newElementAdded');
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        });
     };
 }
