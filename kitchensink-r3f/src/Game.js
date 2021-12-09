@@ -81,5 +81,5 @@ export default function Game() {
 }
 
 register(Game, {
-    role: 'GameRole',
+    role: 'Game',
 });

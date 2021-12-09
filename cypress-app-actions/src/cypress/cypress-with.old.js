@@ -3,38 +3,38 @@ import { AppActionsError, refreshSubject, formatArguments, isDOMNode } from './c
 import getUniqueSelector from '@cypress/unique-selector';
 
 export const register = (name, { defaultIsLoading = () => false } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, ...pickerData) => {
-        // if (!testable.isTestable) {
-        //     throw new AppActionsError(`value passed to cy.${name} is not a testable`);
-        // }
+    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, testable, ...pickerData) => {
+        if (!testable.isTestable) {
+            throw new AppActionsError(`value passed to cy.${name} is not a testable`);
+        }
 
-        // if (!testable.role) {
-        //     throw new AppActionsError(`cyname don't know the selected role`);
-        // }
+        if (!testable.role) {
+            throw new AppActionsError(`cyname don't know the selected role`);
+        }
 
-        // if (pickerData.length && !testable.customPicker) {
-        //     throw new AppActionsError(`testable "${testable.role}" does not have selector support when cy.${name}`);
-        // }
+        if (pickerData.length && !testable.customPicker) {
+            throw new AppActionsError(`testable "${testable.role}" does not have selector support when cy.${name}`);
+        }
 
         const start = performance.now();
 
         const options = {
             log: true,
-            timeoutOnLoading: 6e4, // TODO hardcoded value
+            timeoutOnLoading: testable.timeoutOnLoading || 6e4, // TODO hardcoded value
         };
 
         let filterFn = () => true;
-        let selector = role;
+        let selector = testable.role;
 
         if (typeof pickerData[0] === 'function') {
             filterFn = pickerData[0];
-            selector = `${role} (with a function)`;
-        // } else if (testable.customPicker) {
-        //     filterFn = testable.customPicker(...pickerData);
-        //     const extraInfo = formatArguments(pickerData);
-        //     if (extraInfo) {
-        //         selector = `${testable.role} (${extraInfo})`;
-        //     }
+            selector = `${testable.role} (with a function)`;
+        } else if (testable.customPicker) {
+            filterFn = testable.customPicker(...pickerData);
+            const extraInfo = formatArguments(pickerData);
+            if (extraInfo) {
+                selector = `${testable.role} (${extraInfo})`;
+            }
         }
 
         const getConsolePropsWithoutResult = () => ({
@@ -52,7 +52,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             'Candidates (filter)': candidatesFilter,
         });
 
-        // const isTestableLoading = testable.isLoading || defaultIsLoading;
+        const isTestableLoading = testable.isLoading || defaultIsLoading;
 
         if (options.log) {
             options._log = Cypress.log({
@@ -86,7 +86,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             const candidates = head.flatMap(node => {
                 try {
                     const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                    return findElementByRole(fiber, role);
+                    return findElementByRole(fiber, testable.role);
                 } catch (e) {
                     maybeCandidateError = e;
                     return [];
@@ -102,8 +102,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
-                    // loadingResult = Boolean(isTestableLoading(el));
-                    loadingResult = false;
+                    loadingResult = Boolean(isTestableLoading(el));
                 } catch (error) {
                     loadingResult = error;
                 }

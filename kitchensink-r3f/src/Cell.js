@@ -66,5 +66,5 @@ export default function Cell({ currentState, send, index, position, shadow }) {
 }
 
 register(Cell, {
-    role: 'CellRole',
+    role: 'Cell',
 });

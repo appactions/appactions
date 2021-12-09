@@ -1,4 +1,4 @@
-import { Logo } from '../support/testables/logo';
+// import { Logo } from '../support/testables/logo';
 
 describe('Hello App Actions', () => {
     beforeEach(() => {
@@ -6,6 +6,6 @@ describe('Hello App Actions', () => {
     });
 
     it('Alert should exist', () => {
-        cy.with(Logo).should('exist');
+        cy.with('Logo').should('exist');
     });
 });

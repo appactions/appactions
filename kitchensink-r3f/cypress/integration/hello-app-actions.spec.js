@@ -1,4 +1,4 @@
-import { Game } from '../support/testables/game';
+// import { Game } from '../support/testables/game';
 
 context('Hello App Actions', () => {
     beforeEach(() => {
@@ -7,6 +7,6 @@ context('Hello App Actions', () => {
 
     it('Game should exist', () => {
         cy.get('#root canvas').should('exist')
-        cy.with(Game).should('exist');
+        cy.with('Game').should('exist');
     });
 });
