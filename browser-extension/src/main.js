@@ -141,6 +141,7 @@ function createPanelIfReactLoaded() {
         }
 
         initBridgeAndStore();
+        render();
     });
 }
 
