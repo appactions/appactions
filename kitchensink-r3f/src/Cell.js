@@ -40,14 +40,29 @@ export default function Cell({ currentState, send, index, position, shadow }) {
                     send({ type: 'PLAY', value: index });
                 }}
             >
-                <sphereBufferGeometry args={[0.4, 32, 32]} />
-                <AnimatedMaterial
-                    color={color}
-                    envMapIntensity={env}
-                    clearcoat={coat}
-                    clearcoatRoughness={0}
-                    metalness={0.1}
-                />
+                {player ? (
+                    <>
+                        <torusBufferGeometry args={[0.28, 0.13, 11, 32]} />
+                        <meshPhysicalMaterial
+                            color={player === 'x' ? 'red' : 'blue'}
+                            envMapIntensity={0.5}
+                            clearcoat={0.6}
+                            clearcoatRoughness={0}
+                            metalness={0.1}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <sphereBufferGeometry args={[0.4, 32, 32]} />
+                        <AnimatedMaterial
+                            color={color}
+                            envMapIntensity={env}
+                            clearcoat={coat}
+                            clearcoatRoughness={0}
+                            metalness={0.1}
+                        />
+                    </>
+                )}
             </a.mesh>
             <Environment files="empty_warehouse_01_1k.hdr" />
             {shadow ? (
