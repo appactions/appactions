@@ -42,7 +42,11 @@ export default function Cell({ currentState, send, index, position, shadow }) {
             >
                 {player ? (
                     <>
-                        <torusBufferGeometry args={[0.28, 0.13, 11, 32]} />
+                        {player === 'x' ? (
+                            <torusKnotBufferGeometry args={[0.2, 0.1, 64, 8, 2, 3]} />
+                        ) : (
+                            <torusBufferGeometry args={[0.28, 0.13, 11, 32]} />
+                        )}
                         <meshPhysicalMaterial
                             color={player === 'x' ? 'red' : 'blue'}
                             envMapIntensity={0.5}
