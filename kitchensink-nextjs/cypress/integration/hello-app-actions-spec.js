@@ -7,5 +7,6 @@ describe('Hello App Actions', () => {
 
     it('Alert should exist', () => {
         cy.with('Logo').should('exist');
+        cy.with('Button').click();
     });
 });
