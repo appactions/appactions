@@ -1,5 +1,5 @@
 const faker = require('faker');
-const { addPlugin } = require('cypress-app-actions/dist/cypress/plugin');
+const { addPlugin } = require('cypress-app-actions/plugin');
 
 module.exports = on => {
     addPlugin(on);

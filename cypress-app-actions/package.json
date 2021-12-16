@@ -2,14 +2,15 @@
   "name": "cypress-app-actions",
   "version": "1.0.0",
   "description": "Framework to create App Actions for a React project",
-  "main": "./dist/index.js",
+  "main": "./build/index.js",
   "scripts": {
     "start": "webpack-dev-server --hot",
     "cypress": "node cypress.js",
     "test": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
     "dev": "rollup --config rollup.config.js --watch",
     "build": "rollup --config rollup.config.js",
-    "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js"
+    "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js",
+    "prepublish": "echo \"wrong directory\" && exit 1"
   },
   "author": "Miklos Megyes <hello@miklos.dev>",
   "license": "unlicensed",

@@ -1,0 +1,15 @@
+{
+  "name": "@appactions/cypress-app-actions",
+  "version": "1.0.0",
+  "description": "App Actions early preview",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/appactions/appactions.git"
+  },
+  "author": "Miklos Megyes <hello@miklos.dev>",
+  "license": "UNLICENSED"
+}

@@ -24,10 +24,8 @@
     },
     "scripts": {
         "dev": "node dev.js",
-        "dev:app-actions": "cd react-app-actions && rollup --config rollup.config.js --watch",
-        "dev:cypress:nextjs": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
-        "dev:cypress:r3f": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-r3f cypress' --kill-others",
-        "dev:cypress-app-actions": "yarn workspace cypress-app-actions build:react-devtools-renderer && yarn workspace cypress-app-actions build && yarn dev:cypress",
-        "test": "CI=true yarn --silent workspace kitchensink-nextjs react-app-actions"
-    }
+        "build": "./build.sh"
+    },
+    "repository": "git@github.com:appactions/appactions.git",
+    "author": "Miklos Megyes <hello@miklos.dev>"
 }
