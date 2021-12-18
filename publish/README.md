@@ -46,7 +46,7 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 4. Add the drivers:
 
 ```
-import { register } from '@appactions/cypress-app-actions/driver';
+import { register } from '@appactions/cypress/driver';
 
 register(TextInput, {
   role: 'Input',
@@ -66,7 +66,7 @@ How to decide if a set of components should have a single or multiple testables 
 Example:
 
 ```
-import { createTestable } from '@appactions/cypress-app-actions';
+import { createTestable } from '@appactions/cypress';
 
 // name it anything that describes the given UX pattern
 export const App = createTestable({
