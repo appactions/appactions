@@ -1,13 +1,15 @@
-# Gren Monorepo
+# App Actions Monorepo
 
-## React App Actions
+App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a test runner agnostics solution that integrates with Cypress and Selenium.
 
-Radically different testing experience.
+[Docs](/publish/README.md)
 
-## kitchensink-nextjs
+## Development
 
-Kitchen sink app for NextJS.
+`yarn dev` in the root directory.
 
-## cypress-app-actions
+`yarn dev [label]`: quick start a given project by the label value (see the interactive menu for the values).
 
-This is the original, Cypress dependant version of React App Actions.
+## Kitchensink
+
+[What is exact meaning of "kitchen sink" in programming?](https://stackoverflow.com/a/33949882/1599072)
