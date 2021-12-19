@@ -1,6 +1,6 @@
 {
   "name": "@appactions/cypress",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "App Actions early preview",
   "main": "build/index.js",
   "scripts": {
