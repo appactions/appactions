@@ -8,7 +8,7 @@ import replace from '@rollup/plugin-replace';
 export default {
     input: ['src/index.js', 'src/cypress/plugin.js'],
     output: {
-        dir: 'dist',
+        dir: 'build',
         format: 'cjs',
     },
     plugins: [

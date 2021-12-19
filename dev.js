@@ -13,7 +13,8 @@ const choices = [
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
-            { name: 'kitchensink-nextjs', command: 'yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
+            { name: 'kitchensink-nextjs', command: 'yarn workspace kitchensink-nextjs dev', prefixColor: 'green' },
+            { name: 'cypress', command: 'yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
         ],
     },
     {
@@ -21,6 +22,7 @@ const choices = [
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
+            // the cypress command also handles the dev server
             { name: 'kitchensink-r3f', command: 'yarn workspace kitchensink-r3f cypress', prefixColor: 'green' },
         ],
     },
@@ -74,7 +76,3 @@ prompt(
         killOthers: ['failure', 'success'],
     });
 });
-
-// "dev:cypress:nextjs": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-nextjs cypress' --kill-others",
-// "dev:cypress:r3f": "concurrently -n 'cyappactions,browser-ext,kitchensink' -c 'blue,yellow,green' 'yarn workspace cypress-app-actions build --watch' 'yarn workspace browser-extension dev' 'yarn workspace kitchensink-r3f cypress' --kill-others",
-// "dev:cypress-app-actions": "yarn workspace cypress-app-actions build:react-devtools-renderer && yarn workspace cypress-app-actions build && yarn dev:cypress",

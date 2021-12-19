@@ -1,9 +1,16 @@
 const path = require('path');
+const fs = require('fs');
 
 module.exports.addPlugin = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.name === 'chrome') {
-            launchOptions.extensions.push(path.resolve('../browser-extension/build'));
+            let extensionPath = path.join(__dirname, '../browser-extension/build');
+
+            if (!fs.existsSync(extensionPath)) {
+                extensionPath = path.resolve('../browser-extension/build');
+            }
+
+            launchOptions.extensions.push(extensionPath);
             launchOptions.args.push('--auto-open-devtools-for-tabs');
             launchOptions.args.push('--enable-logging');
             launchOptions.args.push('--v=1');
