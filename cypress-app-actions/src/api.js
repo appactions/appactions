@@ -61,6 +61,7 @@ const hasMatchingName = componentName => fiber => {
     return displayName === componentName;
 };
 
+// deprecated
 const findInstancesWithSpecificInteraction = (fiber, methodName) => {
     const isMatching = fiber => {
         const driver = getDriver(fiber);
@@ -78,7 +79,7 @@ const findInstancesWithSpecificInteraction = (fiber, methodName) => {
     return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isMatching);
 };
 
-const findClosestStateNode = fiber => {
+export const findClosestStateNode = fiber => {
     if (fiber.stateNode) {
         return fiber.stateNode;
     }
@@ -144,6 +145,28 @@ export function findElementByRole(fiber, role) {
 export function findElementByReactComponentName(fiber, componentName) {
     return findElementByPredicate(fiber, hasMatchingName(componentName));
 }
+
+export function listFiberForInteraction(fiber, role, methodName) {
+    const isMatching = fiber => {
+        const driver = getDriver(fiber);
+        
+        if (!driver) {
+            return false;
+        }
+
+        if (!role === driver.role) {
+            return false;
+        }
+
+        if (driver.drivers[methodName]) {
+            return true;
+        }
+
+        return false;
+    };
+
+    return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isMatching);
+};
 
 export function findAncestorElementByPredicate(fiber, predicate) {
     const parent = Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, predicate);

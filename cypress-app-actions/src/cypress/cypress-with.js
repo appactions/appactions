@@ -1,6 +1,6 @@
 import { findElementByRole, isJquery } from '../api';
-import { AppActionsError, refreshSubject, formatArguments, isDOMNode } from './cypress-utils';
-import getUniqueSelector from '@cypress/unique-selector';
+import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
+import { setUniqueSelector, refresh } from './refresh-subject'
 
 export const register = (name, { defaultIsLoading = () => false } = {}) => {
     Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, ...pickerData) => {
@@ -74,7 +74,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             if (!subject) {
                 head = Cypress.AppActions.hook.getAllFiberRoots();
             } else if (isJquery(subject)) {
-                head = Array.from(refreshSubject(subject));
+                head = Array.from(refresh(subject));
             } else if (!Array.isArray(subject)) {
                 head = [subject];
             } else {
@@ -154,10 +154,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             }
             
             if (result.every(isDOMNode)) {
-                result.forEach(el => {
-                    const uniqueSelector = getUniqueSelector(el);
-                    el.dataset.uniqueSelector = uniqueSelector;
-                });
+                setUniqueSelector(result);
 
                 const $result = Cypress.$(result);
                 $result.selector = selector;

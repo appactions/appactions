@@ -309,8 +309,8 @@ export default App;
 register(Table, {
     role: 'Table',
     drivers: {
-        sort: (label, order) => (_, self) => {
-            self.reorder(label, order)(new Event('click'));
+        sort({ instance }, label, order) {
+            instance.reorder(label, order)(new Event('click'));
         },
     },
 });

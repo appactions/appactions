@@ -1,12 +1,7 @@
-import {
-    isJquery,
-    getFunctionName,
-    getFunctionArguments,
-    getElements,
-    AppActionsError,
-    refreshSubject,
-} from './cypress-utils';
-import { purityHelperCommands } from '../testable-tools';
+import { isJquery, AppActionsError } from './cypress-utils';
+// import { purityHelperCommands } from '../testable-tools';
+import { refresh } from './refresh-subject';
+import { listFiberForInteraction, getDisplayName, getDriver } from '../api';
 
 /* 
 interation flowchart:
@@ -25,8 +20,18 @@ interation flowchart:
 
 */
 
+const getElements = $el => {
+    const $arr = Array.from($el);
+
+    if ($arr.length === 1) {
+        return $arr[0];
+    } else {
+        return $arr;
+    }
+};
+
 export const register = name => {
-    Cypress.Commands.add(name, { prevSubject: true }, ($subject, role, interactionName, ...args) => {
+    Cypress.Commands.add(name, { prevSubject: true }, ($subject, role, methodName, ...args) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
         // }
@@ -39,21 +44,18 @@ export const register = name => {
 
         const options = {
             log: true,
+            _log: Cypress.log({
+                message: `${role}.${methodName}`,
+            }),
+            error: null,
         };
-
-        if (options.log) {
-            options._log = Cypress.log({
-                message: getFunctionName(fn),
-            });
-        }
 
         const getConsolePropsWithoutResult = () => {
             const result = {
                 Command: name,
-                Call: getFunctionName(fn),
-                Arguments: getFunctionArguments(fn),
+                Call: `${role}.${methodName}`,
+                Arguments: args,
                 Subject: $subject,
-                Function: fn.displayFunctionBody || fn.toString(),
                 Duration: performance.now() - now,
             };
 
@@ -64,13 +66,15 @@ export const register = name => {
             return result;
         };
 
-        const getConsoleProps = value => () => ({
+        const getConsoleProps = (value, fn, componentName) => () => ({
             ...getConsolePropsWithoutResult(),
+            Function: fn.toString(),
+            Component: componentName,
             Yielded: getElements(value),
             Count: value.length,
         });
 
-        purityHelperCommands.onNewCommand(fn);
+        // purityHelperCommands.onNewCommand(fn);
 
         const getValue = () => {
             if (options._log) {
@@ -80,13 +84,36 @@ export const register = name => {
                 });
             }
 
-            purityHelperCommands.onRetry(fn);
+            // purityHelperCommands.onRetry(fn);
 
-            if ($subject) {
-                $subject = refreshSubject($subject);
+            $subject = refresh($subject);
+
+            const matches = Array.from($subject).flatMap(node => {
+                const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(node);
+                const list = listFiberForInteraction(fiber, role, methodName);
+                return list.map(fiber => ({
+                    node,
+                    fiber,
+                    instance: fiber.stateNode || null,
+                    driver: getDriver(fiber),
+                }));
+            });
+
+            if (matches.length === 0) {
+                throw new AppActionsError(`No fiber found for interaction: ${role} ${methodName}`);
             }
 
-            let value = fn($subject);
+            if (matches.length > 1) {
+                throw new AppActionsError(`Multiple fibers found for interaction: ${role} ${methodName}`);
+            }
+
+            const match = matches[0];
+            const fn = match.driver.drivers[methodName];
+            const componentName = getDisplayName(match.fiber);
+
+            let value = fn(match, ...args);
+
+            // let value = fn($subject);
 
             // if (typeof picker === 'function') {
             //     value = picker(value);
@@ -96,13 +123,13 @@ export const register = name => {
             //     throw new Error(`Picker type passed for \`cy.${name}\` is not supported`);
             // }
 
-            if (cy.isCy(value)) {
-                throw new AppActionsError(`Functions passed to \`cy.${name}(fn)\` must not contain Cypress commands`);
-            }
+            // if (cy.isCy(value)) {
+            //     throw new AppActionsError(`Functions passed to \`cy.${name}(fn)\` must not contain Cypress commands`);
+            // }
 
             if (options._log) {
                 options._log.set({
-                    consoleProps: getConsoleProps(value),
+                    consoleProps: getConsoleProps(value, fn, componentName),
                 });
             }
 
@@ -118,10 +145,10 @@ export const register = name => {
 
                 options.error = err;
 
-                const canRetry = !fn.isImpure || err.didNotPerformSideEffects;
-                if (!canRetry) {
+                // const canRetry = !fn.isImpure || err.didNotPerformSideEffects;
+                // if (!canRetry) {
                     throw err;
-                }
+                // }
 
                 return cy.retry(retryValue, options);
             });

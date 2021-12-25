@@ -8,4 +8,4 @@ export { expectToFailWithMessage } from './utils';
 export { registerCypressCommands } from './cypress/commands';
 
 // can be used to enhance built-in cypress commands to support refrshing
-export { refreshSubject } from './cypress/cypress-utils';
+export { refresh } from './cypress/refresh-subject';
