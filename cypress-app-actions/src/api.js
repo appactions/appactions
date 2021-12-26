@@ -30,7 +30,7 @@ export function getDisplayName(fiber) {
 }
 
 export function isRole(name) {
-    return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.roles.has(name);
+    return Cypress.$autIframe[0].contentWindow.__REACT_APP_ACTIONS__.patterns.has(name);
 }
 
 function unwrapJQuery(el) {
@@ -48,12 +48,12 @@ function unwrapJQuery(el) {
     return isJquery(el) ? el.get(0) : el;
 }
 
-const isPartOfRole = role => fiber => {
+const isPartOfRole = pattern => fiber => {
     const driver = getDriver(fiber);
     if (!driver) {
         return false;
     }
-    return role === driver.role;
+    return pattern === driver.pattern;
 };
 
 const hasMatchingName = componentName => fiber => {
@@ -62,14 +62,14 @@ const hasMatchingName = componentName => fiber => {
 };
 
 // deprecated
-const findInstancesWithSpecificInteraction = (fiber, methodName) => {
+const findInstancesWithSpecificInteraction = (fiber, actionName) => {
     const isMatching = fiber => {
         const driver = getDriver(fiber);
         if (!driver) {
             return false;
         }
 
-        if (driver.drivers[methodName]) {
+        if (driver.actions[actionName]) {
             return true;
         }
 
@@ -96,19 +96,19 @@ export const findClosestStateNode = fiber => {
     return null;
 };
 
-export function callInteraction($el, methodName, ...args) {
+export function callInteraction($el, actionName, ...args) {
     const el = unwrapJQuery($el);
     const rootFiber = Cypress.AppActions.reactApi.findFiberForInteraction(el);
 
-    const matches = findInstancesWithSpecificInteraction(rootFiber, methodName);
+    const matches = findInstancesWithSpecificInteraction(rootFiber, actionName);
 
     if (matches.length === 0) {
-        throw new Error(`Couldn't find instance with "${methodName}" interaction`);
+        throw new Error(`Couldn't find instance with "${actionName}" interaction`);
     }
 
     if (matches.length > 1) {
         throw new Error(
-            `Found more then one instances with "${methodName}" interaction. Narrow down the selection to match exactly a single element.`,
+            `Found more then one instances with "${actionName}" interaction. Narrow down the selection to match exactly a single element.`,
         );
     }
 
@@ -120,16 +120,16 @@ export function callInteraction($el, methodName, ...args) {
     if (!driver) {
         throw new Error(`Component ${componentName} has no drivers registered`);
     }
-    const method = driver.drivers[methodName];
+    const method = driver.actions[actionName];
     if (!method) {
-        throw new Error(`Component ${componentName} has no interaction registered with name ${methodName}`);
+        throw new Error(`Component ${componentName} has no interaction registered with name ${actionName}`);
     }
 
     // TODO this will find any stateNode among the children, when we are adding function component support, return a null here in that case
     const stateNode = findClosestStateNode(fiber);
     const DOMNode = Cypress.AppActions.reactApi.findNativeNodes(fiber);
 
-    // return componentMap[methodName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
+    // return componentMap[actionName].apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
     return method.apply(null, args).call(null, Cypress.$(DOMNode), stateNode);
 }
 
@@ -138,15 +138,15 @@ export function findElementByPredicate(fiber, predicate) {
     return matches.flatMap(Cypress.AppActions.reactApi.findNativeNodes);
 }
 
-export function findElementByRole(fiber, role) {
-    return findElementByPredicate(fiber, isPartOfRole(role));
+export function findElementByRole(fiber, pattern) {
+    return findElementByPredicate(fiber, isPartOfRole(pattern));
 }
 
 export function findElementByReactComponentName(fiber, componentName) {
     return findElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
-export function listFiberForInteraction(fiber, role, methodName) {
+export function listFiberForInteraction(fiber, pattern, actionName) {
     const isMatching = fiber => {
         const driver = getDriver(fiber);
         
@@ -154,11 +154,11 @@ export function listFiberForInteraction(fiber, role, methodName) {
             return false;
         }
 
-        if (!role === driver.role) {
+        if (!pattern === driver.pattern) {
             return false;
         }
 
-        if (driver.drivers[methodName]) {
+        if (driver.actions[actionName]) {
             return true;
         }
 
@@ -176,14 +176,14 @@ export function findAncestorElementByPredicate(fiber, predicate) {
     return Cypress.AppActions.reactApi.findNativeNodes(parent);
 }
 
-export function findAncestorElementByRole(fiber, role) {
-    return findAncestorElementByPredicate(fiber, isPartOfRole(role));
+export function findAncestorElementByRole(fiber, pattern) {
+    return findAncestorElementByPredicate(fiber, isPartOfRole(pattern));
 }
 
 export function findAncestorElementByReactComponentName(fiber, componentName) {
     return findAncestorElementByPredicate(fiber, hasMatchingName(componentName));
 }
 
-export function findOverride($root, role) {
+export function findOverride($root, pattern) {
     throw new Error('Override API is not supported in this version');
 }

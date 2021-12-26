@@ -31,15 +31,15 @@ export default class Agent extends EventEmitter {
                     rendererVersion: inspection.rendererVersion,
 
                     // driver
-                    role: null,
-                    methods: [],
+                    pattern: null,
+                    actions: [],
                 };
 
                 const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
                 const driver = getDriver(fiber);
                 if (driver) {
-                    result.role = driver.role;
-                    result.methods = Object.keys(driver.drivers || {});
+                    result.pattern = driver.pattern;
+                    result.actions = Object.keys(driver.actions || {});
                 }
 
                 this._bridge.send('inspectedElement', {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { register } from 'cypress-app-actions/driver';
+import { createDriver, retryable, tunnel } from 'cypress-app-actions/driver';
 import './style.css';
 
 class PageIndex extends Component {
@@ -198,6 +198,8 @@ class Table extends Component {
             orderOn: label,
             direction,
         });
+
+        tunnel(tableDriver).emit('sort', label, direction)
     };
     render() {
         const { header, data: rawData, className } = this.props;
@@ -306,19 +308,20 @@ class App extends Component {
 
 export default App;
 
-register(Table, {
-    role: 'Table',
-    drivers: {
+const tableDriver = createDriver(Table, {
+    pattern: 'Table',
+    actions: {
         sort({ instance }, label, order) {
             instance.reorder(label, order)(new Event('click'));
         },
+        getData: retryable(({ instance }) => instance.state.data),
     },
 });
 
-register(TableRow, {
-    role: 'TableRowTestable',
+createDriver(TableRow, {
+    pattern: 'TableRowTestable',
 });
 
-register('h2', {
-    role: 'Header',
+createDriver('h2', {
+    pattern: 'Header',
 });

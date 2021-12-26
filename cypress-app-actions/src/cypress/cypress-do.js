@@ -8,7 +8,7 @@ interation flowchart:
 
 0. init
 1. refresh subject
-2. finds the fiber with the role
+2. finds the fiber with the pattern
      - throws if can't find
      - throws if finds multiple
 3. checks if fiber has a given method
@@ -31,7 +31,7 @@ const getElements = $el => {
 };
 
 export const register = name => {
-    Cypress.Commands.add(name, { prevSubject: true }, ($subject, role, methodName, ...args) => {
+    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
         // }
@@ -45,7 +45,7 @@ export const register = name => {
         const options = {
             log: true,
             _log: Cypress.log({
-                message: `${role}.${methodName}`,
+                message: `${pattern}.${actionName}`,
             }),
             error: null,
         };
@@ -53,7 +53,7 @@ export const register = name => {
         const getConsolePropsWithoutResult = () => {
             const result = {
                 Command: name,
-                Call: `${role}.${methodName}`,
+                Call: `${pattern}.${actionName}`,
                 Arguments: args,
                 Subject: $subject,
                 Duration: performance.now() - now,
@@ -90,7 +90,7 @@ export const register = name => {
 
             const matches = Array.from($subject).flatMap(node => {
                 const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(node);
-                const list = listFiberForInteraction(fiber, role, methodName);
+                const list = listFiberForInteraction(fiber, pattern, actionName);
                 return list.map(fiber => ({
                     node,
                     fiber,
@@ -100,15 +100,15 @@ export const register = name => {
             });
 
             if (matches.length === 0) {
-                throw new AppActionsError(`No fiber found for interaction: ${role} ${methodName}`);
+                throw new AppActionsError(`No fiber found for interaction: ${pattern} ${actionName}`);
             }
 
             if (matches.length > 1) {
-                throw new AppActionsError(`Multiple fibers found for interaction: ${role} ${methodName}`);
+                throw new AppActionsError(`Multiple fibers found for interaction: ${pattern} ${actionName}`);
             }
 
             const match = matches[0];
-            const fn = match.driver.drivers[methodName];
+            const fn = match.driver.actions[actionName];
             const componentName = getDisplayName(match.fiber);
 
             let value = fn(match, ...args);
