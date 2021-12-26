@@ -30,7 +30,7 @@ const getElements = $el => {
     }
 };
 
-export const register = (name='do') => {
+export const register = (name = 'read') => {
     Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
@@ -133,7 +133,7 @@ export const register = (name='do') => {
                 });
             }
 
-            return $subject;
+            return value;
         };
 
         // retryValue will automatically retry piped functions that temporarily return errors

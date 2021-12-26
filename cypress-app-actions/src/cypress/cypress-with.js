@@ -2,7 +2,7 @@ import { findElementByRole, isJquery } from '../api';
 import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
 import { setUniqueSelector, refresh } from './refresh-subject'
 
-export const register = (name, { defaultIsLoading = () => false } = {}) => {
+export const register = (name = 'with', { defaultIsLoading = () => false } = {}) => {
     Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, ...pickerData) => {
         // if (!testable.isTestable) {
         //     throw new AppActionsError(`value passed to cy.${name} is not a testable`);
