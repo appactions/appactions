@@ -112,7 +112,7 @@ export const register = (name = 'read') => {
                 ...matches[0],
                 actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
                     result[name] = (...args) => {
-                        return fn.call(null, matches[0], ...args);
+                        return fn.call(null, match, ...args);
                     };
                     return result;
                 }, {}),
