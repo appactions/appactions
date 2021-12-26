@@ -12,7 +12,7 @@ const Table = createTestable({
 });
 
 describe('Interaction', () => {
-    it.only('with(instant appear).do(interaction) -- happypath', () => {
+    it('with(instant appear).do(interaction) -- happypath', () => {
         cy.visit('/instant');
         cy.with('Table').do('Table', 'sort', ['Color', 'asc']);
         cy.get('th').contains('Color ↑');
@@ -40,12 +40,12 @@ describe('Interaction', () => {
         cy.visit('/instant');
         cy.with('Table').find('th').first().do('Table', 'sort', ['Color', 'asc']);
 
-        expectToFailWithMessage('Couldn\'t find instance with "sort" interaction');
+        expectToFailWithMessage('No fiber found for interaction: Table.sort');
     });
     it('with(instant appear<multiple>).do(interaction) -- should fail with multiple subjects', () => {
         cy.visit('/multiple');
         cy.with('Table').do('Table', 'sort', ['Color', 'asc']);
 
-        expectToFailWithMessage('Multiple elements were passed to Table.sort, but only a single one is supported');
+        expectToFailWithMessage('Multiple fibers found for interaction: Table.sort');
     });
 });

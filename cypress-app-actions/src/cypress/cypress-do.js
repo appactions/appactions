@@ -100,11 +100,11 @@ export const register = (name='do') => {
             });
 
             if (matches.length === 0) {
-                throw new AppActionsError(`No fiber found for interaction: ${pattern} ${actionName}`);
+                throw new AppActionsError(`No fiber found for interaction: ${pattern}.${actionName}`);
             }
 
             if (matches.length > 1) {
-                throw new AppActionsError(`Multiple fibers found for interaction: ${pattern} ${actionName}`);
+                throw new AppActionsError(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
             }
 
             const match = matches[0];
