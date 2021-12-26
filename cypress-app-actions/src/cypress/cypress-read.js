@@ -93,6 +93,7 @@ export const register = (name = 'read') => {
                 const list = listFiberForInteraction(fiber, pattern, actionName);
                 return list.map(fiber => ({
                     node,
+                    $el: Cypress.$(node),
                     fiber,
                     instance: fiber.stateNode || null,
                     driver: getDriver(fiber),
@@ -106,8 +107,17 @@ export const register = (name = 'read') => {
             if (matches.length > 1) {
                 throw new AppActionsError(`Multiple fibers found for interaction: ${pattern} ${actionName}`);
             }
+            
+            const match = {
+                ...matches[0],
+                actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
+                    result[name] = (...args) => {
+                        return fn.call(null, matches[0], ...args);
+                    };
+                    return result;
+                }, {}),
+            };
 
-            const match = matches[0];
             const fn = match.driver.actions[actionName];
             const componentName = getDisplayName(match.fiber);
 

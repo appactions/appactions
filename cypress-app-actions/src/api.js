@@ -157,7 +157,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
         if (!pattern === driver.pattern) {
             return false;
         }
-
+        
         if (driver.actions[actionName]) {
             return true;
         }

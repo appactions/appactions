@@ -199,7 +199,7 @@ class Table extends Component {
             direction,
         });
 
-        tunnel(tableDriver).emit('sort', label, direction)
+        tunnel(tableDriver).emit('sort', label, direction);
     };
     render() {
         const { header, data: rawData, className } = this.props;
@@ -314,7 +314,42 @@ const tableDriver = createDriver(Table, {
         sort({ instance }, label, order) {
             instance.reorder(label, order)(new Event('click'));
         },
-        getData: retryable(({ instance }) => instance.state.data),
+        // getData: retryable(({ instance }) => instance.state.data),
+
+        getColumnLabels: ({ $el }) => {
+            const columnsTitles = [];
+
+            $el.vDomFind('TableHeadRow TableHeadCell').forEach($tableHeadCell => {
+                columnsTitles.push($tableHeadCell.text().trim());
+            });
+
+            return columnsTitles;
+        },
+
+        getColumn: ({ $el, actions }, label) => {
+            const columnsTitles = actions.getColumnLabels();
+            const index = columnsTitles.indexOf(label);
+            const results = [];
+            let i;
+            $el.vDomFind('TableHeadRow, TableRow').forEach($tableRow => {
+                i = 0;
+                $tableRow.vDomFind('TableHeadCell, TableCell').forEach($cell => {
+                    if (i === index) {
+                        results.push($cell.text().trim());
+                    }
+                    i += 1;
+                });
+            });
+            return results;
+        },
+
+        getColumnOrThrow: ({ actions }, label) => {
+            const columns = actions.getColumn(label);
+            if (columns.length < 5) {
+                throw new Error();
+            }
+            return columns;
+        },
     },
 });
 
