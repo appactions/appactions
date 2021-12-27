@@ -4,7 +4,7 @@ import Logo from './logo';
 import useSession from 'utils/use-session';
 import { signIn, signOut } from 'next-auth/client';
 import useRole from 'utils/use-role';
-import { register } from 'cypress-app-actions/driver';
+import { createDriver } from 'cypress-app-actions/driver';
 
 export default function Header() {
     const session = useSession();
@@ -90,6 +90,6 @@ export default function Header() {
     );
 }
 
-register('button', {
-    role: 'Button',
+createDriver('button', {
+    pattern: 'Button',
 });
