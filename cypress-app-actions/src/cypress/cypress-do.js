@@ -30,7 +30,7 @@ const getElements = $el => {
     }
 };
 
-export const register = (name = 'do') => {
+export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
     Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
@@ -70,7 +70,7 @@ export const register = (name = 'do') => {
             ...getConsolePropsWithoutResult(),
             Function: fn.toString(),
             Component: componentName,
-            Yielded: getElements(value),
+            Yielded: returnValueIsSubject ? getElements(value) : value,
             Count: value.length,
         });
 
@@ -107,17 +107,17 @@ export const register = (name = 'do') => {
             if (matches.length > 1) {
                 throw new AppActionsError(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
             }
-// debugger;
+            
             const match = {
                 ...matches[0],
                 actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
                     result[name] = (...args) => {
-                        return fn.call(null, matches[0], ...args);
+                        return fn.call(null, match, ...args);
                     };
                     return result;
                 }, {}),
             };
-// debugger;
+            
             const fn = match.driver.actions[actionName];
             const componentName = getDisplayName(match.fiber);
 
@@ -143,7 +143,7 @@ export const register = (name = 'do') => {
                 });
             }
 
-            return $subject;
+            return returnValueIsSubject ? $subject : value;
         };
 
         // retryValue will automatically retry piped functions that temporarily return errors
