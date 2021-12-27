@@ -66,13 +66,21 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             return result;
         };
 
-        const getConsoleProps = (value, fn, componentName) => () => ({
-            ...getConsolePropsWithoutResult(),
-            Function: fn.toString(),
-            Component: componentName,
-            Yielded: returnValueIsSubject ? getElements(value) : value,
-            Count: value.length,
-        });
+        const getConsoleProps = (yielded, fn, componentName) => () => {
+            const result = {
+                ...getConsolePropsWithoutResult(),
+                Function: fn.toString(),
+                Component: componentName,
+                Yielded: yielded,
+                Count: value.length,
+            };
+
+            if (returnValueIsSubject) {
+                result['Count'] = yielded.length;
+            }
+
+            return result;
+        };
 
         // purityHelperCommands.onNewCommand(fn);
 
@@ -107,7 +115,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             if (matches.length > 1) {
                 throw new AppActionsError(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
             }
-            
+
             const match = {
                 ...matches[0],
                 actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
@@ -117,7 +125,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                     return result;
                 }, {}),
             };
-            
+
             const fn = match.driver.actions[actionName];
             const componentName = getDisplayName(match.fiber);
 
@@ -139,7 +147,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             if (options._log) {
                 options._log.set({
-                    consoleProps: getConsoleProps(value, fn, componentName),
+                    consoleProps: getConsoleProps(returnValueIsSubject ? $subject : value, fn, componentName),
                 });
             }
 
