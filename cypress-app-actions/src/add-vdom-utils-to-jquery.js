@@ -1,9 +1,9 @@
-import { vDomFind, vDomFindByPredicate, vDomCallDriver, vDomClosest } from './vdom-utils';
+import { vDomFind, vDomFindByPredicate, vDomClosest } from './vdom-utils';
 
 export function addVDOMUtilsToJQuery($) {
     $.fn.extend({
-        vDomCallDriver(method, ...args) {
-            return vDomCallDriver(this, method, ...args);
+        vDomCallDriver() {
+            throw new Error('vDomCallDriver is not supported anymore');
         },
         vDomFind(selector) {
             const matches = vDomFind(this, selector);

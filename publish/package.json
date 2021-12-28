@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/appactions/appactions.git"
   },
+  "homepage": "https://appactions.com",
   "author": "Miklos Megyes <hello@miklos.dev>",
   "license": "UNLICENSED"
 }

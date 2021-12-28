@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { register } from 'cypress-app-actions/driver';
+import { createDriver, tunnel } from 'cypress-app-actions/driver';
 import './style.css';
 
 class PageIndex extends Component {
@@ -198,6 +198,8 @@ class Table extends Component {
             orderOn: label,
             direction,
         });
+
+        tunnel(tableDriver).emit('sort', label, direction);
     };
     render() {
         const { header, data: rawData, className } = this.props;
@@ -306,19 +308,136 @@ class App extends Component {
 
 export default App;
 
-register(Table, {
-    role: 'Table',
-    drivers: {
-        sort: (label, order) => (_, self) => {
-            self.reorder(label, order)(new Event('click'));
+const tableDriver = createDriver(Table, {
+    pattern: 'Table',
+    getName: ({ $el }) => {
+        const columns = [];
+        $el.vDomFind('TableHeadCell').forEach($el => {
+            columns.push($el.text().trim());
+        });
+        return columns.join(', ');
+    },
+    isLoading: ({ $el }) => {
+        return $el.hasClass('spinner');
+    },
+    actions: {
+        sort({ instance }, label, order) {
+            instance.reorder(label, order)(new Event('click'));
+        },
+
+        getColumnLabels: ({ $el }) => {
+            const columnsTitles = [];
+
+            $el.vDomFind('TableHeadRow TableHeadCell').forEach($tableHeadCell => {
+                columnsTitles.push($tableHeadCell.text().trim());
+            });
+
+            return columnsTitles;
+        },
+
+        getColumn: ({ $el, actions }, label) => {
+            const columnsTitles = actions.getColumnLabels();
+            const index = columnsTitles.indexOf(label);
+            const results = [];
+            let i;
+            $el.vDomFind('TableHeadRow, TableRow').forEach($tableRow => {
+                i = 0;
+                $tableRow.vDomFind('TableHeadCell, TableCell').forEach($cell => {
+                    if (i === index) {
+                        results.push($cell.text().trim());
+                    }
+                    i += 1;
+                });
+            });
+            return results;
+        },
+
+        getColumnOrThrow: ({ actions, retryable }, label) => {
+            return retryable(() => {
+                const columns = actions.getColumn(label);
+                if (columns.length < 5) {
+                    throw new Error();
+                }
+                return columns;
+            })();
+        },
+
+        sortWithDependencyChecks: ({ $el, retryable, nonRetryable, actions }, columnLabel, order) => {
+            const checkDependency = retryable($el => {
+                if ($el.find(`th:contains(${columnLabel})`).length === 0) {
+                    throw new Error('Element is not ready for interaction');
+                }
+                return $el;
+            });
+            checkDependency($el);
+            actions.sort(columnLabel, order);
+        },
+
+        advancedPurityComposition: ({ $el, retryable, nonRetryable }) => {
+            const first = nonRetryable($el => {
+                setTimeout(() => {
+                    $el.append(Cypress.$('<h1 class="side-effect">1. side-effect</h1>'));
+                }, 500);
+            });
+
+            const second = retryable(() => {
+                if (Cypress.$('h1.side-effect').length !== 1) {
+                    throw new Error();
+                }
+            });
+
+            const third = nonRetryable($el => {
+                setTimeout(() => {
+                    $el.append(Cypress.$('<h2 class="side-effect">2. side-effect</h2>'));
+                }, 500);
+            });
+
+            const fourth = retryable(() => {
+                if (Cypress.$('h1.side-effect').length !== 1) {
+                    throw new Error();
+                }
+                if (Cypress.$('h2.side-effect').length !== 1) {
+                    throw new Error();
+                }
+            });
+
+            first($el);
+            second($el);
+            third($el);
+            fourth($el);
+        },
+
+        getDataByColumn: ({ actions }) => {
+            const results = {};
+            const columnsTitles = actions.getColumnLabels();
+            columnsTitles.forEach(title => {
+                results[title] = actions.getColumn(title).slice(1);
+            });
+            return results;
         },
     },
 });
 
-register(TableRow, {
-    role: 'TableRowTestable',
+createDriver(TableRow, {
+    pattern: 'TableRowPattern',
 });
 
-register('h2', {
-    role: 'Header',
+createDriver(TableHeadRow, {
+    pattern: 'HeadRow',
+    actions: {
+        getColumnLabels: ({ $el }) => {
+            const columnsTitles = [];
+
+            $el.vDomFind('TableHeadCell').forEach($tableHeadCell => {
+                columnsTitles.push($tableHeadCell.text().trim());
+            });
+
+            return columnsTitles;
+        },
+    },
+});
+
+createDriver('h2', {
+    pattern: 'Header',
+    getName: ({ $el }) => $el.text().trim(),
 });

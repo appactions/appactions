@@ -1,40 +1,57 @@
-import { findElementByRole, isJquery } from '../api';
-import { AppActionsError, refreshSubject, formatArguments, isDOMNode } from './cypress-utils';
-import getUniqueSelector from '@cypress/unique-selector';
+import { listFiberByRole, isJquery } from '../api';
+import { AppActionsError, isDOMNode } from './cypress-utils';
+import { setUniqueSelector, refresh } from './refresh-subject';
+import { getFiberInfo } from '../api';
 
-export const register = (name, { defaultIsLoading = () => false } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, testable, ...pickerData) => {
-        if (!testable.isTestable) {
-            throw new AppActionsError(`value passed to cy.${name} is not a testable`);
-        }
-
-        if (!testable.role) {
-            throw new AppActionsError(`cyname don't know the selected role`);
-        }
-
-        if (pickerData.length && !testable.customPicker) {
-            throw new AppActionsError(`testable "${testable.role}" does not have selector support when cy.${name}`);
-        }
-
+export const register = (name = 'with', config = {}) => {
+    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, picker) => {
         const start = performance.now();
 
         const options = {
             log: true,
-            timeoutOnLoading: testable.timeoutOnLoading || 6e4, // TODO hardcoded value
+            timeoutOnLoading: config.timeoutOnLoading || 6e4, // default to 60 seconds
         };
 
-        let filterFn = () => true;
-        let selector = testable.role;
+        let selector = role;
 
-        if (typeof pickerData[0] === 'function') {
-            filterFn = pickerData[0];
-            selector = `${testable.role} (with a function)`;
-        } else if (testable.customPicker) {
-            filterFn = testable.customPicker(...pickerData);
-            const extraInfo = formatArguments(pickerData);
-            if (extraInfo) {
-                selector = `${testable.role} (${extraInfo})`;
+        if (typeof picker === 'function') {
+            selector = `${role} (with a function)`;
+        } else if (picker instanceof RegExp) {
+            selector = `${role} (name: /${picker.source}/)`;
+        } else if (typeof picker === 'string') {
+            selector = `${role} (name: "${picker}")`;
+        }
+
+        function filter(candidate, index, arr) {
+            if (picker === undefined) {
+                return true;
             }
+
+            if (!candidate.driver.getName) {
+                throw new AppActionsError(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
+            }
+
+            const name = candidate.driver.getName(candidate);
+
+            if (typeof picker === 'function') {
+                // selector = `${role} (with a function)`;
+                return picker(name, index, arr);
+            } else if (picker instanceof RegExp) {
+                // selector = `${role} (with a RegExp)`;
+                return picker.test(name);
+            } else if (typeof picker === 'string') {
+                return name === picker;
+            } else {
+                throw new AppActionsError(`Invalid picker: should be string, RegExp or function`);
+            }
+        }
+
+        function isLoading(candidate) {
+            if (!candidate.driver.isLoading) {
+                return false;
+            }
+
+            return candidate.driver.isLoading(candidate);
         }
 
         const getConsolePropsWithoutResult = () => ({
@@ -51,8 +68,6 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             'Candidates (loading)': candidatesLoading,
             'Candidates (filter)': candidatesFilter,
         });
-
-        const isTestableLoading = testable.isLoading || defaultIsLoading;
 
         if (options.log) {
             options._log = Cypress.log({
@@ -74,7 +89,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             if (!subject) {
                 head = Cypress.AppActions.hook.getAllFiberRoots();
             } else if (isJquery(subject)) {
-                head = Array.from(refreshSubject(subject));
+                head = Array.from(refresh(subject));
             } else if (!Array.isArray(subject)) {
                 head = [subject];
             } else {
@@ -86,7 +101,8 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
             const candidates = head.flatMap(node => {
                 try {
                     const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                    return findElementByRole(fiber, testable.role);
+                    const matches = listFiberByRole(fiber, role);
+                    return matches.map(fiber => getFiberInfo(fiber));
                 } catch (e) {
                     maybeCandidateError = e;
                     return [];
@@ -97,12 +113,12 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 throw maybeCandidateError;
             }
 
-            const evaluatedCandidates = candidates.map((node, index, array) => {
-                const el = isDOMNode(node) ? Cypress.$(node) : node;
+            const evaluatedCandidates = candidates.map((candidate, index, array) => {
+                const els = isDOMNode(candidate.nodes[0]) ? Cypress.$(candidate.nodes) : candidate.nodes;
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
-                    loadingResult = Boolean(isTestableLoading(el));
+                    loadingResult = Boolean(isLoading(candidate));
                 } catch (error) {
                     loadingResult = error;
                 }
@@ -110,14 +126,14 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 let filterResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "picked" if it has an explicit true
-                    filterResult = Boolean(filterFn(el, index, array));
+                    filterResult = Boolean(filter(candidate, index, array));
                 } catch (error) {
                     filterResult = error;
                 }
                 return {
                     // TODO not sure what would be the best to return here, host node, fiber, or jquery?
                     // following logic will expect what comes from findElementByRole
-                    el: node,
+                    els: candidate.nodes,
                     loadingResult,
                     filterResult,
                 };
@@ -143,7 +159,7 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                     .filter(({ filterResult }) => {
                         return filterResult === true;
                     })
-                    .map(({ el }) => el);
+                    .flatMap(({ els }) => els);
             }
 
             if (result.length === 0) {
@@ -151,22 +167,19 @@ export const register = (name, { defaultIsLoading = () => false } = {}) => {
                 // if we couldn't come up with any items to select, throw an error from filtering, that will help the user to understand what's wrong
                 if (maybeFilterIssue) throw maybeFilterIssue.filterResult;
             }
-            
+
             if (result.every(isDOMNode)) {
-                result.forEach(el => {
-                    const uniqueSelector = getUniqueSelector(el);
-                    el.dataset.uniqueSelector = uniqueSelector;
-                });
+                setUniqueSelector(result);
 
                 const $result = Cypress.$(result);
                 $result.selector = selector;
 
                 if (options._log) {
                     const candidatesLoading = new Map(
-                        evaluatedCandidates.map(({ el, loadingResult }) => [el, loadingResult]),
+                        evaluatedCandidates.map(({ els, loadingResult }) => [els, loadingResult]),
                     );
                     const candidatesFilter = new Map(
-                        evaluatedCandidates.map(({ el, filterResult }) => [el, filterResult]),
+                        evaluatedCandidates.map(({ els, filterResult }) => [els, filterResult]),
                     );
                     options._log.set({
                         $el: $result,

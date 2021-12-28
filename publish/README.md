@@ -46,43 +46,22 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 4. Add the drivers:
 
 ```
-import { register } from '@appactions/cypress/driver';
+import { createDriver } from '@appactions/cypress/driver';
 
-register(TextInput, {
-  role: 'Input',
+createDriver(TextInput, {
+  pattern: 'Input',
 });
 ```
 
 In computing, a driver is a program that helps to connect a component to the primary system. In App Actions, a driver connects a React component to the test runner, enabling the App Actions ✨magic✨.
 
-5. Create a testable in the support folder.
-
-Testables represent UX patterns. A pattern can have one or many implementations. For example, if an app has `<Table />` and `<AdvancedTable />`, perhaps both components implement the same `Table` pattern.
-
-How to decide if a set of components should have a single or multiple testables linked to them? A good rule of thumb is to ask, "does the user think these elements have different goals or kinda do the same?".
-
-**Note:** this concept is about to be gone. In the future, drivers will be the only App Actions API.
-
-Example:
-
-```
-import { createTestable } from '@appactions/cypress';
-
-// name it anything that describes the given UX pattern
-export const App = createTestable({
-  role: 'App', // mandatory field
-});
-```
-
 Ready to write tests. You can check your integration with the following Hello World test:
 
 ```
-import { App } from ‘../support/testables’;
-
-describe(‘Foo’, () => {
-  it(‘Bar’, () => {
-    cy.visit(‘/‘);
-    cy.with(App).should(‘exist’);
+describe('Hello', () => {
+  it('World', () => {
+    cy.visit('/');
+    cy.with('App').should('exist');
   });
 });
 ```
@@ -109,35 +88,22 @@ This is why the App Actions drivers can communicate hints, like loading state, w
 
 ## Creating drivers
 
-The `register` function’s config has 3 fields: `role`, `selectors`, and `interactions`.
+Drivers are defined by the `createDriver` function. It expects a React component (function or string), and a config object, that has 4 keys:
 
-`role` is the only mandatory field, defining what role does this component responsible for. 
-
-`selectors` is an object that represents a key/function map of methods. These methods are pure functions, and their goal is to return values from a given component instance. For example, a `Table` pattern can have a selector called `getRowData` that returns data from a given row. These functions must be pure because the test runner will retry them on failure.
-
-`interations` is the same as the `selectors` object, but these methods simulate user interactions on a given component instance. Because an interaction is a function with a side effect most of the time, these functions are not retried, but it's possible to mark certain parts as "pure", so certain subtasks can be prone to failure.
-
-## Creating testables
-
-The `createTestable` functions’s config has 5 (double check) fields:
-
-- `role` (mandatory)
-- `isLoading`
+- `pattern` (mandatory)
 - `getName`
-- `interactions`
-- `selectors`
+- `isLoading`
+- `actions`
 
-`role` is the same as in the driver, a string that defines what pattern does this testable implements.
-
-`isLoading` is a function that gets the components instance as an argument. It returns a boolean value, defining whether is that instance is in a loading state or not. When an instance is selected for interaction or assertion, but it's in a loading state, the test runner can handle this case gracefully and give extra time for that component to catch up. This is an effective way to handle occasional hiccups in the backend: sometimes a 3rd party service can be slower than usual, but instead of setting the default timeout value to a greater number (making the overall performance slower), we can help the test runner to recognize this unusual case, and allow it to wait.
+`pattern` is the only mandatory field, defining what UX pattern this driver is responsible for.
 
 `getName` is a function that returns a string that is a "good name" for a given component. For example, if it's a button, this string can be the label. Instead of referencing an element by a technical attribute, like its CSS selector or test-id, names let us use something meaningful for users. This decreases the maintenance cost because only UX changes will require updates in the test code.
 
-`interactions` 
+`isLoading` is a function that gets the components instance as an argument. It returns a boolean value, defining whether is that instance is in a loading state or not. When an instance is selected for interaction or assertion, but it's in a loading state, the test runner can handle this case gracefully and give extra time for that component to catch up. This is an effective way to handle occasional hiccups in the backend: sometimes a 3rd party service can be slower than usual, but instead of setting the default timeout value to a greater number (making the overall performance slower), we can help the test runner to recognize this unusual case, and allow it to wait.
 
-TODO
+`actions` TODO
 
-`selectors`
+### Creating actions
 
 TODO
 
@@ -146,7 +112,7 @@ TODO
 ### jQuery Helpers
 
 ```
-$(el).vDomFind(‘.foo Pattern1 Pattern2’);
+$(el).vDomFind('.foo Pattern1 Pattern2');
 ```
 Returns the DOM node rendered by Pattern2.
 
@@ -159,8 +125,10 @@ Subject refresh is a Cypress-specific feature. Cypress has a long-standing bug, 
 You have to manually enable it on each built-in Cypress command, like this:
 
 ```
+import { refresh } from '@appactions/cypress';
+
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {
-  return click(refreshSubject(subject), ...args);
+  return click(refresh(subject), ...args);
 });
 ```
 

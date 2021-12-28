@@ -1,19 +1,19 @@
-module.exports.register = (Component, config) => {
+module.exports.createDriver = (Component, config) => {
     // Do no run in a server side env
     if (typeof window === 'undefined') {
         return;
     }
 
-    if (!config || !config.role) {
-        throw new Error('Role must be specified');
+    if (!config || !config.pattern) {
+        throw new Error('Pattern must be specified');
     }
 
     if (!window.__REACT_APP_ACTIONS__) {
-        window.__REACT_APP_ACTIONS__ = { drivers: {}, roles: new Set() };
+        window.__REACT_APP_ACTIONS__ = { drivers: {}, patterns: new Set() };
     }
 
-    if (config.role) {
-        window.__REACT_APP_ACTIONS__.roles.add(config.role);
+    if (config.pattern) {
+        window.__REACT_APP_ACTIONS__.patterns.add(config.pattern);
     }
 
     if (typeof Component === 'string') {
@@ -27,4 +27,18 @@ module.exports.register = (Component, config) => {
             },
         });
     }
+
+    return {
+        Component,
+        config,
+    };
+};
+
+module.exports.tunnel = driver => {
+    return {
+        emit: (event, ...args) => {
+            console.log('tunnel emit:', event, ...args);
+            // throw new Error('Not implemented');
+        },
+    };
 };

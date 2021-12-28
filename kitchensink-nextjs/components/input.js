@@ -1,5 +1,5 @@
 import React from 'react';
-import { register } from 'cypress-app-actions/driver';
+import { createDriver } from 'cypress-app-actions/driver';
 
 const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, error }, ref) => {
     return (
@@ -46,14 +46,14 @@ const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, 
 
 export default Input;
 
-register(Input, {
-    role: 'Input',
-    drivers: {
-        fill: text => ($el, self) => {
-            self.ref.value = text;
+createDriver(Input, {
+    pattern: 'Input',
+    actions: {
+        fill: ({ instance }, text) => {
+            instance.ref.value = text;
         },
-        // isDisabled: () => ($el, self) => {
-        //     return self.props.disabled;
+        // isDisabled: ({ instance }) => {
+        //     return instance.props.disabled;
         // },
     },
 });

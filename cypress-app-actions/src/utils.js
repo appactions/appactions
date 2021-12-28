@@ -10,7 +10,7 @@ export function expectToFailWithMessage(expectedMessage) {
 
     // `expectedFailReason` should be at the end of the test logic
     cy.then(() => {
-        throw new Error('logic in this test should have failed at this point, but it did not');
+        throw new Error('This test expected to be failed at this point, but it didn\'t');
     });
 }
 

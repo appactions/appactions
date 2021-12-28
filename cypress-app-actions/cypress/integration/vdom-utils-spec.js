@@ -1,5 +1,5 @@
 import { expectToFailWithMessage } from '../../src/utils';
-import { vDomFind, vDomClosest, vDomCallDriver } from '../../src/vdom-utils';
+import { vDomFind, vDomClosest } from '../../src/vdom-utils';
 
 describe('VDOM utils', () => {
     describe('As jQuery functions', () => {
@@ -42,10 +42,10 @@ describe('VDOM utils', () => {
                 expect($headCells).to.have.lengthOf(9);
             });
         });
-        it('vDomFind -- should support testables as selectors', () => {
+        it('vDomFind -- should support patterns as selectors', () => {
             cy.visit('/instant');
             cy.then(() => {
-                const $headCells = Cypress.$('.app').vDomFind('Table TableRowTestable');
+                const $headCells = Cypress.$('.app').vDomFind('Table TableRowPattern');
                 expect($headCells).to.have.lengthOf(4);
             });
         });
@@ -80,21 +80,12 @@ describe('VDOM utils', () => {
 
             expectToFailWithMessage('`vDomClosest` does not support the space operator');
         });
-        it('vDomClosest -- should support testables as selector', () => {
+        it('vDomClosest -- should support patterns as selector', () => {
             cy.visit('/instant');
             cy.then(() => {
-                const $table = Cypress.$('td:contains("orange")').vDomClosest('TableRowTestable');
+                const $table = Cypress.$('td:contains("orange")').vDomClosest('TableRowPattern');
                 expect($table[0]).to.have.class('table-row');
             });
-        });
-        it('vDomCallDriver -- should be able to call drivers', () => {
-            cy.visit('/instant');
-            cy.then(() => {
-                Cypress.$('.app')
-                    .vDomFind('Table')
-                    .vDomCallDriver('sort', 'Name', 'asc');
-            });
-            cy.get('th').contains('Name ↑');
         });
         it('forEach -- polyfill for better iterator on jQuery selections', () => {
             cy.visit('/instant');
@@ -132,13 +123,6 @@ describe('VDOM utils', () => {
                 const table = vDomClosest(Cypress.$('td:contains("orange")'), 'Table');
                 expect(table[0]).to.have.class('table');
             });
-        });
-        it('vDomCallDriver -- should work', () => {
-            cy.visit('/instant');
-            cy.then(() => {
-                vDomCallDriver(Cypress.$('.app').vDomFind('Table'), 'sort', 'Name', 'asc');
-            });
-            cy.get('th').contains('Name ↑');
         });
     });
 });

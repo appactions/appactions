@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Environment, MeshDistortMaterial, ContactShadows } from '@react-three/drei';
 import { useSpring } from '@react-spring/core';
 import { a } from '@react-spring/three';
-import { register } from 'cypress-app-actions/driver';
+import { createDriver } from 'cypress-app-actions/driver';
 
 // React-spring animates native elements, in this case <mesh/> etc,
 // but it can also handle 3rd–party objs, just wrap them in "a".
@@ -40,14 +40,33 @@ export default function Cell({ currentState, send, index, position, shadow }) {
                     send({ type: 'PLAY', value: index });
                 }}
             >
-                <sphereBufferGeometry args={[0.4, 32, 32]} />
-                <AnimatedMaterial
-                    color={color}
-                    envMapIntensity={env}
-                    clearcoat={coat}
-                    clearcoatRoughness={0}
-                    metalness={0.1}
-                />
+                {player ? (
+                    <>
+                        {player === 'x' ? (
+                            <torusKnotBufferGeometry args={[0.2, 0.1, 64, 8, 2, 3]} />
+                        ) : (
+                            <torusBufferGeometry args={[0.28, 0.13, 11, 32]} />
+                        )}
+                        <meshPhysicalMaterial
+                            color={player === 'x' ? 'red' : 'blue'}
+                            envMapIntensity={0.5}
+                            clearcoat={0.6}
+                            clearcoatRoughness={0}
+                            metalness={0.1}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <sphereBufferGeometry args={[0.4, 32, 32]} />
+                        <AnimatedMaterial
+                            color={color}
+                            envMapIntensity={env}
+                            clearcoat={coat}
+                            clearcoatRoughness={0}
+                            metalness={0.1}
+                        />
+                    </>
+                )}
             </a.mesh>
             <Environment files="empty_warehouse_01_1k.hdr" />
             {shadow ? (
@@ -65,6 +84,6 @@ export default function Cell({ currentState, send, index, position, shadow }) {
     );
 }
 
-register(Cell, {
-    role: 'CellRole',
+createDriver(Cell, {
+    pattern: 'Cell',
 });

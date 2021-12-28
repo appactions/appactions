@@ -1,4 +1,4 @@
-import { register } from 'cypress-app-actions/driver';
+import { createDriver } from 'cypress-app-actions/driver';
 
 export default function Logo() {
     return (
@@ -10,6 +10,6 @@ export default function Logo() {
     );
 }
 
-register(Logo, {
-    role: 'Logo',
+createDriver(Logo, {
+    pattern: 'Logo',
 });
