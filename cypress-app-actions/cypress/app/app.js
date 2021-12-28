@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { createDriver, retryable, tunnel } from 'cypress-app-actions/driver';
+import { createDriver, tunnel } from 'cypress-app-actions/driver';
 import './style.css';
 
 class PageIndex extends Component {
@@ -314,7 +314,6 @@ const tableDriver = createDriver(Table, {
         sort({ instance }, label, order) {
             instance.reorder(label, order)(new Event('click'));
         },
-        // getData: retryable(({ instance }) => instance.state.data),
 
         getColumnLabels: ({ $el }) => {
             const columnsTitles = [];
@@ -343,12 +342,64 @@ const tableDriver = createDriver(Table, {
             return results;
         },
 
-        getColumnOrThrow: ({ actions }, label) => {
-            const columns = actions.getColumn(label);
-            if (columns.length < 5) {
-                throw new Error();
-            }
-            return columns;
+        getColumnOrThrow: ({ actions, retryable }, label) => {
+            return retryable(() => {
+                const columns = actions.getColumn(label);
+                if (columns.length < 5) {
+                    throw new Error();
+                }
+                return columns;
+            })();
+        },
+
+        sortWithDependencyChecks: ({ $el, retryable, nonRetryable, actions }, columnLabel, order) => {
+            const checkDependency = retryable($el => {
+                if ($el.find(`th:contains(${columnLabel})`).length === 0) {
+                    throw new Error('Element is not ready for interaction');
+                }
+                return $el;
+            });
+
+            const doSort = nonRetryable($el => {
+                $el.vDomCallDriver('sort', columnLabel, order);
+            });
+
+            checkDependency($el);
+            actions.sort(columnLabel, order);
+        },
+
+        advancedPurityComposition: ({ $el, retryable, nonRetryable }) => {
+            const first = nonRetryable($el => {
+                setTimeout(() => {
+                    $el.append(Cypress.$('<h1 class="side-effect">1. side-effect</h1>'));
+                }, 500);
+            });
+
+            const second = retryable(() => {
+                if (Cypress.$('h1.side-effect').length !== 1) {
+                    throw new Error();
+                }
+            });
+
+            const third = nonRetryable($el => {
+                setTimeout(() => {
+                    $el.append(Cypress.$('<h2 class="side-effect">2. side-effect</h2>'));
+                }, 500);
+            });
+
+            const fourth = retryable(() => {
+                if (Cypress.$('h1.side-effect').length !== 1) {
+                    throw new Error();
+                }
+                if (Cypress.$('h2.side-effect').length !== 1) {
+                    throw new Error();
+                }
+            });
+
+            first($el);
+            second($el);
+            third($el);
+            fourth($el);
         },
     },
 });

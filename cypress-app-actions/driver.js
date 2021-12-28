@@ -34,10 +34,6 @@ module.exports.createDriver = (Component, config) => {
     };
 };
 
-module.exports.retryable = fn => () => {
-    throw new Error('Not implemented');
-};
-
 module.exports.tunnel = driver => {
     return {
         emit: (event, ...args) => {

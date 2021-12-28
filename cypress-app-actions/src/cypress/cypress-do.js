@@ -30,8 +30,69 @@ const getElements = $el => {
     }
 };
 
+function createRetryContext() {
+    const purityValues = [];
+    let currentIndex = 0;
+
+    return {
+        retryable: fn => (...args) => {
+            if (currentIndex < purityValues.length) {
+                return purityValues[currentIndex++];
+            }
+
+            let result;
+            try {
+                result = fn(...args);
+            } catch (error) {
+                if (!error.hasOwnProperty('__retryable')) {
+                    Object.defineProperty(error, '__retryable', {
+                        enumerable: false,
+                        get() {
+                            return true;
+                        },
+                    });
+                }
+
+                throw error;
+            }
+
+            purityValues.push(result);
+            currentIndex++;
+            return result;
+        },
+        nonRetryable: fn => (...args) => {
+            if (currentIndex < purityValues.length) {
+                return purityValues[currentIndex++];
+            }
+
+            let result;
+            try {
+                result = fn(...args);
+            } catch (error) {
+                if (!error.hasOwnProperty('__retryable')) {
+                    Object.defineProperty(error, '__retryable', {
+                        enumerable: false,
+                        get() {
+                            return false;
+                        },
+                    });
+                }
+
+                throw error;
+            }
+
+            purityValues.push(result);
+            currentIndex++;
+            return result;
+        },
+        onRetry: () => {
+            currentIndex = 0;
+        },
+    };
+}
+
 export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args) => {
+    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args = []) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
         // }
@@ -66,13 +127,12 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             return result;
         };
 
-        const getConsoleProps = (yielded, fn, componentName) => () => {
+        const getConsoleProps = ({ yielded, fn, componentName }) => () => {
             const result = {
                 ...getConsolePropsWithoutResult(),
                 Function: fn.toString(),
                 Component: componentName,
                 Yielded: yielded,
-                Count: value.length,
             };
 
             if (returnValueIsSubject) {
@@ -84,6 +144,8 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
         // purityHelperCommands.onNewCommand(fn);
 
+        const retryContext = createRetryContext();
+
         const getValue = () => {
             if (options._log) {
                 options._log.set({
@@ -93,6 +155,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             }
 
             // purityHelperCommands.onRetry(fn);
+            retryContext.onRetry();
 
             $subject = refresh($subject);
 
@@ -124,6 +187,8 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                     };
                     return result;
                 }, {}),
+                retryable: retryContext.retryable,
+                nonRetryable: retryContext.nonRetryable,
             };
 
             const fn = match.driver.actions[actionName];
@@ -146,8 +211,9 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             // }
 
             if (options._log) {
+                const yielded = returnValueIsSubject ? getElements($subject) : value;
                 options._log.set({
-                    consoleProps: getConsoleProps(returnValueIsSubject ? $subject : value, fn, componentName),
+                    consoleProps: getConsoleProps({ yielded, fn, componentName }),
                 });
             }
 
@@ -156,17 +222,17 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
         // retryValue will automatically retry piped functions that temporarily return errors
         const retryValue = () => {
-            return Cypress.Promise.try(getValue).catch(err => {
-                if (err instanceof AppActionsError) {
-                    throw err;
+            return Cypress.Promise.try(getValue).catch(error => {
+                if (error instanceof AppActionsError) {
+                    throw error;
                 }
 
-                options.error = err;
+                options.error = error;
 
-                // const canRetry = !fn.isImpure || err.didNotPerformSideEffects;
-                // if (!canRetry) {
-                throw err;
-                // }
+                const canRetry = Boolean(error.__retryable);
+                if (!canRetry) {
+                    throw error;
+                }
 
                 return cy.retry(retryValue, options);
             });

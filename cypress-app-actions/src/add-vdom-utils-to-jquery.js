@@ -3,7 +3,8 @@ import { vDomFind, vDomFindByPredicate, vDomCallDriver, vDomClosest } from './vd
 export function addVDOMUtilsToJQuery($) {
     $.fn.extend({
         vDomCallDriver(method, ...args) {
-            return vDomCallDriver(this, method, ...args);
+            throw new Error('vDomCallDriver is deprecated.');
+            // return vDomCallDriver(this, method, ...args);
         },
         vDomFind(selector) {
             const matches = vDomFind(this, selector);
