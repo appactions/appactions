@@ -1,5 +1,4 @@
 import {
-    callInteraction,
     findElementByPredicate,
     findElementByRole,
     findElementByReactComponentName,
@@ -7,10 +6,6 @@ import {
     findAncestorElementByReactComponentName,
     isRole,
 } from './api';
-
-export const vDomCallDriver = ($el, methodName, ...args) => {
-    return callInteraction($el, methodName, ...args);
-};
 
 export const vDomFind = ($el, selector) => {
     return (

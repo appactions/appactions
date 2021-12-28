@@ -1,5 +1,5 @@
 import { expectToFailWithMessage } from '../../src/utils';
-import { vDomFind, vDomClosest, vDomCallDriver } from '../../src/vdom-utils';
+import { vDomFind, vDomClosest } from '../../src/vdom-utils';
 
 describe('VDOM utils', () => {
     describe('As jQuery functions', () => {
@@ -87,15 +87,6 @@ describe('VDOM utils', () => {
                 expect($table[0]).to.have.class('table-row');
             });
         });
-        it.skip('vDomCallDriver -- should be able to call drivers', () => {
-            cy.visit('/instant');
-            cy.then(() => {
-                Cypress.$('.app')
-                    .vDomFind('Table')
-                    .vDomCallDriver('sort', 'Name', 'asc');
-            });
-            cy.get('th').contains('Name ↑');
-        });
         it('forEach -- polyfill for better iterator on jQuery selections', () => {
             cy.visit('/instant');
             cy.then(() => {
@@ -132,13 +123,6 @@ describe('VDOM utils', () => {
                 const table = vDomClosest(Cypress.$('td:contains("orange")'), 'Table');
                 expect(table[0]).to.have.class('table');
             });
-        });
-        it.skip('vDomCallDriver -- should work', () => {
-            cy.visit('/instant');
-            cy.then(() => {
-                vDomCallDriver(Cypress.$('.app').vDomFind('Table'), 'sort', 'Name', 'asc');
-            });
-            cy.get('th').contains('Name ↑');
         });
     });
 });

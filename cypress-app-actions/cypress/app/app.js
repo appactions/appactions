@@ -369,11 +369,6 @@ const tableDriver = createDriver(Table, {
                 }
                 return $el;
             });
-
-            const doSort = nonRetryable($el => {
-                $el.vDomCallDriver('sort', columnLabel, order);
-            });
-
             checkDependency($el);
             actions.sort(columnLabel, order);
         },
