@@ -173,7 +173,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
             return false;
         }
 
-        if (driver.actions[actionName]) {
+        if (driver.actions?.[actionName]) {
             return true;
         }
 

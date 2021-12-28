@@ -92,13 +92,22 @@ function createRetryContext() {
 }
 
 export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args = []) => {
+    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args, picker) => {
         // if (!fn.isTestableFunction) {
         //     throw new Error(`Value passed to cy.${name} is not a testable function`);
         // }
 
         if (!isJquery($subject)) {
-            throw new Error(`Subject passed to cy.${name} is not a jQuery selector`);
+            throw new AppActionsError(`Subject passed to cy.${name} is not a jQuery selector`);
+        }
+
+        // handle null
+        if (!args) {
+            args = [];
+        }
+
+        if (!Array.isArray(args)) {
+            throw new AppActionsError(`Arguments parameter passed to cy.${name} must be an array`);
         }
 
         const now = performance.now();
@@ -166,11 +175,11 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             });
 
             if (matches.length === 0) {
-                throw new AppActionsError(`No fiber found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`No fiber found for interaction: ${pattern}.${actionName}`);
             }
 
             if (matches.length > 1) {
-                throw new AppActionsError(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
             }
 
             const match = {
@@ -192,13 +201,15 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             // let value = fn($subject);
 
-            // if (typeof picker === 'function') {
-            //     value = picker(value);
-            // } else if (typeof picker === 'string') {
-            //     value = picker.split('.').reduce((value, key) => value[key], value);
-            // } else if (picker) {
-            //     throw new Error(`Picker type passed for \`cy.${name}\` is not supported`);
-            // }
+            if (picker) {
+                if (typeof picker === 'function') {
+                    value = picker(value);
+                } else if (typeof picker === 'string') {
+                    value = picker.split('.').reduce((value, key) => value[key], value);
+                } else {
+                    throw new AppActionsError(`Picker type passed for \`cy.${name}\` is not supported`);
+                }
+            }
 
             // if (cy.isCy(value)) {
             //     throw new AppActionsError(`Functions passed to \`cy.${name}(fn)\` must not contain Cypress commands`);

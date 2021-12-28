@@ -315,7 +315,7 @@ const tableDriver = createDriver(Table, {
         $el.vDomFind('TableHeadCell').forEach($el => {
             columns.push($el.text().trim());
         });
-        return columns.join(', ')
+        return columns.join(', ');
     },
     actions: {
         sort({ instance }, label, order) {
@@ -408,6 +408,15 @@ const tableDriver = createDriver(Table, {
             third($el);
             fourth($el);
         },
+
+        getDataByColumn: ({ actions }) => {
+            const results = {};
+            const columnsTitles = actions.getColumnLabels();
+            columnsTitles.forEach(title => {
+                results[title] = actions.getColumn(title).slice(1);
+            });
+            return results;
+        },
     },
 });
 
@@ -417,4 +426,5 @@ createDriver(TableRow, {
 
 createDriver('h2', {
     pattern: 'Header',
+    getName: ({ $el }) => $el.text().trim(),
 });

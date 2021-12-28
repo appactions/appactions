@@ -34,10 +34,16 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             selector = `${role} (name: "${picker}")`;
         }
 
-        function filter(name, index, arr) {
+        function filter(candidate, index, arr) {
             if (picker === undefined) {
                 return true;
             }
+
+            if (!candidate.driver.getName) {
+                throw new Error(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
+            }
+
+            const name = candidate.driver.getName(candidate);
 
             if (typeof picker === 'function') {
                 // selector = `${role} (with a function)`;
@@ -124,12 +130,10 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                     loadingResult = error;
                 }
 
-                const name = candidate.driver.getName(candidate);
-
                 let filterResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "picked" if it has an explicit true
-                    filterResult = Boolean(filter(name, index, array));
+                    filterResult = Boolean(filter(candidate, index, array));
                 } catch (error) {
                     filterResult = error;
                 }
