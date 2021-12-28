@@ -159,8 +159,10 @@ Subject refresh is a Cypress-specific feature. Cypress has a long-standing bug, 
 You have to manually enable it on each built-in Cypress command, like this:
 
 ```
+import { refresh } from '@appactions/cypress';
+
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {
-  return click(refreshSubject(subject), ...args);
+  return click(refresh(subject), ...args);
 });
 ```
 

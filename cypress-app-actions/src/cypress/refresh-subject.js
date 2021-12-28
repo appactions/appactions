@@ -52,7 +52,7 @@ const refreshNativeNode = element => {
     }
     if (newEl) {
         // it's fine if no new element got selected, because it might been removed from the DOM
-        // we are going to filter this gap from the subject in `refreshSubject`
+        // we are going to filter this gap from the subject in `refresh`
         newEl.dataset.uniqueSelector = uniqueSelector;
     }
     return newEl;
