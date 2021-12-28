@@ -1,4 +1,4 @@
-import { findElementByRole, isJquery } from '../api';
+import { listFiberByRole, isJquery } from '../api';
 import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
 import { setUniqueSelector, refresh } from './refresh-subject';
 import { getFiberInfo } from '../api';
@@ -26,7 +26,19 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
 
         let selector = role;
 
+        if (typeof picker === 'function') {
+            selector = `${role} (with a function)`;
+        } else if (picker instanceof RegExp) {
+            selector = `${role} (name: /${picker.source}/)`;
+        } else if (typeof picker === 'string') {
+            selector = `${role} (name: "${picker}")`;
+        }
+
         function filter(name, index, arr) {
+            if (picker === undefined) {
+                return true;
+            }
+
             if (typeof picker === 'function') {
                 // selector = `${role} (with a function)`;
                 return picker(name, index, arr);
@@ -90,9 +102,12 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 .flatMap(node => {
                     try {
                         const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                        // TODO make this return fiber
-                        const matches = findElementByRole(fiber, role);
-                        return matches.map(fiber => getFiberInfo(node, fiber));
+                        const matches = listFiberByRole(fiber, role);
+                        return matches.map(fiber => {
+                            // TODO should we handle all nodes?
+                            const [node] = Cypress.AppActions.reactApi.findNativeNodes(fiber)
+                            return getFiberInfo(node, fiber);
+                        });
                     } catch (e) {
                         maybeCandidateError = e;
                         return [];

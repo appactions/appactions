@@ -131,13 +131,13 @@ describe('Retrying', () => {
 
         expectToFailWithMessage('Timed out retrying: Expected to find element: `NotExisting`, but never found it.');
     });
-    it('with(not existing, "foo", "bar", "baz") -- should show the picker data in the exception', () => {
+    it('with(not existing, \'foo, bar, baz\') -- should show the picker data in the exception', () => {
         cy.visit('/instant');
 
-        cy.with('NotExisting', 'foo', 'bar', 'baz').should('exist');
+        cy.with('NotExisting', 'foo, bar, baz').should('exist');
 
         expectToFailWithMessage(
-            'Timed out retrying: Expected to find element: `NotExisting ("foo", "bar", "baz")`, but never found it.',
+            'Timed out retrying: Expected to find element: `NotExisting (name: "foo, bar, baz")`, but never found it.',
         );
     });
     it('with(appears in chunks).do(interaction<without side-effect handling>) -- interaction should fail', () => {
@@ -158,7 +158,7 @@ describe('Retrying', () => {
         cy.contains('h1', '1. side-effect').should('have.lengthOf', 1);
         cy.contains('h2', '2. side-effect').should('have.lengthOf', 1);
     });
-    it.only('with(appears in chunks) -- should retry is customPicker has thrown', () => {
+    it('with(appears in chunks) -- should retry is customPicker has thrown', () => {
         cy.visit('/partial');
         cy.with('Table', 'Name, Color, Fruit').should('exist');
     });

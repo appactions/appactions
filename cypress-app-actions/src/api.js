@@ -24,7 +24,6 @@ export function getDriver(fiber) {
 }
 
 export function getFiberInfo(node, fiber) {
-    debugger;
     return {
         node,
         $el: Cypress.$(node),
@@ -155,6 +154,10 @@ export function findElementByRole(fiber, pattern) {
 
 export function findElementByReactComponentName(fiber, componentName) {
     return findElementByPredicate(fiber, hasMatchingName(componentName));
+}
+
+export function listFiberByRole(fiber, pattern) {
+    return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(pattern));
 }
 
 export function listFiberForInteraction(fiber, pattern, actionName) {
