@@ -1,9 +1,3 @@
-// import { createTestable } from '../../src/testable-tools';
-
-// const Table = createTestable({
-//     role: 'Table',
-// });
-
 describe('Selection', () => {
     it('with(instant appear) -- happypath', () => {
         cy.visit('/instant');
@@ -36,7 +30,7 @@ describe('Selection', () => {
             .should('exist')
             .and('have.class', 'table');
     });
-    it('with(instant appear<multiple>) -- can select multiple testables', () => {
+    it('with(instant appear<multiple>) -- can select multiple patterns', () => {
         cy.visit('/multiple');
         cy.with('Table').should($el => {
             expect($el).to.have.lengthOf(3);

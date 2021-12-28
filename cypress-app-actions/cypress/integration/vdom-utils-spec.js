@@ -42,10 +42,10 @@ describe('VDOM utils', () => {
                 expect($headCells).to.have.lengthOf(9);
             });
         });
-        it('vDomFind -- should support testables as selectors', () => {
+        it('vDomFind -- should support patterns as selectors', () => {
             cy.visit('/instant');
             cy.then(() => {
-                const $headCells = Cypress.$('.app').vDomFind('Table TableRowTestable');
+                const $headCells = Cypress.$('.app').vDomFind('Table TableRowPattern');
                 expect($headCells).to.have.lengthOf(4);
             });
         });
@@ -80,10 +80,10 @@ describe('VDOM utils', () => {
 
             expectToFailWithMessage('`vDomClosest` does not support the space operator');
         });
-        it('vDomClosest -- should support testables as selector', () => {
+        it('vDomClosest -- should support patterns as selector', () => {
             cy.visit('/instant');
             cy.then(() => {
-                const $table = Cypress.$('td:contains("orange")').vDomClosest('TableRowTestable');
+                const $table = Cypress.$('td:contains("orange")').vDomClosest('TableRowPattern');
                 expect($table[0]).to.have.class('table-row');
             });
         });

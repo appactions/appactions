@@ -424,9 +424,8 @@ const tableDriver = createDriver(Table, {
 });
 
 createDriver(TableRow, {
-    pattern: 'TableRowTestable',
+    pattern: 'TableRowPattern',
 });
-
 
 createDriver(TableHeadRow, {
     pattern: 'HeadRow',
@@ -439,8 +438,8 @@ createDriver(TableHeadRow, {
             });
 
             return columnsTitles;
-        }
-    }
+        },
+    },
 });
 
 createDriver('h2', {

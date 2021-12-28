@@ -1,24 +1,6 @@
 import { isJquery, AppActionsError } from './cypress-utils';
-// import { purityHelperCommands } from '../testable-tools';
 import { refresh } from './refresh-subject';
 import { listFiberForInteraction, getDisplayName, getFiberInfo } from '../api';
-
-/* 
-interation flowchart:
-
-0. init
-1. refresh subject
-2. finds the fiber with the pattern
-     - throws if can't find
-     - throws if finds multiple
-3. checks if fiber has a given method
-     - throws if don't
-4. calls the method
-     - wraps the thrown error
-5. if selector, runs picker on return value, if interaction, returns subject
-6. catch errors: if didn't perform side effect and not timeouting, GOTO step 1
-
-*/
 
 const getElements = $el => {
     const $arr = Array.from($el);
@@ -93,10 +75,6 @@ function createRetryContext() {
 
 export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
     Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args, picker) => {
-        // if (!fn.isTestableFunction) {
-        //     throw new Error(`Value passed to cy.${name} is not a testable function`);
-        // }
-
         if (!isJquery($subject)) {
             throw new AppActionsError(`Subject passed to cy.${name} is not a jQuery selector`);
         }
@@ -151,8 +129,6 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             return result;
         };
 
-        // purityHelperCommands.onNewCommand(fn);
-
         const retryContext = createRetryContext();
 
         const getValue = () => {
@@ -163,7 +139,6 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                 });
             }
 
-            // purityHelperCommands.onRetry(fn);
             retryContext.onRetry();
 
             $subject = refresh($subject);
@@ -210,10 +185,6 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                     throw new AppActionsError(`Picker type passed for \`cy.${name}\` is not supported`);
                 }
             }
-
-            // if (cy.isCy(value)) {
-            //     throw new AppActionsError(`Functions passed to \`cy.${name}(fn)\` must not contain Cypress commands`);
-            // }
 
             if (options._log) {
                 const yielded = returnValueIsSubject ? getElements($subject) : value;

@@ -1,27 +1,15 @@
 import { listFiberByRole, isJquery } from '../api';
-import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
+import { AppActionsError, isDOMNode } from './cypress-utils';
 import { setUniqueSelector, refresh } from './refresh-subject';
 import { getFiberInfo } from '../api';
 
-export const register = (name = 'with') => {
+export const register = (name = 'with', config = {}) => {
     Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, picker) => {
-        // if (!testable.isTestable) {
-        //     throw new AppActionsError(`value passed to cy.${name} is not a testable`);
-        // }
-
-        // if (!testable.role) {
-        //     throw new AppActionsError(`cyname don't know the selected role`);
-        // }
-
-        // if (pickerData.length && !testable.customPicker) {
-        //     throw new AppActionsError(`testable "${testable.role}" does not have selector support when cy.${name}`);
-        // }
-
         const start = performance.now();
 
         const options = {
             log: true,
-            timeoutOnLoading: 6e4, // TODO hardcoded value
+            timeoutOnLoading: config.timeoutOnLoading || 6e4, // default to 60 seconds
         };
 
         let selector = role;
@@ -40,7 +28,7 @@ export const register = (name = 'with') => {
             }
 
             if (!candidate.driver.getName) {
-                throw new Error(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
+                throw new AppActionsError(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
             }
 
             const name = candidate.driver.getName(candidate);

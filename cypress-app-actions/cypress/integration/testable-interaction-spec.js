@@ -1,15 +1,4 @@
-import { createTestable } from '../../src/testable-tools';
 import { expectToFailWithMessage } from '../../src/utils';
-
-const Table = createTestable({
-    role: 'Table',
-
-    interactions: {
-        sort: (columnLabel, order) => $el => {
-            $el.vDomCallDriver('sort', columnLabel, order);
-        },
-    },
-});
 
 describe('Interaction', () => {
     it('with(instant appear).do(interaction) -- happypath', () => {
