@@ -317,6 +317,9 @@ const tableDriver = createDriver(Table, {
         });
         return columns.join(', ');
     },
+    isLoading: ({ $el }) => {
+        return $el.hasClass('spinner');
+    },
     actions: {
         sort({ instance }, label, order) {
             instance.reorder(label, order)(new Event('click'));
@@ -422,6 +425,22 @@ const tableDriver = createDriver(Table, {
 
 createDriver(TableRow, {
     pattern: 'TableRowTestable',
+});
+
+
+createDriver(TableHeadRow, {
+    pattern: 'HeadRow',
+    actions: {
+        getColumnLabels: ({ $el }) => {
+            const columnsTitles = [];
+
+            $el.vDomFind('TableHeadCell').forEach($tableHeadCell => {
+                columnsTitles.push($tableHeadCell.text().trim());
+            });
+
+            return columnsTitles;
+        }
+    }
 });
 
 createDriver('h2', {

@@ -3,7 +3,7 @@ import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
 import { setUniqueSelector, refresh } from './refresh-subject';
 import { getFiberInfo } from '../api';
 
-export const register = (name = 'with', { defaultIsLoading = () => false } = {}) => {
+export const register = (name = 'with') => {
     Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, picker) => {
         // if (!testable.isTestable) {
         //     throw new AppActionsError(`value passed to cy.${name} is not a testable`);
@@ -58,6 +58,14 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             }
         }
 
+        function isLoading(candidate) {
+            if (!candidate.driver.isLoading) {
+                return false;
+            }
+
+            return candidate.driver.isLoading(candidate);
+        }
+
         const getConsolePropsWithoutResult = () => ({
             Command: name,
             Subject: subject,
@@ -72,8 +80,6 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             'Candidates (loading)': candidatesLoading,
             'Candidates (filter)': candidatesFilter,
         });
-
-        // const isTestableLoading = testable.isLoading || defaultIsLoading;
 
         if (options.log) {
             options._log = Cypress.log({
@@ -124,8 +130,7 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
-                    // loadingResult = Boolean(isTestableLoading(el));
-                    loadingResult = false;
+                    loadingResult = Boolean(isLoading(candidate));
                 } catch (error) {
                     loadingResult = error;
                 }

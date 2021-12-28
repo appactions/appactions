@@ -4,8 +4,7 @@ import { addVDOMUtilsToJQuery } from '../add-vdom-utils-to-jquery';
 import { installHook } from '../hook';
 import { activateBackend } from '../backend';
 
-export function registerCypressCommands(config = {}) {
-    const { defaultIsLoading } = config;
+export function registerCypressCommands() {
 
     Cypress.on('window:before:load', win => {
         Cypress.AppActions.hook = installHook(win);
@@ -13,7 +12,7 @@ export function registerCypressCommands(config = {}) {
         activateBackend(win);
     });
 
-    registerWith('with', { defaultIsLoading });
+    registerWith('with');
     registerDo('do', { returnValueIsSubject: true });
     registerDo('read', { returnValueIsSubject: false });
 

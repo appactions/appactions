@@ -48,7 +48,7 @@ const Table = createTestable({
     },
 });
 
-describe.only('Picking', () => {
+describe('Picking', () => {
     it('with(instant, default picker) -- default function should only return the picked items', () => {
         cy.visit('/headers');
         cy.with('Header', (name, index, array) => {
