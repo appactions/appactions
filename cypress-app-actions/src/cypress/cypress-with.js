@@ -1,9 +1,10 @@
 import { findElementByRole, isJquery } from '../api';
 import { AppActionsError, formatArguments, isDOMNode } from './cypress-utils';
-import { setUniqueSelector, refresh } from './refresh-subject'
+import { setUniqueSelector, refresh } from './refresh-subject';
+import { getFiberInfo } from '../api';
 
 export const register = (name = 'with', { defaultIsLoading = () => false } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, ...pickerData) => {
+    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, picker) => {
         // if (!testable.isTestable) {
         //     throw new AppActionsError(`value passed to cy.${name} is not a testable`);
         // }
@@ -23,18 +24,20 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             timeoutOnLoading: 6e4, // TODO hardcoded value
         };
 
-        let filterFn = () => true;
         let selector = role;
 
-        if (typeof pickerData[0] === 'function') {
-            filterFn = pickerData[0];
-            selector = `${role} (with a function)`;
-        // } else if (testable.customPicker) {
-        //     filterFn = testable.customPicker(...pickerData);
-        //     const extraInfo = formatArguments(pickerData);
-        //     if (extraInfo) {
-        //         selector = `${testable.role} (${extraInfo})`;
-        //     }
+        function filter(name, index, arr) {
+            if (typeof picker === 'function') {
+                // selector = `${role} (with a function)`;
+                return picker(name, index, arr);
+            } else if (picker instanceof RegExp) {
+                // selector = `${role} (with a RegExp)`;
+                return picker.test(name);
+            } else if (typeof picker === 'string') {
+                return name === picker;
+            } else {
+                throw new AppActionsError(`Invalid picker: should be string, RegExp or function`);
+            }
         }
 
         const getConsolePropsWithoutResult = () => ({
@@ -82,22 +85,26 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             }
 
             let maybeCandidateError = null;
-
-            const candidates = head.flatMap(node => {
-                try {
-                    const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                    return findElementByRole(fiber, role);
-                } catch (e) {
-                    maybeCandidateError = e;
-                    return [];
-                }
-            });
+            
+            const candidates = head
+                .flatMap(node => {
+                    try {
+                        const fiber = Cypress.AppActions.reactApi.findFiber(node);
+                        // TODO make this return fiber
+                        const matches = findElementByRole(fiber, role);
+                        return matches.map(fiber => getFiberInfo(node, fiber));
+                    } catch (e) {
+                        maybeCandidateError = e;
+                        return [];
+                    }
+                })
 
             if (maybeCandidateError && candidates.length === 0) {
                 throw maybeCandidateError;
             }
-
-            const evaluatedCandidates = candidates.map((node, index, array) => {
+            
+            const evaluatedCandidates = candidates.map((candidate, index, array) => {
+                const { node, driver } = candidate;
                 const el = isDOMNode(node) ? Cypress.$(node) : node;
                 let loadingResult = null;
                 try {
@@ -107,11 +114,13 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 } catch (error) {
                     loadingResult = error;
                 }
+                
+                const name = driver.getName(candidate);
 
                 let filterResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "picked" if it has an explicit true
-                    filterResult = Boolean(filterFn(el, index, array));
+                    filterResult = Boolean(filter(name, index, array));
                 } catch (error) {
                     filterResult = error;
                 }
@@ -152,7 +161,7 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 // if we couldn't come up with any items to select, throw an error from filtering, that will help the user to understand what's wrong
                 if (maybeFilterIssue) throw maybeFilterIssue.filterResult;
             }
-            
+
             if (result.every(isDOMNode)) {
                 setUniqueSelector(result);
 

@@ -1,7 +1,7 @@
 import { isJquery, AppActionsError } from './cypress-utils';
 // import { purityHelperCommands } from '../testable-tools';
 import { refresh } from './refresh-subject';
-import { listFiberForInteraction, getDisplayName, getDriver } from '../api';
+import { listFiberForInteraction, getDisplayName, getFiberInfo } from '../api';
 
 /* 
 interation flowchart:
@@ -162,13 +162,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             const matches = Array.from($subject).flatMap(node => {
                 const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(node);
                 const list = listFiberForInteraction(fiber, pattern, actionName);
-                return list.map(fiber => ({
-                    node,
-                    $el: Cypress.$(node),
-                    fiber,
-                    instance: fiber.stateNode || null,
-                    driver: getDriver(fiber),
-                }));
+                return list.map(fiber => getFiberInfo(node, fiber));
             });
 
             if (matches.length === 0) {

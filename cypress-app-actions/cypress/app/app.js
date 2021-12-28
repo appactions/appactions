@@ -310,6 +310,13 @@ export default App;
 
 const tableDriver = createDriver(Table, {
     pattern: 'Table',
+    getName: ({ $el }) => {
+        const columns = [];
+        $el.vDomFind('TableHeadCell').forEach($el => {
+            columns.push($el.text().trim());
+        });
+        return columns.join(', ')
+    },
     actions: {
         sort({ instance }, label, order) {
             instance.reorder(label, order)(new Event('click'));

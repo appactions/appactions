@@ -23,6 +23,17 @@ export function getDriver(fiber) {
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
+export function getFiberInfo(node, fiber) {
+    debugger;
+    return {
+        node,
+        $el: Cypress.$(node),
+        fiber,
+        instance: fiber.stateNode || null,
+        driver: getDriver(fiber),
+    };
+}
+
 export const isJquery = obj => !!(obj && obj.jquery && typeof obj.constructor === 'function');
 
 export function getDisplayName(fiber) {
@@ -149,7 +160,7 @@ export function findElementByReactComponentName(fiber, componentName) {
 export function listFiberForInteraction(fiber, pattern, actionName) {
     const isMatching = fiber => {
         const driver = getDriver(fiber);
-        
+
         if (!driver) {
             return false;
         }
@@ -157,7 +168,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
         if (!pattern === driver.pattern) {
             return false;
         }
-        
+
         if (driver.actions[actionName]) {
             return true;
         }
@@ -166,7 +177,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
     };
 
     return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isMatching);
-};
+}
 
 export function findAncestorElementByPredicate(fiber, predicate) {
     const parent = Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, predicate);

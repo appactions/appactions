@@ -158,8 +158,8 @@ describe('Retrying', () => {
         cy.contains('h1', '1. side-effect').should('have.lengthOf', 1);
         cy.contains('h2', '2. side-effect').should('have.lengthOf', 1);
     });
-    it('with(appears in chunks) -- should retry is customPicker has thrown', () => {
+    it.only('with(appears in chunks) -- should retry is customPicker has thrown', () => {
         cy.visit('/partial');
-        cy.with(TableWithRequiredColumns, 'Name', 'Color', 'Fruit').should('exist');
+        cy.with('Table', 'Name, Color, Fruit').should('exist');
     });
 });
