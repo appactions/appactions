@@ -97,30 +97,24 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
             }
 
             let maybeCandidateError = null;
-            
-            const candidates = head
-                .flatMap(node => {
-                    try {
-                        const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                        const matches = listFiberByRole(fiber, role);
-                        return matches.map(fiber => {
-                            // TODO should we handle all nodes?
-                            const [node] = Cypress.AppActions.reactApi.findNativeNodes(fiber)
-                            return getFiberInfo(node, fiber);
-                        });
-                    } catch (e) {
-                        maybeCandidateError = e;
-                        return [];
-                    }
-                })
+
+            const candidates = head.flatMap(node => {
+                try {
+                    const fiber = Cypress.AppActions.reactApi.findFiber(node);
+                    const matches = listFiberByRole(fiber, role);
+                    return matches.map(fiber => getFiberInfo(fiber));
+                } catch (e) {
+                    maybeCandidateError = e;
+                    return [];
+                }
+            });
 
             if (maybeCandidateError && candidates.length === 0) {
                 throw maybeCandidateError;
             }
-            
+
             const evaluatedCandidates = candidates.map((candidate, index, array) => {
-                const { node, driver } = candidate;
-                const el = isDOMNode(node) ? Cypress.$(node) : node;
+                const els = isDOMNode(candidate.nodes[0]) ? Cypress.$(candidate.nodes) : candidate.nodes;
                 let loadingResult = null;
                 try {
                     // convert to boolean is important, later we will handle candidates as "loaded" if it has an explicit false
@@ -129,8 +123,8 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 } catch (error) {
                     loadingResult = error;
                 }
-                
-                const name = driver.getName(candidate);
+
+                const name = candidate.driver.getName(candidate);
 
                 let filterResult = null;
                 try {
@@ -142,7 +136,7 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                 return {
                     // TODO not sure what would be the best to return here, host node, fiber, or jquery?
                     // following logic will expect what comes from findElementByRole
-                    el: node,
+                    els: candidate.nodes,
                     loadingResult,
                     filterResult,
                 };
@@ -168,7 +162,7 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
                     .filter(({ filterResult }) => {
                         return filterResult === true;
                     })
-                    .map(({ el }) => el);
+                    .flatMap(({ els }) => els);
             }
 
             if (result.length === 0) {
@@ -185,10 +179,10 @@ export const register = (name = 'with', { defaultIsLoading = () => false } = {})
 
                 if (options._log) {
                     const candidatesLoading = new Map(
-                        evaluatedCandidates.map(({ el, loadingResult }) => [el, loadingResult]),
+                        evaluatedCandidates.map(({ els, loadingResult }) => [els, loadingResult]),
                     );
                     const candidatesFilter = new Map(
-                        evaluatedCandidates.map(({ el, filterResult }) => [el, filterResult]),
+                        evaluatedCandidates.map(({ els, filterResult }) => [els, filterResult]),
                     );
                     options._log.set({
                         $el: $result,

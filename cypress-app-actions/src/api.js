@@ -23,10 +23,11 @@ export function getDriver(fiber) {
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
-export function getFiberInfo(node, fiber) {
+export function getFiberInfo(fiber) {
+    const nodes = Cypress.AppActions.reactApi.findNativeNodes(fiber);
     return {
-        node,
-        $el: Cypress.$(node),
+        nodes,
+        $el: Cypress.$(nodes),
         fiber,
         instance: fiber.stateNode || null,
         driver: getDriver(fiber),

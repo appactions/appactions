@@ -87,7 +87,7 @@ describe('VDOM utils', () => {
                 expect($table[0]).to.have.class('table-row');
             });
         });
-        it('vDomCallDriver -- should be able to call drivers', () => {
+        it.skip('vDomCallDriver -- should be able to call drivers', () => {
             cy.visit('/instant');
             cy.then(() => {
                 Cypress.$('.app')
@@ -133,7 +133,7 @@ describe('VDOM utils', () => {
                 expect(table[0]).to.have.class('table');
             });
         });
-        it('vDomCallDriver -- should work', () => {
+        it.skip('vDomCallDriver -- should work', () => {
             cy.visit('/instant');
             cy.then(() => {
                 vDomCallDriver(Cypress.$('.app').vDomFind('Table'), 'sort', 'Name', 'asc');

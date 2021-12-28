@@ -162,7 +162,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             const matches = Array.from($subject).flatMap(node => {
                 const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(node);
                 const list = listFiberForInteraction(fiber, pattern, actionName);
-                return list.map(fiber => getFiberInfo(node, fiber));
+                return list.map(fiber => getFiberInfo(fiber));
             });
 
             if (matches.length === 0) {
