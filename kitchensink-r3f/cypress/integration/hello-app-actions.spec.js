@@ -1,5 +1,3 @@
-// import { Game } from '../support/testables/game';
-
 context('Hello App Actions', () => {
     beforeEach(() => {
         cy.visit('/');
