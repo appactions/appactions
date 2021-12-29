@@ -36,9 +36,10 @@ module.exports.createDriver = (Component, config) => {
 
 module.exports.tunnel = driver => {
     return {
-        emit: (event, ...args) => {
-            console.log('tunnel emit:', event, ...args);
-            // throw new Error('Not implemented');
+        emit: (actionName, ...args) => {
+            if (Cypress.AppActions.hook) {
+                Cypress.AppActions.hook.emit('session-recording-event', { args, actionName });
+            }
         },
     };
 };

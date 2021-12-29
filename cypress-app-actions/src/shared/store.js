@@ -9,8 +9,11 @@ export default class Store extends VendorStore {
         this._selectedElementID = null;
         this._isBackendReady = false;
 
+        this._sessionRecordingDb = [{ init: true }];
+
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
         this._bridge.addListener('backend-ready', this.onBackendReady);
+        this._bridge.addListener('session-recording-event', this.onSessionRecordingEvent);
 
         this.addListener('mutated', this.onMutation);
     }
@@ -21,6 +24,10 @@ export default class Store extends VendorStore {
 
     get isBackendReady() {
         return this._isBackendReady;
+    }
+
+    get sessionRecordingDb() {
+        return this._sessionRecordingDb;
     }
 
     onInspectedElement = data => {
@@ -79,6 +86,11 @@ export default class Store extends VendorStore {
 
     onBackendReady = () => {
         this._isBackendReady = true;
-        this.emit('backend-ready')
-    }
+        this.emit('backend-ready');
+    };
+
+    onSessionRecordingEvent = payload => {
+        this._sessionRecordingDb.push(payload);
+        this.emit('session-recording-event');
+    };
 }

@@ -86,4 +86,8 @@ export default class Agent extends EventEmitter {
     onBackendReady = () => {
         this._bridge.send('backend-ready');
     }
+
+    onSessionRecordingEvent = payload => {
+        this._bridge.send('session-recording-event', payload);
+    }
 }

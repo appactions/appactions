@@ -94,7 +94,7 @@ function Element({ index }) {
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {roleElement.role}
+            {roleElement.pattern}
         </div>
     );
 }

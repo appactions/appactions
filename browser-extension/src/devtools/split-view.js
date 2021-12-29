@@ -27,8 +27,6 @@ export default function SplitView({ left, right, minimumSize = 250 }) {
 
             const isMousePositionInBounds = currentMousePosition > boundaryMin && currentMousePosition < boundaryMax;
 
-            console.log('isMousePositionInBounds', isMousePositionInBounds);
-
             if (isMousePositionInBounds) {
                 const percentage = (currentMousePosition / width) * 100;
 
@@ -51,7 +49,7 @@ export default function SplitView({ left, right, minimumSize = 250 }) {
             <div
                 onMouseDown={onResizeStart}
                 style={{ left: `${leftWidthPercent}%`, cursor: 'ew-resize' }}
-                className="absolute w-1 h-full cursor-move -left-0.5"
+                className="absolute w-1 h-full border-l border-gray-200 border-solid cursor-move -left-0.5"
             ></div>
             <div className="overflow-x-hidden overflow-y-scroll" style={{ width: `${100 - leftWidthPercent}%` }}>
                 {right}
