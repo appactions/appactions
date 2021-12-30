@@ -89,14 +89,14 @@ export default class Agent extends EventEmitter {
 
     onSessionRecordingEvent = payload => {
         const { args, patternName, actionName, event } = payload;
-        const targetFiber = Cypress.AppActions.reactApi.findFiberForInteraction(event.target);
-        const predicate = fiber => {
+        const targetFiber = Cypress.AppActions.reactApi.findFiber(event.target);
+        const hasDriverWeNeed = fiber => {
             const driver = getDriver(fiber);
             return driver && driver.pattern === patternName && driver.actions?.[actionName];
         };
-        const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, predicate);
+        const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, hasDriverWeNeed);
         const id = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
-        
+
         this._bridge.send('session-recording-event', { args, patternName, actionName, id });
     };
 }

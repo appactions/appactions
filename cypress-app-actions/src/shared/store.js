@@ -9,7 +9,7 @@ export default class Store extends VendorStore {
         this._selectedElementID = null;
         this._isBackendReady = false;
 
-        this._sessionRecordingDb = [{ init: true }];
+        this._sessionRecordingDb = [];
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
         this._bridge.addListener('backend-ready', this.onBackendReady);
@@ -90,7 +90,7 @@ export default class Store extends VendorStore {
     };
 
     onSessionRecordingEvent = payload => {
-        this._sessionRecordingDb.push(payload);
+        this._sessionRecordingDb = [...this._sessionRecordingDb, payload];
         this.emit('session-recording-event');
     };
 }
