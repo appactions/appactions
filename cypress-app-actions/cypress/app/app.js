@@ -198,8 +198,8 @@ class Table extends Component {
             orderOn: label,
             direction,
         });
-
-        tunnel(tableDriver).emit('sort', label, direction);
+        
+        tunnel(event).action('Table', 'sort', label, direction);
     };
     render() {
         const { header, data: rawData, className } = this.props;

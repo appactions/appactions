@@ -34,11 +34,15 @@ module.exports.createDriver = (Component, config) => {
     };
 };
 
-module.exports.tunnel = driver => {
+module.exports.tunnel = event => {
     return {
-        emit: (actionName, ...args) => {
+        action: (patternName, actionName, ...args) => {
             if (Cypress.AppActions.hook) {
-                Cypress.AppActions.hook.emit('session-recording-event', { args, actionName });
+                if (!event || !event._dispatchInstances) {
+                    console.warn("Cannot tunnel event, because it's not a SyntheticEvent");
+                    return;
+                }
+                Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
             }
         },
     };
