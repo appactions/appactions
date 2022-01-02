@@ -36,6 +36,14 @@ const choices = [
         ],
     },
     {
+        choice: { name: 'Browser Extension', value: 'ext' },
+        concurrently: [
+            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
+            { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
+            { name: 'test-app', command: 'yarn workspace browser-extension test', prefixColor: 'green' },
+        ],
+    },
+    {
         choice: { name: 'Standalone React App Actions', value: 'standalone' },
         concurrently: [
             // TODO: improve this once react-app-actions is developed again

@@ -1,5 +1,5 @@
 const HTMLPlugin = require('html-webpack-plugin');
-const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
+const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
@@ -60,11 +60,11 @@ module.exports = {
             showErrors: true,
         }),
         new CspHtmlWebpackPlugin({
-            "default-src": "'self'",
-            "script-src": "'self'",
-            "style-src": "'self' 'unsafe-inline' https://fonts.googleapis.com",
-            "font-src": "'self' https://fonts.gstatic.com",
-            "img-src": "'self' data:",
+            'default-src': "'self'",
+            'script-src': "'self'",
+            'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
+            'font-src': "'self' https://fonts.gstatic.com",
+            'img-src': "'self' data:",
         }),
         new CopyPlugin([
             { from: './src/assets', to: './assets' },
@@ -81,8 +81,11 @@ module.exports = {
         new ManifestVersionSyncPlugin(),
     ],
     devtool: 'cheap-module-source-map',
-    optimization: process.env.NODE_ENV === 'production' ? {
-        minimize: true,
-    } : undefined,
+    optimization:
+        process.env.NODE_ENV === 'production'
+            ? {
+                  minimize: true,
+              }
+            : undefined,
     stats: 'minimal',
 };

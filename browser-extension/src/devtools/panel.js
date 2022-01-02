@@ -23,11 +23,11 @@ const reducer = (state, action) => {
 
 const Panel = () => {
     const [tabs, dispatch] = useReducer(reducer, [
-        { name: 'RoleTree', id: 'role-tree', selected: true },
-        { name: 'SessionRecording', id: 'session-recording' },
+        { name: 'Inspect', id: 'side-panel', selected: true },
+        { name: 'Session Recording', id: 'session-recording' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
-    console.log('selectedTab', selectedTab.id, selectedTab.id === 'role-tree', selectedTab.id === 'session-recording');
+    
     return (
         <SplitView
             left={
@@ -62,7 +62,7 @@ const Panel = () => {
                             ))}
                         </nav>
                     </div>
-                    {selectedTab.id === 'role-tree' ? <SidePanel /> : null}
+                    {selectedTab.id === 'side-panel' ? <SidePanel /> : null}
                     {selectedTab.id === 'session-recording' ? <SessionRecording /> : null}
                 </>
             }
