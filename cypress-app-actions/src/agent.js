@@ -1,6 +1,6 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
-import { getDriver } from './api';
+import { getDriver, getFiberInfo } from './api';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -32,14 +32,19 @@ export default class Agent extends EventEmitter {
 
                     // driver
                     pattern: null,
+                    name: null,
                     actions: [],
                 };
 
                 const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
-                const driver = getDriver(fiber);
-                if (driver) {
-                    result.pattern = driver.pattern;
-                    result.actions = Object.keys(driver.actions || {});
+                const fiberInfo = getFiberInfo(fiber);
+                if (fiberInfo.driver) {
+                    result.pattern = fiberInfo.driver.pattern;
+                    result.actions = Object.keys(fiberInfo.driver.actions || {});
+
+                    if (fiberInfo.driver.getName) {
+                        result.name = fiberInfo.driver.getName(fiberInfo);
+                    }
                 }
 
                 this._bridge.send('inspectedElement', {
