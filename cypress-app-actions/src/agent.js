@@ -94,7 +94,13 @@ export default class Agent extends EventEmitter {
 
     onSessionRecordingEvent = payload => {
         const { args, patternName, actionName, event } = payload;
-        const targetFiber = Cypress.AppActions.reactApi.findFiber(event.target);
+        const target = event.nativeEvent.target || event.target;
+        let targetFiber;
+        try {
+            targetFiber = Cypress.AppActions.reactApi.findFiber(target);
+        } catch (error) {
+            throw new Error(`Cannot find fiber for event target`);
+        }
         const hasDriverWeNeed = fiber => {
             const driver = getDriver(fiber);
             return driver && driver.pattern === patternName && driver.actions?.[actionName];

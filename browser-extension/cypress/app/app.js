@@ -11,8 +11,14 @@ import './style.css';
 const TodoItem = ({ id }) => {
     const dispatch = useDispatch();
     const item = useSelector(useCallback(state => state.todos.find(todo => todo.id === id), [id]));
-    const toggleCompleted = () => dispatch({ type: 'TOGGLE_TODO', id });
-    const remove = () => dispatch({ type: 'REMOVE_TODO', id });
+    const toggleCompleted = event => {
+        tunnel(event).action('Item', 'toggle', id);
+        dispatch({ type: 'TOGGLE_TODO', id });
+    };
+    const remove = event => {
+        tunnel(event).action('Item', 'remove', id);
+        dispatch({ type: 'REMOVE_TODO', id });
+    };
     return (
         <>
             <input type="checkbox" checked={item?.completed} onChange={toggleCompleted} />
@@ -26,7 +32,13 @@ const FilterSelection = () => {
     const dispatch = useDispatch();
     const filter = useSelector(useCallback(state => state.filter, []));
     return (
-        <Radio.Group onChange={e => dispatch({ type: 'SET_FILTER', filter: e.target.value })} value={filter}>
+        <Radio.Group
+            onChange={e => {
+                tunnel(e).action('Filter', 'set', e.target.value);
+                dispatch({ type: 'SET_FILTER', filter: e.target.value });
+            }}
+            value={filter}
+        >
             <Radio value="all">All</Radio>
             <Radio value="completed">Completed</Radio>
             <Radio value="incompleted">Incompleted</Radio>
@@ -69,6 +81,7 @@ const TodoList = () => {
         const id = `${++count}`;
         const title = e.currentTarget.inputTitle.value;
         e.currentTarget.inputTitle.value = '';
+        tunnel(e).action('App', 'add', id, title);
         dispatch({ type: 'ADD_TODO', id, title });
     };
     return (
@@ -83,17 +96,40 @@ const TodoList = () => {
 export default function App() {
     return (
         <>
-            <h1>Jōtai</h1>
+            <h1>TODO</h1>
             <TodoList />
         </>
     );
 }
 
-createDriver(App, {
+createDriver(TodoList, {
     pattern: 'App',
+    actions: {
+        add: (id, title) => {
+            throw new Error('Not implemented');
+        },
+    },
+});
+
+createDriver(FilterSelection, {
+    pattern: 'Filter',
+    getName: ({ $el }) => $el.text().trim(),
+    actions: {
+        set: filter => {
+            throw new Error('Not implemented');
+        },
+    },
 });
 
 createDriver(TodoItem, {
     pattern: 'Item',
     getName: ({ $el }) => $el.text().trim(),
+    actions: {
+        toggle: id => {
+            throw new Error('Not implemented');
+        },
+        remove: id => {
+            throw new Error('Not implemented');
+        },
+    },
 });
