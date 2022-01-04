@@ -42,6 +42,20 @@ function convert(obj, ret) {
     }
 }
 
+function isPrimitive(obj) {
+    var type = getType(obj);
+
+    switch (type) {
+        case 'string':
+        case 'null':
+        case 'number':
+        case 'boolean':
+            return true;
+        default:
+            return false;
+    }
+}
+
 function convertArray(obj, ret) {
     if (obj.length === 0) {
         ret.push('[]');
@@ -62,9 +76,17 @@ function convertHash(obj, ret) {
         var recurse = [];
         if (obj.hasOwnProperty(k)) {
             var ele = obj[k];
-            convert(ele, recurse);
+
+            // CUSTOM
+            const couldInline = getType(ele) === 'array' && ele.every(isPrimitive);
+            if (couldInline) {
+                recurse.push('[' + ele.join(', ') + ']');
+            } else {
+                convert(ele, recurse, k);
+            }
+
             var type = getType(ele);
-            if (type == 'string' || type == 'null' || type == 'number' || type == 'boolean') {
+            if (type == 'string' || type == 'null' || type == 'number' || type == 'boolean' || couldInline) {
                 ret.push(normalizeString(k) + ': ' + recurse[0]);
             } else {
                 ret.push(normalizeString(k) + ': ');
@@ -84,7 +106,7 @@ function normalizeString(str) {
     }
 
     // TODO this seeps like unnecessary escaping?
-    
+
     // if (str.match(/^[\w]+$/)) {
     //     return str;
     // } else {
