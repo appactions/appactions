@@ -46,6 +46,12 @@ module.exports.tunnel = event => {
                 return;
             }
 
+            const target = event.nativeEvent?.target || event.target;
+            if (!target) {
+                console.warn('Cannot tunnel event, because target is not present in event object');
+                return;
+            }
+
             Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
         },
     };
