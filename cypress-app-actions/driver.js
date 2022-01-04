@@ -34,11 +34,25 @@ module.exports.createDriver = (Component, config) => {
     };
 };
 
-module.exports.tunnel = driver => {
+module.exports.tunnel = event => {
     return {
-        emit: (event, ...args) => {
-            console.log('tunnel emit:', event, ...args);
-            // throw new Error('Not implemented');
+        action: (patternName, actionName, ...args) => {
+            if (!Cypress.AppActions.hook) {
+                console.error('Cypress.AppActions.hook is not defined');
+                return;
+            }
+            if (!event) {
+                console.warn('Cannot tunnel event, because event is not passed');
+                return;
+            }
+
+            const target = event.nativeEvent?.target || event.target;
+            if (!target) {
+                console.warn('Cannot tunnel event, because target is not present in event object');
+                return;
+            }
+
+            Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
         },
     };
 };

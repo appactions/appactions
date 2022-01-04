@@ -99,7 +99,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
             return false;
         }
 
-        if (!pattern === driver.pattern) {
+        if (pattern !== driver.pattern) {
             return false;
         }
 

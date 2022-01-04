@@ -31,7 +31,16 @@ const choices = [
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
             { name: 'test-app', command: 'yarn workspace cypress-app-actions start', prefixColor: 'yellow' },
+            { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
             { name: 'cypress', command: 'yarn workspace cypress-app-actions cypress', prefixColor: 'green' },
+        ],
+    },
+    {
+        choice: { name: 'Browser Extension', value: 'ext' },
+        concurrently: [
+            { name: 'cyappactions', command: 'yarn workspace cypress-app-actions dev', prefixColor: 'blue' },
+            { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
+            { name: 'test-app', command: 'yarn workspace browser-extension test', prefixColor: 'green' },
         ],
     },
     {

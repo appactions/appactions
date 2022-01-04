@@ -1,38 +1,27 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDevtoolsContext } from './context';
-import { useSubscription, useStore } from './hooks';
+import { useStore } from './hooks';
 import Delay from './components/delay'
 
 export default function RoleTree() {
-    const { bridge, store } = useDevtoolsContext();
-
-    const getStoreState = useMemo(
-        () => ({
-            getCurrentValue: () => {
-                let numElements = 0;
-                store.roots.forEach(rootID => {
-                    const { weight } = store.getElementByID(rootID);
-                    numElements += weight;
-                });
-
-                return {
-                    numElements,
-                };
-            },
-            subscribe: callback => {
-                store.addListener('mutated', callback);
-                return () => store.removeListener('mutated', callback);
-            },
-        }),
-        [store],
-    );
+    const { bridge } = useDevtoolsContext();
 
     const onLeave = useCallback(() => {
         bridge.send('clearNativeElementHighlight');
     }, [bridge]);
 
     const isBackendReady = useStore('backend-ready', store => store.isBackendReady);
-    const { numElements } = useSubscription(getStoreState);
+
+    const numElements = useStore('mutated', store => {
+        let numElements = 0;
+
+        store.roots.forEach(rootID => {
+            const { weight } = store.getElementByID(rootID);
+            numElements += weight;
+        });
+
+        return numElements;
+    });
 
     if (!isBackendReady) {
         return <h4>Waiting to detect React.</h4>;
@@ -94,7 +83,7 @@ function Element({ index }) {
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {roleElement.role}
+            {roleElement.pattern}
         </div>
     );
 }

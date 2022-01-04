@@ -1,68 +1,17 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDevtoolsContext } from './context';
 
-export function useSubscription({ getCurrentValue, subscribe }) {
-    const [state, setState] = useState(() => ({
-        getCurrentValue,
-        subscribe,
-        value: getCurrentValue(),
-    }));
-
-    if (state.getCurrentValue !== getCurrentValue || state.subscribe !== subscribe) {
-        setState({
-            getCurrentValue,
-            subscribe,
-            value: getCurrentValue(),
-        });
-    }
+export function useStore(event, selector) {
+    const { store } = useDevtoolsContext();
+    const [value, setValue] = useState(() => selector(store));
 
     useEffect(() => {
-        let didUnsubscribe = false;
-
-        const checkForUpdates = () => {
-            if (didUnsubscribe) {
-                return;
-            }
-
-            setState(prevState => {
-                if (prevState.getCurrentValue !== getCurrentValue || prevState.subscribe !== subscribe) {
-                    return prevState;
-                }
-
-                const value = getCurrentValue();
-                if (prevState.value === value) {
-                    return prevState;
-                }
-
-                return { ...prevState, value };
-            });
+        const callback = () => {
+            setValue(selector(store));
         };
-        const unsubscribe = subscribe(checkForUpdates);
+        store.addListener(event, callback);
+        return () => store.removeListener(event, callback);
+    }, [store]);
 
-        checkForUpdates();
-
-        return () => {
-            didUnsubscribe = true;
-            unsubscribe();
-        };
-    }, [getCurrentValue, subscribe]);
-
-    return state.value;
-}
-
-export function useStore(eventType, getCurrentValue) {
-    const { store } = useDevtoolsContext();
-
-    const sub = useMemo(
-        () => ({
-            getCurrentValue: () => getCurrentValue(store),
-            subscribe: callback => {
-                store.addListener(eventType, callback);
-                return () => store.removeListener(eventType, callback);
-            },
-        }),
-        [store],
-    );
-
-    return useSubscription(sub);
+    return value;
 }

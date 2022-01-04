@@ -1,7 +1,7 @@
 import { expectToFailWithMessage } from '../../src/utils';
 
 describe('Interaction', () => {
-    it('with(instant appear).do(interaction) -- happypath', () => {
+    it.only('with(instant appear).do(interaction) -- happypath', () => {
         cy.visit('/instant');
         cy.with('Table').do('Table', 'sort', ['Color', 'asc']);
         cy.get('th').contains('Color ↑');
