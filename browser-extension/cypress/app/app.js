@@ -119,6 +119,14 @@ createDriver(FilterSelection, {
             throw new Error('Not implemented');
         },
     },
+    tunnel: {
+        set: (prev, current) => {
+            if (prev.patternName === current.patternName && prev.actionName === current.actionName) {
+                return [null, current];
+            }
+            return [prev, current];
+        },
+    },
 });
 
 createDriver(TodoItem, {
@@ -130,6 +138,14 @@ createDriver(TodoItem, {
         },
         remove: id => {
             throw new Error('Not implemented');
+        },
+    },
+    tunnel: {
+        toggle: (prev, current) => {
+            if (prev.patternName === current.patternName && prev.actionName === current.actionName && prev.id === current.id) {
+                return [null, null];
+            }
+            return [prev, current];
         },
     },
 });

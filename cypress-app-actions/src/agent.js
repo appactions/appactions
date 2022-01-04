@@ -2,12 +2,23 @@ import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { getDriver, getFiberInfo } from './api';
 
+function getMockedSessionRecordEvent() {
+    return {
+        args: [],
+        patternName: null,
+        actionName: null,
+        id: null,
+        __MOCKED__: true,
+    };
+}
+
 export default class Agent extends EventEmitter {
     constructor(bridge) {
         super();
 
         this._bridge = bridge;
         this._rendererInterfaces = {};
+        this._sessionRecordingEvents = [];
 
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
@@ -94,20 +105,59 @@ export default class Agent extends EventEmitter {
 
     onSessionRecordingEvent = payload => {
         const { args, patternName, actionName, event } = payload;
-        const target = event.nativeEvent.target || event.target;
-        let targetFiber;
-        try {
-            targetFiber = Cypress.AppActions.reactApi.findFiber(target);
-        } catch (error) {
-            throw new Error(`Cannot find fiber for event target`);
-        }
-        const hasDriverWeNeed = fiber => {
-            const driver = getDriver(fiber);
-            return driver && driver.pattern === patternName && driver.actions?.[actionName];
-        };
-        const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, hasDriverWeNeed);
+        const target = event.nativeEvent?.target || event.target;
+
+        const fiber = getFiberOfTarget(target, patternName, actionName);
+        const fiberInfo = getFiberInfo(fiber);
         const id = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
 
-        this._bridge.send('session-recording-event', { args, patternName, actionName, id });
+        const currentEvent = { args, patternName, actionName, id };
+
+        const [head, ...tail] = this._sessionRecordingEvents;
+
+        let result = [head, currentEvent];
+
+        if (fiberInfo.driver?.tunnel?.[actionName]) {
+            // let's transform the last two events
+            result = fiberInfo.driver?.tunnel?.[actionName](
+                // when an event is null, we pass in a mocked object instead
+                ...result.map(event => (event ? event : getMockedSessionRecordEvent())),
+            );
+
+            if (!result || !Array.isArray(result) || result.length !== 2) {
+                throw new Error(`Tunnel function must return an array of two elements (${patternName}.${actionName})`);
+            }
+        }
+
+        // reverting the mocked object back to null
+        result = result.map(event => (event && event.__MOCKED__ ? null : event));
+
+        const [prev, current] = result;
+
+        if (!prev && !current) {
+            this._sessionRecordingEvents = tail;
+        } else if (!prev) {
+            this._sessionRecordingEvents = [current, ...tail];
+        } else if (!current) {
+            this._sessionRecordingEvents = [prev, ...tail];
+        } else {
+            this._sessionRecordingEvents = [current, prev, ...tail];
+        }
+
+        this._bridge.send('session-recording-event', [prev, current]);
     };
+}
+
+function getFiberOfTarget(target, patternName, actionName) {
+    let targetFiber;
+    try {
+        targetFiber = Cypress.AppActions.reactApi.findFiber(target);
+    } catch (error) {
+        throw new Error(`Cannot find fiber for event target`);
+    }
+    const hasDriverWeNeed = fiber => {
+        const driver = getDriver(fiber);
+        return driver && driver.pattern === patternName && driver.actions?.[actionName];
+    };
+    return Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, hasDriverWeNeed);
 }

@@ -89,8 +89,9 @@ export default class Store extends VendorStore {
         this.emit('backend-ready');
     };
 
-    onSessionRecordingEvent = payload => {
-        this._sessionRecordingDb = [...this._sessionRecordingDb, payload];
+    onSessionRecordingEvent = ([prev, current]) => {
+        this._sessionRecordingDb = this._sessionRecordingDb.slice(0, -1).concat([prev, current].filter(Boolean));
+
         this.emit('session-recording-event');
     };
 }
