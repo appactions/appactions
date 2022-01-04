@@ -19,9 +19,13 @@ export default class Agent extends EventEmitter {
         this._bridge = bridge;
         this._rendererInterfaces = {};
         this._sessionRecordingEvents = [];
+        this._isRecording = false;
 
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
+        bridge.addListener('session-recording-toggle', this.toggleSessionRecording);
+        bridge.addListener('session-recording-replay', this.replaySessionRecording);
+        bridge.addListener('session-recording-clear', this.clearSessionRecording);
 
         setupHighlighter(bridge, this);
     }
@@ -103,7 +107,27 @@ export default class Agent extends EventEmitter {
         this._bridge.send('backend-ready');
     };
 
+    toggleSessionRecording = () => {
+        this._isRecording = !this._isRecording;
+        this._bridge.send('session-recording-toggle', this._isRecording);
+    }
+
+    clearSessionRecording = () => {
+        this._sessionRecordingEvents = [];
+
+        this._bridge.send('session-recording-clear');
+    }
+
+    replaySessionRecording = () => {
+        this._isRecording = false;
+        this._bridge.send('session-recording-toggle', this._isRecording);
+    }
+
     onSessionRecordingEvent = payload => {
+        if (!this._isRecording) {
+            return;
+        }
+
         const { args, patternName, actionName, event } = payload;
         const target = event.nativeEvent?.target || event.target;
 

@@ -5,15 +5,18 @@ export default class Store extends VendorStore {
     constructor(bridge, config) {
         super(bridge, config);
 
-        this._idToRole = {};
+        this._idToPattern = {};
         this._selectedElementID = null;
         this._isBackendReady = false;
+        this._isRecording = false;
 
         this._sessionRecordingDb = [];
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
         this._bridge.addListener('backend-ready', this.onBackendReady);
         this._bridge.addListener('session-recording-event', this.onSessionRecordingEvent);
+        this._bridge.addListener('session-recording-toggle', this.onSessionRecordingToggle);
+        this._bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
 
         this.addListener('mutated', this.onMutation);
     }
@@ -30,15 +33,19 @@ export default class Store extends VendorStore {
         return this._sessionRecordingDb;
     }
 
+    get isRecording() {
+        return this._isRecording;
+    }
+
     onInspectedElement = data => {
         if (data.type === 'full-data') {
-            this._idToRole[data.id] = data.value;
+            this._idToPattern[data.id] = data.value;
             this.emit('inspectedElement');
         }
     };
 
-    getRoleByID = id => {
-        return this._idToRole[id] || null;
+    getPatternByID = id => {
+        return this._idToPattern[id] || null;
     };
 
     selectElement = async id => {
@@ -55,7 +62,7 @@ export default class Store extends VendorStore {
                 rendererID,
             });
 
-            this._idToRole[data.id] = data.value;
+            this._idToPattern[data.id] = data.value;
             this.emit('selectionChange');
         } catch (error) {
             console.error(error);
@@ -64,7 +71,7 @@ export default class Store extends VendorStore {
 
     onMutation = ([addedElementIDs]) => {
         addedElementIDs.forEach(async id => {
-            if (!this._idToRole[id]) {
+            if (!this._idToPattern[id]) {
                 try {
                     const rendererID = this.getRendererIDForElement(id);
 
@@ -75,7 +82,7 @@ export default class Store extends VendorStore {
                         rendererID,
                     });
 
-                    this._idToRole[data.id] = data.value;
+                    this._idToPattern[data.id] = data.value;
                     this.emit('newElementAdded');
                 } catch (error) {
                     console.error(error);
@@ -94,4 +101,14 @@ export default class Store extends VendorStore {
 
         this.emit('session-recording-event');
     };
+
+    onSessionRecordingToggle = isRecording => {
+        this._isRecording = isRecording;
+        this.emit('session-recording-toggle');
+    }
+
+    onSessionRecordingClear = () => {
+        this._sessionRecordingDb = [];
+        this.emit('session-recording-event');
+    }
 }

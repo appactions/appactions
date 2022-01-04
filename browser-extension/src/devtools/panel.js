@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
-// import Tree from './tree';
-import RoleTree from './role-tree';
-import SessionRecording from './session-recording';
-import SidePanel from './side-panel';
+import PatternTree from './pattern-tree';
+import SessionRecordingPanel from './session-recording-panel';
+import InspectPanel from './inspect-panel';
 import portaledContent from './portaled-content';
 import SplitView from './split-view';
 import classNames from 'classnames';
+import { useStore } from './hooks';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -22,17 +22,18 @@ const reducer = (state, action) => {
 };
 
 const Panel = () => {
+    const recording = useStore('session-recording-toggle', store => store.isRecording);
     const [tabs, dispatch] = useReducer(reducer, [
-        { name: 'Inspect', id: 'side-panel', selected: true },
+        { name: 'Inspect', id: 'inspect-panel', selected: true },
         { name: 'Session Recording', id: 'session-recording' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
-    
+
     return (
         <SplitView
             left={
                 <div className="m-4">
-                    <RoleTree />
+                    <PatternTree />
                 </div>
             }
             right={
@@ -58,12 +59,13 @@ const Panel = () => {
                                     }}
                                 >
                                     {tab.name}
+                                    {tab.id === 'session-recording' ? (recording ? ' 🔴' : ' ⚪️') : null}
                                 </span>
                             ))}
                         </nav>
                     </div>
-                    {selectedTab.id === 'side-panel' ? <SidePanel /> : null}
-                    {selectedTab.id === 'session-recording' ? <SessionRecording /> : null}
+                    {selectedTab.id === 'inspect-panel' ? <InspectPanel /> : null}
+                    {selectedTab.id === 'session-recording' ? <SessionRecordingPanel /> : null}
                 </>
             }
         />
