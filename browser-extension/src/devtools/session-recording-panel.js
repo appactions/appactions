@@ -79,7 +79,7 @@ const meta = {
     },
 };
 
-export default function SessionRecording() {
+export default function SessionRecordingPanel() {
     const sessionRecording = useStore('session-recording-event', store => store.sessionRecordingDb);
 
     return (

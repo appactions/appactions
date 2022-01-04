@@ -5,7 +5,7 @@ export default class Store extends VendorStore {
     constructor(bridge, config) {
         super(bridge, config);
 
-        this._idToRole = {};
+        this._idToPattern = {};
         this._selectedElementID = null;
         this._isBackendReady = false;
         this._isRecording = false;
@@ -39,13 +39,13 @@ export default class Store extends VendorStore {
 
     onInspectedElement = data => {
         if (data.type === 'full-data') {
-            this._idToRole[data.id] = data.value;
+            this._idToPattern[data.id] = data.value;
             this.emit('inspectedElement');
         }
     };
 
-    getRoleByID = id => {
-        return this._idToRole[id] || null;
+    getPatternByID = id => {
+        return this._idToPattern[id] || null;
     };
 
     selectElement = async id => {
@@ -62,7 +62,7 @@ export default class Store extends VendorStore {
                 rendererID,
             });
 
-            this._idToRole[data.id] = data.value;
+            this._idToPattern[data.id] = data.value;
             this.emit('selectionChange');
         } catch (error) {
             console.error(error);
@@ -71,7 +71,7 @@ export default class Store extends VendorStore {
 
     onMutation = ([addedElementIDs]) => {
         addedElementIDs.forEach(async id => {
-            if (!this._idToRole[id]) {
+            if (!this._idToPattern[id]) {
                 try {
                     const rendererID = this.getRendererIDForElement(id);
 
@@ -82,7 +82,7 @@ export default class Store extends VendorStore {
                         rendererID,
                     });
 
-                    this._idToRole[data.id] = data.value;
+                    this._idToPattern[data.id] = data.value;
                     this.emit('newElementAdded');
                 } catch (error) {
                     console.error(error);

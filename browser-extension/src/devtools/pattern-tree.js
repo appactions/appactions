@@ -3,7 +3,7 @@ import { useDevtoolsContext } from './context';
 import { useStore } from './hooks';
 import Delay from './components/delay'
 
-export default function RoleTree() {
+export default function PatternTree() {
     const { bridge } = useDevtoolsContext();
 
     const onLeave = useCallback(() => {
@@ -29,7 +29,7 @@ export default function RoleTree() {
 
     if (numElements === 0) {
         // TODO show link to docs
-        return <Delay key="no-elements"><h4>Could not find any roles. Annotate your components with drivers.</h4></Delay>;
+        return <Delay key="no-elements"><h4>Could not find any patterns. Annotate your components with drivers.</h4></Delay>;
     }
 
     return (
@@ -48,8 +48,8 @@ function Element({ index }) {
 
     const { id, depth, displayName, hocDisplayNames, key, type } = store.getElementAtIndex(index);
 
-    const roleElement = useStore('newElementAdded', store => {
-        return store.getRoleByID(id);
+    const patternElement = useStore('newElementAdded', store => {
+        return store.getPatternByID(id);
     });
     const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
 
@@ -70,7 +70,7 @@ function Element({ index }) {
         store.selectElement(id);
     }, [store, id]);
 
-    if (!roleElement) {
+    if (!patternElement) {
         return null;
     }
 
@@ -83,7 +83,7 @@ function Element({ index }) {
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {roleElement.pattern}
+            {patternElement.pattern}
         </div>
     );
 }

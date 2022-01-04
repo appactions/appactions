@@ -4,7 +4,7 @@ import { setUniqueSelector, refresh } from './refresh-subject';
 import { getFiberInfo } from '../api';
 
 export const register = (name = 'with', config = {}) => {
-    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, role, picker) => {
+    Cypress.Commands.add(name, { prevSubject: 'optional' }, (subject, pattern, picker) => {
         const start = performance.now();
 
         const options = {
@@ -12,14 +12,14 @@ export const register = (name = 'with', config = {}) => {
             timeoutOnLoading: config.timeoutOnLoading || 6e4, // default to 60 seconds
         };
 
-        let selector = role;
+        let selector = pattern;
 
         if (typeof picker === 'function') {
-            selector = `${role} (with a function)`;
+            selector = `${pattern} (with a function)`;
         } else if (picker instanceof RegExp) {
-            selector = `${role} (name: /${picker.source}/)`;
+            selector = `${pattern} (name: /${picker.source}/)`;
         } else if (typeof picker === 'string') {
-            selector = `${role} (name: "${picker}")`;
+            selector = `${pattern} (name: "${picker}")`;
         }
 
         function filter(candidate, index, arr) {
@@ -34,10 +34,10 @@ export const register = (name = 'with', config = {}) => {
             const name = candidate.driver.getName(candidate);
 
             if (typeof picker === 'function') {
-                // selector = `${role} (with a function)`;
+                // selector = `${pattern} (with a function)`;
                 return picker(name, index, arr);
             } else if (picker instanceof RegExp) {
-                // selector = `${role} (with a RegExp)`;
+                // selector = `${pattern} (with a RegExp)`;
                 return picker.test(name);
             } else if (typeof picker === 'string') {
                 return name === picker;
@@ -101,7 +101,7 @@ export const register = (name = 'with', config = {}) => {
             const candidates = head.flatMap(node => {
                 try {
                     const fiber = Cypress.AppActions.reactApi.findFiber(node);
-                    const matches = listFiberByRole(fiber, role);
+                    const matches = listFiberByRole(fiber, pattern);
                     return matches.map(fiber => getFiberInfo(fiber));
                 } catch (e) {
                     maybeCandidateError = e;
