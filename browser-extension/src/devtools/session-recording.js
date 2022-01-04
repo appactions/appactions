@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from './hooks';
 import { useDevtoolsContext } from './context';
+import Highlight from 'react-highlight';
 
 function RecordControls() {
     const { bridge, store } = useDevtoolsContext();
@@ -70,16 +71,37 @@ function RecordControls() {
 }
 
 export default function SessionRecording() {
-    const sessionRecordingDb = useStore('session-recording-event', store => store.sessionRecordingDb);
+    const sessionRecordingYAML = useStore('session-recording-event', store => renderYAML(store.sessionRecordingDb));
 
     return (
         <div className="pt-2 pl-2">
             <RecordControls />
-            <ul>
-                {sessionRecordingDb.map((line, index) => (
-                    <li key={index}>{JSON.stringify(line)}</li>
-                ))}
-            </ul>
+            <div className="my-2">
+                <Highlight className="yaml">{sessionRecordingYAML}</Highlight>
+            </div>
         </div>
     );
 }
+
+function renderYAML(events) {
+    if (events.length === 0) {
+        return '# empty test';
+    }
+
+    return demo;
+}
+
+const demo = `description: User onboarding flow.
+start:
+  route: '/'
+  auth: false
+steps:
+  - with: { button: Sign in }
+    do: click
+  - with: { input: Email }
+    do: { type: $data.user.email }
+  - with: { button: Sign in with TestLogin }
+    do: click
+  - with: { heading: Welcome to Restaurant Reviewer! }
+  - with: { button: Continue }
+    do: click`;
