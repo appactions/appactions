@@ -6,6 +6,7 @@ import SidePanel from './side-panel';
 import portaledContent from './portaled-content';
 import SplitView from './split-view';
 import classNames from 'classnames';
+import { useStore } from './hooks';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -22,12 +23,13 @@ const reducer = (state, action) => {
 };
 
 const Panel = () => {
+    const recording = useStore('session-recording-toggle', store => store.isRecording);
     const [tabs, dispatch] = useReducer(reducer, [
         { name: 'Inspect', id: 'side-panel', selected: true },
         { name: 'Session Recording', id: 'session-recording' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
-    
+
     return (
         <SplitView
             left={
@@ -58,6 +60,7 @@ const Panel = () => {
                                     }}
                                 >
                                     {tab.name}
+                                    {tab.id === 'session-recording' ? (recording ? ' 🔴' : ' ⚪️') : null}
                                 </span>
                             ))}
                         </nav>

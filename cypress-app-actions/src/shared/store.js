@@ -8,12 +8,15 @@ export default class Store extends VendorStore {
         this._idToRole = {};
         this._selectedElementID = null;
         this._isBackendReady = false;
+        this._isRecording = false;
 
         this._sessionRecordingDb = [];
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
         this._bridge.addListener('backend-ready', this.onBackendReady);
         this._bridge.addListener('session-recording-event', this.onSessionRecordingEvent);
+        this._bridge.addListener('session-recording-toggle', this.onSessionRecordingToggle);
+        this._bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
 
         this.addListener('mutated', this.onMutation);
     }
@@ -28,6 +31,10 @@ export default class Store extends VendorStore {
 
     get sessionRecordingDb() {
         return this._sessionRecordingDb;
+    }
+
+    get isRecording() {
+        return this._isRecording;
     }
 
     onInspectedElement = data => {
@@ -94,4 +101,14 @@ export default class Store extends VendorStore {
 
         this.emit('session-recording-event');
     };
+
+    onSessionRecordingToggle = isRecording => {
+        this._isRecording = isRecording;
+        this.emit('session-recording-toggle');
+    }
+
+    onSessionRecordingClear = () => {
+        this._sessionRecordingDb = [];
+        this.emit('session-recording-event');
+    }
 }
