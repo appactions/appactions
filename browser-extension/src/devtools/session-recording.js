@@ -2,6 +2,7 @@ import React from 'react';
 import { useStore } from './hooks';
 import { useDevtoolsContext } from './context';
 import Highlight from 'react-highlight';
+import json2yaml from './json-to-yaml';
 
 function RecordControls() {
     const { bridge, store } = useDevtoolsContext();
@@ -70,38 +71,41 @@ function RecordControls() {
     );
 }
 
+const meta = {
+    description: `Test recorded at ${new Date().toLocaleString()}`,
+    start: {
+        route: '/',
+        auth: false,
+    },
+};
+
 export default function SessionRecording() {
-    const sessionRecordingYAML = useStore('session-recording-event', store => renderYAML(store.sessionRecordingDb));
+    const sessionRecording = useStore('session-recording-event', store => store.sessionRecordingDb);
 
     return (
         <div className="pt-2 pl-2">
             <RecordControls />
             <div className="my-2">
-                <Highlight className="yaml">{sessionRecordingYAML}</Highlight>
+                <Highlight className="yaml">{renderYAML(meta, sessionRecording)}</Highlight>
             </div>
         </div>
     );
 }
 
-function renderYAML(events) {
+function renderYAML(meta, events) {
     if (events.length === 0) {
         return '# empty test';
     }
 
-    return demo;
+    return json2yaml({
+        description: meta.description,
+        start: {
+            route: meta.start.route,
+            auth: meta.start.auth,
+        },
+        steps: events.map(event => ({
+            with: event.patternName,
+            do: event.args.length === 0 ? event.actionName : { [event.actionName]: event.args },
+        })),
+    });
 }
-
-const demo = `description: User onboarding flow.
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: { button: Sign in }
-    do: click
-  - with: { input: Email }
-    do: { type: $data.user.email }
-  - with: { button: Sign in with TestLogin }
-    do: click
-  - with: { heading: Welcome to Restaurant Reviewer! }
-  - with: { button: Continue }
-    do: click`;
