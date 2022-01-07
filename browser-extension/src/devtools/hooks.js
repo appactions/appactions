@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDevtoolsContext } from './context';
 
 export function useStore(event, selector) {
@@ -14,4 +14,15 @@ export function useStore(event, selector) {
     }, [store]);
 
     return value;
+}
+
+export function useTemporaryState({ timeout, value }) {
+    const [state, setState] = useState(value);
+
+    const setValue = useCallback(newValue => {
+        setState(newValue);
+        setTimeout(() => setState(value), timeout);
+    }, [timeout, value]);
+
+    return [state, setValue]
 }

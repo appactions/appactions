@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStore } from './hooks';
+import { useStore, useTemporaryState } from './hooks';
 import { useDevtoolsContext } from './context';
 import Highlight from 'react-highlight';
 import { copy } from 'clipboard-js';
@@ -7,6 +7,10 @@ import json2yaml from './json-to-yaml';
 
 function RecordControls() {
     const { bridge, store } = useDevtoolsContext();
+    const [justDidCopy, setJustDidCopy] = useTemporaryState({
+        timeout: 2000,
+        value: false,
+    });
     const recording = useStore('session-recording-toggle', store => store.isRecording);
     const toggleRecord = event => {
         bridge.send('session-recording-toggle', !recording);
@@ -17,6 +21,7 @@ function RecordControls() {
     const download = event => {
         const result = renderYAML(meta, store.sessionRecordingDb);
         copy(result);
+        setJustDidCopy(true);
     };
     return (
         <span className="relative z-0 inline-flex shadow-sm rounded-md">
@@ -61,13 +66,23 @@ function RecordControls() {
                 className="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none"
                 onClick={download}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        fillRule="evenodd"
-                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                    />
-                </svg>
+                {justDidCopy ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            fillRule="evenodd"
+                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                )}
             </button>
         </span>
     );
