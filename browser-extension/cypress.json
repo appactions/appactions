@@ -1,3 +1,4 @@
 {
-    "baseUrl": "http://localhost:12000"
+    "baseUrl": "http://localhost:12000",
+    "integrationFolder": "flows"
 }
