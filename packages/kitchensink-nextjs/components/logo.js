@@ -1,4 +1,4 @@
-import { createDriver } from 'cypress-app-actions/driver';
+import { createDriver } from '@appactions/cypress/driver';
 
 export default function Logo() {
     return (

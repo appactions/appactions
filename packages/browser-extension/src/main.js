@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
-import Bridge from 'cypress-app-actions/src/shared/bridge';
-import Store from 'cypress-app-actions/src/shared/store';
+import Bridge from '@appactions/cypress/src/shared/bridge';
+import Store from '@appactions/cypress/src/shared/store';
 import App from './devtools/app';
 
 let panelCreated = false;

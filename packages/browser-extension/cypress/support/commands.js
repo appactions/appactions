@@ -1,3 +1,3 @@
-import { registerCypressCommands } from 'cypress-app-actions';
+import { registerCypressCommands } from '@appactions/cypress';
 
 registerCypressCommands();

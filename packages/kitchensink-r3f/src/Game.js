@@ -7,7 +7,7 @@ import { useMachine } from '@xstate/react';
 import { ticTacToeMachine } from './machine';
 import Cell from './Cell';
 
-import { createDriver } from 'cypress-app-actions/driver';
+import { createDriver } from '@appactions/cypress/driver';
 
 function Title({ currentState, send }) {
     if (currentState.matches('playing')) {

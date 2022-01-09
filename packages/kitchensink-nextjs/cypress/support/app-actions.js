@@ -1,4 +1,4 @@
-import { registerCypressCommands, refresh } from 'cypress-app-actions';
+import { registerCypressCommands, refresh } from '@appactions/cypress';
 
 registerCypressCommands({
     defaultIsLoading($el) {

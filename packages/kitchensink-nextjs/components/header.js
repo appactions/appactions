@@ -4,7 +4,7 @@ import Logo from './logo';
 import useSession from 'utils/use-session';
 import { signIn, signOut } from 'next-auth/client';
 import useRole from 'utils/use-role';
-import { createDriver } from 'cypress-app-actions/driver';
+import { createDriver } from '@appactions/cypress/driver';
 
 export default function Header() {
     const session = useSession();
