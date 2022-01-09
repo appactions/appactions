@@ -16,7 +16,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: build package
-        run: yarn workspace cypress-app-actions build
+        run: yarn workspace @appactions/cypress build
 
       - name: run cypress
         id: cypress

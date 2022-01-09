@@ -7,7 +7,7 @@ module.exports.addPlugin = on => {
             let extensionPath = path.join(__dirname, '../browser-extension/build');
 
             if (!fs.existsSync(extensionPath)) {
-                extensionPath = path.resolve('../browser-extension/build');
+                extensionPath = path.resolve('../browser-extension');
             }
 
             launchOptions.extensions.push(extensionPath);

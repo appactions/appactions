@@ -1,11 +1,7 @@
 {
     "private": true,
     "workspaces": [
-        "react-app-actions",
-        "kitchensink-nextjs",
-        "kitchensink-r3f",
-        "cypress-app-actions",
-        "browser-extension"
+        "packages/*"
     ],
     "devDependencies": {
         "concurrently": "^6.2.1",
@@ -23,8 +19,7 @@
         "*.{js,css,md}": "prettier --write"
     },
     "scripts": {
-        "dev": "node dev.js",
-        "build": "./build.sh"
+        "dev": "node dev.js"
     },
     "repository": "git@github.com:appactions/appactions.git",
     "author": "Miklos Megyes <hello@miklos.dev>"

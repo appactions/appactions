@@ -2,7 +2,8 @@
     "version": "0.0.1",
     "name": "browser-extension",
     "scripts": {
-        "build": "NODE_ENV=production webpack --config webpack.config.js",
+        "clean": "rm -rf build",
+        "build": "yarn run clean && NODE_ENV=production webpack --config webpack.config.js",
         "dev": "NODE_ENV=development webpack --config webpack.config.js --watch",
         "test": "start-server-and-test testapp http://localhost:12000 'cypress open'",
         "testapp": "webpack serve --config cypress/app/webpack.config.js"
