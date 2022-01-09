@@ -20,7 +20,7 @@ jobs:
           route: POST /repos/:repository/deployments
           repository: ${{ github.repository }}
           ref: ${{ github.head_ref }}
-          environment: ${{ env.STAGE }}
+          environment: cicd
           state: in_progress
           transient_environment: true
           required_contexts: '[]'

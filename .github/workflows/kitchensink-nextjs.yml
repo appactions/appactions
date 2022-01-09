@@ -2,7 +2,7 @@ name: Kitchensink NextJS
 on: [deployment_status]
 jobs:
   main:
-    if: github.event.deployment_status.environment == ${{ env.STAGE }} && github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.environment == 'cicd' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     concurrency: deploy-${{ github.head_ref }}
     steps:
