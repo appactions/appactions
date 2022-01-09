@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { createDriver, tunnel } from '@appactions/cypress/driver';
+import { createDriver, tunnel } from '@appactions/driver';
 import './style.css';
 
 class PageIndex extends Component {

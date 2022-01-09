@@ -1,5 +1,5 @@
 import React from 'react';
-import { createDriver } from '@appactions/cypress/driver';
+import { createDriver } from '@appactions/driver';
 
 const Input = React.forwardRef(({ label, type, name, autoComplete, placeholder, error }, ref) => {
     return (

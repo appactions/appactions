@@ -46,7 +46,7 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 4. Add the drivers:
 
 ```
-import { createDriver } from '@appactions/cypress/driver';
+import { createDriver } from '@appactions/driver';
 
 createDriver(TextInput, {
   pattern: 'Input',

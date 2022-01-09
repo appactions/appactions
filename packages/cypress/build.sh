@@ -3,8 +3,8 @@
 yarn workspace @appactions/cypress build
 yarn workspace browser-extension build
 
-mkdir packages/app-actions-cypress/build/browser-extension
-cp -R packages/browser-extension/build packages/app-actions-cypress/build/browser-extension
+mkdir packages/cypress/build/browser-extension
+cp -R packages/browser-extension/build packages/cypress/build/browser-extension
 
 # rm -rf packages/cypress-app-actions/build
 
