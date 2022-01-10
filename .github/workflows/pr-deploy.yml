@@ -1,4 +1,4 @@
-name: "Deploy"
+name: 'Deploy'
 on:
   pull_request:
     types: [opened, synchronize]
@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
 
       - uses: actions/checkout@v2
-      
+
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -55,11 +55,11 @@ jobs:
 
           vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_RESTAURANT_TABLE_NAME preview --yes || true
           vercel --token ${{ secrets.VERCEL_TOKEN }} env rm DYNAMODB_USER_TABLE_NAME preview --yes || true
-          
+
           echo -n ${{ steps.cdk-deploy.outputs.restaurant_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_RESTAURANT_TABLE_NAME preview ${{ github.head_ref }}
           echo -n ${{ steps.cdk-deploy.outputs.user_table }} | vercel --token ${{ secrets.VERCEL_TOKEN }} env add DYNAMODB_USER_TABLE_NAME preview ${{ github.head_ref }}
 
-      - name: deploy to vercel staging 
+      - name: deploy to vercel staging
         id: vercel-deploy
         uses: amondnet/vercel-action@v20
         with:
@@ -81,5 +81,3 @@ jobs:
           environment_url: ${{ steps.vercel-deploy.outputs.preview-url }}
         env:
           GITHUB_TOKEN: ${{ secrets.GREN_CI_CD_GITHUB_TOKEN }}
-
-
