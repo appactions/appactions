@@ -2,7 +2,6 @@ import React from 'react';
 import { useStore, useTemporaryState } from './hooks';
 import { useDevtoolsContext } from './context';
 import Highlight from 'react-highlight';
-import { copy } from 'clipboard-js';
 import json2yaml from './json-to-yaml';
 
 function RecordControls() {
@@ -18,9 +17,10 @@ function RecordControls() {
     const clear = event => {
         bridge.send('session-recording-clear');
     };
-    const download = event => {
-        const result = renderYAML(meta, store.sessionRecordingDb);
-        copy(result);
+    const save = event => {
+        const content = renderYAML(meta, store.sessionRecordingDb);
+        const fileName = `recorded_${new Date().toISOString().replace('T', '_').substring(0, 19)}.yml`;
+        bridge.send('session-recording-save', { content, fileName });
         setJustDidCopy(true);
     };
     return (
@@ -64,7 +64,7 @@ function RecordControls() {
             <button
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none"
-                onClick={download}
+                onClick={save}
             >
                 {justDidCopy ? (
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">

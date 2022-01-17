@@ -26,6 +26,7 @@ export default class Agent extends EventEmitter {
         bridge.addListener('session-recording-toggle', this.toggleSessionRecording);
         bridge.addListener('session-recording-replay', this.replaySessionRecording);
         bridge.addListener('session-recording-clear', this.clearSessionRecording);
+        bridge.addListener('session-recording-save', this.saveSessionRecording);
 
         setupHighlighter(bridge, this);
     }
@@ -110,18 +111,18 @@ export default class Agent extends EventEmitter {
     toggleSessionRecording = () => {
         this._isRecording = !this._isRecording;
         this._bridge.send('session-recording-toggle', this._isRecording);
-    }
+    };
 
     clearSessionRecording = () => {
         this._sessionRecordingEvents = [];
 
         this._bridge.send('session-recording-clear');
-    }
+    };
 
     replaySessionRecording = () => {
         this._isRecording = false;
         this._bridge.send('session-recording-toggle', this._isRecording);
-    }
+    };
 
     onSessionRecordingEvent = payload => {
         if (!this._isRecording) {
@@ -169,6 +170,14 @@ export default class Agent extends EventEmitter {
         }
 
         this._bridge.send('session-recording-event', [prev, current]);
+    };
+
+    saveSessionRecording = payload => {
+        Cypress.backend('task', {
+            task: 'saveSessionRecording',
+            arg: payload,
+            timeout: 4000,
+        });
     };
 }
 

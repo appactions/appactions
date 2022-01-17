@@ -17,6 +17,15 @@ module.exports.addPlugin = on => {
             return launchOptions;
         }
     });
+
+    on('task', {
+        saveSessionRecording({ fileName, content }) {
+            const filePath = path.join(process.cwd(), './flows/', fileName);
+            fs.writeFileSync(filePath, content);
+
+            return null;
+        },
+    });
 };
 
 // TODO this file needs to be cjs, because it will be running in Node; transpile this maybe?
