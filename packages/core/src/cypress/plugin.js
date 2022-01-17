@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports.addPlugin = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.name === 'chrome') {
-            let extensionPath = path.join(__dirname, '../browser-extension/build');
+            let extensionPath = path.join(__dirname, '../../../browser-extension/build');
 
             if (!fs.existsSync(extensionPath)) {
                 extensionPath = path.resolve('../browser-extension');
@@ -16,6 +16,15 @@ module.exports.addPlugin = on => {
             launchOptions.args.push('--v=1');
             return launchOptions;
         }
+    });
+
+    on('task', {
+        saveSessionRecording({ fileName, content }) {
+            const filePath = path.join(process.cwd(), './flows/', fileName);
+            fs.writeFileSync(filePath, content);
+
+            return null;
+        },
     });
 };
 

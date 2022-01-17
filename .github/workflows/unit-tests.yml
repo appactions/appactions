@@ -16,11 +16,11 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: build package
-        run: yarn workspace @appactions/cypress build
+        run: yarn workspace @appactions/core build
 
       - name: run unit tests
         id: cypress
-        run: yarn workspace @appactions/cypress test
+        run: yarn workspace @appactions/core test
         env:
           CI: true
           CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
