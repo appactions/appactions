@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports.addPlugin = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.name === 'chrome') {
-            let extensionPath = path.join(__dirname, '../browser-extension/build');
+            let extensionPath = path.join(__dirname, '../../../browser-extension/build');
 
             if (!fs.existsSync(extensionPath)) {
                 extensionPath = path.resolve('../browser-extension');
