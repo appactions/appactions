@@ -1,5 +1,5 @@
-const { addPlugin } = require('@appactions/cypress/plugin');
-const preprocessor = require('@appactions/cypress/preprocessor');
+const { addPlugin } = require('@appactions/core/plugin');
+const preprocessor = require('@appactions/core/preprocessor');
 
 module.exports = on => {
     addPlugin(on);

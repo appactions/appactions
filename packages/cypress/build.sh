@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yarn workspace @appactions/cypress build
+yarn workspace @appactions/core build
 yarn workspace browser-extension build
 
 mkdir packages/cypress/build/browser-extension
@@ -12,7 +12,7 @@ cp -R packages/browser-extension/build packages/cypress/build/browser-extension
 # yarn workspace browser-extension build
 
 # rm -rf cypress-app-actions/build
-# yarn workspace @appactions/cypress build
+# yarn workspace @appactions/core build
 
 # cp -R cypress-app-actions/build publish/build
 

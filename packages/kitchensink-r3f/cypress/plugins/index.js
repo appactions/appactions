@@ -1,4 +1,4 @@
-const { addPlugin } = require('@appactions/cypress/plugin');
+const { addPlugin } = require('@appactions/core/plugin');
 
 module.exports = on => {
     addPlugin(on);

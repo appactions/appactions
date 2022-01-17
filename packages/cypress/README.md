@@ -13,7 +13,7 @@ App Actions helps to solve the following problems:
 
 ## Getting started
 
-1. Install App Actions and Cypress: `yarn add -D cypress @appactions/cypress`
+1. Install App Actions and Cypress: `yarn add -D cypress @appactions/core`
 
 **Note:** Before installation, an NPM token will be required. Add the following to the `.npmrc` file:
 
@@ -24,7 +24,7 @@ App Actions helps to solve the following problems:
 2. Insert the Cypress plugin at the plugin file:
 
 ```
-const { addPlugin } = require('@appactions/cypress/plugin');
+const { addPlugin } = require('@appactions/core/plugin');
 
 module.exports = on => {
   addPlugin(on);
@@ -36,7 +36,7 @@ The plugin will install the developer tool (a browser extension) to the automate
 3. Register the Cypress commands in the support file:
 
 ```
-import { registerCypressCommands } from '@appactions/cypress';
+import { registerCypressCommands } from '@appactions/core';
 
 registerCypressCommands();
 ```
@@ -125,7 +125,7 @@ Subject refresh is a Cypress-specific feature. Cypress has a long-standing bug, 
 You have to manually enable it on each built-in Cypress command, like this:
 
 ```
-import { refresh } from '@appactions/cypress';
+import { refresh } from '@appactions/core';
 
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {
   return click(refresh(subject), ...args);
