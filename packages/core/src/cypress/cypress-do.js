@@ -154,7 +154,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             // if it didn't work, try using each element individually
             if (matches.length === 0) {
-                matches = Array.from($subject).flatMap(getMatch);
+                matches = Array.from($subject).map(node => [node]).flatMap(getMatch);
             }
 
             if (matches.length === 0) {
