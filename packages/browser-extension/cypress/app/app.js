@@ -4,6 +4,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { a, useTransition } from '@react-spring/web';
 import { Radio } from 'antd';
 import { useSelector, useDispatch } from './store';
+import { dispatchHelper, actionHelper } from './helper';
 import { createDriver, tunnel } from '@appactions/driver';
 import 'antd/dist/antd.css';
 import './style.css';
@@ -76,6 +77,7 @@ let count = 0;
 
 const TodoList = () => {
     const dispatch = useDispatch();
+    dispatchHelper(dispatch);
     const add = e => {
         e.preventDefault();
         const id = `${++count}`;
@@ -105,8 +107,8 @@ export default function App() {
 createDriver(TodoList, {
     pattern: 'App',
     actions: {
-        add: (id, title) => {
-            throw new Error('Not implemented');
+        add: (_, id, title) => {
+            actionHelper('add', id, title);
         },
     },
 });
@@ -115,8 +117,8 @@ createDriver(FilterSelection, {
     pattern: 'Filter',
     getName: ({ $el }) => $el.text().trim(),
     actions: {
-        set: filter => {
-            throw new Error('Not implemented');
+        set: (_, filter) => {
+            actionHelper('set', filter);
         },
     },
     tunnel: {
@@ -133,16 +135,20 @@ createDriver(TodoItem, {
     pattern: 'Item',
     getName: ({ $el }) => $el.text().trim(),
     actions: {
-        toggle: id => {
-            throw new Error('Not implemented');
+        toggle: (_, id) => {
+            actionHelper('toggle', id);
         },
-        remove: id => {
-            throw new Error('Not implemented');
+        remove: (_, id) => {
+            actionHelper('remove', id);
         },
     },
     tunnel: {
         toggle: (prev, current) => {
-            if (prev.patternName === current.patternName && prev.actionName === current.actionName && prev.id === current.id) {
+            if (
+                prev.patternName === current.patternName &&
+                prev.actionName === current.actionName &&
+                prev.id === current.id
+            ) {
                 return [null, null];
             }
             return [prev, current];

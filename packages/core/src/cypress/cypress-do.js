@@ -143,11 +143,19 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             $subject = refresh($subject);
 
-            const matches = Array.from($subject).flatMap(node => {
-                const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(node);
+            const getMatch = nodes => {
+                const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(nodes);
                 const list = listFiberForInteraction(fiber, pattern, actionName);
                 return list.map(fiber => getFiberInfo(fiber));
-            });
+            };
+
+            // first, try using all elements from subject (eg. Fragment component)
+            let matches = getMatch(Array.from($subject));
+
+            // if it didn't work, try using each element individually
+            if (matches.length === 0) {
+                matches = Array.from($subject).map(node => [node]).flatMap(getMatch);
+            }
 
             if (matches.length === 0) {
                 throw new Error(`No fiber found for interaction: ${pattern}.${actionName}`);

@@ -49,18 +49,18 @@ export function attach(hook, rendererID, renderer, global) {
     };
 
     // use when looking for a fiber because want to run an interaction on it
-    const findFiberForInteraction = element => {
-        let fiber = findFiber(element);
+    const findFiberForInteraction = elements => {
+        let fiber = findFiber(elements[0]);
 
         // find the highest parent, which returns the same dom nodes as the argument
         while (fiber.return) {
             const els = findNativeNodes(fiber.return);
 
-            if (els.length !== 1) {
+            if (els.length !== elements.length) {
                 return fiber;
             }
 
-            if (els[0] !== element) {
+            if (els.some(el => elements.find(e => e === el) === undefined)) {
                 return fiber;
             }
 
