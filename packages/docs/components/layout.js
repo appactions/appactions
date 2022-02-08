@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from './layout.module.css';
-import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
+import Logo from 'components/logo';
 
-const name = 'App Actions';
 export const siteTitle = 'App Actions Documentations';
 
 export default function Layout({ children, home }) {
@@ -23,7 +22,14 @@ export default function Layout({ children, home }) {
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
             <header className={styles.header}>
-                App Actions
+                <Link href="/">
+                    <a className="block p-2 w-52 text-grey-700">
+                        <span className="inline-block w-9 h-6">
+                            <Logo stroke="#444" />
+                        </span>
+                        App Actions
+                    </a>
+                </Link>
             </header>
             <main>{children}</main>
             {!home && (
