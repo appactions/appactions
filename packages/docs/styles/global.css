@@ -8,9 +8,10 @@ body {
   font-size: 18px;
 }
 
+/* 
 * {
   box-sizing: border-box;
-}
+} */
 
 a {
   color: #0070f3;
@@ -25,3 +26,7 @@ img {
   max-width: 100%;
   display: block;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
