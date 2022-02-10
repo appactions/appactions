@@ -1,12 +1,11 @@
 import Head from 'next/head';
-import Layout from '../components/layout';
 import { getMainDocsData } from '../lib/posts';
 // import Link from 'next/link';
 // import Date from '../components/date';
 
 export default function Home({ mainData }) {
     return (
-        <Layout home>
+        <>
             <Head>
                 <title>{mainData.title}</title>
             </Head>
@@ -21,7 +20,7 @@ export default function Home({ mainData }) {
                     Last changed: <Date dateString={mainData.date} />
                 </div> */}
             </article>
-        </Layout>
+        </>
     );
 }
 
