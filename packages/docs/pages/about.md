@@ -1,6 +1,6 @@
-App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a test runner agnostics solution that integrates with Cypress\*.
+App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a meta-framework running on top of Cypress\*.
 
-\*_Support for other runners is under development._
+\*_A standalone version is under development._
 
 App Actions helps to solve the following problems:
 
