@@ -1,6 +1,6 @@
 ---
-title: "Getting started"
-date: "2022-02-08"
+title: 'Getting started'
+date: '2022-02-08'
 ---
 
 ## Getting started
@@ -19,7 +19,7 @@ date: "2022-02-08"
 const { addPlugin } = require('@appactions/core/plugin');
 
 module.exports = on => {
-  addPlugin(on);
+    addPlugin(on);
 };
 ```
 
@@ -41,7 +41,7 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 import { createDriver } from '@appactions/driver';
 
 createDriver(TextInput, {
-  pattern: 'Input',
+    pattern: 'Input',
 });
 ```
 
@@ -51,10 +51,10 @@ Ready to write tests. You can check your integration with the following Hello Wo
 
 ```javascript
 describe('Hello', () => {
-  it('World', () => {
-    cy.visit('/');
-    cy.with('App').should('exist');
-  });
+    it('World', () => {
+        cy.visit('/');
+        cy.with('App').should('exist');
+    });
 });
 ```
 
@@ -82,10 +82,10 @@ This is why the App Actions drivers can communicate hints, like loading state, w
 
 Drivers are defined by the `createDriver` function. It expects a React component (function or string), and a config object, that has 4 keys:
 
-- `pattern` (mandatory)
-- `getName`
-- `isLoading`
-- `actions`
+-   `pattern` (mandatory)
+-   `getName`
+-   `isLoading`
+-   `actions`
 
 `pattern` is the only mandatory field, defining what UX pattern this driver is responsible for.
 
@@ -108,6 +108,7 @@ Drivers are defined by the `createDriver` function. It expects a React component
 ```javascript
 $(el).vDomFind('.foo Pattern1 Pattern2');
 ```
+
 Returns the DOM node rendered by Pattern2.
 
 [LOCKED]
@@ -122,10 +123,16 @@ You have to manually enable it on each built-in Cypress command, like this:
 import { refresh } from '@appactions/core';
 
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {
-  return click(refresh(subject), ...args);
+    return click(refresh(subject), ...args);
 });
 ```
 
-## License
+## Articles
 
-UNLICENSED
+### For developers
+
+[LOCKED]
+
+### Innovation
+
+[LOCKED]
