@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from './layout.module.css';
 import Link from 'next/link';
 import Logo from 'components/logo';
 
@@ -8,7 +7,7 @@ export const siteTitle = 'App Actions Documentations';
 
 export default function Layout({ children, home }) {
     return (
-        <div className={styles.container}>
+        <div className="max-w-xl px-4 py-0 mx-auto mt-4 mb-24">
             <Head>
                 <link rel="icon" href="/favicon.svg" />
                 <meta name="description" content="Learn how to build a personal website using Next.js" />
@@ -21,11 +20,11 @@ export default function Layout({ children, home }) {
                 <meta name="og:title" content={siteTitle} />
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
-            <header className={styles.header}>
-                <Link href="/">
-                    <a className="block p-2 w-52 text-grey-700">
-                        <span className="inline-block w-9 h-6">
-                            <Logo stroke="#444" />
+            <header className="flex flex-col items-center mb-12">
+                <Link href="https://appactions.com">
+                    <a className="p-2 text-xl font-medium">
+                        <span className="inline-block h-6 mr-2 align-middle w-9">
+                            <Logo stroke="currentColor" />
                         </span>
                         App Actions
                     </a>
@@ -33,7 +32,7 @@ export default function Layout({ children, home }) {
             </header>
             <main>{children}</main>
             {!home && (
-                <div className={styles.backToHome}>
+                <div className="mx-0 mt-12 mb-0">
                     <Link href="/">
                         <a>← Back to home</a>
                     </Link>

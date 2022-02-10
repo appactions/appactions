@@ -1,20 +1,7 @@
 ---
-title: "App Actions main"
+title: "Getting started"
 date: "2022-02-08"
 ---
-
-# About
-
-App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a test runner agnostics solution that integrates with Cypress and Selenium*.
-
-**Out of the box Selenium support is work in progress.*
-
-App Actions helps to solve the following problems:
-
-- Speed up the test writing process.
-- Minimize the amount of work needed for test maintenance.
-- Optimize test running speed.
-- Enable non-frontend developers to write automation tests.
 
 ## Getting started
 
@@ -28,7 +15,7 @@ App Actions helps to solve the following problems:
 
 2. Insert the Cypress plugin at the plugin file:
 
-```
+```javascript
 const { addPlugin } = require('@appactions/core/plugin');
 
 module.exports = on => {
@@ -40,7 +27,7 @@ The plugin will install the developer tool (a browser extension) to the automate
 
 3. Register the Cypress commands in the support file:
 
-```
+```javascript
 import { registerCypressCommands } from '@appactions/core';
 
 registerCypressCommands();
@@ -50,7 +37,7 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 
 4. Add the drivers:
 
-```
+```javascript
 import { createDriver } from '@appactions/driver';
 
 createDriver(TextInput, {
@@ -62,7 +49,7 @@ In computing, a driver is a program that helps to connect a component to the pri
 
 Ready to write tests. You can check your integration with the following Hello World test:
 
-```
+```javascript
 describe('Hello', () => {
   it('World', () => {
     cy.visit('/');
@@ -106,22 +93,24 @@ Drivers are defined by the `createDriver` function. It expects a React component
 
 `isLoading` is a function that gets the components instance as an argument. It returns a boolean value, defining whether is that instance is in a loading state or not. When an instance is selected for interaction or assertion, but it's in a loading state, the test runner can handle this case gracefully and give extra time for that component to catch up. This is an effective way to handle occasional hiccups in the backend: sometimes a 3rd party service can be slower than usual, but instead of setting the default timeout value to a greater number (making the overall performance slower), we can help the test runner to recognize this unusual case, and allow it to wait.
 
-`actions` TODO
+`actions`
+
+[LOCKED]
 
 ### Creating actions
 
-TODO
+[LOCKED]
 
 ## Misc feature
 
 ### jQuery Helpers
 
-```
+```javascript
 $(el).vDomFind('.foo Pattern1 Pattern2');
 ```
 Returns the DOM node rendered by Pattern2.
 
-TODO
+[LOCKED]
 
 ### Subject refresh
 
@@ -129,7 +118,7 @@ Subject refresh is a Cypress-specific feature. Cypress has a long-standing bug, 
 
 You have to manually enable it on each built-in Cypress command, like this:
 
-```
+```javascript
 import { refresh } from '@appactions/core';
 
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {

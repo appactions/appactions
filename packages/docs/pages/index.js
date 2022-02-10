@@ -1,9 +1,8 @@
 import Head from 'next/head';
-import Layout, { siteTitle } from '../components/layout';
-import utilStyles from '../styles/utils.module.css';
+import Layout from '../components/layout';
 import { getMainDocsData } from '../lib/posts';
-import Link from 'next/link';
-import Date from '../components/date';
+// import Link from 'next/link';
+// import Date from '../components/date';
 
 export default function Home({ mainData }) {
     return (
@@ -12,29 +11,16 @@ export default function Home({ mainData }) {
                 <title>{mainData.title}</title>
             </Head>
             <article>
-                {/* <h1 className={utilStyles.headingXl}>{mainData.title}</h1> */}
-                <div dangerouslySetInnerHTML={{ __html: mainData.contentHtml }} />
+                <div className="markdown-body" dangerouslySetInnerHTML={{ __html: mainData.aboutHtml }} />
+                <h2 className="mt-6 mb-4 text-2xl font-semibold leading-tight border-b border-solid">
+                    Table of Content
+                </h2>
+                <div className="markdown-body" dangerouslySetInnerHTML={{ __html: mainData.contentHtml }} />
 
-                <div className={utilStyles.lightText}>
+                {/* <div className="mt-6 text-gray-600">
                     Last changed: <Date dateString={mainData.date} />
-                </div>
+                </div> */}
             </article>
-            {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
-                <a>{title}</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
-            </li>
-          ))}
-        </ul>
-      </section> */}
         </Layout>
     );
 }
