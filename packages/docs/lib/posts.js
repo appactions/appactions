@@ -13,8 +13,65 @@ import rehypeTableOfContent from '@jsdevtools/rehype-toc';
 import rehypeStringify from 'rehype-stringify';
 import rehypeHighlight from 'rehype-highlight';
 import yaml from 'js-yaml';
+import { h, s } from 'hastscript';
 
 const docsDirectory = path.join(process.cwd(), 'pages');
+
+const anchor = s(
+    'svg',
+    {
+        xmlns: 'http://www.w3.org/2000/svg',
+        width: '100%',
+        height: '100%',
+        fill: 'currentColor',
+        viewBox: '0 0 256 256',
+    },
+    s('rect', {
+        width: 256,
+        height: 256,
+        fill: 'none',
+    }),
+    s('line', {
+        x1: 128,
+        y1: 232,
+        x2: 128,
+        y2: 72,
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('circle', {
+        cx: 128,
+        cy: 52,
+        r: 20,
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('line', {
+        x1: 88,
+        y1: 112,
+        x2: 168,
+        y2: 112,
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('path', {
+        d: 'M40,144a48,48,0,0,0,48,48,40,40,0,0,1,40,40,40,40,0,0,1,40-40,48,48,0,0,0,48-48',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+);
 
 export async function getMainDocsData() {
     const id = 'index';
@@ -34,16 +91,9 @@ export async function getMainDocsData() {
         .use(remarkNormalizeHeadings)
         .use(rehypeSlug)
         .use(rehypeAutolinkHeadings, {
-            // behavior: 'before',
-            // content(node) {
-            //     return anchorIcon;
-            //     // return h('span.anchor-link', 'Read the “', toString(node), '” section');
-            //     return h('span.anchor-link', anchorIcon);
-            //     // return [
-            //     //     h('span.visually-hidden', 'Read the “', toString(node), '” section'),
-            //     //     h('span.icon.icon-link', { ariaHidden: 'true' }),
-            //     // ];
-            // },
+            content() {
+                return h('span.anchor-link', anchor);
+            },
         })
         .use(rehypeHighlight)
         .use(rehypeTableOfContent, {
@@ -57,8 +107,6 @@ export async function getMainDocsData() {
     }
 
     const matter = yaml.load(frontMatter);
-
-    console.log(matter)
 
     return {
         id,

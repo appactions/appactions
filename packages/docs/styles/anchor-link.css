@@ -1,0 +1,21 @@
+span.anchor-link {
+    display: inline-block;
+    width: 32px;
+    height: auto;
+    margin-left: -32px;
+    opacity: 0;
+    vertical-align: middle;
+    text-align: center;
+    padding-right: 5px;
+    color: rgb(75, 113, 202);
+    transition: opacity 0.2s ease-in-out;
+}
+span.anchor-link:hover {
+    color: rgb(40, 68, 135);
+}
+
+h1:hover > a > span.anchor-link,
+h2:hover > a > span.anchor-link,
+h3:hover > a > span.anchor-link {
+    opacity: 1;
+}
