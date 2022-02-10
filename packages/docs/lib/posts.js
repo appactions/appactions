@@ -74,11 +74,17 @@ const anchor = s(
 );
 
 export async function getMainDocsData() {
-    const id = 'index';
+    const about = await unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeStringify)
+        .process(await read(path.join(docsDirectory, 'about.md')));
+
+    const id = 'getting-started';
     const fullPath = path.join(docsDirectory, `${id}.md`);
     let frontMatter = null;
 
-    const file = await unified()
+    const content = await unified()
         .use(remarkParse)
         .use(remarkFrontmatter, ['yaml'])
         .use(() => tree => {
@@ -109,8 +115,8 @@ export async function getMainDocsData() {
     const matter = yaml.load(frontMatter);
 
     return {
-        id,
-        contentHtml: String(file),
+        aboutHtml: String(about),
+        contentHtml: String(content),
         ...matter,
     };
 }
