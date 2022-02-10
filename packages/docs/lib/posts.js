@@ -14,6 +14,7 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeHighlight from 'rehype-highlight';
 import yaml from 'js-yaml';
 import { h, s } from 'hastscript';
+// import { toString } from 'mdast-util-to-string';
 
 const docsDirectory = path.join(process.cwd(), 'pages');
 
@@ -73,6 +74,63 @@ const anchor = s(
     }),
 );
 
+const lock = s(
+    'svg',
+    {
+        xmlns: 'http://www.w3.org/2000/svg',
+        width: 192,
+        height: 192,
+        fill: '#000000',
+        viewBox: '0 0 256 256',
+    },
+    s('rect', {
+        width: 256,
+        height: 256,
+        fill: 'none',
+    }),
+    s('circle', {
+        cx: 128,
+        cy: 140,
+        r: 20,
+        fill: 'none',
+        stroke: '#000000',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('line', {
+        x1: 128,
+        y1: 160,
+        x2: 128,
+        y2: 184,
+        fill: 'none',
+        stroke: '#000000',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('rect', {
+        x: 40,
+        y: 88,
+        width: 176,
+        height: 128,
+        rx: 8,
+        fill: 'none',
+        stroke: '#000000',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+    s('path', {
+        d: 'M92,88V52a36,36,0,0,1,72,0V88',
+        fill: 'none',
+        stroke: '#000000',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        strokeWidth: 16,
+    }),
+);
+
 export async function getMainDocsData() {
     const about = await unified()
         .use(remarkParse)
@@ -114,9 +172,21 @@ export async function getMainDocsData() {
 
     const matter = yaml.load(frontMatter);
 
+    const getLockedHtml = (messagge = '') => `
+    <div class="w-full my-12 p-4 text-gray-700">
+        <p class="text-center align-middle absolute left-0 right-0 mt-16">
+            <br />Locked section.<br /><br />This part is only available for early access participants.
+        </p>
+        <div class="inline-block w-full">
+            <span class="blur-md ml-2">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
+        </div>
+    </div>`;
+
+    const contentHtml = String(content).replace(/\[LOCKED\]/g, getLockedHtml());
+
     return {
         aboutHtml: String(about),
-        contentHtml: String(content),
+        contentHtml,
         ...matter,
     };
 }

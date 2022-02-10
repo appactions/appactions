@@ -93,11 +93,13 @@ Drivers are defined by the `createDriver` function. It expects a React component
 
 `isLoading` is a function that gets the components instance as an argument. It returns a boolean value, defining whether is that instance is in a loading state or not. When an instance is selected for interaction or assertion, but it's in a loading state, the test runner can handle this case gracefully and give extra time for that component to catch up. This is an effective way to handle occasional hiccups in the backend: sometimes a 3rd party service can be slower than usual, but instead of setting the default timeout value to a greater number (making the overall performance slower), we can help the test runner to recognize this unusual case, and allow it to wait.
 
-`actions` TODO
+`actions`
+
+[LOCKED]
 
 ### Creating actions
 
-TODO
+[LOCKED]
 
 ## Misc feature
 
@@ -108,7 +110,7 @@ $(el).vDomFind('.foo Pattern1 Pattern2');
 ```
 Returns the DOM node rendered by Pattern2.
 
-TODO
+[LOCKED]
 
 ### Subject refresh
 
