@@ -28,7 +28,7 @@ App Actions helps to solve the following problems:
 
 2. Insert the Cypress plugin at the plugin file:
 
-```
+```javascript
 const { addPlugin } = require('@appactions/core/plugin');
 
 module.exports = on => {
@@ -40,7 +40,7 @@ The plugin will install the developer tool (a browser extension) to the automate
 
 3. Register the Cypress commands in the support file:
 
-```
+```javascript
 import { registerCypressCommands } from '@appactions/core';
 
 registerCypressCommands();
@@ -50,7 +50,7 @@ This function will add the `cy.with` and `cy.do` command to the Cypress runtime,
 
 4. Add the drivers:
 
-```
+```javascript
 import { createDriver } from '@appactions/driver';
 
 createDriver(TextInput, {
@@ -62,7 +62,7 @@ In computing, a driver is a program that helps to connect a component to the pri
 
 Ready to write tests. You can check your integration with the following Hello World test:
 
-```
+```javascript
 describe('Hello', () => {
   it('World', () => {
     cy.visit('/');
@@ -116,7 +116,7 @@ TODO
 
 ### jQuery Helpers
 
-```
+```javascript
 $(el).vDomFind('.foo Pattern1 Pattern2');
 ```
 Returns the DOM node rendered by Pattern2.
@@ -129,7 +129,7 @@ Subject refresh is a Cypress-specific feature. Cypress has a long-standing bug, 
 
 You have to manually enable it on each built-in Cypress command, like this:
 
-```
+```javascript
 import { refresh } from '@appactions/core';
 
 Cypress.Commands.overwrite('click', (click, subject, ...args) => {

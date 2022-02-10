@@ -13,7 +13,7 @@ export default function Home({ mainData }) {
             </Head>
             <article>
                 {/* <h1 className={utilStyles.headingXl}>{mainData.title}</h1> */}
-                <div dangerouslySetInnerHTML={{ __html: mainData.contentHtml }} />
+                <div className="markdown-body" dangerouslySetInnerHTML={{ __html: mainData.contentHtml }} />
 
                 <div className={utilStyles.lightText}>
                     Last changed: <Date dateString={mainData.date} />

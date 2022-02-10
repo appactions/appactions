@@ -24,7 +24,7 @@ export default function Layout({ children, home }) {
             <header className={styles.header}>
                 <Link href="/">
                     <a className="block p-2 w-52 text-grey-700">
-                        <span className="inline-block w-9 h-6">
+                        <span className="inline-block h-6 align-middle w-9">
                             <Logo stroke="#444" />
                         </span>
                         App Actions
