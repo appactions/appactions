@@ -125,5 +125,5 @@ export default function json2yaml(obj) {
 
     var ret = [];
     convert(obj, ret);
-    return ret.join('\n');
+    return ret.join('\n').concat('\n');
 }
