@@ -4,10 +4,11 @@ import { CloseOutlined } from '@ant-design/icons';
 import { a, useTransition } from '@react-spring/web';
 import { Radio } from 'antd';
 import { useSelector, useDispatch } from './store';
-import { dispatchHelper, actionHelper } from './helper';
-import { createDriver, tunnel } from '@appactions/driver';
+import { createDriver, tunnel, createActionHook } from '@appactions/driver';
 import 'antd/dist/antd.css';
 import './style.css';
+
+const useAction = createActionHook(React);
 
 const TodoItem = ({ id }) => {
     const dispatch = useDispatch();
@@ -20,6 +21,8 @@ const TodoItem = ({ id }) => {
         tunnel(event).action('Item', 'remove', id);
         dispatch({ type: 'REMOVE_TODO', id });
     };
+    useAction('toggle', ({ id }) => dispatch({ type: 'TOGGLE_TODO', id }));
+    useAction('remove', ({ id }) => dispatch({ type: 'REMOVE_TODO', id }));
     return (
         <>
             <input type="checkbox" checked={item?.completed} onChange={toggleCompleted} />
@@ -32,6 +35,7 @@ const TodoItem = ({ id }) => {
 const FilterSelection = () => {
     const dispatch = useDispatch();
     const filter = useSelector(useCallback(state => state.filter, []));
+    useAction('set', ({ filter }) => dispatch({ type: 'SET_FILTER', filter }));
     return (
         <Radio.Group
             onChange={e => {
@@ -77,7 +81,6 @@ let count = 0;
 
 const TodoList = () => {
     const dispatch = useDispatch();
-    dispatchHelper(dispatch);
     const add = e => {
         e.preventDefault();
         const id = `${++count}`;
@@ -86,6 +89,7 @@ const TodoList = () => {
         tunnel(e).action('App', 'add', id, title);
         dispatch({ type: 'ADD_TODO', id, title });
     };
+    useAction('add', ({ id, title }) => dispatch({ type: 'ADD_TODO', id, title }));
     return (
         <form onSubmit={add}>
             <FilterSelection />
@@ -107,8 +111,8 @@ export default function App() {
 createDriver(TodoList, {
     pattern: 'App',
     actions: {
-        add: (_, id, title) => {
-            actionHelper('add', id, title);
+        add: ({ hooks }, id, title) => {
+            hooks.add({ id, title });
         },
     },
 });
@@ -117,8 +121,8 @@ createDriver(FilterSelection, {
     pattern: 'Filter',
     getName: ({ $el }) => $el.text().trim(),
     actions: {
-        set: (_, filter) => {
-            actionHelper('set', filter);
+        set: ({ hooks }, filter) => {
+            hooks.set({ filter });
         },
     },
     tunnel: {
@@ -135,11 +139,11 @@ createDriver(TodoItem, {
     pattern: 'Item',
     getName: ({ $el }) => $el.text().trim(),
     actions: {
-        toggle: (_, id) => {
-            actionHelper('toggle', id);
+        toggle: ({ hooks }, id) => {
+            hooks.toggle({ id });
         },
-        remove: (_, id) => {
-            actionHelper('remove', id);
+        remove: ({ hooks }, id) => {
+            hooks.remove({ id });
         },
     },
     tunnel: {

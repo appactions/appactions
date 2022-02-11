@@ -13,6 +13,7 @@ export function attach(hook, rendererID, renderer, global) {
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
         inspectElement,
+        inspectHooksOfFiber,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -104,6 +105,19 @@ export function attach(hook, rendererID, renderer, global) {
         return null;
     };
 
+    const listActionHooksOfFiber = fiber => {
+        const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
+        const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.actionHook);
+
+        return actionHooks.reduce((acc, hook) => {
+            const { name, callback } = hook.value;
+
+            acc[name] = callback;
+
+            return acc;
+        }, {});
+    };
+
     return {
         findFiber,
         getParentFiber, // going to replace findFiberForInteraction
@@ -121,6 +135,8 @@ export function attach(hook, rendererID, renderer, global) {
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
+
+        listActionHooksOfFiber,
 
         // for debug only
         devtoolsInterface,
