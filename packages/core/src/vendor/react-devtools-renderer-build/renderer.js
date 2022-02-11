@@ -12479,7 +12479,8 @@ function attach(hook, rendererID, renderer, global) {
     // added for React App Actions
     findCurrentFiberUsingSlowPathById,
     getOrGenerateFiberID,
-    getDisplayNameForFiber
+    getDisplayNameForFiber,
+    inspectHooksOfFiber
   };
 }
 
