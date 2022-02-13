@@ -14,6 +14,7 @@ export function attach(hook, rendererID, renderer, global) {
         handleCommitFiberRoot,
         inspectElement,
         inspectHooksOfFiber,
+        isUsingHooks,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -106,6 +107,10 @@ export function attach(hook, rendererID, renderer, global) {
     };
 
     const listActionHooksOfFiber = fiber => {
+        if (!isUsingHooks(fiber)) {
+            return [];
+        }
+
         const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
         const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.actionHook);
 
