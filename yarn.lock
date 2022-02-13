@@ -12490,7 +12490,7 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.6, graceful-fs@^4.2.0
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-graceful-fs@^4.1.2, graceful-fs@^4.2.6:
+graceful-fs@^4.1.2:
   version "4.2.9"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
@@ -21267,20 +21267,16 @@ temp-dir@^1.0.0:
   resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-1.0.0.tgz#0a7c0ea26d3a39afa7e0ebea9c1fc0bc4daa011d"
   integrity sha1-CnwOom06Oa+n4OvqnB/AvE2qAR0=
 
-temp-dir@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-2.0.0.tgz#bde92b05bdfeb1516e804c9c00ad45177f31321e"
-  integrity sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==
-
-temp-write@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/temp-write/-/temp-write-5.0.0.tgz#dd9aafebc93ce2067e962a1665f3873e20efb498"
-  integrity sha512-cJhnzBW7DjNox7VcZDXeNlQSkIh3mX/h+M0n0Fh+zgT7YAHwI9c+OngKx4MCiQCVx9iXxV104xYlJgDBCCtawA==
+temp-write@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/temp-write/-/temp-write-4.0.0.tgz#cd2e0825fc826ae72d201dc26eef3bf7e6fc9320"
+  integrity sha512-HIeWmj77uOOHb0QX7siN3OtwV3CTntquin6TNVg6SHOqCP3hYKmox90eeFOGaY1MqJ9WYDDjkyZrW6qS5AWpbw==
   dependencies:
-    graceful-fs "^4.2.6"
+    graceful-fs "^4.1.15"
     is-stream "^2.0.0"
-    temp-dir "^2.0.0"
-    uuid "^8.3.2"
+    make-dir "^3.0.0"
+    temp-dir "^1.0.0"
+    uuid "^3.3.2"
 
 tempy@^0.3.0:
   version "0.3.0"

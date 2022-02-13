@@ -60,7 +60,7 @@
     "chokidar": "^3.5.3",
     "common-tags": "^1.8.2",
     "debug": "^4.3.3",
-    "temp-write": "^5.0.0",
+    "temp-write": "^4.0.0",
     "yaml": "^1.10.2"
   }
 }
