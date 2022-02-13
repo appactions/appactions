@@ -1,4 +1,6 @@
-module.exports.createDriver = (Component, config) => {
+import React from 'react';
+
+export const createDriver = (Component, config) => {
     // Do no run in a server side env
     if (typeof window === 'undefined') {
         return;
@@ -34,7 +36,7 @@ module.exports.createDriver = (Component, config) => {
     };
 };
 
-module.exports.tunnel = event => {
+export const tunnel = event => {
     return {
         action: (patternName, actionName, ...args) => {
             if (!Cypress.AppActions.hook) {
@@ -57,10 +59,8 @@ module.exports.tunnel = event => {
     };
 };
 
-function createActionHook(reactInstance) {
+export function createActionHook(reactInstance) {
     return (name, callback) => reactInstance.useState(() => ({ name, callback, actionHook: true }));
 }
 
-module.exports.createActionHook = createActionHook;
-
-module.exports.useAction = createActionHook(require('react'));
+export const useAction = createActionHook(React);

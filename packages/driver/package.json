@@ -1,15 +1,24 @@
 {
-  "name": "@appactions/driver",
-  "version": "1.0.0",
-  "description": "Driver annotation for App Actions",
-  "main": "index.js",
-  "author": "Miklos Megyes <hello@miklos.dev>",
-  "license": "UNLICENSED",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/appactions/appactions.git"
-  },
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
-  }
+    "name": "@appactions/driver",
+    "version": "1.0.1",
+    "description": "Driver annotation for App Actions",
+    "main": "build/index.js",
+    "author": "Miklos Megyes <hello@miklos.dev>",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/appactions/appactions.git"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.16.11",
+        "@rollup/plugin-babel": "^5.3.0",
+        "rollup": "^2.67.2"
+    },
+    "scripts": {
+        "build": "rollup -c rollup.config.js",
+        "prepublish": "rm -rf build && npm run build"
+    }
 }
