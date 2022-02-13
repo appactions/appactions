@@ -4,5 +4,12 @@
   "description": "Driver annotation for App Actions",
   "main": "index.js",
   "author": "Miklos Megyes <hello@miklos.dev>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/appactions/appactions.git"
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  }
 }

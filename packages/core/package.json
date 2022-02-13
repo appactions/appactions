@@ -17,6 +17,9 @@
     "type": "git",
     "url": "git+ssh://git@github.com/appactions/appactions.git"
   },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
   "author": "Miklos Megyes <hello@miklos.dev>",
   "license": "UNLICENSED",
   "devDependencies": {

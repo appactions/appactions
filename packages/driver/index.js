@@ -57,8 +57,10 @@ module.exports.tunnel = event => {
     };
 };
 
-module.exports.createActionHook = reactInstance => {
-    return function useAction(name, callback) {
-        reactInstance.useState(() => ({ name, callback, actionHook: true }));
-    }
+function createActionHook(reactInstance) {
+    return (name, callback) => reactInstance.useState(() => ({ name, callback, actionHook: true }));
 }
+
+module.exports.createActionHook = createActionHook;
+
+module.exports.useAction = createActionHook(require('react'));
