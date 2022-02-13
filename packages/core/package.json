@@ -1,6 +1,6 @@
 {
   "name": "@appactions/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "App Actions early preview",
   "main": "build/index.js",
   "scripts": {
