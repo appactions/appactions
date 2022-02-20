@@ -126,13 +126,3 @@ Cypress.Commands.overwrite('click', (click, subject, ...args) => {
     return click(refresh(subject), ...args);
 });
 ```
-
-## Articles
-
-### For developers
-
-[LOCKED]
-
-### Innovation
-
-[LOCKED]
