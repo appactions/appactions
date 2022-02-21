@@ -11325,6 +11325,15 @@ function attach(hook, rendererID, renderer, global) {
     return null;
   }
 
+  function isUsingHooks(fiber) {
+    const {
+      memoizedState,
+      dependencies,
+      tag,
+    } = fiber;
+    return (tag === FunctionComponent || tag === SimpleMemoComponent || tag === ForwardRef) && (!!memoizedState || !!dependencies);
+  }
+
   function inspectElementRaw(id) {
     const fiber = findCurrentFiberUsingSlowPathById(id);
 
@@ -12480,7 +12489,8 @@ function attach(hook, rendererID, renderer, global) {
     findCurrentFiberUsingSlowPathById,
     getOrGenerateFiberID,
     getDisplayNameForFiber,
-    inspectHooksOfFiber
+    inspectHooksOfFiber,
+    isUsingHooks
   };
 }
 

@@ -5,12 +5,12 @@ date: '2022-02-08'
 
 ## Getting started
 
-1. Install App Actions and Cypress: `yarn add -D cypress @appactions/core`
+1. Install App Actions and Cypress: `yarn add -D cypress @appactions/core @appactions/driver`
 
-**Note:** Before installation, an NPM token will be required. Add the following to the `.npmrc` file:
+**Note:** Before installation, an NPM token will be required. Add the following to the `~/.npmrc` file:
 
 ```
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
 2. Insert the Cypress plugin at the plugin file:
@@ -126,13 +126,3 @@ Cypress.Commands.overwrite('click', (click, subject, ...args) => {
     return click(refresh(subject), ...args);
 });
 ```
-
-## Articles
-
-### For developers
-
-[LOCKED]
-
-### Innovation
-
-[LOCKED]
