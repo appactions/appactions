@@ -27,6 +27,15 @@ const choices = [
         ],
     },
     {
+        choice: { name: 'Cypress version with Trello kitchensink', value: 'trello' },
+        concurrently: [
+            { name: 'cyappactions', command: 'yarn workspace @appactions/core dev', prefixColor: 'blue' },
+            { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
+            // the cypress command also handles the dev server
+            { name: 'kitchensink-trello', command: 'yarn workspace kitchensink-trello cypress', prefixColor: 'green' },
+        ],
+    },
+    {
         choice: { name: 'Cypress App Actions unit tests', value: 'unit' },
         concurrently: [
             { name: 'cyappactions', command: 'yarn workspace @appactions/core dev', prefixColor: 'blue' },

@@ -5,7 +5,7 @@ function MyApp({ Component, pageProps }) {
     return (
         <div className="min-h-screen">
             <Head>
-                <title>Create Next App</title>
+                <title>Trello Kitchensink</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Component {...pageProps} />
