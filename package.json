@@ -1,9 +1,14 @@
 {
     "name": "appactions",
     "private": true,
-    "workspaces": [
-        "packages/*"
-    ],
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "**"
+        ]
+    },
     "devDependencies": {
         "concurrently": "^6.2.1",
         "eslint": "^7.22.0",
