@@ -1,41 +1,34 @@
 import Board from 'react-trello';
-
-const data = {
-    lanes: [
-        {
-            id: 'lane1',
-            title: 'Planned Tasks',
-            label: '2/2',
-            cards: [
-                {
-                    id: 'Card1',
-                    title: 'Write Blog',
-                    description: 'Can AI make memes',
-                    label: '30 mins',
-                    draggable: false,
-                },
-                {
-                    id: 'Card2',
-                    title: 'Pay Rent',
-                    description: 'Transfer via NEFT',
-                    label: '5 mins',
-                    metadata: { sha: 'be312a1' },
-                },
-            ],
-        },
-        {
-            id: 'lane2',
-            title: 'Completed',
-            label: '0/0',
-            cards: [],
-        },
-    ],
-};
+import data from './data.json';
 
 const Home = () => {
+    const shouldReceiveNewData = nextData => {
+        console.log('Board has changed');
+        console.log(nextData);
+    };
+
+    const handleCardDelete = (cardId, laneId) => {
+        console.log(`Card: ${cardId} deleted from lane: ${laneId}`);
+    };
+
+    const handleCardAdd = (card, laneId) => {
+        console.log(`New card added to lane ${laneId}`);
+        console.log(card);
+    };
     return (
         <main className="">
-            <Board data={data} />
+            <Board
+                data={data}
+                draggable
+                id="EditableBoard1"
+                onDataChange={shouldReceiveNewData}
+                onCardDelete={handleCardDelete}
+                onCardAdd={handleCardAdd}
+                onCardClick={(cardId, metadata, laneId) =>
+                    console.log(`Card with id:${cardId} clicked. Card in lane: ${laneId}`)
+                }
+                editable
+            />
         </main>
     );
 };
