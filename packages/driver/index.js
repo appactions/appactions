@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const createDriver = (Component, config) => {
     // Do no run in a server side env
     if (typeof window === 'undefined') {
@@ -59,8 +57,15 @@ export const tunnel = event => {
     };
 };
 
-export function createActionHook(reactInstance) {
-    return (name, callback) => reactInstance.useState(() => ({ name, callback, actionHook: true }));
+let reactInstance = null;
+
+export function setReactInstance(instance) {
+    reactInstance = instance;
 }
 
-export const useAction = createActionHook(React);
+export function useAction(name, callback) {
+    if (!reactInstance) {
+        throw new Error('React instance is not defined. ');
+    }
+    reactInstance.useState(() => ({ name, callback, actionHook: true }));
+}
