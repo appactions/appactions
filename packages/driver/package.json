@@ -20,5 +20,8 @@
     "scripts": {
         "build": "rollup -c rollup.config.js",
         "prepublish": "rm -rf build && npm run build"
+    },
+    "peerDependencies": {
+        "react": "^17.0.2"
     }
 }
