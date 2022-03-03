@@ -1,5 +1,31 @@
 import Board from 'react-trello';
+import Lane from 'react-trello/dist/controllers/Lane';
+import Card from 'react-trello/dist/components/Card';
+import NewLaneSection from 'react-trello/dist/components/NewLaneSection';
+import AddCardLink from 'react-trello/dist/components/AddCardLink';
+import { createDriver } from '@appactions/driver';
 import data from './data.json';
+
+createDriver(Board, {
+    pattern: 'Board',
+    // actions: {
+    //     add: ({ hooks }, id, title) => {
+    //         hooks.add({ id, title });
+    //     },
+    // },
+});
+createDriver(Lane, {
+    pattern: 'Lane',
+});
+createDriver(Card, {
+    pattern: 'Card',
+});
+createDriver(AddCardLink, {
+    pattern: 'AddCard',
+});
+createDriver(NewLaneSection, {
+    pattern: 'AddLane',
+});
 
 const Home = () => {
     const shouldReceiveNewData = nextData => {
@@ -27,6 +53,7 @@ const Home = () => {
                 onCardClick={(cardId, metadata, laneId) =>
                     console.log(`Card with id:${cardId} clicked. Card in lane: ${laneId}`)
                 }
+                canAddLanes
                 editable
             />
         </main>
