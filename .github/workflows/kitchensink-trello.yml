@@ -1,0 +1,26 @@
+name: Kitchensink Trello
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install node dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: build package
+        run: yarn workspace @appactions/core build
+
+      - name: build app
+        run: yarn workspace kitchensink-trello build
+
+      - name: run cypress
+        id: cypress
+        run: yarn workspace kitchensink-trello cypress:ci
