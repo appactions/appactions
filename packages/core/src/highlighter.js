@@ -1,4 +1,5 @@
 import Overlay from './overlay';
+import { getFiberInfo } from './api';
 
 export function setupHighlighter(bridge, agent) {
     bridge.addListener('highlightNativeElement', highlightNativeElement);
@@ -14,7 +15,7 @@ export function setupHighlighter(bridge, agent) {
         }
     }
 
-    function showOverlay(elements, componentName) {
+    function showOverlay(elements, pattern, name) {
         if (elements == null) {
             return;
         }
@@ -23,7 +24,7 @@ export function setupHighlighter(bridge, agent) {
             overlay = new Overlay();
         }
 
-        overlay.inspect(elements, componentName);
+        overlay.inspect(elements, pattern, name);
     }
 
     function highlightNativeElement({
@@ -51,7 +52,20 @@ export function setupHighlighter(bridge, agent) {
                 node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
             }
 
-            showOverlay(nodes, displayName, hideAfterTimeout);
+            let pattern = '';
+            let name = 'null';
+
+            const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+            const fiberInfo = getFiberInfo(fiber);
+            if (fiberInfo.driver) {
+                pattern = fiberInfo.driver.pattern;
+
+                if (fiberInfo.driver.getName) {
+                    name = fiberInfo.driver.getName(fiberInfo);
+                }
+            }
+
+            showOverlay(nodes, pattern, name);
 
             if (openNativeElementsPanel) {
                 window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = node;

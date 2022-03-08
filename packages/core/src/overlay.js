@@ -87,9 +87,9 @@ class OverlayTip {
         }
     }
 
-    updateText(name, width, height) {
+    updateText(name, dim) {
         this.nameSpan.textContent = name;
-        this.dimSpan.textContent = Math.round(width) + 'px × ' + Math.round(height) + 'px';
+        this.dimSpan.textContent = dim;
     }
 
     updatePosition(dims, bounds) {
@@ -133,7 +133,7 @@ export default class Overlay {
         }
     }
 
-    inspect(nodes, name) {
+    inspect(nodes, pattern, name) {
         // We can't get the size of text nodes or comment nodes. React as of v15
         // heavily uses comment nodes to delimit text.
         const elements = nodes.filter(node => node.nodeType === Node.ELEMENT_NODE);
@@ -169,29 +169,7 @@ export default class Overlay {
             rect.update(box, dims);
         });
 
-        if (!name) {
-            name = elements[0].nodeName.toLowerCase();
-
-            const node = elements[0];
-            const hook = node.ownerDocument.defaultView.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-            if (hook != null && hook.rendererInterfaces != null) {
-                let ownerName = null;
-                // eslint-disable-next-line no-for-of-loops/no-for-of-loops
-                for (const rendererInterface of hook.rendererInterfaces.values()) {
-                    const id = rendererInterface.getFiberIDForNative(node, true);
-                    if (id !== null) {
-                        ownerName = rendererInterface.getDisplayNameForFiberID(id, true);
-                        break;
-                    }
-                }
-
-                if (ownerName) {
-                    name += ' (in ' + ownerName + ')';
-                }
-            }
-        }
-
-        this.tip.updateText(name, outerBox.right - outerBox.left, outerBox.bottom - outerBox.top);
+        this.tip.updateText(pattern, name);
         const tipBounds = getNestedBoundingClientRect(this.tipBoundsWindow.document.documentElement, this.window);
 
         this.tip.updatePosition(

@@ -19,6 +19,9 @@ createDriver(Lane, {
 });
 createDriver(Card, {
     pattern: 'Card',
+    getName(info) {
+        return info.fiber.stateNode.props.title;
+    },
 });
 createDriver(AddCardLink, {
     pattern: 'AddCard',
