@@ -84,6 +84,10 @@ export default class Agent extends EventEmitter {
         this.emit('shutdown');
     };
 
+    get rendererInterfaces() {
+        return this._rendererInterfaces;
+    }
+
     setRendererInterface = (rendererID, rendererInterface) => {
         this._rendererInterfaces[rendererID] = rendererInterface;
     };

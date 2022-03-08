@@ -10,6 +10,8 @@ export function registerCypressCommands() {
         Cypress.AppActions.hook = installHook(win);
 
         activateBackend(win);
+        
+        window.__APP_ACTIONS_TARGET_WINDOW__ = win;
     });
 
     registerWith('with');
