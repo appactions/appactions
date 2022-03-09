@@ -109,6 +109,7 @@ export default class Agent extends EventEmitter {
     };
 
     onBackendReady = () => {
+        this._isRecording = true;
         this._bridge.send('backend-ready');
     };
 

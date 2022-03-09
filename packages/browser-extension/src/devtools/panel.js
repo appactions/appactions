@@ -22,10 +22,9 @@ const reducer = (state, action) => {
 };
 
 const Panel = () => {
-    const recording = useStore('session-recording-toggle', store => store.isRecording);
     const [tabs, dispatch] = useReducer(reducer, [
         { name: 'Inspect', id: 'inspect-panel', selected: true },
-        { name: 'Session Recording', id: 'session-recording' },
+        { name: 'Recording', id: 'session-recording' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
 
@@ -59,7 +58,6 @@ const Panel = () => {
                                     }}
                                 >
                                     {tab.name}
-                                    {tab.id === 'session-recording' ? (recording ? ' 🔴' : ' ⚪️') : null}
                                 </span>
                             ))}
                         </nav>

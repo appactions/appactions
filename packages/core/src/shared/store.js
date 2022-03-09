@@ -93,6 +93,7 @@ export default class Store extends VendorStore {
 
     onBackendReady = () => {
         this._isBackendReady = true;
+        this._isRecording = true;
         this.emit('backend-ready');
     };
 
