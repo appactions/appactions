@@ -5,7 +5,15 @@ function createChainFromStep(step) {
     const commands = ['cy'];
 
     if (step.with) {
-        commands.push(`with('${step.with}')`);
+        if (typeof step.with === 'string') {
+            commands.push(`with('${step.with}')`);
+        } else if (typeof step.with === 'object' && step.with !== null) {
+            Object.entries(step.with).forEach(([key, value]) => {
+                commands.push(`with('${key}', '${value}')`);
+            });
+        } else {
+            throw new Error('Invalid `with` type');
+        }
     }
 
     if (step.do) {
@@ -17,7 +25,7 @@ function createChainFromStep(step) {
     return commands.join('.').concat(';\n');
 }
 
-const preprocessFlows = (content, {fileName}) => {
+const preprocessFlows = (content, { fileName }) => {
     const flow = yaml.parse(content);
 
     return source`

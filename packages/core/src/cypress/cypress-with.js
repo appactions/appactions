@@ -27,11 +27,13 @@ export const register = (name = 'with', config = {}) => {
                 return true;
             }
 
-            if (!candidate.driver.getName) {
-                throw new AppActionsError(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
-            }
+            let name = '';
 
-            const name = candidate.driver.getName(candidate);
+            if (candidate.driver.getName) {
+                // throw new AppActionsError(`Picker value has been set, but driver doesn\'t have \`getName\` implemented`);
+
+                name = candidate.driver.getName(candidate);
+            }
 
             if (typeof picker === 'function') {
                 // selector = `${pattern} (with a function)`;
@@ -61,13 +63,15 @@ export const register = (name = 'with', config = {}) => {
             Duration: performance.now() - start,
         });
 
-        const getConsoleProps = ({ $result, candidatesLoading, candidatesFilter }) => () => ({
-            ...getConsolePropsWithoutResult(),
-            Yielded: $result,
-            MatchCount: $result.length,
-            'Candidates (loading)': candidatesLoading,
-            'Candidates (filter)': candidatesFilter,
-        });
+        const getConsoleProps =
+            ({ $result, candidatesLoading, candidatesFilter }) =>
+            () => ({
+                ...getConsolePropsWithoutResult(),
+                Yielded: $result,
+                MatchCount: $result.length,
+                'Candidates (loading)': candidatesLoading,
+                'Candidates (filter)': candidatesFilter,
+            });
 
         if (options.log) {
             options._log = Cypress.log({
