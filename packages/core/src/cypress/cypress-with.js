@@ -14,6 +14,10 @@ export const register = (name = 'with', config = {}) => {
 
         let selector = pattern;
 
+        if (typeof picker === 'string' && picker.startsWith('/') && picker.endsWith('/')) {
+            picker = new RegExp(picker.slice(1, -1));
+        }
+
         if (typeof picker === 'function') {
             selector = `${pattern} (with a function)`;
         } else if (picker instanceof RegExp) {
