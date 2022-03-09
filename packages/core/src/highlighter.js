@@ -52,8 +52,8 @@ export function setupHighlighter(bridge, agent) {
                 node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
             }
 
-            let pattern = '';
-            let name = 'null';
+            let pattern = null;
+            let name = null;
 
             const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
             const fiberInfo = getFiberInfo(fiber);

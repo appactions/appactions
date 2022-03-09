@@ -1,0 +1,7 @@
+description: 'Test recorded at 1/7/2022, 7:35:19 PM'
+start:
+  route: '/'
+  auth: false
+steps:
+  - with: Board
+  # - with: { Lane: Planned Tasks }

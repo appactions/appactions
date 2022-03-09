@@ -67,9 +67,6 @@ class OverlayTip {
         this.tip.appendChild(this.nameSpan);
         Object.assign(this.nameSpan.style, {
             color: '#ee78e6',
-            borderRight: '1px solid #aaaaaa',
-            paddingRight: '0.5rem',
-            marginRight: '0.5rem',
         });
         this.dimSpan = doc.createElement('span');
         this.tip.appendChild(this.dimSpan);
@@ -90,6 +87,26 @@ class OverlayTip {
     updateText(name, dim) {
         this.nameSpan.textContent = name;
         this.dimSpan.textContent = dim;
+
+        if (dim) {
+            Object.assign(this.nameSpan.style, {
+                borderRight: '1px solid #aaaaaa',
+                paddingRight: '0.5rem',
+                marginRight: '0.5rem',
+            });
+            Object.assign(this.dimSpan.style, {
+                display: 'inline',
+            });
+        } else {
+            Object.assign(this.nameSpan.style, {
+                borderRight: 'none',
+                paddingRight: '0',
+                marginRight: '0',
+            });
+            Object.assign(this.dimSpan.style, {
+                display: 'none',
+            });
+        }
     }
 
     updatePosition(dims, bounds) {
