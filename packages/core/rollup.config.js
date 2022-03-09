@@ -6,7 +6,7 @@ import multi from 'rollup-plugin-multi-input';
 import replace from '@rollup/plugin-replace';
 
 export default {
-    input: ['src/index.js', 'src/cypress/plugin.js'],
+    input: ['src/index.js', 'src/flow.js', 'src/cypress/plugin.js'],
     output: {
         dir: 'build',
         format: 'cjs',
