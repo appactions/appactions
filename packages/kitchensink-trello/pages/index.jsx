@@ -29,8 +29,12 @@ createDriver(Card, {
 createDriver(AddCardLink, {
     pattern: 'AddCard',
 });
-createDriver(NewLaneSection, {
-    pattern: 'AddLane',
+// createDriver(NewLaneSection, {
+//     pattern: 'AddLane',
+// });
+createDriver('button', {
+    pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
 });
 
 const Home = () => {
