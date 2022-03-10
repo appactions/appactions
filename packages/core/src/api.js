@@ -1,3 +1,5 @@
+import { builtInActions } from './built-in-actions';
+
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
         isRepresentingRole: fiber => {
@@ -22,12 +24,6 @@ export function getRawDriver(fiber) {
 
     return fiber.type.__REACT_APP_ACTIONS__;
 }
-
-const builtInActions = {
-    click() {
-        throw new Error('Not implemented');
-    },
-};
 
 export function getDriver(fiber) {
     const driver = getRawDriver(fiber);
