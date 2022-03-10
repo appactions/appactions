@@ -145,7 +145,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             const getMatch = nodes => {
                 const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(nodes);
-                const list = listFiberForInteraction(fiber, pattern, actionName);
+                const list = listFiberForInteraction(fiber, pattern);
                 return list.map(fiber => getFiberInfo(fiber));
             };
 
@@ -158,11 +158,11 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             }
 
             if (matches.length === 0) {
-                throw new Error(`No fiber found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`No fiber found for interaction with pattern: ${pattern}`);
             }
 
             if (matches.length > 1) {
-                throw new Error(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`Multiple fibers found for interaction with pattern: ${pattern}`);
             }
 
             const match = {
@@ -181,8 +181,6 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             const componentName = getDisplayName(match.fiber);
 
             let value = fn(match, ...args);
-
-            // let value = fn($subject);
 
             if (picker) {
                 if (typeof picker === 'function') {

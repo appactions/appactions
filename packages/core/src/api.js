@@ -6,7 +6,7 @@ if (!Cypress.AppActions) {
     };
 }
 
-export function getDriver(fiber) {
+export function getRawDriver(fiber) {
     if (!fiber.type) {
         return null;
     }
@@ -21,6 +21,24 @@ export function getDriver(fiber) {
     }
 
     return fiber.type.__REACT_APP_ACTIONS__;
+}
+
+const builtInActions = {
+    click() {
+        throw new Error('Not implemented');
+    },
+};
+
+export function getDriver(fiber) {
+    const driver = getRawDriver(fiber);
+
+    if (!driver) {
+        return null;
+    }
+
+    const result = Object.create(driver);
+    result.actions = Object.assign(Object.create(builtInActions), driver.actions);
+    return result;
 }
 
 export function getFiberInfo(fiber) {
@@ -94,7 +112,7 @@ export function listFiberByRole(fiber, pattern) {
     return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isPartOfRole(pattern));
 }
 
-export function listFiberForInteraction(fiber, pattern, actionName) {
+export function listFiberForInteraction(fiber, pattern) {
     const isMatching = fiber => {
         const driver = getDriver(fiber);
 
@@ -102,15 +120,7 @@ export function listFiberForInteraction(fiber, pattern, actionName) {
             return false;
         }
 
-        if (pattern !== driver.pattern) {
-            return false;
-        }
-
-        if (driver.actions?.[actionName]) {
-            return true;
-        }
-
-        return false;
+        return pattern === driver.pattern;
     };
 
     return Cypress.AppActions.reactApi.listFibersByPredicate(fiber, isMatching);
