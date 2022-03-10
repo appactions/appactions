@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --hot",
     "cypress": "node cypress.js",
-    "test": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
+    "test:cypress": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
+    "test:jest": "jest",
+    "test": "yarn test:cypress && yarn test:jest",
     "dev": "rollup --config rollup.config.js --watch",
     "clean": "rm -rf build",
     "build": "yarn run clean && rollup --config rollup.config.js",
@@ -43,6 +45,7 @@
     "cypress": "^4.6.0",
     "error-stack-parser": "^2.0.6",
     "html-webpack-plugin": "^4.0.4",
+    "jest": "^27.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.0.0",
@@ -63,5 +66,8 @@
     "debug": "^4.3.3",
     "temp-write": "^4.0.0",
     "yaml": "^1.10.2"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": ["<rootDir>/src/vendor/"]
   }
 }

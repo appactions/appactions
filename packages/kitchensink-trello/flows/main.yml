@@ -4,5 +4,5 @@ start:
   auth: false
 steps:
   - with: Board
-  # - with: { Lane: /Planned Tasks/ }
-  - with: { Lane: Planned Tasks, Card: /Dispose Garbage/ }
+  - with: { Lane: Planned Tasks, Button: /^Click to add card$/ }
+    do: click

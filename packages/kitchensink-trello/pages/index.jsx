@@ -30,6 +30,7 @@ createDriver(Card, {
 });
 createDriver(AddCardLink, {
     pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
 });
 createDriver(NewCardForm, {
     pattern: 'NewCardForm',
