@@ -5,4 +5,4 @@ start:
 steps:
   - with: Board
   # - with: { Lane: /Planned Tasks/ }
-  - with: { Lane: Planned Tasks }
+  - with: { Lane: Planned Tasks, Card: /Dispose Garbage/ }

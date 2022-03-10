@@ -9,7 +9,11 @@ function createChainFromStep(step) {
             commands.push(`with('${step.with}')`);
         } else if (typeof step.with === 'object' && step.with !== null) {
             Object.entries(step.with).forEach(([key, value]) => {
-                commands.push(`with('${key}', '${value}')`);
+                let name = `'${value}'`;
+                if (typeof value === 'string' && value.startsWith('/') && value.endsWith('/')) {
+                    name = value;
+                }
+                commands.push(`with('${key}', ${name})`);
             });
         } else {
             throw new Error('Invalid `with` type');
