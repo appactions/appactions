@@ -102,7 +102,7 @@ export default function SessionRecordingPanel() {
     return (
         <div className="pt-2 pl-2">
             <RecordControls />
-            <div className="my-2">
+            <div className="my-2" style={{ maxWidth: 'calc(100% - 5px)'}}>
                 <Highlight className="yaml">{renderYAML(meta, sessionRecording)}</Highlight>
             </div>
         </div>

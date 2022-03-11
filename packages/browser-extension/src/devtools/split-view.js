@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 
 export default function SplitView({ left, right, minimumSize = 150 }) {
     const [isResizing, setIsResizing] = useState(false);
-    const [leftWidthPercent, setLeftWidthPercent] = useState(50);
+    const [leftWidthPercent, setLeftWidthPercent] = useState(25);
     const wrapperElementRef = useRef(null);
 
     const onResizeStart = () => setIsResizing(true);

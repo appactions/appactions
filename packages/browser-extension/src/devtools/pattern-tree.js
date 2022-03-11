@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { useDevtoolsContext } from './context';
 import { useStore } from './hooks';
-import Delay from './components/delay'
+import Delay from './components/delay';
 
 export default function PatternTree() {
-    const { bridge } = useDevtoolsContext();
+    const { bridge, store } = useDevtoolsContext();
 
     const onLeave = useCallback(() => {
         bridge.send('clearNativeElementHighlight');
@@ -29,24 +29,28 @@ export default function PatternTree() {
 
     if (numElements === 0) {
         // TODO show link to docs
-        return <Delay key="no-elements"><h4>Could not find any patterns. Annotate your components with drivers.</h4></Delay>;
+        return (
+            <Delay key="no-elements">
+                <h4>Could not find any patterns. Annotate your components with drivers.</h4>
+            </Delay>
+        );
     }
 
     return (
         <div onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
-                .map((_, index) => (
-                    <Element key={index} index={index} />
-                ))}
+                .map((_, index) => {
+                    const element = store.getElementAtIndex(index);
+                    return <Element key={element.id} element={element} />;
+                })}
         </div>
     );
 }
 
-function Element({ index }) {
+function Element({ element }) {
+    const { id, depth, displayName, hocDisplayNames, key, type } = element;
     const { bridge, store } = useDevtoolsContext();
-
-    const { id, depth, displayName, hocDisplayNames, key, type } = store.getElementAtIndex(index);
 
     const patternElement = useStore('newElementAdded', store => {
         return store.getPatternByID(id);

@@ -29,12 +29,12 @@ describe('Interaction', () => {
         cy.visit('/instant');
         cy.with('Table').find('th').first().do('Table', 'sort', ['Color', 'asc']);
 
-        expectToFailWithMessage('No fiber found for interaction: Table.sort');
+        expectToFailWithMessage('No fiber found for interaction with pattern: Table');
     });
     it('with(instant appear<multiple>).do(interaction) -- should fail with multiple subjects', () => {
         cy.visit('/multiple');
         cy.with('Table').do('Table', 'sort', ['Color', 'asc']);
 
-        expectToFailWithMessage('Multiple fibers found for interaction: Table.sort');
+        expectToFailWithMessage('Multiple fibers found for interaction with pattern: Table');
     });
 });

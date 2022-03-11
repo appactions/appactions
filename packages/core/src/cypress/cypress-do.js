@@ -1,4 +1,4 @@
-import { isJquery, AppActionsError } from './cypress-utils';
+import { isJquery, AppActionsError, formatArguments } from './cypress-utils';
 import { refresh } from './refresh-subject';
 import { listFiberForInteraction, getDisplayName, getFiberInfo } from '../api';
 
@@ -17,56 +17,60 @@ function createRetryContext() {
     let currentIndex = 0;
 
     return {
-        retryable: fn => (...args) => {
-            if (currentIndex < purityValues.length) {
-                return purityValues[currentIndex++];
-            }
-
-            let result;
-            try {
-                result = fn(...args);
-            } catch (error) {
-                if (!error.hasOwnProperty('__retryable')) {
-                    Object.defineProperty(error, '__retryable', {
-                        enumerable: false,
-                        get() {
-                            return true;
-                        },
-                    });
+        retryable:
+            fn =>
+            (...args) => {
+                if (currentIndex < purityValues.length) {
+                    return purityValues[currentIndex++];
                 }
 
-                throw error;
-            }
+                let result;
+                try {
+                    result = fn(...args);
+                } catch (error) {
+                    if (!error.hasOwnProperty('__retryable')) {
+                        Object.defineProperty(error, '__retryable', {
+                            enumerable: false,
+                            get() {
+                                return true;
+                            },
+                        });
+                    }
 
-            purityValues.push(result);
-            currentIndex++;
-            return result;
-        },
-        nonRetryable: fn => (...args) => {
-            if (currentIndex < purityValues.length) {
-                return purityValues[currentIndex++];
-            }
-
-            let result;
-            try {
-                result = fn(...args);
-            } catch (error) {
-                if (!error.hasOwnProperty('__retryable')) {
-                    Object.defineProperty(error, '__retryable', {
-                        enumerable: false,
-                        get() {
-                            return false;
-                        },
-                    });
+                    throw error;
                 }
 
-                throw error;
-            }
+                purityValues.push(result);
+                currentIndex++;
+                return result;
+            },
+        nonRetryable:
+            fn =>
+            (...args) => {
+                if (currentIndex < purityValues.length) {
+                    return purityValues[currentIndex++];
+                }
 
-            purityValues.push(result);
-            currentIndex++;
-            return result;
-        },
+                let result;
+                try {
+                    result = fn(...args);
+                } catch (error) {
+                    if (!error.hasOwnProperty('__retryable')) {
+                        Object.defineProperty(error, '__retryable', {
+                            enumerable: false,
+                            get() {
+                                return false;
+                            },
+                        });
+                    }
+
+                    throw error;
+                }
+
+                purityValues.push(result);
+                currentIndex++;
+                return result;
+            },
         onRetry: () => {
             currentIndex = 0;
         },
@@ -93,7 +97,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
         const options = {
             log: true,
             _log: Cypress.log({
-                message: `${pattern}.${actionName}`,
+                message: args.length ? `${pattern}.${actionName} ${formatArguments(args)}` : `${pattern}.${actionName}`,
             }),
             error: null,
         };
@@ -114,24 +118,26 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             return result;
         };
 
-        const getConsoleProps = ({ yielded, fn, componentName }) => () => {
-            const result = {
-                ...getConsolePropsWithoutResult(),
-                Function: fn.toString(),
-                Component: componentName,
-                Yielded: yielded,
+        const getConsoleProps =
+            ({ yielded, fn, componentName }) =>
+            () => {
+                const result = {
+                    ...getConsolePropsWithoutResult(),
+                    Function: fn.toString(),
+                    Component: componentName,
+                    Yielded: yielded,
+                };
+
+                if (returnValueIsSubject) {
+                    result['Count'] = yielded.length;
+                }
+
+                return result;
             };
-
-            if (returnValueIsSubject) {
-                result['Count'] = yielded.length;
-            }
-
-            return result;
-        };
 
         const retryContext = createRetryContext();
 
-        const getValue = () => {
+        const getValue = async () => {
             if (options._log) {
                 options._log.set({
                     $el: $subject,
@@ -145,7 +151,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             const getMatch = nodes => {
                 const fiber = Cypress.AppActions.reactApi.findFiberForInteraction(nodes);
-                const list = listFiberForInteraction(fiber, pattern, actionName);
+                const list = listFiberForInteraction(fiber, pattern);
                 return list.map(fiber => getFiberInfo(fiber));
             };
 
@@ -154,15 +160,17 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
 
             // if it didn't work, try using each element individually
             if (matches.length === 0) {
-                matches = Array.from($subject).map(node => [node]).flatMap(getMatch);
+                matches = Array.from($subject)
+                    .map(node => [node])
+                    .flatMap(getMatch);
             }
 
             if (matches.length === 0) {
-                throw new Error(`No fiber found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`No fiber found for interaction with pattern: ${pattern}`);
             }
 
             if (matches.length > 1) {
-                throw new Error(`Multiple fibers found for interaction: ${pattern}.${actionName}`);
+                throw new Error(`Multiple fibers found for interaction with pattern: ${pattern}`);
             }
 
             const match = {
@@ -180,9 +188,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
             const fn = match.driver.actions[actionName];
             const componentName = getDisplayName(match.fiber);
 
-            let value = fn(match, ...args);
-
-            // let value = fn($subject);
+            let value = await fn(match, ...args);
 
             if (picker) {
                 if (typeof picker === 'function') {

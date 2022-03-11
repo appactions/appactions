@@ -19,8 +19,12 @@ jobs:
         run: yarn workspace @appactions/core build
 
       - name: run unit tests
-        id: cypress
-        run: yarn workspace @appactions/core test
+        run: yarn workspace @appactions/core test:cypress
         env:
           CI: true
           CYPRESS_RECORD_KEY_FOR_APP_ACTIONS: ${{ secrets.CYPRESS_RECORD_KEY_FOR_APP_ACTIONS}}
+
+      - name: run jest tests
+        run: yarn workspace @appactions/core test:jest
+        env:
+          CI: true

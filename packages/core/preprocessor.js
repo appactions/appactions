@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const yaml = require('yaml');
-const { source } = require('common-tags');
 const tempWrite = require('temp-write');
 const chokidar = require('chokidar');
+const preprocessFlows = require('./build/flow');
 const cyBrowserify = require('@cypress/browserify-preprocessor')();
 const debug = require('debug')('app-actions-preprocessor');
 
@@ -21,35 +20,11 @@ const debug = require('debug')('app-actions-preprocessor');
 // bundled[filename] => promise
 const bundled = {};
 
-function createChainFromStep(step) {
-    const commands = ['cy'];
-
-    if (step.with) {
-        commands.push(`with('${step.with}')`);
-    }
-
-    if (step.do) {
-        const firstDoKey = Object.keys(step.do)[0];
-        const firstDoArgs = JSON.stringify(step.do[firstDoKey]);
-        commands.push(`do('${step.with}', '${firstDoKey}', ${firstDoArgs})`);
-    }
-
-    return commands.join('.').concat(';\n');
-}
-
 const preprocessFlowFiles = (filePath, outputPath) => {
     const content = fs.readFileSync(filePath, 'utf8');
     //   const flow = yaml.parse(content, { mapAsMap: true });
-    const flow = yaml.parse(content);
-
-    const specSource = source`
-        describe('${path.basename(filePath)}', () => {
-            it('${flow.description}', () => {
-                cy.visit('${flow.start.route}');
-                ${flow.steps.map(createChainFromStep).join('\n')}
-            });
-        });
-    `;
+    debugger;
+    const specSource = preprocessFlows(content, { fileName: path.basename(filePath) });
 
     const writtenTempFilename = tempWrite.sync(specSource, path.basename(filePath) + '.js');
     debug('wrote temp file', writtenTempFilename);
