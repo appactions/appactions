@@ -37,6 +37,9 @@ createDriver(NewCardForm, {
 });
 createDriver(EditableLabel, {
     pattern: 'EditableLabel',
+    getName(info) {
+        return info.fiber.stateNode.props.placeholder;
+    },
 });
 createDriver(InlineInputController, {
     pattern: 'Input',

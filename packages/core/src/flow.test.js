@@ -73,3 +73,27 @@ steps:
 });"
 `);
 });
+
+test('"with" should correctly work when no name specified', () => {
+    const content = `
+description: 'Test recorded at 1/7/2022, 7:35:19 PM'
+start:
+  route: '/'
+  auth: false
+steps:
+  - with: { NewCardForm, EditableLabel }
+    do: { type: 'foobarbaz' }
+`;
+    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
+"describe('main.yml', () => {
+    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
+        cy.visit('/');
+        cy
+        	.with('NewCardForm')
+        	.with('EditableLabel')
+        	.do('EditableLabel', 'type', ['foobarbaz']);
+        
+    });
+});"
+`);
+});

@@ -6,3 +6,11 @@ steps:
   - with: Board
   - with: { Lane: Planned Tasks, Button: /^Click to add card$/ }
     do: click
+  - with: { NewCardForm, EditableLabel: title }
+    do: { type: 'foo' }
+  - with: { NewCardForm, EditableLabel: label }
+    do: { type: 'bar' }
+  - with: { NewCardForm, EditableLabel: description }
+    do: { type: 'baz' }
+  - with: { NewCardForm, Button: Add card }
+    do: click
