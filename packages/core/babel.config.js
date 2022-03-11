@@ -14,5 +14,9 @@ module.exports = {
         '@babel/preset-react',
         '@babel/preset-flow',
     ],
-    plugins: ['@babel/plugin-transform-flow-strip-types', '@babel/plugin-proposal-class-properties'],
+    plugins: [
+        '@babel/transform-runtime',
+        '@babel/plugin-transform-flow-strip-types',
+        '@babel/plugin-proposal-class-properties',
+    ],
 };
