@@ -1,4 +1,4 @@
-name: Kitchensink R3F
+name: Browser extension
 on:
   pull_request:
     types: [opened, synchronize]
