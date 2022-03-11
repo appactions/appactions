@@ -49,7 +49,7 @@ const choices = [
         concurrently: [
             { name: 'core', command: 'yarn workspace @appactions/core dev', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace browser-extension dev', prefixColor: 'yellow' },
-            { name: 'test-app', command: 'yarn workspace browser-extension test', prefixColor: 'green' },
+            { name: 'test-app', command: 'yarn workspace browser-extension start', prefixColor: 'green' },
         ],
     },
     {
