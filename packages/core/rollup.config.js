@@ -11,6 +11,7 @@ export default {
         dir: 'build',
         format: 'cjs',
     },
+    external: ['path', 'fs'],
     plugins: [
         multi(),
         resolve(),

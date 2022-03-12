@@ -1,7 +1,7 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-module.exports.addPlugin = on => {
+export const addPlugin = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.name === 'chrome') {
             let extensionPath = path.join(__dirname, '../../../browser-extension/build');
@@ -27,5 +27,3 @@ module.exports.addPlugin = on => {
         },
     });
 };
-
-// TODO this file needs to be cjs, because it will be running in Node; transpile this maybe?
