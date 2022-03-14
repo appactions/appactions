@@ -1,5 +1,6 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
+import { setupAssertMenu } from './assert-menu'
 import { getDriver, getFiberInfo } from './api';
 
 function getMockedSessionRecordEvent() {
@@ -29,6 +30,7 @@ export default class Agent extends EventEmitter {
         bridge.addListener('session-recording-save', this.saveSessionRecording);
 
         setupHighlighter(bridge, this);
+        setupAssertMenu(bridge, this);
     }
 
     inspectElement = ({ id, path, rendererID, requestID }) => {

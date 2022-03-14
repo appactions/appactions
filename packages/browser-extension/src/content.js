@@ -1,5 +1,3 @@
-import './assert-menu'
-
 let connection;
 
 window.addEventListener('message', ({ data: message, isTrusted }) => {
