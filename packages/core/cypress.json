@@ -1,4 +1,5 @@
 {
   "baseUrl": "http://localhost:12000",
+  "integrationFolder": "tests",
   "projectId": "uyfqj7"
 }
