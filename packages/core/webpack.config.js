@@ -8,11 +8,11 @@ const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin'
 const extensionConfig = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        main: './src/main.js',
-        content: './src/content.js',
-        background: './src/background.js',
-        panel: './src/panel.js',
-        popup: './src/popup.js',
+        main: './src/browser-extension/main.js',
+        content: './src/browser-extension/content.js',
+        background: './src/browser-extension/background.js',
+        panel: './src/browser-extension/panel.js',
+        popup: './src/browser-extension/popup.js',
     },
     output: {
         filename: '[name].js',
@@ -66,10 +66,12 @@ const extensionConfig = {
             'font-src': "'self' https://fonts.gstatic.com",
             'img-src': "'self' data:",
         }),
-        new CopyPlugin([
-            { from: './src/assets', to: './assets' },
-            { from: './src/manifest.json', to: './manifest.json' },
-        ]),
+        new CopyPlugin({
+            patterns: [
+                { from: './src/assets', to: './assets' },
+                { from: './src/manifest.json', to: './manifest.json' },
+            ],
+        }),
         new ExtensionReloader({
             reloadPage: false,
             entries: {
@@ -93,13 +95,13 @@ const extensionConfig = {
 const assertMenuConfig = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        assertMenu: './src/assert-menu.js',
+        assertMenu: './src/browser-extension/assert-menu.js',
     },
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: '[name].js',
         library: '[name]',
-        libraryTarget:'umd',
+        libraryTarget: 'umd',
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css'],
@@ -134,6 +136,6 @@ const assertMenuConfig = {
               }
             : undefined,
     stats: 'minimal',
-}
+};
 
 module.exports = [extensionConfig, assertMenuConfig];
