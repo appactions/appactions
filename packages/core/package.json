@@ -4,9 +4,9 @@
   "description": "App Actions early preview",
   "main": "build/index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot",
+    "start": "webpack-dev-server --hot --config cypress/app/webpack.config.js",
     "cypress": "node cypress.js",
-    "test:cypress": "start-server-and-test webpack-dev-server http://localhost:12000 cypress",
+    "test:cypress": "start-server-and-test http://localhost:12000 cypress",
     "test:jest": "jest",
     "test": "yarn test:cypress && yarn test:jest",
     "dev": "rollup --config rollup.config.js --watch",

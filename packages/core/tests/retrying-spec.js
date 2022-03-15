@@ -1,4 +1,4 @@
-import { expectToFailWithMessage } from '../../src/utils';
+import { expectToFailWithMessage } from '../src/utils';
 
 describe('Retrying', () => {
     it("with(appears delayed<spinner>) -- retry works", () => {
