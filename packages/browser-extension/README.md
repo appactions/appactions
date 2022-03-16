@@ -10,7 +10,7 @@ Right click on the icon, and Inspect Popup.
 
 ### Debug a devtools panel
 
-Access `chrome-extension://jlcplipjkglcddmppdmbnkogbpgnfbck/devtools.html` in your browser, where the id is the extension id.
+Access `chrome-extension://jcckhadkikcgdlgejoflohhncchdgiie/main.html` in your browser, where the id is the extension id.
 
 ### Debug the Chrome instance
 

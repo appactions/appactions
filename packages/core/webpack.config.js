@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HTMLPlugin = require('html-webpack-plugin');
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -77,53 +78,10 @@ module.exports = {
                 { from: './src/browser-extension/manifest.json', to: './manifest.json' },
             ],
         }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
     ],
-    devtool: 'cheap-module-source-map',
-    optimization:
-        process.env.NODE_ENV === 'production'
-            ? {
-                  minimize: true,
-              }
-            : undefined,
-    stats: 'minimal',
-};
-
-const assertMenuConfig = {
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    entry: {
-        assertMenu: './src/browser-extension/assert-menu.js',
-    },
-    output: {
-        path: path.resolve(__dirname, 'build/browser-extension'),
-        filename: '[name].js',
-        library: '[name]',
-        libraryTarget: 'umd',
-    },
-    resolve: {
-        extensions: ['.js', '.jsx', '.css'],
-        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    },
-    module: {
-        rules: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                    },
-                ],
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader'],
-            },
-            {
-                test: /\.svg$/,
-                use: ['@svgr/webpack'],
-            },
-        ],
-    },
     devtool: 'cheap-module-source-map',
     optimization:
         process.env.NODE_ENV === 'production'
