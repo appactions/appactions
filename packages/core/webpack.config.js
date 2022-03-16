@@ -2,9 +2,8 @@ const HTMLPlugin = require('html-webpack-plugin');
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-const ExtensionReloader = require('webpack-extension-reloader');
 
-const extensionConfig = {
+module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
         main: './src/browser-extension/main.js',
@@ -12,6 +11,7 @@ const extensionConfig = {
         background: './src/browser-extension/background.js',
         panel: './src/browser-extension/panel.js',
         popup: './src/browser-extension/popup.js',
+        assertMenu: './src/browser-extension/assert-menu.js',
     },
     output: {
         filename: '[name].js',
@@ -58,6 +58,11 @@ const extensionConfig = {
             filename: 'panel.html',
             showErrors: true,
         }),
+        new HTMLPlugin({
+            chunks: ['assertMenu'],
+            filename: 'assertMenu.html',
+            showErrors: true,
+        }),
         new CspHtmlWebpackPlugin({
             'default-src': "'self'",
             'script-src': "'self'",
@@ -72,17 +77,7 @@ const extensionConfig = {
                 { from: './src/browser-extension/manifest.json', to: './manifest.json' },
             ],
         }),
-        process.env.NODE_ENV === 'development'
-            ? new ExtensionReloader({
-                  reloadPage: false,
-                  entries: {
-                      contentScript: ['content', 'main'],
-                      background: 'background',
-                      extensionPage: ['popup'],
-                  },
-              })
-            : null,
-    ].filter(Boolean),
+    ],
     devtool: 'cheap-module-source-map',
     optimization:
         process.env.NODE_ENV === 'production'
@@ -138,5 +133,3 @@ const assertMenuConfig = {
             : undefined,
     stats: 'minimal',
 };
-
-module.exports = [extensionConfig, assertMenuConfig];

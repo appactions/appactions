@@ -9,13 +9,15 @@
     "test:cypress": "start-server-and-test http://localhost:12000 cypress",
     "test:jest": "jest",
     "test": "yarn test:cypress && yarn test:jest",
-    "dev": "rollup --config rollup.config.js --watch",
+    "dev": "concurrently \"yarn:dev:*\"",
+    "dev:library": "NODE_ENV=development rollup --config rollup.config.js --watch",
+    "dev:extension": "NODE_ENV=development webpack --config webpack.config.js --watch",
     "clean": "rm -rf build",
-    "build": "yarn run clean && yarn run build:browser-extension && yarn run build:library",
-    "build:browser-extension": "NODE_ENV=production webpack --config webpack.config.js",
+    "build": "yarn run clean && yarn run build:extension && yarn run build:library",
+    "build:extension": "NODE_ENV=production webpack --config webpack.config.js",
     "build:library": "NODE_ENV=production rollup --config rollup.config.js",
     "build:react-devtools-renderer": "rollup --config src/vendor/rollup.config.js",
-    "prepublish": "./build.sh"
+    "prepublish": "yarn build"
   },
   "repository": {
     "type": "git",
@@ -69,8 +71,7 @@
     "tailwindcss": "^3.0.23",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4",
-    "webpack-extension-reloader": "^1.1.4"
+    "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",

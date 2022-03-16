@@ -42,9 +42,6 @@ const config = {
     ],
     devServer: {
         port: 12000,
-        clientLogLevel: 'warning',
-        publicPath: '/',
-        stats: 'errors-only',
         historyApiFallback: true,
     },
 };
