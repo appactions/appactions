@@ -1,5 +1,5 @@
 import { expectToFailWithMessage } from '../src/utils';
-import { vDomFind, vDomClosest } from '../../src/vdom-utils';
+import { vDomFind, vDomClosest } from '../src/vdom-utils';
 
 describe('VDOM utils', () => {
     describe('As jQuery functions', () => {
