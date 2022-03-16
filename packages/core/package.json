@@ -9,6 +9,7 @@
     "test:cypress": "start-server-and-test http://localhost:12000 cypress",
     "test:jest": "jest",
     "test": "yarn test:cypress && yarn test:jest",
+    "wait-for-dev": "yarn run clean && wait-on build/index.js && wait-on build/browser-extension/main.js",
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:library": "NODE_ENV=development rollup --config rollup.config.js --watch",
     "dev:extension": "NODE_ENV=development webpack --config webpack.config.js --watch",
@@ -69,6 +70,7 @@
     "start-server-and-test": "^1.14.0",
     "style-loader": "^2.0.0",
     "tailwindcss": "^3.0.23",
+    "wait-on": "^6.0.1",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"

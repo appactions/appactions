@@ -14,7 +14,7 @@ const choices = [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
             { name: 'kitchensink-nextjs', command: 'yarn workspace kitchensink-nextjs dev', prefixColor: 'green' },
-            { name: 'cypress', command: 'yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
+            { name: 'cypress', command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
         ],
     },
     {
@@ -23,7 +23,7 @@ const choices = [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
             // the cypress command also handles the dev server
-            { name: 'cypress', command: 'yarn workspace kitchensink-r3f cypress', prefixColor: 'green' },
+            { name: 'cypress', command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-r3f cypress', prefixColor: 'green' },
         ],
     },
     {
@@ -32,7 +32,7 @@ const choices = [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
             // the cypress command also handles the dev server
-            { name: 'cypress', command: 'yarn workspace kitchensink-trello cypress', prefixColor: 'green' },
+            { name: 'cypress', command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-trello cypress', prefixColor: 'green' },
         ],
     },
     {
@@ -41,7 +41,7 @@ const choices = [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
             { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
             { name: 'test-app', command: 'yarn workspace @appactions/core start', prefixColor: 'cyan' },
-            { name: 'cypress', command: 'yarn workspace @appactions/core cypress', prefixColor: 'green' },
+            { name: 'cypress', command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace @appactions/core cypress', prefixColor: 'green' },
         ],
     },
     {

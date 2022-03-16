@@ -4,10 +4,10 @@ import fs from 'fs';
 export const addPlugin = on => {
     on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.name === 'chrome') {
-            let extensionPath = path.join(__dirname, '../../../browser-extension/build');
+            const extensionPath = path.join(__dirname, '../browser-extension');
 
             if (!fs.existsSync(extensionPath)) {
-                extensionPath = path.resolve('../browser-extension');
+                throw new Error(`Cannot find browser-extension directory at ${extensionPath}`);
             }
 
             launchOptions.extensions.push(extensionPath);
