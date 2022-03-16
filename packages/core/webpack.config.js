@@ -3,7 +3,6 @@ const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
-const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
 
 const extensionConfig = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -16,7 +15,7 @@ const extensionConfig = {
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'build/browser-extension'),
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css'],
@@ -66,22 +65,24 @@ const extensionConfig = {
             'font-src': "'self' https://fonts.gstatic.com",
             'img-src': "'self' data:",
         }),
+        // TODO make the copy plugin to set the version in manifest.json based on package.json
         new CopyPlugin({
             patterns: [
-                { from: './src/assets', to: './assets' },
-                { from: './src/manifest.json', to: './manifest.json' },
+                { from: './src/browser-extension/assets', to: './assets' },
+                { from: './src/browser-extension/manifest.json', to: './manifest.json' },
             ],
         }),
-        new ExtensionReloader({
-            reloadPage: false,
-            entries: {
-                contentScript: ['content', 'main'],
-                background: 'background',
-                extensionPage: ['popup'],
-            },
-        }),
-        new ManifestVersionSyncPlugin(),
-    ],
+        process.env.NODE_ENV === 'development'
+            ? new ExtensionReloader({
+                  reloadPage: false,
+                  entries: {
+                      contentScript: ['content', 'main'],
+                      background: 'background',
+                      extensionPage: ['popup'],
+                  },
+              })
+            : null,
+    ].filter(Boolean),
     devtool: 'cheap-module-source-map',
     optimization:
         process.env.NODE_ENV === 'production'
@@ -98,7 +99,7 @@ const assertMenuConfig = {
         assertMenu: './src/browser-extension/assert-menu.js',
     },
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'build/browser-extension'),
         filename: '[name].js',
         library: '[name]',
         libraryTarget: 'umd',
