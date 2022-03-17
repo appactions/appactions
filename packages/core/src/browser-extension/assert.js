@@ -1,7 +1,8 @@
-// import { Transition } from '@headlessui/react';
-// import './style.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './style.css';
 
-export default function Menu() {
+function Menu() {
     return (
         <div className="relative inline-block text-left">
             {/* <Transition
@@ -62,3 +63,7 @@ export default function Menu() {
         </div>
     );
 }
+
+const container = document.createElement('div');
+document.body.appendChild(container);
+ReactDOM.render(<Menu />, container);

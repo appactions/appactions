@@ -12,7 +12,7 @@ module.exports = {
         background: './src/browser-extension/background.js',
         panel: './src/browser-extension/panel.js',
         popup: './src/browser-extension/popup.js',
-        assertMenu: './src/browser-extension/assert-menu.js',
+        assert: './src/browser-extension/assert.js',
     },
     output: {
         filename: '[name].js',
@@ -60,8 +60,8 @@ module.exports = {
             showErrors: true,
         }),
         new HTMLPlugin({
-            chunks: ['assertMenu'],
-            filename: 'assertMenu.html',
+            chunks: ['assert'],
+            filename: 'assert.html',
             showErrors: true,
         }),
         new CspHtmlWebpackPlugin({

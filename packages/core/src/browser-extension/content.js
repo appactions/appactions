@@ -30,3 +30,20 @@ const handleMessage = message => {
 const handleDisconnect = () => {
     connection = undefined;
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const iframe = document.createElement('iframe');
+    iframe.id = 'assert-menu-iframe';
+    Object.assign(iframe.style, {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 10000000,
+        border: 'none',
+        display: 'none',
+    });
+    iframe.src = chrome.runtime.getURL('assert.html');
+    document.body.appendChild(iframe);
+});
