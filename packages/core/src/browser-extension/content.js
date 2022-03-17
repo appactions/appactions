@@ -1,6 +1,7 @@
 let connection;
 
 window.addEventListener('message', ({ data: message, isTrusted }) => {
+    console.log('__message__', message);
     // Filter messages not from the agent
     if (!isTrusted || message?.source !== 'agent') {
         return;
@@ -11,6 +12,19 @@ window.addEventListener('message', ({ data: message, isTrusted }) => {
         connection = chrome.runtime.connect({ name: 'agent' });
         connection.onMessage.addListener(handleMessage);
         connection.onDisconnect.addListener(handleDisconnect);
+    }
+
+    if (message.type === 'contextmenu-open') {
+        Object.assign(iframe.style, {
+            display: 'block',
+        });
+        iframe.contentWindow.postMessage(message, chrome.runtime.getURL('assert.html'));
+    }
+
+    if (message.type === 'contextmenu-close') {
+        Object.assign(iframe.style, {
+            display: 'none',
+        });
     }
 
     if (!connection) {
@@ -31,8 +45,9 @@ const handleDisconnect = () => {
     connection = undefined;
 };
 
+let iframe;
 document.addEventListener('DOMContentLoaded', () => {
-    const iframe = document.createElement('iframe');
+    iframe = document.createElement('iframe');
     iframe.id = 'assert-menu-iframe';
     Object.assign(iframe.style, {
         width: '100%',

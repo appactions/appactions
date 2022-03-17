@@ -3,6 +3,13 @@ export function setupAssertMenu(bridge, agent) {
     contentWindow.document.addEventListener('contextmenu', event => {
         event.preventDefault();
 
-        console.log('contextmenu', event);
+        bridge.send('contextmenu-open', {
+            x: event.x,
+            y: event.y,
+            pageX: event.pageX,
+            pageY: event.pageY,
+            screenX: event.screenX,
+            screenY: event.screenY,
+        });
     });
 }

@@ -4,7 +4,7 @@ import './style.css';
 
 function Menu() {
     return (
-        <div className="relative inline-block text-left">
+        <div className="relative inline-block text-left" id="assert-menu">
             {/* <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
@@ -64,6 +64,36 @@ function Menu() {
     );
 }
 
+window.addEventListener('message', ({ data: message, isTrusted }) => {
+    if (!isTrusted || message?.source !== 'agent') {
+        return;
+    }
+
+    if (message.type === 'contextmenu-open') {
+        const menu = document.getElementById('assert-menu');
+        Object.assign(menu.style, {
+            left: message.payload.pageX + 'px',
+            top: message.payload.pageY + 'px',
+        });
+    }
+});
+
 const container = document.createElement('div');
+Object.assign(container.style, {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 10000000,
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    background: 'rgba(0, 0, 0, 0.3)',
+});
 document.body.appendChild(container);
 ReactDOM.render(<Menu />, container);
+
+container.addEventListener('click', () => {
+    window.parent.postMessage({ source: 'agent', type: 'contextmenu-close' }, '*');
+});
