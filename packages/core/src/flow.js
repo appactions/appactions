@@ -58,7 +58,7 @@ function createChainFromStep(step) {
     return commands.join('\n\t.').concat(';\n');
 }
 
-const preprocessFlows = (content, { fileName }) => {
+export const preprocessFlows = (content, { fileName }) => {
     const flow = yaml.parse(content);
 
     return source`
@@ -70,5 +70,3 @@ const preprocessFlows = (content, { fileName }) => {
         });
     `;
 };
-
-export default preprocessFlows;

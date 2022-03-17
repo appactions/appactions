@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
-import Bridge from '../../core/src/shared/bridge';
-import Store from '../../core/src/shared/store';
+import Bridge from '../shared/bridge';
+import Store from '../shared/store';
 import App from './devtools/app';
 
 let panelCreated = false;

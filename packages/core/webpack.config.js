@@ -1,52 +1,93 @@
-/* This config is only to start the React app that unit tests will depend on. */
+const webpack = require('webpack');
+const HTMLPlugin = require('html-webpack-plugin');
+const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { resolve } = require('path');
-
-process.env.NODE_ENV = 'development';
-
-const config = {
-    mode: 'development',
-    devtool: false,
+module.exports = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        app: './cypress/app/index.js',
+        main: './src/browser-extension/main.js',
+        content: './src/browser-extension/content.js',
+        background: './src/browser-extension/background.js',
+        panel: './src/browser-extension/panel.js',
+        popup: './src/browser-extension/popup.js',
+        assert: './src/browser-extension/assert.js',
     },
     output: {
         filename: '[name].js',
-        path: resolve(__dirname, 'build'),
-        publicPath: '/',
+        path: path.resolve(__dirname, 'build/browser-extension'),
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.css'],
+        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     },
     module: {
         rules: [
             {
-                test: /\.js$/,
-                loader: 'babel-loader',
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                    },
+                ],
             },
             {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
-                ],
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
+            },
+            {
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
             },
         ],
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './cypress/app/index.html',
+        new HTMLPlugin({
+            chunks: ['popup'],
+            filename: 'popup.html',
+            showErrors: true,
+        }),
+        new HTMLPlugin({
+            chunks: ['main'],
+            filename: 'main.html',
+            showErrors: true,
+        }),
+        new HTMLPlugin({
+            chunks: ['panel'],
+            filename: 'panel.html',
+            showErrors: true,
+        }),
+        new HTMLPlugin({
+            chunks: ['assert'],
+            filename: 'assert.html',
+            showErrors: true,
+        }),
+        new CspHtmlWebpackPlugin({
+            'default-src': "'self'",
+            'script-src': "'self'",
+            'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
+            'font-src': "'self' https://fonts.gstatic.com",
+            'img-src': "'self' data:",
+        }),
+        // TODO make the copy plugin to set the version in manifest.json based on package.json
+        new CopyPlugin({
+            patterns: [
+                { from: './src/browser-extension/assets', to: './assets' },
+                { from: './src/browser-extension/manifest.json', to: './manifest.json' },
+            ],
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
         }),
     ],
-    devServer: {
-        port: 12000,
-        clientLogLevel: 'warning',
-        publicPath: '/',
-        stats: 'errors-only',
-        historyApiFallback: true,
-    },
+    devtool: 'cheap-module-source-map',
+    optimization:
+        process.env.NODE_ENV === 'production'
+            ? {
+                  minimize: true,
+              }
+            : undefined,
+    stats: 'minimal',
 };
-
-module.exports = config;

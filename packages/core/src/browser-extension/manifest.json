@@ -15,7 +15,6 @@
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "all_frames": true,
             "js": ["content.js"],
             "run_at": "document_start"
         }
@@ -27,5 +26,5 @@
     },
     "permissions": ["file:///*", "http://*/*", "https://*/*"],
     "content_security_policy": "script-src 'self'; object-src 'self'",
-    "web_accessible_resources": ["assets/img/*"]
+    "web_accessible_resources": ["assets/img/*", "assert.html"]
 }

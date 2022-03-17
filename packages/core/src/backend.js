@@ -98,6 +98,8 @@ function initBackend(hook, agent, global) {
 }
 
 export function activateBackend(contentWindow) {
+    window.__APP_ACTIONS_TARGET_WINDOW__ = contentWindow;
+
     const bridge = new Bridge({
         listen(fn) {
             const handleMessage = ({ data, isTrusted }) => {

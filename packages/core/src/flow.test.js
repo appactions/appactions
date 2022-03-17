@@ -1,4 +1,4 @@
-import preprocessFlows from './flow';
+import { preprocessFlows } from './flow';
 
 test('simple "do"', () => {
     const content = `

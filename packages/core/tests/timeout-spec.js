@@ -1,4 +1,4 @@
-import { expectToFailWithMessage } from '../../src/utils';
+import { expectToFailWithMessage } from '../src/utils';
 
 describe('Timeout', () => {
     it('does wait over the command timeout, when `isLoading` is implemented', () => {

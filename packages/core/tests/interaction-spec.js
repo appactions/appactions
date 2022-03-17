@@ -1,4 +1,4 @@
-import { expectToFailWithMessage } from '../../src/utils';
+import { expectToFailWithMessage } from '../src/utils';
 
 describe('Interaction', () => {
     it('with(instant appear).do(interaction) -- happypath', () => {

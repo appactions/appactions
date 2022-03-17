@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const tempWrite = require('temp-write');
 const chokidar = require('chokidar');
-const preprocessFlows = require('./build/flow');
+const { preprocessFlows } = require('./build/flow');
 const cyBrowserify = require('@cypress/browserify-preprocessor')();
 const debug = require('debug')('app-actions-preprocessor');
 
@@ -22,8 +22,6 @@ const bundled = {};
 
 const preprocessFlowFiles = (filePath, outputPath) => {
     const content = fs.readFileSync(filePath, 'utf8');
-    //   const flow = yaml.parse(content, { mapAsMap: true });
-    debugger;
     const specSource = preprocessFlows(content, { fileName: path.basename(filePath) });
 
     const writtenTempFilename = tempWrite.sync(specSource, path.basename(filePath) + '.js');

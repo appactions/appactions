@@ -1,3 +1,5 @@
+/* This config is only to start the React app that unit tests will depend on. */
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { resolve } = require('path');
 
@@ -7,7 +9,7 @@ const config = {
     mode: 'development',
     devtool: false,
     entry: {
-        app: resolve(__dirname, './index.js'),
+        app: './cypress/app/index.js',
     },
     output: {
         filename: '[name].js',
@@ -35,14 +37,11 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: resolve(__dirname, './index.html'),
+            template: './cypress/app/index.html',
         }),
     ],
     devServer: {
         port: 12000,
-        clientLogLevel: 'warning',
-        publicPath: '/',
-        stats: 'errors-only',
         historyApiFallback: true,
     },
 };
