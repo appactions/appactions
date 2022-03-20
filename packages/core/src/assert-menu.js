@@ -10,6 +10,8 @@ export function setupAssertMenu(bridge, agent) {
             pageY: event.pageY,
             screenX: event.screenX,
             screenY: event.screenY,
+            clientX: event.clientX,
+            clientY: event.clientY,
         });
     });
 }

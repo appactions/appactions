@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './style.css';
 
 function Menu() {
+    // return (
+    //     <div className="relative block w-8 h-8 bg-red-400" id="assert-menu" />
+    // )
     return (
         <div className="relative inline-block text-left" id="assert-menu">
             {/* <Transition
@@ -72,8 +75,11 @@ window.addEventListener('message', ({ data: message, isTrusted }) => {
     if (message.type === 'contextmenu-open') {
         const menu = document.getElementById('assert-menu');
         Object.assign(menu.style, {
-            left: message.payload.pageX + 'px',
-            top: message.payload.pageY + 'px',
+            left: message.payload.clientX + 'px',
+            top: message.payload.clientY + 'px',
+        });
+        Object.assign(container.style, {
+            display: 'block',
         });
     }
 });
@@ -90,10 +96,14 @@ Object.assign(container.style, {
     maxWidth: '100%',
     overflow: 'hidden',
     background: 'rgba(0, 0, 0, 0.3)',
+    display: 'none',
 });
 document.body.appendChild(container);
 ReactDOM.render(<Menu />, container);
 
 container.addEventListener('click', () => {
+    Object.assign(container.style, {
+        display: 'none',
+    });
     window.parent.postMessage({ source: 'agent', type: 'contextmenu-close' }, '*');
 });
