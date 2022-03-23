@@ -308,7 +308,7 @@ class App extends Component {
 
 export default App;
 
-const tableDriver = createDriver(Table, {
+createDriver(Table, {
     pattern: 'Table',
     getName: ({ $el }) => {
         const columns = [];
