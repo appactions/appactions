@@ -1,6 +1,6 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
-import { setupAssertMenu } from './assert-menu'
+import { setupAssertMenu } from './assert-menu';
 import { getDriver, getFiberInfo } from './api';
 
 function getMockedSessionRecordEvent() {
