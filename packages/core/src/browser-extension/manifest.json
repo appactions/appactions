@@ -25,7 +25,7 @@
         "48": "assets/img/icon-48x48.png",
         "128": "assets/img/icon-128x128.png"
     },
-    "permissions": ["file:///*", "http://*/*", "https://*/*"],
+    "permissions": ["file:///*", "http://*/*", "https://*/*", "webNavigation"],
     "content_security_policy": "script-src 'self'; object-src 'self'",
     "web_accessible_resources": ["assets/img/*", "assert.html"]
 }

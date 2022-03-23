@@ -17,7 +17,13 @@ class BackgroundEventTarget {
     /** Dispatches event to all listeners excluding source */
     dispatchEvent(source, event) {
         const targets = { ...this.listeners, [source]: undefined };
-        console.log('dispatching an event from', source, 'to', Object.keys(targets).filter(key => targets[key]), event);
+        console.log(
+            'dispatching an event from',
+            source,
+            'to',
+            Object.keys(targets).filter(key => targets[key]),
+            event,
+        );
         Object.values(targets).forEach(f => f && f(event));
     }
 
@@ -62,6 +68,20 @@ const handleContentScriptConnection = port => {
         //     () => true
         //   );
         // });
+
+        chrome.webNavigation.getAllFrames({ tabId }, frames => {
+            console.log('getAllFrames', tabId, frames);
+            const appFrameId = frames.find(
+                frame => frame.parentFrameId === 0 && !frame.url.includes('/__cypress/'),
+            )?.frameId;
+
+            console.log('appFrameId', appFrameId);
+
+            chrome.tabs.executeScript(tabId, {
+                frameId: appFrameId,
+                code: "window.__FOOBAR__ = 'foobar';",
+            });
+        });
     }
 };
 
