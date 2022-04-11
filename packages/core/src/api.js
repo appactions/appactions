@@ -33,7 +33,10 @@ export function getDriver(fiber) {
     }
 
     const result = Object.create(driver);
-    result.actions = Object.assign(Object.create(builtInActions), driver.actions);
+    result.actions = {
+        ...builtInActions,
+        ...result.actions,
+    };
     return result;
 }
 
