@@ -12,7 +12,6 @@ module.exports = {
         background: './src/browser-extension/background.js',
         panel: './src/browser-extension/panel.js',
         popup: './src/browser-extension/popup.js',
-        assert: './src/browser-extension/assert.js',
     },
     output: {
         filename: '[name].js',
@@ -57,11 +56,6 @@ module.exports = {
         new HTMLPlugin({
             chunks: ['panel'],
             filename: 'panel.html',
-            showErrors: true,
-        }),
-        new HTMLPlugin({
-            chunks: ['assert'],
-            filename: 'assert.html',
             showErrors: true,
         }),
         new CspHtmlWebpackPlugin({
