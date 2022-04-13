@@ -50,30 +50,13 @@ createDriver('button', {
 });
 
 const Home = () => {
-    const shouldReceiveNewData = (nextData, ...rest) => {
-        console.log('!!!', nextData, ...rest);
-    };
-
-    const handleCardDelete = (cardId, laneId) => {
-        // console.log(`Card: ${cardId} deleted from lane: ${laneId}`);
-    };
-
-    const handleCardAdd = (card, laneId) => {
-        //  tunnel(event).action('Table', 'sort', label, direction);
-    };
     return (
         <main className="">
-            <button onClick={event => tunnel(event).action('Button', 'test')}>Test</button>
+            {/* <button onClick={event => tunnel(event).action('Button', 'test')}>Test</button> */}
             <Board
                 data={data}
                 draggable
                 id="EditableBoard1"
-                onDataChange={shouldReceiveNewData}
-                onCardDelete={handleCardDelete}
-                onCardAdd={handleCardAdd}
-                onCardClick={(cardId, metadata, laneId) =>
-                    console.log(`Card with id:${cardId} clicked. Card in lane: ${laneId}`)
-                }
                 canAddLanes
                 editable
             />

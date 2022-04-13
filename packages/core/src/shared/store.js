@@ -106,10 +106,10 @@ export default class Store extends VendorStore {
     onSessionRecordingToggle = isRecording => {
         this._isRecording = isRecording;
         this.emit('session-recording-toggle');
-    }
+    };
 
     onSessionRecordingClear = () => {
         this._sessionRecordingDb = [];
         this.emit('session-recording-event');
-    }
+    };
 }
