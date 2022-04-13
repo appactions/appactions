@@ -24,7 +24,6 @@ function initBackend(hook, agent, global) {
         hook.sub('fastRefreshScheduled', agent.onFastRefreshScheduled),
         hook.sub('operations', agent.onHookOperations),
         hook.sub('traceUpdates', agent.onTraceUpdates),
-        hook.sub('session-recording-event', agent.onSessionRecordingEvent),
 
         // TODO Add additional subscriptions required for profiling mode
     ];

@@ -1,6 +1,6 @@
 export function installHook(target) {
     if (target.hasOwnProperty('__REACT_DEVTOOLS_GLOBAL_HOOK__')) {
-        throw new Error("react-app-actions cannot install react devtools hook, because it's already installed");
+        throw new Error("App Actions cannot install react devtools hook, because it's already installed");
     }
 
     let uidCounter = 0;

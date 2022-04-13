@@ -19,7 +19,7 @@ export const createDriver = (Component, config) => {
     if (typeof Component === 'string') {
         // this is a hack for now, because defineProperty does not work on strings
         window.__REACT_APP_ACTIONS__.drivers[Component] = config;
-    } else {
+    } else if (!Component.__REACT_APP_ACTIONS__) {
         Object.defineProperty(Component, '__REACT_APP_ACTIONS__', {
             enumerable: false,
             get() {
@@ -37,22 +37,28 @@ export const createDriver = (Component, config) => {
 export const tunnel = event => {
     return {
         action: (patternName, actionName, ...args) => {
-            if (!Cypress.AppActions.hook) {
-                console.error('Cypress.AppActions.hook is not defined');
-                return;
-            }
-            if (!event) {
-                console.warn('Cannot tunnel event, because event is not passed');
-                return;
-            }
+            // if (!window.Cypress || !window.Cypress.AppActions) {
+            //     return;
+            // }
+            // if (!Cypress.AppActions.hook) {
+            //     console.error('Cypress.AppActions.hook is not defined');
+            //     return;
+            // }
+            // if (!event) {
+            //     console.warn('Cannot tunnel event, because event is not passed');
+            //     return;
+            // }
 
-            const target = event.nativeEvent?.target || event.target;
-            if (!target) {
-                console.warn('Cannot tunnel event, because target is not present in event object');
-                return;
-            }
+            // const target = event.nativeEvent?.target || event.target;
+            // if (!target) {
+            //     console.warn('Cannot tunnel event, because target is not present in event object');
+            //     return;
+            // }
 
-            Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
+            // NOTE: don't use the event system, just directly reference agent
+            // Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
+
+            throw new Error('TODO: change tunnel api to annotate the event');
         },
     };
 };
@@ -64,6 +70,11 @@ export function setReactInstance(instance) {
 }
 
 export function useAction(name, callback) {
+    // TODO maybe use this instead:
+    // const fiber = Cypress.AppActions.hook.renderers.get(1).getCurrentFiber();
+    // weakMap.set(fiber, { name, callback });
+    // so reactInstance won't be needed
+
     if (!reactInstance) {
         throw new Error('React instance is not defined. ');
     }
