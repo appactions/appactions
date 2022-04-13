@@ -1,6 +1,7 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
-import { setupAssertMenu } from './assert-menu'
+import { setupAssertMenu } from './assert-menu';
+import { setupRecorder } from './recorder';
 import { getDriver, getFiberInfo } from './api';
 
 function getMockedSessionRecordEvent() {
@@ -21,6 +22,8 @@ export default class Agent extends EventEmitter {
         this._rendererInterfaces = {};
         this._sessionRecordingEvents = [];
         this._isRecording = false;
+        this._previousRecordEvent = null;
+        this.window = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
 
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
@@ -31,6 +34,7 @@ export default class Agent extends EventEmitter {
 
         setupHighlighter(bridge, this);
         setupAssertMenu(bridge, this);
+        setupRecorder(bridge, this);
     }
 
     inspectElement = ({ id, path, rendererID, requestID }) => {
@@ -136,7 +140,25 @@ export default class Agent extends EventEmitter {
             return;
         }
 
-        const { args, patternName, actionName, event } = payload;
+        const { builtInAction, args, patternName, actionName, event } = payload;
+
+        if (builtInAction) {
+            console.log('builtInAction', event.type, event);
+            return;
+        } else {
+            console.log('customAction', event.type, event);
+        }
+
+        // bridge._sendMessage({
+        //     selector,
+        //     value: event.target.value,
+        //     tagName: event.target.tagName,
+        //     action: event.type,
+        //     keyCode: event.keyCode ? event.keyCode : null,
+        //     href: event.target.href ? event.target.href : null,
+        //     coordinates: getCoordinates(e),
+        // });
+
         const target = event.nativeEvent?.target || event.target;
 
         const fiber = getFiberOfTarget(target, patternName, actionName);
