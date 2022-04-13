@@ -5,7 +5,7 @@ import NewCardForm from 'react-trello/dist/components/NewCardForm';
 import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { createDriver } from '@appactions/driver';
+import { createDriver, tunnel } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
@@ -50,21 +50,20 @@ createDriver('button', {
 });
 
 const Home = () => {
-    const shouldReceiveNewData = nextData => {
-        console.log('Board has changed');
-        console.log(nextData);
+    const shouldReceiveNewData = (nextData, ...rest) => {
+        console.log('!!!', nextData, ...rest);
     };
 
     const handleCardDelete = (cardId, laneId) => {
-        console.log(`Card: ${cardId} deleted from lane: ${laneId}`);
+        // console.log(`Card: ${cardId} deleted from lane: ${laneId}`);
     };
 
     const handleCardAdd = (card, laneId) => {
-        console.log(`New card added to lane ${laneId}`);
-        console.log(card);
+        //  tunnel(event).action('Table', 'sort', label, direction);
     };
     return (
         <main className="">
+            <button onClick={event => tunnel(event).action('Button', 'test')}>Test</button>
             <Board
                 data={data}
                 draggable
