@@ -1,3 +1,5 @@
+import { getDriver } from './api';
+
 const eventsToRecord = {
     CLICK: 'click',
     DBLCLICK: 'dblclick',
@@ -33,7 +35,7 @@ export function setupRecorder(bridge, agent) {
         agent._previousRecordEvent = event;
 
         try {
-            agent.onSessionRecordingEvent({ builtInAction: true, event })
+            agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event)));
         } catch (err) {
             console.error(err);
         }
@@ -48,4 +50,111 @@ function getAllFrames(windowElement, allFrames = []) {
     });
 
     return allFrames;
+}
+
+function makeRecordingEvent(event) {
+    // TODO refactor that .get(1) thing
+    const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
+
+    console.log('targetFiber', targetFiber)
+
+    const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
+        const driver = getDriver(fiber);
+        return driver && driver.pattern;
+    });
+
+    console.log('fiber', fiber)
+
+    const currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
+    const driver = getDriver(fiber);
+    const patternInfo = driver
+        ? { args: [], patternName: driver.pattern, actionName: event.type, id: currentFiberId }
+        : null;
+
+    const recording = {
+        ...patternInfo,
+        value: event.target.value,
+        tagName: event.target.tagName,
+        action: event.type,
+        keyCode: event.keyCode ? event.keyCode : null,
+        href: event.target.href ? event.target.href : null,
+        coordinates: getCoordinates(event),
+    };
+
+    console.log('recording', recording);
+
+    return recording;
+}
+
+// function getMockedSessionRecordEvent() {
+//     return {
+//         args: [],
+//         patternName: null,
+//         actionName: null,
+//         id: null,
+//         __MOCKED__: true,
+//     };
+// }
+
+// function getFiberOfTarget(target, patternName, actionName) {
+//     let targetFiber;
+//     try {
+//         targetFiber = Cypress.AppActions.reactApi.findFiber(target);
+//     } catch (error) {
+//         throw new Error(`Cannot find fiber for event target`);
+//     }
+//     const hasDriverWeNeed = fiber => {
+//         const driver = getDriver(fiber);
+//         return driver && driver.pattern === patternName && driver.actions?.[actionName];
+//     };
+//     return Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, hasDriverWeNeed);
+// }
+
+function getCoordinates(event) {
+    const eventsWithCoordinates = {
+        mouseup: true,
+        mousedown: true,
+        mousemove: true,
+        mouseover: true,
+    };
+
+    return eventsWithCoordinates[event.type] ? { x: event.clientX, y: event.clientY } : null;
+}
+
+let prev = null;
+
+function processHistoricalEvents(current) {
+    const result = [prev, current];
+    prev = current;
+    return result;
+
+    // const target = event.nativeEvent?.target || event.target;
+    // const fiber = getFiberOfTarget(target, patternName, actionName);
+    // const fiberInfo = getFiberInfo(fiber);
+    // const id = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
+    // const currentEvent = { args, patternName, actionName, id };
+    // const [head, ...tail] = this._sessionRecordingEvents;
+    // let result = [head, currentEvent];
+    // if (fiberInfo.driver?.tunnel?.[actionName]) {
+    //     // let's transform the last two events
+    //     result = fiberInfo.driver?.tunnel?.[actionName](
+    //         // when an event is null, we pass in a mocked object instead
+    //         ...result.map(event => (event ? event : getMockedSessionRecordEvent())),
+    //     );
+    //     if (!result || !Array.isArray(result) || result.length !== 2) {
+    //         throw new Error(`Tunnel function must return an array of two elements (${patternName}.${actionName})`);
+    //     }
+    // }
+    // // reverting the mocked object back to null
+    // result = result.map(event => (event && event.__MOCKED__ ? null : event));
+    // const [prev, current] = result;
+    // if (!prev && !current) {
+    //     this._sessionRecordingEvents = tail;
+    // } else if (!prev) {
+    //     this._sessionRecordingEvents = [current, ...tail];
+    // } else if (!current) {
+    //     this._sessionRecordingEvents = [prev, ...tail];
+    // } else {
+    //     this._sessionRecordingEvents = [current, prev, ...tail];
+    // }
 }
