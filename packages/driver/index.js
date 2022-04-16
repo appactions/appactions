@@ -1,3 +1,11 @@
+function init() {
+    return {
+        drivers: {},
+        patterns: new Set(),
+        annotations: [],
+    };
+}
+
 export const createDriver = (Component, config) => {
     // Do no run in a server side env
     if (typeof window === 'undefined') {
@@ -9,7 +17,7 @@ export const createDriver = (Component, config) => {
     }
 
     if (!window.__REACT_APP_ACTIONS__) {
-        window.__REACT_APP_ACTIONS__ = { drivers: {}, patterns: new Set() };
+        window.__REACT_APP_ACTIONS__ = init();
     }
 
     if (config.pattern) {
@@ -61,6 +69,19 @@ export const tunnel = event => {
             throw new Error('TODO: change tunnel api to annotate the event');
         },
     };
+};
+
+export const annotate = (pattern, actions, payload) => {
+    if (!window.__REACT_APP_ACTIONS__) {
+        window.__REACT_APP_ACTIONS__ = init();
+    }
+
+    window.__REACT_APP_ACTIONS__.annotations.push({
+        pattern,
+        actions,
+        payload,
+        timestamp: Date.now(),
+    });
 };
 
 let reactInstance = null;

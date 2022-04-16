@@ -34,11 +34,23 @@ export function setupRecorder(bridge, agent) {
         }
         agent._previousRecordEvent = event;
 
-        try {
-            agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event)));
-        } catch (err) {
-            console.error(err);
-        }
+        // const annotation = agent.window.__REACT_APP_ACTIONS__.annotations;
+
+        // try {
+        // const annotatedEvent = Object.create(event, {
+        //     args: {
+        //         // value: annotation.args,
+        //         get() {
+        //             return ['foo', 'bar'];
+        //         },
+        //     },
+        // });
+        // const annotatedEvent = Object.create(event);
+        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event)));
+        // } catch (err) {
+        //     debugger;
+        //     console.error(err);
+        // }
     }
 }
 
@@ -52,27 +64,34 @@ function getAllFrames(windowElement, allFrames = []) {
     return allFrames;
 }
 
-function makeRecordingEvent(event) {
+function makeRecordingEvent(event, annotation) {
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
 
-    console.log('targetFiber', targetFiber)
+    console.group(event.type);
 
-    const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
-        const driver = getDriver(fiber);
-        return driver && driver.pattern;
-    });
+    console.log('targetFiber', targetFiber, event.target);
 
-    console.log('fiber', fiber)
+    let currentFiberId = null;
+    let driver = null;
 
-    const currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
-    const driver = getDriver(fiber);
-    const patternInfo = driver
-        ? { args: [], patternName: driver.pattern, actionName: event.type, id: currentFiberId }
-        : null;
+    if (targetFiber) {
+        const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
+            const driver = getDriver(fiber);
+            return driver && driver.pattern;
+        });
+
+        console.log('fiber', fiber);
+
+        currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
+        driver = getDriver(fiber);
+    }
 
     const recording = {
-        ...patternInfo,
+        id: currentFiberId,
+        args: event.args ? event.args : [],
+        patternName: driver ? driver.pattern : null,
+        actionName: event.type,
         value: event.target.value,
         tagName: event.target.tagName,
         action: event.type,
@@ -82,6 +101,8 @@ function makeRecordingEvent(event) {
     };
 
     console.log('recording', recording);
+
+    console.groupEnd();
 
     return recording;
 }
