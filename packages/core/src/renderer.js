@@ -97,11 +97,11 @@ export function attach(hook, rendererID, renderer, global) {
     };
 
     const findAncestorElementByPredicate = (fiber, predicate) => {
-        while ((fiber = fiber.return)) {
+        do {
             if (predicate(fiber)) {
                 return fiber;
             }
-        }
+        } while ((fiber = fiber.return));
 
         return null;
     };

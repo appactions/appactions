@@ -5,7 +5,7 @@ import NewCardForm from 'react-trello/dist/components/NewCardForm';
 import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { createDriver, tunnel } from '@appactions/driver';
+import { createDriver, annotate } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
@@ -52,13 +52,23 @@ createDriver('button', {
 const Home = () => {
     return (
         <main className="">
-            {/* <button onClick={event => tunnel(event).action('Button', 'test')}>Test</button> */}
+            <button onClick={event => {
+                event.nativeEvent.args = ['test'];
+                console.log('--- onclick ---');
+                // tunnel(event).action('Button', 'test');
+            }}>Test</button>
             <Board
-                data={data}
-                draggable
                 id="EditableBoard1"
+                draggable
                 canAddLanes
                 editable
+                data={data}
+                onCardAdd={(card, laneId) => {
+                    // console.log('onCardAdd', card, laneId);
+                    annotate('Button', 'click', {
+                        args: [card.title],
+                    })
+                }}
             />
         </main>
     );
