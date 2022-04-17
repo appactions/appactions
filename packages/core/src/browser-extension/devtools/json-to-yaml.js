@@ -78,9 +78,25 @@ function convertHash(obj, ret) {
             var ele = obj[k];
 
             // CUSTOM
-            const couldInline = getType(ele) === 'array' && ele.every(isPrimitive);
-            if (couldInline) {
+            const isPrimitiveArray = getType(ele) === 'array' && ele.every(isPrimitive);
+            const isPrimitiveObject =
+                getType(ele) === 'hash' &&
+                ele !== null &&
+                Object.values(ele).length === 1 &&
+                Object.values(ele).every(key => isPrimitive(ele[key]));
+
+            const couldInline = isPrimitiveArray || isPrimitiveObject;
+
+            if (isPrimitiveArray) {
                 recurse.push('[' + ele.join(', ') + ']');
+            } else if (isPrimitiveObject) {
+                recurse.push(
+                    '{ ' +
+                        Object.entries(ele)
+                            .map(([k, v]) => `${k}: ${v}`)
+                            .join(', ') +
+                        ' }',
+                );
             } else {
                 convert(ele, recurse, k);
             }

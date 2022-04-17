@@ -1,4 +1,4 @@
-import { getDriver } from './api';
+import { getDriver, getFiberInfo } from './api';
 import isMatch from 'lodash.ismatch';
 
 const eventsToRecord = {
@@ -70,6 +70,7 @@ function makeRecordingEvent(event, annotation = {}) {
 
     let currentFiberId = null;
     let driver = null;
+    let name = null;
 
     if (targetFiber) {
         const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
@@ -81,6 +82,7 @@ function makeRecordingEvent(event, annotation = {}) {
 
         currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
         driver = getDriver(fiber);
+        name = driver.getName(getFiberInfo(fiber))
     }
 
     console.log('annotation', annotation);
@@ -89,6 +91,7 @@ function makeRecordingEvent(event, annotation = {}) {
         pattern: driver ? driver.pattern : null,
         action: event.type,
         args: [],
+        name,
 
         // native
         value: event.target.value,

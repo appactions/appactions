@@ -25,6 +25,8 @@ export function getRawDriver(fiber) {
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
+const defaultGetName = () => null;
+
 export function getDriver(fiber) {
     const driver = getRawDriver(fiber);
 
@@ -37,6 +39,7 @@ export function getDriver(fiber) {
         ...builtInActions,
         ...result.actions,
     };
+    result.getName = result.getName || defaultGetName;
     return result;
 }
 
