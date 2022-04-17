@@ -121,8 +121,8 @@ function renderYAML(meta, events) {
             auth: meta.start.auth,
         },
         steps: events.map(event => ({
-            with: event.patternName,
-            do: event.args.length === 0 ? event.actionName : { [event.actionName]: event.args },
+            with: event.pattern,
+            do: event.args.length === 0 ? event.action : { [event.action]: event.args },
         })),
     });
 }

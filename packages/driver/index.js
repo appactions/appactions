@@ -42,41 +42,17 @@ export const createDriver = (Component, config) => {
     };
 };
 
-export const tunnel = event => {
-    return {
-        action: (patternName, actionName, ...args) => {
-            // if (!window.Cypress || !window.Cypress.AppActions) {
-            //     return;
-            // }
-            // if (!Cypress.AppActions.hook) {
-            //     console.error('Cypress.AppActions.hook is not defined');
-            //     return;
-            // }
-            // if (!event) {
-            //     console.warn('Cannot tunnel event, because event is not passed');
-            //     return;
-            // }
-
-            // const target = event.nativeEvent?.target || event.target;
-            // if (!target) {
-            //     console.warn('Cannot tunnel event, because target is not present in event object');
-            //     return;
-            // }
-
-            // NOTE: don't use the event system, just directly reference agent
-            // Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
-
-            throw new Error('TODO: change tunnel api to annotate the event');
-        },
-    };
-};
-
 export const annotate = (eventOrMatcher, payload) => {
     if (!payload) {
         throw new Error('Payload must be specified');
     }
 
     // TODO use postMessage instead of window.__REACT_APP_ACTIONS__?
+    // eg. Cypress.AppActions.hook.emit('session-recording-event-annotation', {
+    //     matcher: eventOrMatcher,
+    //     payload,
+    //     timestamp: Date.now(),
+    // });
 
     if (!window.__REACT_APP_ACTIONS__) {
         window.__REACT_APP_ACTIONS__ = init();
