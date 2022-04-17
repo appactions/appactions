@@ -19,7 +19,7 @@ createDriver(MyComponent, {
     },
     tunnel: {
         set: (prev, current) => {
-            if (prev.patternName === current.patternName && prev.actionName === current.actionName) {
+            if (prev.pattern === current.pattern && prev.action === current.action) {
                 return [null, current];
             }
             return [prev, current];

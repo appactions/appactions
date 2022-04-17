@@ -85,16 +85,24 @@ function makeRecordingEvent(event, annotation = {}) {
 
     console.log('annotation', annotation);
     const recording = {
-        id: currentFiberId,
-        args: event.args ? event.args : [],
-        patternName: driver ? driver.pattern : null,
-        actionName: event.type,
+        // app actions
+        pattern: driver ? driver.pattern : null,
+        action: event.type,
+        args: [],
+
+        // native
         value: event.target.value,
         tagName: event.target.tagName,
         action: event.type,
         keyCode: event.keyCode ? event.keyCode : null,
         href: event.target.href ? event.target.href : null,
         coordinates: getCoordinates(event),
+
+        // override
+        ...annotation.payload,
+
+        // non-overrideable
+        id: currentFiberId,
     };
 
     console.log('recording', recording);
