@@ -52,11 +52,15 @@ createDriver('button', {
 const Home = () => {
     return (
         <main className="">
-            <button onClick={event => {
-                event.nativeEvent.args = ['test'];
-                console.log('--- onclick ---');
-                // tunnel(event).action('Button', 'test');
-            }}>Test</button>
+            <button
+                onClick={event => {
+                    annotate(event, {
+                        args: ['test'],
+                    });
+                }}
+            >
+                Test
+            </button>
             <Board
                 id="EditableBoard1"
                 draggable
@@ -64,10 +68,11 @@ const Home = () => {
                 editable
                 data={data}
                 onCardAdd={(card, laneId) => {
-                    // console.log('onCardAdd', card, laneId);
-                    annotate('Button', 'click', {
+                    annotate({ type: 'click' }, {
+                        pattern: 'Card',
+                        action: 'add',
                         args: [card.title],
-                    })
+                    });
                 }}
             />
         </main>

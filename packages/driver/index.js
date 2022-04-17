@@ -71,14 +71,19 @@ export const tunnel = event => {
     };
 };
 
-export const annotate = (pattern, actions, payload) => {
+export const annotate = (eventOrMatcher, payload) => {
+    if (!payload) {
+        throw new Error('Payload must be specified');
+    }
+
+    // TODO use postMessage instead of window.__REACT_APP_ACTIONS__?
+
     if (!window.__REACT_APP_ACTIONS__) {
         window.__REACT_APP_ACTIONS__ = init();
     }
 
     window.__REACT_APP_ACTIONS__.annotations.push({
-        pattern,
-        actions,
+        matcher: eventOrMatcher,
         payload,
         timestamp: Date.now(),
     });

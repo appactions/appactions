@@ -1,4 +1,5 @@
 import { getDriver } from './api';
+import isMatch from 'lodash.ismatch';
 
 const eventsToRecord = {
     CLICK: 'click',
@@ -34,23 +35,18 @@ export function setupRecorder(bridge, agent) {
         }
         agent._previousRecordEvent = event;
 
-        // const annotation = agent.window.__REACT_APP_ACTIONS__.annotations;
+        let annotation;
 
-        // try {
-        // const annotatedEvent = Object.create(event, {
-        //     args: {
-        //         // value: annotation.args,
-        //         get() {
-        //             return ['foo', 'bar'];
-        //         },
-        //     },
-        // });
-        // const annotatedEvent = Object.create(event);
-        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event)));
-        // } catch (err) {
-        //     debugger;
-        //     console.error(err);
-        // }
+        const annotationIndex = agent.window.__REACT_APP_ACTIONS__.annotations.findIndex(annotation => {
+            return event === annotation.matcher?.nativeEvent || isMatch(event, annotation.matcher);
+        });
+
+        if (annotationIndex !== -1) {
+            annotation = agent.window.__REACT_APP_ACTIONS__.annotations[annotationIndex];
+            agent.window.__REACT_APP_ACTIONS__.annotations.splice(annotationIndex, 1);
+        }
+
+        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event, annotation)));
     }
 }
 
@@ -64,7 +60,7 @@ function getAllFrames(windowElement, allFrames = []) {
     return allFrames;
 }
 
-function makeRecordingEvent(event, annotation) {
+function makeRecordingEvent(event, annotation = {}) {
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
 
@@ -87,6 +83,7 @@ function makeRecordingEvent(event, annotation) {
         driver = getDriver(fiber);
     }
 
+    console.log('annotation', annotation);
     const recording = {
         id: currentFiberId,
         args: event.args ? event.args : [],
