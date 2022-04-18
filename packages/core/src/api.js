@@ -147,3 +147,19 @@ export function findAncestorElementByReactComponentName(fiber, componentName) {
 export function findOverride($root, pattern) {
     throw new Error('Override API is not supported anymore');
 }
+
+export function getParentsWithDriver(fiber) {
+    const result = [];
+
+    Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, fiber => {
+        // if they have a driver, add the fiber to result
+        if (getDriver(fiber)) {
+            result.unshift(fiber);
+        }
+
+        // we want to go up all to the top
+        return false;
+    });
+
+    return result;
+}
