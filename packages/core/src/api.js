@@ -165,3 +165,12 @@ export function getOwnerPatterns(fiber) {
 
     return result;
 }
+
+export function isFiberMounted(fiber) {
+    try {
+        Cypress.AppActions.reactApi.assertIsMounted(fiber);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
