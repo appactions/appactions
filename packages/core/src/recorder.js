@@ -61,33 +61,30 @@ function getAllFrames(windowElement, allFrames = []) {
 }
 
 function makeRecordingEvent(event, annotation = {}, agent) {
+    console.group(event.type);
+
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
 
-    console.group(event.type);
+    if (!targetFiber) {
+        console.log('No fiber found for target');
+        console.groupEnd();
+        return;
+    }
 
     console.log('targetFiber', targetFiber, event.target);
 
-    let currentFiberId = null;
-    let driver = null;
-    let name = null;
-    let owners = [];
+    const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
+        const driver = getDriver(fiber);
+        return driver && driver.pattern;
+    });
 
-    if (targetFiber) {
-        const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
-            const driver = getDriver(fiber);
-            return driver && driver.pattern;
-        });
+    console.log('fiber', fiber);
 
-        console.log('fiber', fiber);
-
-        currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
-        driver = getDriver(fiber);
-
-        name = driver.getName(getFiberInfo(fiber));
-
-        owners = agent.getOwners(fiber);
-    }
+    const currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
+    const driver = getDriver(fiber);
+    const name = driver.getName(getFiberInfo(fiber));
+    const owners = agent.getOwners(fiber);
 
     console.log('annotation', annotation);
     console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
