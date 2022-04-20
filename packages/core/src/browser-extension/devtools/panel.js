@@ -5,7 +5,6 @@ import InspectPanel from './inspect-panel';
 import portaledContent from './portaled-content';
 import SplitView from './split-view';
 import classNames from 'classnames';
-import { useStore } from './hooks';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -23,8 +22,8 @@ const reducer = (state, action) => {
 
 const Panel = () => {
     const [tabs, dispatch] = useReducer(reducer, [
-        { name: 'Inspect', id: 'inspect-panel', selected: true },
-        { name: 'Recording', id: 'session-recording' },
+        { name: 'Recording', id: 'session-recording', selected: true },
+        { name: 'Inspect', id: 'inspect-panel' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
 
@@ -62,8 +61,8 @@ const Panel = () => {
                             ))}
                         </nav>
                     </div>
-                    {selectedTab.id === 'inspect-panel' ? <InspectPanel /> : null}
                     {selectedTab.id === 'session-recording' ? <SessionRecordingPanel /> : null}
+                    {selectedTab.id === 'inspect-panel' ? <InspectPanel /> : null}
                 </>
             }
         />
