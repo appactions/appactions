@@ -2,8 +2,7 @@ import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
 import { setupRecorder } from './recorder';
-import { getFiberInfo } from './api';
-
+import { getFiberInfo, getOwnerPatterns } from './api';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -14,6 +13,7 @@ export default class Agent extends EventEmitter {
         this._sessionRecordingEvents = [];
         this._isRecording = false;
         this._previousRecordEvent = null;
+        this._idToOwners = new WeakMap();
         this.window = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
 
         bridge.addListener('inspectElement', this.inspectElement);
@@ -54,6 +54,9 @@ export default class Agent extends EventEmitter {
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;
                     result.actions = Object.keys(fiberInfo.driver.actions || {});
+                    result.owners = getOwnerPatterns(fiber);
+                    
+                    this.saveOwners(fiber, result.owners);
 
                     if (fiberInfo.driver.getName) {
                         result.name = fiberInfo.driver.getName(fiberInfo);
@@ -65,6 +68,7 @@ export default class Agent extends EventEmitter {
                     value: result,
                 });
             } catch (error) {
+                console.error(error);
                 this._bridge.send('inspectedElement', {
                     type: 'error',
                     id,
@@ -140,5 +144,13 @@ export default class Agent extends EventEmitter {
             arg: payload,
             timeout: 4000,
         });
+    };
+
+    saveOwners = (fiber, owners) => {
+        this._idToOwners.set(fiber, owners);
+    };
+
+    getOwners = fiber => {
+        return this._idToOwners.get(fiber);
     };
 }

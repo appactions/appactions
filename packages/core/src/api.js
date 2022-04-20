@@ -148,18 +148,20 @@ export function findOverride($root, pattern) {
     throw new Error('Override API is not supported anymore');
 }
 
-export function getParentsWithDriver(fiber) {
+export function getOwnerPatterns(fiber) {
     const result = [];
 
-    Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, fiber => {
-        // if they have a driver, add the fiber to result
-        if (getDriver(fiber)) {
-            result.unshift(fiber);
+    do {
+        const driver = getDriver(fiber);
+        if (driver) {
+            const fiberInfo = getFiberInfo(fiber);
+            const name = driver.getName(fiberInfo);
+            result.unshift({
+                pattern: driver.pattern,
+                name,
+            });
         }
-
-        // we want to go up all to the top
-        return false;
-    });
+    } while ((fiber = fiber.return));
 
     return result;
 }
