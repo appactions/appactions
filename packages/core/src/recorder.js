@@ -1,4 +1,4 @@
-import { getDriver, getFiberInfo, getParentsWithDriver } from './api';
+import { getDriver, getFiberInfo } from './api';
 import isMatch from 'lodash.ismatch';
 
 const eventsToRecord = {
@@ -46,7 +46,7 @@ export function setupRecorder(bridge, agent) {
             agent.window.__REACT_APP_ACTIONS__.annotations.splice(annotationIndex, 1);
         }
 
-        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event, annotation)));
+        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event, annotation, agent)));
     }
 }
 
@@ -60,7 +60,7 @@ function getAllFrames(windowElement, allFrames = []) {
     return allFrames;
 }
 
-function makeRecordingEvent(event, annotation = {}) {
+function makeRecordingEvent(event, annotation = {}, agent) {
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
 
@@ -71,7 +71,7 @@ function makeRecordingEvent(event, annotation = {}) {
     let currentFiberId = null;
     let driver = null;
     let name = null;
-    let drivers = [];
+    let owners = [];
 
     if (targetFiber) {
         const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
@@ -84,20 +84,13 @@ function makeRecordingEvent(event, annotation = {}) {
         currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
         driver = getDriver(fiber);
 
-        name = driver.getName(getFiberInfo(fiber))
+        name = driver.getName(getFiberInfo(fiber));
 
-        drivers = getParentsWithDriver(fiber).map(fiber => {
-            const driver = getDriver(fiber);
-            const fiberInfo = getFiberInfo(fiber);
-            return {
-                name: driver.getName(fiberInfo),
-                pattern: driver.pattern,
-            };
-        });
+        owners = agent.getOwners(fiber);
     }
 
     console.log('annotation', annotation);
-    console.log('drivers', drivers.map(x => `${x.pattern} (${x.name})`).join(' > '));
+    console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
 
     const recording = {
         // app actions
@@ -105,7 +98,7 @@ function makeRecordingEvent(event, annotation = {}) {
         action: event.type,
         args: [],
         name,
-        drivers,
+        owners,
 
         // native
         value: event.target.value,

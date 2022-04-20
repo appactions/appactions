@@ -74,7 +74,7 @@ export function setReactInstance(instance) {
 export function useAction(name, callback) {
     // TODO maybe use this instead:
     // const fiber = Cypress.AppActions.hook.renderers.get(1).getCurrentFiber();
-    // weakMap.set(fiber, { name, callback });
+    // const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
     // so reactInstance won't be needed
 
     if (!reactInstance) {
