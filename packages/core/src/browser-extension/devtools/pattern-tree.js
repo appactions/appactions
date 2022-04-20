@@ -87,7 +87,8 @@ function Element({ element }) {
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {patternElement.pattern}
+            <span className="mr-2">{patternElement.pattern}</span>
+            {patternElement.name ? <span className="text-gray-500">{patternElement.name}</span> : null}
         </div>
     );
 }
