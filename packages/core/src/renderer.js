@@ -15,6 +15,7 @@ export function attach(hook, rendererID, renderer, global) {
         inspectElement,
         inspectHooksOfFiber,
         isUsingHooks,
+        assertIsMounted,
     } = devtoolsInterface;
 
     const findFiber = subject => {
@@ -137,6 +138,7 @@ export function attach(hook, rendererID, renderer, global) {
         findCurrentFiberUsingSlowPathById,
         getOrGenerateFiberID,
         findNativeNodesForFiberID,
+        assertIsMounted,
 
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,

@@ -12490,7 +12490,9 @@ function attach(hook, rendererID, renderer, global) {
     getOrGenerateFiberID,
     getDisplayNameForFiber,
     inspectHooksOfFiber,
-    isUsingHooks
+    isUsingHooks,
+    // TODO add this to the patch
+    assertIsMounted
   };
 }
 

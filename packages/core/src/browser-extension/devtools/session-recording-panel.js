@@ -121,8 +121,12 @@ function renderYAML(meta, events) {
             auth: meta.start.auth,
         },
         steps: events.map(event => ({
-            with: event.name ? { [event.pattern]: event.name } : event.pattern,
+            with: event.owners.length === 1 ? processOwner(event.owners[0]) : event.owners.map(processOwner),
             do: event.args.length === 0 ? event.action : { [event.action]: event.args },
         })),
     });
+}
+
+function processOwner({ name, pattern }) {
+    return name ? { [pattern]: name } : pattern;
 }

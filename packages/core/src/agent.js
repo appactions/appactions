@@ -2,7 +2,7 @@ import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
 import { setupRecorder } from './recorder';
-import { getFiberInfo, getOwnerPatterns } from './api';
+import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -55,7 +55,7 @@ export default class Agent extends EventEmitter {
                     result.pattern = fiberInfo.driver.pattern;
                     result.actions = Object.keys(fiberInfo.driver.actions || {});
                     result.owners = getOwnerPatterns(fiber);
-                    
+
                     this.saveOwners(fiber, result.owners);
 
                     if (fiberInfo.driver.getName) {
@@ -151,6 +151,12 @@ export default class Agent extends EventEmitter {
     };
 
     getOwners = fiber => {
-        return this._idToOwners.get(fiber);
+        if (isFiberMounted(fiber)) {
+            return getOwnerPatterns(fiber);
+        } else if (this._idToOwners.has(fiber)) {
+            return this._idToOwners.get(fiber);
+        } else {
+            return getOwnerPatterns(fiber);
+        }
     };
 }
