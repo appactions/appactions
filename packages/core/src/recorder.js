@@ -69,6 +69,8 @@ function makeRecordingEvent(event, annotation = {}, agent) {
     if (!targetFiber) {
         console.log('No fiber found for target');
         console.groupEnd();
+        // TODO send "event.target.location.pathname" on the laod event
+        // debugger;
         return;
     }
 
@@ -114,6 +116,9 @@ function makeRecordingEvent(event, annotation = {}, agent) {
     };
 
     console.log('recording', recording);
+
+    // agent.window.recordings = agent.window.recordings || [];
+    // agent.window.recordings.push(recording);
 
     console.groupEnd();
 

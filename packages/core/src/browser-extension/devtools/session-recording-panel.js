@@ -2,7 +2,6 @@ import React from 'react';
 import { useStore, useTemporaryState } from './hooks';
 import { useDevtoolsContext } from './context';
 import Highlight from 'react-highlight';
-import json2yaml from './json-to-yaml';
 
 function RecordControls() {
     const { bridge, store } = useDevtoolsContext();
@@ -88,45 +87,16 @@ function RecordControls() {
     );
 }
 
-const meta = {
-    description: `Test recorded at ${new Date().toLocaleString()}`,
-    start: {
-        route: '/',
-        auth: false,
-    },
-};
-
 export default function SessionRecordingPanel() {
-    const sessionRecording = useStore('session-recording-event', store => store.sessionRecordingDb);
+    const yaml = useStore('session-recording-yaml-change', store => store.sessionRecordingYAML);
+    console.log('rerender', yaml)
 
     return (
         <div className="pt-2 pl-2">
             <RecordControls />
             <div className="my-2" style={{ maxWidth: 'calc(100% - 5px)' }}>
-                <Highlight className="yaml">{renderYAML(meta, sessionRecording)}</Highlight>
+                <Highlight className="yaml">{yaml}</Highlight>
             </div>
         </div>
     );
-}
-
-function renderYAML(meta, events) {
-    if (events.length === 0) {
-        return '# empty test';
-    }
-
-    return json2yaml({
-        description: meta.description,
-        start: {
-            route: meta.start.route,
-            auth: meta.start.auth,
-        },
-        steps: events.map(event => ({
-            with: event.owners.length === 1 ? processOwner(event.owners[0]) : event.owners.map(processOwner),
-            do: event.args.length === 0 ? event.action : { [event.action]: event.args },
-        })),
-    });
-}
-
-function processOwner({ name, pattern }) {
-    return name ? { [pattern]: name } : pattern;
 }
