@@ -83,6 +83,7 @@ function makeRecordingEvent(event, annotation = {}, agent) {
 
     const currentFiberId = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
     const driver = getDriver(fiber);
+    const pattern = driver.pattern;
     const name = driver.getName(getFiberInfo(fiber));
     const owners = agent.getOwners(fiber);
 
@@ -91,11 +92,11 @@ function makeRecordingEvent(event, annotation = {}, agent) {
 
     const recording = {
         // app actions
-        pattern: driver ? driver.pattern : null,
-        action: event.type,
-        args: [],
+        pattern,
         name,
         owners,
+        action: event.type,
+        args: [],
 
         // native
         value: event.target.value,

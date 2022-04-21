@@ -167,10 +167,5 @@ export function getOwnerPatterns(fiber) {
 }
 
 export function isFiberMounted(fiber) {
-    try {
-        Cypress.AppActions.reactApi.assertIsMounted(fiber);
-        return true;
-    } catch (e) {
-        return false;
-    }
+    return Cypress.AppActions.reactApi.isFiberMounted(fiber);
 }

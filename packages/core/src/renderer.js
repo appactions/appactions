@@ -16,7 +16,17 @@ export function attach(hook, rendererID, renderer, global) {
         inspectHooksOfFiber,
         isUsingHooks,
         assertIsMounted,
+        isFiberHostComponent,
     } = devtoolsInterface;
+
+    const isFiberMounted = fiber => {
+        try {
+            assertIsMounted(fiber);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    };
 
     const findFiber = subject => {
         let id;
@@ -72,7 +82,15 @@ export function attach(hook, rendererID, renderer, global) {
 
         return fiber;
     };
-    const findNativeNodes = fiber => findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
+    const findNativeNodes = fiber => {
+        if (isFiberMounted(fiber)) {
+            return findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
+        }
+        if (isFiberHostComponent(fiber)) {
+            return [fiber.stateNode];
+        }
+        return null;
+    };
     const getOwner = fiber => {
         if (fiber._debugOwner) {
             return fiber._debugOwner;
@@ -138,7 +156,7 @@ export function attach(hook, rendererID, renderer, global) {
         findCurrentFiberUsingSlowPathById,
         getOrGenerateFiberID,
         findNativeNodesForFiberID,
-        assertIsMounted,
+        isFiberMounted,
 
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,
