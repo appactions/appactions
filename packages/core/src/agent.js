@@ -147,6 +147,7 @@ export default class Agent extends EventEmitter {
     };
 
     saveOwners = (fiber, owners) => {
+        // TODO this should be a graph, so a new owner updates all the previous ones
         this._idToOwners.set(fiber, owners);
     };
 
