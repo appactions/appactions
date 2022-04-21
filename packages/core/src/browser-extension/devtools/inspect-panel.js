@@ -1,5 +1,5 @@
 import { useStore } from './hooks';
-import json2yaml from './json-to-yaml';
+import json2yaml from '../../json-to-yaml';
 
 export default function InspectPanel() {
     const data = useStore('selectionChange', store => {

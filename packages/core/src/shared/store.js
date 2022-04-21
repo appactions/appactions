@@ -1,5 +1,6 @@
 import VendorStore from '../vendor/react-devtools-renderer-build/store';
 import { inspectElement } from './backend-api';
+import renderYAML from '../recordings-to-yaml';
 
 export default class Store extends VendorStore {
     constructor(bridge, config) {
@@ -11,6 +12,14 @@ export default class Store extends VendorStore {
         this._isRecording = false;
 
         this._sessionRecordingDb = [];
+        this._sessionRecordingYAML = '# empty test';
+        this._sessionRecordingMeta = {
+            description: undefined,
+            start: {
+                route: '/',
+                auth: false,
+            },
+        };
 
         this._bridge.addListener('inspectedElement', this.onInspectedElement);
         this._bridge.addListener('backend-ready', this.onBackendReady);
@@ -31,6 +40,10 @@ export default class Store extends VendorStore {
 
     get sessionRecordingDb() {
         return this._sessionRecordingDb;
+    }
+
+    get sessionRecordingYAML() {
+        return this._sessionRecordingYAML;
     }
 
     get isRecording() {
@@ -100,7 +113,13 @@ export default class Store extends VendorStore {
     onSessionRecordingEvent = ([prev, current]) => {
         this._sessionRecordingDb = this._sessionRecordingDb.slice(0, -1).concat([prev, current].filter(Boolean));
 
-        this.emit('session-recording-event');
+        if (!this._sessionRecordingMeta.description) {
+            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
+        }
+
+        this._sessionRecordingYAML = renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
+
+        this.emit('session-recording-yaml-change');
     };
 
     onSessionRecordingToggle = isRecording => {
@@ -110,6 +129,7 @@ export default class Store extends VendorStore {
 
     onSessionRecordingClear = () => {
         this._sessionRecordingDb = [];
-        this.emit('session-recording-event');
+        this._sessionRecordingYAML = '# empty test';
+        this.emit('session-recording-yaml-change');
     };
 }
