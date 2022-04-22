@@ -135,12 +135,14 @@ export default class Agent extends EventEmitter {
         throw new Error('Not implemented');
     };
 
-    sendRecordingEvent = payload => {
+    sendRecordingEvent = (recording, merger) => {
         if (!this._isRecording) {
             return;
         }
 
-        this._sessionRecordingDb = [...this._sessionRecordingDb, payload];
+        const newItems = merger([this._sessionRecordingDb[this._sessionRecordingDb.length - 1], recording]);
+
+        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -1), ...newItems];
 
         if (!this._sessionRecordingMeta.description) {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
