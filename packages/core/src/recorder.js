@@ -22,7 +22,7 @@ const eventsToRecord = {
 const extractArgs = {
     type: event => [event.key],
     goto: event => [event.target.href],
-}
+};
 
 function processAnnotation(driver, event, annotation = {}) {
     const self = {
@@ -102,9 +102,25 @@ export function setupRecorder(bridge, agent) {
         const recording = makeRecordingEvent(event, annotation, agent);
 
         if (recording) {
-            agent.sendRecordingEvent(recording);
+            agent.sendRecordingEvent(recording, merger);
         }
     }
+}
+
+function merger([prev, curr]) {
+    if (!prev) {
+        return [curr];
+    }
+    if (prev.action === 'type' && curr.action === 'type') {
+        return [
+            {
+                ...prev,
+                args: [prev.args[0] + curr.args[0]],
+            },
+        ];
+    }
+
+    return [prev, curr];
 }
 
 function getAllFrames(windowElement, allFrames = []) {
