@@ -1,5 +1,6 @@
 import { getDriver, getFiberInfo } from './api';
 import isMatch from 'lodash.ismatch';
+import isEqual from 'lodash.isequal';
 
 // const eventsToRecord = {
 //     CLICK: 'click',
@@ -22,6 +23,15 @@ const eventsToRecord = {
 const extractArgs = {
     type: event => [event.key],
     goto: event => [event.target.href],
+};
+
+const mergeEvents = {
+    type: (prev, curr) => {
+        return {
+            ...curr,
+            args: [prev.args[0] + curr.args[0]],
+        };
+    },
 };
 
 function processAnnotation(driver, event, annotation = {}) {
@@ -111,13 +121,13 @@ function merger([prev, curr]) {
     if (!prev) {
         return [curr];
     }
-    if (prev.action === 'type' && curr.action === 'type') {
-        return [
-            {
-                ...prev,
-                args: [prev.args[0] + curr.args[0]],
-            },
-        ];
+
+    if (mergeEvents[curr.action]) {
+        if (mergeEvents[prev.action] === mergeEvents[curr.action]) {
+            if (isEqual(prev.owners, curr.owners)) {
+                return [mergeEvents[curr.action](prev, curr)];
+            }
+        }
     }
 
     return [prev, curr];
