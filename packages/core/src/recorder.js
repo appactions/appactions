@@ -46,7 +46,11 @@ export function setupRecorder(bridge, agent) {
             agent.window.__REACT_APP_ACTIONS__.annotations.splice(annotationIndex, 1);
         }
 
-        agent.sendRecordingEvent(processHistoricalEvents(makeRecordingEvent(event, annotation, agent)));
+        const recording = makeRecordingEvent(event, annotation, agent);
+
+        if (recording) {
+            agent.sendRecordingEvent(recording);
+        }
     }
 }
 

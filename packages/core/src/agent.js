@@ -3,6 +3,7 @@ import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
 import { setupRecorder } from './recorder';
 import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
+import renderYAML from './recordings-to-yaml';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -11,17 +12,27 @@ export default class Agent extends EventEmitter {
         this._bridge = bridge;
         this._rendererInterfaces = {};
         this._sessionRecordingEvents = [];
-        this._isRecording = false;
         this._previousRecordEvent = null;
         this._idToOwners = new WeakMap();
         this.window = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
 
+        this._isRecording = false;
+        this._sessionRecordingDb = [];
+        this._sessionRecordingMeta = {
+            description: undefined,
+            start: {
+                route: '/',
+                auth: false,
+            },
+        };
+
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
-        bridge.addListener('session-recording-toggle', this.toggleSessionRecording);
-        bridge.addListener('session-recording-replay', this.replaySessionRecording);
-        bridge.addListener('session-recording-clear', this.clearSessionRecording);
-        bridge.addListener('session-recording-save', this.saveSessionRecording);
+
+        bridge.addListener('session-recording-toggle', this.onToggleSessionRecording);
+        bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
+        bridge.addListener('session-recording-replay', this.onReplaySessionRecording);
+        bridge.addListener('session-recording-save', this.onSaveSessionRecording);
 
         setupHighlighter(bridge, this);
         setupAssertMenu(bridge, this);
@@ -112,22 +123,16 @@ export default class Agent extends EventEmitter {
     onBackendReady = () => {
         this._isRecording = true;
         this._bridge.send('backend-ready');
+        this.sendYAML();
     };
 
-    toggleSessionRecording = () => {
+    onToggleSessionRecording = () => {
         this._isRecording = !this._isRecording;
         this._bridge.send('session-recording-toggle', this._isRecording);
     };
 
-    clearSessionRecording = () => {
-        this._sessionRecordingEvents = [];
-
-        this._bridge.send('session-recording-clear');
-    };
-
-    replaySessionRecording = () => {
-        this._isRecording = false;
-        this._bridge.send('session-recording-toggle', this._isRecording);
+    onReplaySessionRecording = () => {
+        throw new Error('Not implemented');
     };
 
     sendRecordingEvent = payload => {
@@ -135,15 +140,28 @@ export default class Agent extends EventEmitter {
             return;
         }
 
-        this._bridge.send('session-recording-event', payload);
+        this._sessionRecordingDb = [...this._sessionRecordingDb, payload];
+
+        if (!this._sessionRecordingMeta.description) {
+            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
+        }
+
+        this.sendYAML();
     };
 
-    saveSessionRecording = payload => {
+    onSaveSessionRecording = () => {
+        const content = this.generateYAML();
+        const fileName = `recorded_${new Date().toISOString().replace('T', '_').substring(0, 19)}.yml`;
         Cypress.backend('task', {
             task: 'saveSessionRecording',
-            arg: payload,
+            arg: { content, fileName },
             timeout: 4000,
         });
+    };
+
+    onSessionRecordingClear = () => {
+        this._sessionRecordingDb = [];
+        this.sendYAML();
     };
 
     saveOwners = (fiber, owners) => {
@@ -159,5 +177,13 @@ export default class Agent extends EventEmitter {
         } else {
             return getOwnerPatterns(fiber);
         }
+    };
+
+    generateYAML = () => {
+        return renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
+    };
+
+    sendYAML = () => {
+        this._bridge.send('session-recording-yaml-change', this.generateYAML());
     };
 }

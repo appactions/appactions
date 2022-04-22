@@ -16,7 +16,7 @@ export default function renderYAML(meta, events) {
             do: event.args.length === 0 ? event.action : { [event.action]: event.args },
         })),
     };
-
+    
     return json2yaml(result);
 }
 

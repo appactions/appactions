@@ -17,9 +17,7 @@ function RecordControls() {
         bridge.send('session-recording-clear');
     };
     const save = event => {
-        const content = renderYAML(meta, store.sessionRecordingDb);
-        const fileName = `recorded_${new Date().toISOString().replace('T', '_').substring(0, 19)}.yml`;
-        bridge.send('session-recording-save', { content, fileName });
+        bridge.send('session-recording-save');
         setJustDidCopy(true);
     };
     return (

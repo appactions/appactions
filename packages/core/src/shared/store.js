@@ -1,31 +1,24 @@
 import VendorStore from '../vendor/react-devtools-renderer-build/store';
 import { inspectElement } from './backend-api';
-import renderYAML from '../recordings-to-yaml';
 
 export default class Store extends VendorStore {
     constructor(bridge, config) {
         super(bridge, config);
 
+        this._bridge = bridge;
+
         this._idToPattern = {};
         this._selectedElementID = null;
         this._isBackendReady = false;
+
         this._isRecording = false;
+        this._sessionRecordingYAML = '';
 
-        this._sessionRecordingDb = [];
-        this._sessionRecordingYAML = '# empty test';
-        this._sessionRecordingMeta = {
-            description: undefined,
-            start: {
-                route: '/',
-                auth: false,
-            },
-        };
+        bridge.addListener('inspectedElement', this.onInspectedElement);
+        bridge.addListener('backend-ready', this.onBackendReady);
 
-        this._bridge.addListener('inspectedElement', this.onInspectedElement);
-        this._bridge.addListener('backend-ready', this.onBackendReady);
-        this._bridge.addListener('session-recording-event', this.onSessionRecordingEvent);
-        this._bridge.addListener('session-recording-toggle', this.onSessionRecordingToggle);
-        this._bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
+        bridge.addListener('session-recording-yaml-change', this.onSessionRecordingYAMLChange);
+        bridge.addListener('session-recording-toggle', this.onToggleSessionRecording);
 
         this.addListener('mutated', this.onMutation);
     }
@@ -36,10 +29,6 @@ export default class Store extends VendorStore {
 
     get isBackendReady() {
         return this._isBackendReady;
-    }
-
-    get sessionRecordingDb() {
-        return this._sessionRecordingDb;
     }
 
     get sessionRecordingYAML() {
@@ -110,26 +99,13 @@ export default class Store extends VendorStore {
         this.emit('backend-ready');
     };
 
-    onSessionRecordingEvent = ([prev, current]) => {
-        this._sessionRecordingDb = this._sessionRecordingDb.slice(0, -1).concat([prev, current].filter(Boolean));
-
-        if (!this._sessionRecordingMeta.description) {
-            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
-        }
-
-        this._sessionRecordingYAML = renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
-
+    onSessionRecordingYAMLChange = yaml => {
+        this._sessionRecordingYAML = yaml;
         this.emit('session-recording-yaml-change');
     };
 
-    onSessionRecordingToggle = isRecording => {
+    onToggleSessionRecording = isRecording => {
         this._isRecording = isRecording;
         this.emit('session-recording-toggle');
-    };
-
-    onSessionRecordingClear = () => {
-        this._sessionRecordingDb = [];
-        this._sessionRecordingYAML = '# empty test';
-        this.emit('session-recording-yaml-change');
     };
 }
