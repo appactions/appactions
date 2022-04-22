@@ -147,4 +147,7 @@ export const builtInActions = {
     mouseUp({ $el }) {
         throw new Error('Not implemented');
     },
+    goto() {
+        throw new Error('Not implemented');
+    }
 };
