@@ -5,7 +5,7 @@ export default function renderYAML(meta, events) {
         return '# empty test';
     }
 
-    return json2yaml({
+    const result = {
         description: meta.description,
         start: {
             route: meta.start.route,
@@ -15,7 +15,9 @@ export default function renderYAML(meta, events) {
             with: event.owners.length === 1 ? processOwner(event.owners[0]) : event.owners.map(processOwner),
             do: event.args.length === 0 ? event.action : { [event.action]: event.args },
         })),
-    });
+    };
+
+    return json2yaml(result);
 }
 
 function processOwner({ name, pattern }) {
