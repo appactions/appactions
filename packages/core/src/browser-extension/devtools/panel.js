@@ -29,11 +29,7 @@ const Panel = () => {
 
     return (
         <SplitView
-            left={
-                <div className="m-4">
-                    <PatternTree />
-                </div>
-            }
+            left={<PatternTree />}
             right={
                 <>
                     <div className="pl-2 border-b border-gray-200">

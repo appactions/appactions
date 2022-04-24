@@ -193,6 +193,7 @@ function makeRecordingEvent(event, annotation, agent) {
 
         // non-overrideable
         id: currentFiberId,
+        type: 'event',
     };
 
     console.log('recording', recording);

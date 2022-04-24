@@ -191,6 +191,19 @@ export default class Agent extends EventEmitter {
     };
 
     onSessionRecordingAssert = payload => {
-        console.log('onSessionRecordingAssert', payload);
+        const { id, asserter } = payload;
+        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+
+        const owners = this.getOwners(fiber);
+
+        const assert = {
+            type: 'assert',
+            id,
+            owners,
+            asserter,
+        };
+
+        this._sessionRecordingDb = [...this._sessionRecordingDb, assert];
+        this.sendYAML();
     };
 }

@@ -6,9 +6,8 @@ import Highlight from 'react-highlight';
 
 function RecordControls() {
     const { bridge, store } = useDevtoolsContext();
-    const [justDidCopy, setJustDidCopy] = useTemporaryState({
+    const [justDidCopy, setJustDidCopy] = useTemporaryState(false, {
         timeout: 2000,
-        value: false,
     });
     const recording = useStore('session-recording-toggle', store => store.isRecording);
     const toggleRecord = event => {

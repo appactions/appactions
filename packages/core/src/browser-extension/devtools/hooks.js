@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDevtoolsContext } from './context';
 
 export function useStore(event, selector) {
@@ -16,7 +16,7 @@ export function useStore(event, selector) {
     return value;
 }
 
-export function useTemporaryState({ timeout, value }) {
+export function useTemporaryState(value, { timeout = 2000 } = {}) {
     const [state, setState] = useState(value);
 
     const setValue = useCallback(newValue => {
@@ -25,4 +25,21 @@ export function useTemporaryState({ timeout, value }) {
     }, [timeout, value]);
 
     return [state, setValue]
+}
+
+export function useClickOutside(callback) {
+    const ref = useRef();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                callback();
+            }
+        }
+
+        document.addEventListener('pointerdown', handleClickOutside);
+        return () => document.removeEventListener('pointerdown', handleClickOutside);
+    }, [ref]);
+
+    return ref;
 }

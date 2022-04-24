@@ -1,7 +1,7 @@
 import json2yaml from './json-to-yaml';
 
-export default function renderYAML(meta, events) {
-    if (events.length === 0) {
+export default function renderYAML(meta, steps) {
+    if (steps.length === 0) {
         return '# empty test';
     }
 
@@ -11,15 +11,39 @@ export default function renderYAML(meta, events) {
             route: meta.start.route,
             auth: meta.start.auth,
         },
-        steps: events.map(event => ({
-            with: event.owners.length === 1 ? processOwner(event.owners[0]) : event.owners.map(processOwner),
-            do: event.args.length === 0 ? event.action : { [event.action]: event.args },
-        })),
+        steps: steps.map(event => {
+            if (event.type === 'assert') {
+                return renderAssertStep(event);
+            }
+
+            return renderEventStep(event);
+        }),
     };
-    
+
     return json2yaml(result);
 }
 
-function processOwner({ name, pattern }) {
+function getOwner({ name, pattern }) {
     return name ? { [pattern]: name } : pattern;
+}
+
+function renderEventStep(step) {
+    return {
+        with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
+        do: step.args.length === 0 ? step.action : { [step.action]: step.args },
+    };
+}
+
+// const assert = {
+//     type: 'assert',
+//     id,
+//     owners,
+//     asserter,
+//     value,
+// };
+function renderAssertStep(step) {
+    return {
+        with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
+        assert: ['this', step.asserter, step.value],
+    };
 }

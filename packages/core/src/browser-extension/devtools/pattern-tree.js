@@ -37,7 +37,7 @@ export default function PatternTree() {
     }
 
     return (
-        <div onPointerLeave={onLeave}>
+        <div className="my-2" onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
                 .map((_, index) => {
@@ -82,8 +82,8 @@ function Element({ element }) {
 
     return (
         <div
-            className={`cursor-pointer ${isSelected ? 'bg-blue-300' : 'hover:bg-blue-100'}`}
-            style={{ paddingLeft: depth * 12 + 2 }}
+            className={`cursor-pointer ${isSelected ? 'bg-[#d4e7fa]' : 'hover:bg-[#e7f1fa]'}`}
+            style={{ paddingLeft: (depth + 1) * 12 }}
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
