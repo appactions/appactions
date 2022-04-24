@@ -33,6 +33,7 @@ export default class Agent extends EventEmitter {
         bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
         bridge.addListener('session-recording-replay', this.onReplaySessionRecording);
         bridge.addListener('session-recording-save', this.onSaveSessionRecording);
+        bridge.addListener('session-recording-assert', this.onSessionRecordingAssert);
 
         setupHighlighter(bridge, this);
         setupAssertMenu(bridge, this);
@@ -187,5 +188,9 @@ export default class Agent extends EventEmitter {
 
     sendYAML = () => {
         this._bridge.send('session-recording-yaml-change', this.generateYAML());
+    };
+
+    onSessionRecordingAssert = payload => {
+        console.log('onSessionRecordingAssert', payload);
     };
 }
