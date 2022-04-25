@@ -49,7 +49,7 @@ export default function PatternTree() {
 }
 
 function Element({ element }) {
-    const { id, depth, displayName, hocDisplayNames, key, type } = element;
+    const { id, depth } = element;
     const { bridge, store } = useDevtoolsContext();
 
     const patternElement = useStore('newElementAdded', store => {
