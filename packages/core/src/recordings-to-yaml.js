@@ -44,6 +44,6 @@ function renderEventStep(step) {
 function renderAssertStep(step) {
     return {
         with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
-        assert: ['this', step.asserter, step.value],
+        assert: !step.asserter && !step.value ? step.selector : [step.selector, step.asserter, step.value],
     };
 }
