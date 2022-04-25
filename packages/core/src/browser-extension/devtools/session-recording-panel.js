@@ -13,9 +13,11 @@ export default function SessionRecordingPanel() {
                 <RecordControls />
                 <AssertButton />
             </div>
-            <div className="my-2" style={{ maxWidth: 'calc(100% - 5px)' }}>
-                <Highlight className="yaml">{yaml}</Highlight>
-            </div>
+            {yaml ? (
+                <div className="my-2" style={{ maxWidth: 'calc(100% - 5px)' }}>
+                    <Highlight className="yaml">{yaml}</Highlight>
+                </div>
+            ) : null}
         </div>
     );
 }

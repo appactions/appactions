@@ -12,7 +12,7 @@ export default function App({ store, bridge, portalContainer }) {
                 console.error(e);
             }
         };
-    });
+    }, []);
 
     return (
         <DevtoolsContext.Provider value={{ bridge, store }}>

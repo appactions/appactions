@@ -34,13 +34,6 @@ function renderEventStep(step) {
     };
 }
 
-// const assert = {
-//     action: 'assert',
-//     id,
-//     owners,
-//     asserter,
-//     value,
-// };
 function renderAssertStep(step) {
     return {
         with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
