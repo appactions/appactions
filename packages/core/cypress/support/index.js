@@ -1,3 +1,3 @@
-import { registerCypressCommands } from '../../src';
+import { registerCypressCommands } from '@appactions/core';
 
 registerCypressCommands();

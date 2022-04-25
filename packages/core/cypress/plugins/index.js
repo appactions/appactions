@@ -1,10 +1,7 @@
-const webpack = require('@cypress/webpack-preprocessor');
 const { addPlugin } = require('@appactions/core/plugin');
+const preprocessor = require('@appactions/core/preprocessor');
 
 module.exports = on => {
-    const options = webpack.defaultOptions;
-
-    on('file:preprocessor', webpack(options));
-
     addPlugin(on);
+    on('file:preprocessor', preprocessor());
 };
