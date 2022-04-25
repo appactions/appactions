@@ -58,15 +58,8 @@ function Element({ element }) {
     const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
 
     const onHover = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(id);
-
         bridge.send('highlightNativeElement', {
-            displayName,
-            hideAfterTimeout: false,
             id,
-            openNativeElementsPanel: false,
-            rendererID,
-            scrollIntoView: false,
         });
     }, [bridge, id]);
 

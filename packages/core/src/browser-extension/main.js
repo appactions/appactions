@@ -49,12 +49,6 @@ function createPanelIfReactLoaded() {
 
         store = new Store(bridge);
 
-        // window.__debugBridge = bridge;
-
-        bridge.addListener('syncSelectionToNativeElementsPanel', () => {
-            setBrowserSelectionFromReact();
-        });
-
         bridge.addListener('connection-init', () => {
             bridge.send('connection-acknowledge');
         });
@@ -72,45 +66,6 @@ function createPanelIfReactLoaded() {
     }
 
     initBridgeAndStore();
-
-    function setBrowserSelectionFromReact() {
-        // This is currently only called on demand when you press "view DOM".
-        // In the future, if Chrome adds an inspect() that doesn't switch tabs,
-        // we could make this happen automatically when you select another component.
-        chrome.devtools.inspectedWindow.eval(
-            '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) ?' +
-                '(inspect(window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0), true) :' +
-                'false',
-            (didSelectionChange, evalError) => {
-                if (evalError) {
-                    console.error(evalError);
-                }
-            },
-        );
-    }
-
-    function setReactSelectionFromBrowser() {
-        // When the user chooses a different node in the browser Elements tab,
-        // copy it over to the hook object so that we can sync the selection.
-        chrome.devtools.inspectedWindow.eval(
-            '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__ && window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) ?' +
-                '(window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0, true) :' +
-                'false',
-            (didSelectionChange, evalError) => {
-                if (evalError) {
-                    console.error(evalError);
-                } else if (didSelectionChange) {
-                    // Remember to sync the selection next time we show Components tab.
-                    needsToSyncElementSelection = true;
-                }
-            },
-        );
-    }
-
-    setReactSelectionFromBrowser();
-    chrome.devtools.panels.elements.onSelectionChanged.addListener(() => {
-        setReactSelectionFromBrowser();
-    });
 
     chrome.devtools.panels.create('App Actions', '', 'panel.html', extensionPanel => {
         extensionPanel.onShown.addListener(panel => {

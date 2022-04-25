@@ -28,34 +28,15 @@ export function setupHighlighter(bridge, agent) {
     }
 
     function highlightNativeElement({
-        displayName,
-        hideAfterTimeout,
         id,
-        openNativeElementsPanel,
-        rendererID,
-        scrollIntoView,
     }) {
-        // debugger;
-        const renderer = agent.rendererInterfaces[rendererID];
-        if (renderer == null) {
-            console.warn(`Invalid renderer id "${rendererID}" for element "${id}"`);
-        }
-
-        let nodes = null;
-        if (renderer != null) {
-            nodes = renderer.findNativeNodesForFiberID(id);
-        }
+        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+        const nodes = Cypress.AppActions.reactApi.findNativeNodes(fiber);
 
         if (nodes != null && nodes[0] != null) {
-            const node = nodes[0];
-            if (scrollIntoView && typeof node.scrollIntoView === 'function') {
-                node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-            }
-
             let pattern = null;
             let name = null;
 
-            const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
             const fiberInfo = getFiberInfo(fiber);
             if (fiberInfo.driver) {
                 pattern = fiberInfo.driver.pattern;
@@ -66,11 +47,6 @@ export function setupHighlighter(bridge, agent) {
             }
 
             showOverlay(nodes, pattern, name);
-
-            if (openNativeElementsPanel) {
-                window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = node;
-                bridge.send('syncSelectionToNativeElementsPanel');
-            }
         } else {
             hideOverlay();
         }

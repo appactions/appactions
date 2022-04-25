@@ -33,14 +33,16 @@ export default function AssertButton() {
 
     // if we change selection, but the selected element is not available, fallback to the first one
     // this way we can keep the state as switching between elements
-    const asserter = selectedElement.selectors.includes(selectedSelector) ? selectedSelector : selectedElement.selectors[0];
+    const asserter = selectedElement.selectors.includes(selectedSelector)
+        ? selectedSelector
+        : selectedElement.selectors[0];
 
     return (
         <>
             <span className="inline-flex text-gray-500 items-center">Assert:</span>
             <span className="relative z-0 inline-flex shadow-sm rounded-md">
                 <button
-                    className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 w-32 flex-col"
+                    className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 min-w-[120px] max-w-[320px] truncate flex-col"
                     onClick={() => {
                         bridge.send('session-recording-assert', {
                             id: selectedElement.id,
@@ -49,6 +51,12 @@ export default function AssertButton() {
                         setPressed(true);
                     }}
                     disabled={justPressed}
+                    onPointerEnter={() => {
+                        bridge.send('highlightNativeElement', {
+                            id: selectedElement.id,
+                        });
+                    }}
+                    onPointerLeave={() => bridge.send('clearNativeElementHighlight')}
                 >
                     {justPressed ? <TickIcon /> : asserter}
                 </button>
