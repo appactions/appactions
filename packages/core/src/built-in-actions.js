@@ -124,14 +124,22 @@ export const builtInActions = {
     },
     goto() {
         throw new Error('Not implemented');
-    }
+    },
 };
 
 export const builtInSelectors = {
-    exists() {
-        throw new Error('Not implemented');
+    exists: {
+        fn() {
+            throw new Error('Not implemented');
+        },
+        asserter: null,
+        input: null,
     },
-    text() {
-        throw new Error('Not implemented');
-    }
-}
+    text: {
+        fn() {
+            throw new Error('Not implemented');
+        },
+        asserter: 'toBe',
+        input: 'text',
+    },
+};

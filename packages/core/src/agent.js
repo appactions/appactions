@@ -67,6 +67,9 @@ export default class Agent extends EventEmitter {
                     result.pattern = fiberInfo.driver.pattern;
                     result.actions = Object.keys(fiberInfo.driver.actions || {});
                     result.selectors = Object.keys(fiberInfo.driver.selectors || {});
+                    result.selectorsConfig = Object.entries(fiberInfo.driver.selectors || {}).map(
+                        ([name, { asserter, input }]) => ({ name, asserter, input }),
+                    );
                     result.owners = getOwnerPatterns(fiber);
 
                     this.saveOwners(fiber, result.owners);
@@ -175,7 +178,7 @@ export default class Agent extends EventEmitter {
         this._bridge.send('session-recording-yaml-change', this.generateYAML());
     };
 
-    sendRecordingEvent = (recording) => {
+    sendRecordingEvent = recording => {
         if (!this._isRecording) {
             return;
         }
@@ -192,7 +195,7 @@ export default class Agent extends EventEmitter {
     };
 
     onSessionRecordingAssert = payload => {
-        const { id, asserter } = payload;
+        const { id, selector, asserter, value } = payload;
         const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
 
         const owners = this.getOwners(fiber);
@@ -201,7 +204,9 @@ export default class Agent extends EventEmitter {
             action: 'assert',
             id,
             owners,
+            selector,
             asserter,
+            value,
         };
 
         this.sendRecordingEvent(assert);
