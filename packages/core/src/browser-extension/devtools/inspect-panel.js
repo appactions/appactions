@@ -7,9 +7,9 @@ export default function InspectPanel() {
         return store.getPatternByID(id);
     });
 
-    if (!data) {
-        return null;
-    }
-
-    return <code className="block pt-2 pl-2 whitespace-pre-wrap">{json2yaml(data)}</code>;
+    return (
+        <code className="block pt-2 pl-2 whitespace-pre-wrap">
+            {data ? json2yaml(data) : 'Select a pattern to debug'}
+        </code>
+    );
 }

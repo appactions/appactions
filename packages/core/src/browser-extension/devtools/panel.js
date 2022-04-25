@@ -23,7 +23,7 @@ const reducer = (state, action) => {
 const Panel = () => {
     const [tabs, dispatch] = useReducer(reducer, [
         { name: 'Recording', id: 'session-recording', selected: true },
-        { name: 'Inspect', id: 'inspect-panel' },
+        { name: 'Debug', id: 'inspect-panel' },
     ]);
     const selectedTab = tabs.find(tab => tab.selected);
 

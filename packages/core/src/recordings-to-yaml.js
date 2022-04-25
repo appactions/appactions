@@ -12,7 +12,7 @@ export default function renderYAML(meta, steps) {
             auth: meta.start.auth,
         },
         steps: steps.map(event => {
-            if (event.type === 'assert') {
+            if (event.action === 'assert') {
                 return renderAssertStep(event);
             }
 
@@ -35,7 +35,7 @@ function renderEventStep(step) {
 }
 
 // const assert = {
-//     type: 'assert',
+//     action: 'assert',
 //     id,
 //     owners,
 //     asserter,
