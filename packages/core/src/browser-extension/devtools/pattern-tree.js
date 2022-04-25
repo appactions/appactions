@@ -24,14 +24,14 @@ export default function PatternTree() {
     });
 
     if (!isBackendReady) {
-        return <h4>Waiting to detect React.</h4>;
+        return <h4 className="m-2">Waiting to detect React.</h4>;
     }
 
     if (numElements === 0) {
         // TODO show link to docs
         return (
             <Delay key="no-elements">
-                <h4>Could not find any patterns. Annotate your components with drivers.</h4>
+                <h4 className="m-2">Could not find any patterns. Annotate your components with drivers.</h4>
             </Delay>
         );
     }

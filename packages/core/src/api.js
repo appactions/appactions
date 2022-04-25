@@ -1,4 +1,4 @@
-import { builtInActions } from './built-in-actions';
+import { builtInActions, builtInSelectors } from './built-in-actions';
 
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
@@ -28,18 +28,24 @@ export function getRawDriver(fiber) {
 const defaultGetName = () => null;
 
 export function getDriver(fiber) {
-    const driver = getRawDriver(fiber);
+    const rawDriver = getRawDriver(fiber);
 
-    if (!driver) {
+    if (!rawDriver) {
         return null;
     }
 
-    const result = Object.create(driver);
+    const result = Object.create(rawDriver);
     result.actions = {
         ...builtInActions,
-        ...result.actions,
+        ...rawDriver.actions,
     };
+    result.selectors = {
+        ...builtInSelectors,
+        // user defined actions are also selectors
+        ...rawDriver.actions,
+    }
     result.getName = result.getName || defaultGetName;
+    result.rawDriver = rawDriver;
     return result;
 }
 

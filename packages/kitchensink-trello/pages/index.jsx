@@ -43,6 +43,9 @@ createDriver(EditableLabel, {
 });
 createDriver(InlineInputController, {
     pattern: 'Input',
+    actions: {
+        getValue: ({ $el }) => $el.val(),
+    }
 });
 createDriver('button', {
     pattern: 'Button',

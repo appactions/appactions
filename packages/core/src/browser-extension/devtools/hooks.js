@@ -16,7 +16,7 @@ export function useStore(event, selector) {
     return value;
 }
 
-export function useTemporaryState(value, { timeout = 2000 } = {}) {
+export function useTemporaryState(value, { timeout = 1500 } = {}) {
     const [state, setState] = useState(value);
 
     const setValue = useCallback(newValue => {

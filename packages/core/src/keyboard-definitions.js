@@ -1,3 +1,28 @@
+export const keyToModifierBitMap = {
+    Alt: 1,
+    Control: 2,
+    Meta: 4,
+    Shift: 8,
+};
+
+export function getKeyDefinition(key) {
+    const keyDefinition = keyCodeDefinitions[key];
+
+    if (!keyDefinition) {
+        throw new Error(`Unsupported key '${key}'.`);
+    }
+
+    const keyCode = keyDefinition.keyCode ?? 0;
+    return {
+        keyCode,
+        key: keyDefinition?.key ?? '',
+        text: keyDefinition.key.length === 1 ? keyDefinition.key : undefined,
+        code: keyDefinition.code ?? '',
+        location: keyDefinition.location ?? 0,
+        windowsVirtualKeyCode: keyCode,
+    };
+}
+
 // Copied from https://github.com/puppeteer/puppeteer/blob/a86363fda695865ddc7c5eeb3c958f5c2da8e61b/experimental/puppeteer-firefox/lib/USKeyboardLayout.js
 
 // prettier-ignore
@@ -264,4 +289,3 @@ export const keyCodeDefinitions = {
     '}': {'keyCode': 221, 'key': '}', 'code': 'BracketRight'},
     '"': {'keyCode': 222, 'key': '"', 'code': 'Quote'},
 };
-  
