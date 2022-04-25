@@ -66,6 +66,7 @@ export default class Agent extends EventEmitter {
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;
                     result.actions = Object.keys(fiberInfo.driver.actions || {});
+                    result.selectors = Object.keys(fiberInfo.driver.selectors || {});
                     result.owners = getOwnerPatterns(fiber);
 
                     this.saveOwners(fiber, result.owners);
