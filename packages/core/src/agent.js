@@ -1,7 +1,7 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
-import { setupRecorder } from './recorder';
+import { setupRecorder, merger } from './recorder';
 import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
 import renderYAML from './recordings-to-yaml';
 
@@ -136,22 +136,6 @@ export default class Agent extends EventEmitter {
         throw new Error('Not implemented');
     };
 
-    sendRecordingEvent = (recording, merger) => {
-        if (!this._isRecording) {
-            return;
-        }
-
-        const newItems = merger([this._sessionRecordingDb[this._sessionRecordingDb.length - 1], recording]);
-
-        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -1), ...newItems];
-
-        if (!this._sessionRecordingMeta.description) {
-            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
-        }
-
-        this.sendYAML();
-    };
-
     onSaveSessionRecording = () => {
         const content = this.generateYAML();
         const fileName = `recorded_${new Date().toISOString().replace('T', '_').substring(0, 19)}.yml`;
@@ -190,6 +174,22 @@ export default class Agent extends EventEmitter {
         this._bridge.send('session-recording-yaml-change', this.generateYAML());
     };
 
+    sendRecordingEvent = (recording) => {
+        if (!this._isRecording) {
+            return;
+        }
+
+        const newItems = merger([this._sessionRecordingDb[this._sessionRecordingDb.length - 1], recording]);
+
+        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -1), ...newItems];
+
+        if (!this._sessionRecordingMeta.description) {
+            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
+        }
+
+        this.sendYAML();
+    };
+
     onSessionRecordingAssert = payload => {
         const { id, asserter } = payload;
         const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
@@ -197,13 +197,12 @@ export default class Agent extends EventEmitter {
         const owners = this.getOwners(fiber);
 
         const assert = {
-            type: 'assert',
+            action: 'assert',
             id,
             owners,
             asserter,
         };
 
-        this._sessionRecordingDb = [...this._sessionRecordingDb, assert];
-        this.sendYAML();
+        this.sendRecordingEvent(assert);
     };
 }

@@ -117,7 +117,7 @@ export function setupRecorder(bridge, agent) {
     }
 }
 
-function merger([prev, curr]) {
+export function merger([prev, curr]) {
     if (!prev) {
         return [curr];
     }
@@ -129,6 +129,18 @@ function merger([prev, curr]) {
             }
         }
     }
+
+    // TODO this seems like not doing what is should
+    // if (curr.action === 'assert' && prev.action !== 'assert') {
+    //     if (isEqual(prev.owners, curr.owners)) {
+    //         return [
+    //             {
+    //                 ...prev,
+    //                 assert: curr.assert,
+    //             },
+    //         ];
+    //     }
+    // }
 
     return [prev, curr];
 }
@@ -193,7 +205,6 @@ function makeRecordingEvent(event, annotation, agent) {
 
         // non-overrideable
         id: currentFiberId,
-        type: 'event',
     };
 
     console.log('recording', recording);
