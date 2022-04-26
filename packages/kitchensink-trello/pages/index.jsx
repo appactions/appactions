@@ -45,7 +45,15 @@ createDriver(InlineInputController, {
     pattern: 'Input',
     actions: {
         getValue: ({ $el }) => $el.val(),
-    }
+    },
+    asserts: {
+        getValue: {
+            // optional
+            // tester: (a, b) => a === b,
+            test: '===',
+            input: 'text',
+        },
+    },
 });
 createDriver('button', {
     pattern: 'Button',
@@ -71,11 +79,14 @@ const Home = () => {
                 editable
                 data={data}
                 onCardAdd={(card, laneId) => {
-                    annotate({ type: 'click' }, {
-                        pattern: 'Card',
-                        action: 'add',
-                        args: [card.title],
-                    });
+                    annotate(
+                        { type: 'click' },
+                        {
+                            pattern: 'Card',
+                            action: 'add',
+                            args: [card.title],
+                        },
+                    );
                 }}
             />
         </main>

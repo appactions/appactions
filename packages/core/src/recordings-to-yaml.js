@@ -11,12 +11,12 @@ export default function renderYAML(meta, steps) {
             route: meta.start.route,
             auth: meta.start.auth,
         },
-        steps: steps.map(event => {
-            if (event.action === 'assert') {
-                return renderAssertStep(event);
+        steps: steps.map(step => {
+            if (step.type === 'assert') {
+                return renderAssertStep(step);
             }
 
-            return renderEventStep(event);
+            return renderEventStep(step);
         }),
     };
 
@@ -37,6 +37,6 @@ function renderEventStep(step) {
 function renderAssertStep(step) {
     return {
         with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
-        assert: !step.asserter && !step.value ? step.selector : [step.selector, step.asserter, step.value],
+        assert: !step.test && !step.value ? step.action : [step.action, step.test, step.value],
     };
 }
