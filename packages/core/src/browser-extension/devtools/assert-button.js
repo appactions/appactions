@@ -23,7 +23,7 @@ export default function AssertButton() {
     const [open, setOpen] = useState(false);
     const [currentValue, setCurrentValue] = useState('');
     const [justPressed, setPressed] = useTemporaryState(false);
-    const [preferredSelector, setPreferredSelector] = useState(null);
+    const [preferredAssert, setPreferredAssert] = useState(null);
     const selectedElement = useStore('selectionChange', store => {
         return store.getPatternByID(store.selectedElementID);
     });
@@ -32,17 +32,7 @@ export default function AssertButton() {
         return <span className="inline-flex text-gray-500 items-center">Select a pattern for assert</span>;
     }
 
-    // if we change selection, but the selected element is not available, fallback to the first one
-    // this way we can keep the state as switching between elements
-    const selectedSelector = selectedElement.selectors.includes(preferredSelector)
-        ? preferredSelector
-        : selectedElement.selectors[0];
-
-    const selectorConfig = selectedElement.selectorsConfig.find(config => config.name === selectedSelector);
-
-    if (!selectorConfig) {
-        return 'Error: no selector config found';
-    }
+    const assertConfig = selectedElement.asserts.find(assert => assert.name === preferredAssert) || selectedElement.asserts[0];
 
     return (
         <>
@@ -53,8 +43,8 @@ export default function AssertButton() {
                     onClick={() => {
                         bridge.send('session-recording-assert', {
                             id: selectedElement.id,
-                            selector: selectedSelector,
-                            asserter: selectorConfig.asserter,
+                            action: assertConfig.name,
+                            test: assertConfig.test,
                             value: currentValue,
                         });
                         setPressed(true);
@@ -68,7 +58,7 @@ export default function AssertButton() {
                     }}
                     onPointerLeave={() => bridge.send('clearNativeElementHighlight')}
                 >
-                    {justPressed ? <TickIcon /> : selectedSelector}
+                    {justPressed ? <TickIcon /> : assertConfig.name}
                 </button>
 
                 <span className="-ml-px relative block">
@@ -82,19 +72,19 @@ export default function AssertButton() {
                     {open ? (
                         <ul className="origin-top-right absolute right-0 mt-2 -mr-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
                             <div className="py-1">
-                                {selectedElement.selectors.map(selector => (
-                                    <li key={selector}>
+                                {selectedElement.asserts.map(assert => (
+                                    <li key={assert.name}>
                                         <a
                                             className={classNames(
                                                 false ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-50',
                                                 'block px-4 py-2 text-sm hover:bg-gray-50 cursor-pointer',
                                             )}
                                             onClick={() => {
-                                                setPreferredSelector(selector);
+                                                setPreferredAssert(assert.name);
                                                 setOpen(false);
                                             }}
                                         >
-                                            {selector}
+                                            {assert.name}
                                         </a>
                                     </li>
                                 ))}
@@ -103,14 +93,14 @@ export default function AssertButton() {
                     ) : null}
                 </span>
             </span>
-            {selectorConfig.input ? (
+            {assertConfig.input ? (
                 <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm">
                     <label>
                         <span className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900">
-                            {selectorConfig.asserter}
+                            {assertConfig.test}
                         </span>
                         <input
-                            type={selectorConfig.input}
+                            type={assertConfig.input}
                             name="value"
                             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 sm:text-sm focus:ring-0"
                             placeholder={''}

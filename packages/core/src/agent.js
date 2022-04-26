@@ -65,11 +65,12 @@ export default class Agent extends EventEmitter {
                 const fiberInfo = getFiberInfo(fiber);
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;
-                    result.actions = Object.keys(fiberInfo.driver.actions || {});
-                    result.selectors = Object.keys(fiberInfo.driver.selectors || {});
-                    result.selectorsConfig = Object.entries(fiberInfo.driver.selectors || {}).map(
-                        ([name, { asserter, input }]) => ({ name, asserter, input }),
-                    );
+                    result.actions = Object.keys(fiberInfo.driver.actions);
+                    result.asserts = Object.entries(fiberInfo.driver.asserts).map(([name, { test, input }]) => ({
+                        name,
+                        test,
+                        input,
+                    }));
                     result.owners = getOwnerPatterns(fiber);
 
                     this.saveOwners(fiber, result.owners);
@@ -195,17 +196,17 @@ export default class Agent extends EventEmitter {
     };
 
     onSessionRecordingAssert = payload => {
-        const { id, selector, asserter, value } = payload;
+        const { id, action, test, value } = payload;
         const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
 
         const owners = this.getOwners(fiber);
 
         const assert = {
-            action: 'assert',
+            type: 'assert',
             id,
             owners,
-            selector,
-            asserter,
+            action,
+            test,
             value,
         };
 

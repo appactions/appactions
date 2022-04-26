@@ -1,4 +1,4 @@
-import { builtInActions, builtInSelectors } from './built-in-actions';
+import { builtInActions, builtInAsserts } from './built-in-actions';
 
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
@@ -39,10 +39,9 @@ export function getDriver(fiber) {
         ...builtInActions,
         ...rawDriver.actions,
     };
-    result.selectors = {
-        ...builtInSelectors,
-        // user defined actions are also selectors
-        ...rawDriver.actions,
+    result.asserts = {
+        ...builtInAsserts,
+        ...rawDriver.asserts,
     }
     result.getName = result.getName || defaultGetName;
     result.rawDriver = rawDriver;

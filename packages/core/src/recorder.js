@@ -189,6 +189,9 @@ function makeRecordingEvent(event, annotation, agent) {
     console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
 
     const recording = {
+        type: 'event',
+        id: currentFiberId,
+
         // app actions
         name,
         owners,
@@ -202,9 +205,6 @@ function makeRecordingEvent(event, annotation, agent) {
         keyCode: event.keyCode ? event.keyCode : null,
         href: event.target.href ? event.target.href : null,
         coordinates: getCoordinates(event),
-
-        // non-overrideable
-        id: currentFiberId,
     };
 
     console.log('recording', recording);
