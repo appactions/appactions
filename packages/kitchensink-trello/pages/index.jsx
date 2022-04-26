@@ -21,6 +21,31 @@ createDriver(Lane, {
     getName(info) {
         return info.fiber.stateNode.props.title;
     },
+    actions: {
+        addCard({}, title, label, description) {
+            console.log('addCard', title, label, description);
+        },
+    },
+    simplify: {
+        addCard: {
+            start: {
+                pattern: 'AddCardLink',
+                action: 'click',
+            },
+            end: {
+                pattern: 'Button',
+                name: 'Add card',
+                action: 'click',
+            },
+            getArgs(generator) {
+                const [title] = generator.getArgsOf('Input', 'title');
+                const [label] = generator.getArgsOf('Input', 'label');
+                const [description] = generator.getArgsOf('Input', 'description');
+
+                return [title, label, description];
+            },
+        },
+    },
 });
 createDriver(Card, {
     pattern: 'Card',

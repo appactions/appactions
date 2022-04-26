@@ -71,6 +71,11 @@ export default class Agent extends EventEmitter {
                         test,
                         input,
                     }));
+                    result.simplify = Object.entries(fiberInfo.driver.simplify).map(([name, { start, end }]) => ({
+                        name,
+                        start,
+                        end,
+                    }));
                     result.owners = getOwnerPatterns(fiber);
 
                     this.saveOwners(fiber, result.owners);

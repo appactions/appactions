@@ -43,6 +43,7 @@ export function getDriver(fiber) {
         ...builtInAsserts,
         ...rawDriver.asserts,
     }
+    result.simplify = rawDriver.simplify || {};
     result.getName = result.getName || defaultGetName;
     result.rawDriver = rawDriver;
     return result;
