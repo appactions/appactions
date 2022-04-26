@@ -1,5 +1,7 @@
 import { getCypressElementCoordinates } from './coord-utils';
 import { keyCodeDefinitions, keyToModifierBitMap, getKeyDefinition } from './keyboard-definitions';
+import isMatch from 'lodash.ismatch';
+import isEqual from 'lodash.isequal';
 
 export const builtInActions = {
     async click({ $el }) {
@@ -144,4 +146,15 @@ export const builtInAsserts = {
         test: '===',
         input: 'text',
     },
-}
+};
+
+export const builtInTesters = {
+    '===': (actual, expected) => actual === expected,
+    '!==': (actual, expected) => actual !== expected,
+    '_.isEqual': (actual, expected) => isEqual(actual, expected),
+    '_.isMatch': (actual, expected) => isMatch(actual, expected),
+    'String .includes': (actual, expected) => actual.includes(expected),
+    'String .startsWith': (actual, expected) => actual.startsWith(expected),
+    'String .endsWith': (actual, expected) => actual.endsWith(expected),
+    'String .match': (actual, expected) => actual.match(expected),
+};
