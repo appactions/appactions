@@ -42,7 +42,7 @@ export function getDriver(fiber) {
     result.asserts = {
         ...builtInAsserts,
         ...rawDriver.asserts,
-    }
+    };
     result.simplify = rawDriver.simplify || {};
     result.getName = result.getName || defaultGetName;
     result.rawDriver = rawDriver;
@@ -162,9 +162,15 @@ export function getOwnerPatterns(fiber) {
         if (driver) {
             const fiberInfo = getFiberInfo(fiber);
             const name = driver.getName(fiberInfo);
+            const simplify = Object.entries(driver.simplify).map(([name, { start, end }]) => ({
+                name,
+                start,
+                end,
+            }));
             result.unshift({
                 pattern: driver.pattern,
                 name,
+                simplify,
             });
         }
     } while ((fiber = fiber.return));

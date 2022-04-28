@@ -29,7 +29,8 @@ createDriver(Lane, {
     simplify: {
         addCard: {
             start: {
-                pattern: 'AddCardLink',
+                pattern: 'Button',
+                name: 'Click to add card',
                 action: 'click',
             },
             end: {
@@ -37,7 +38,7 @@ createDriver(Lane, {
                 name: 'Add card',
                 action: 'click',
             },
-            getArgs(generator) {
+            collect(generator) {
                 const [title] = generator.getArgsOf('Input', 'title');
                 const [label] = generator.getArgsOf('Input', 'label');
                 const [description] = generator.getArgsOf('Input', 'description');

@@ -18,6 +18,7 @@ export default class Agent extends EventEmitter {
 
         this._isRecording = false;
         this._sessionRecordingDb = [];
+        this._sessionRecordingNestingDepth = 0;
         this._sessionRecordingMeta = {
             description: undefined,
             start: {
@@ -216,5 +217,15 @@ export default class Agent extends EventEmitter {
         };
 
         this.sendRecordingEvent(assert);
+    };
+
+    handleNestingStart = (recording, config) => {
+        console.log('handleNestingStart', config);
+        return recording;
+    };
+
+    handleNestingEnd = (recording, config) => {
+        console.log('handleNestingEnd', config);
+        return recording;
     };
 }

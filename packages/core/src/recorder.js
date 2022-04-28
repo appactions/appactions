@@ -182,22 +182,28 @@ function makeRecordingEvent(event, annotation, agent) {
     const driver = getDriver(fiber);
 
     const annotationGenerator = processAnnotation(driver, event, annotation);
-    const name = driver.getName(getFiberInfo(fiber));
     const owners = agent.getOwners(fiber);
+    // const name = driver.getName(getFiberInfo(fiber));
+    const { name } = owners[owners.length - 1];
 
     console.log('annotation', annotation);
-    console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
+    // console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
+    console.log('owners', owners);
 
-    const recording = {
+    const pattern = annotationGenerator.getPattern();
+    const action = annotationGenerator.getAction();
+    const args = annotationGenerator.getArgs();
+
+    let recording = {
         type: 'event',
         id: currentFiberId,
 
         // app actions
         name,
         owners,
-        pattern: annotationGenerator.getPattern(),
-        action: annotationGenerator.getAction(),
-        args: annotationGenerator.getArgs(),
+        pattern,
+        action,
+        args,
 
         // native
         value: event.target.value,
@@ -206,6 +212,28 @@ function makeRecordingEvent(event, annotation, agent) {
         href: event.target.href ? event.target.href : null,
         coordinates: getCoordinates(event),
     };
+
+    console.log('raw recording', recording);
+
+    for (let i = owners.length - 1; i >= 0; i--) {
+        const nestingStart = owners[i].simplify.find(({ start }) => {
+            return isMatch({ pattern, name, action }, start);
+        });
+
+        if (nestingStart) {
+            recording = agent.handleNestingStart(recording, nestingStart);
+            break;
+        }
+
+        const nestingEnd = owners[i].simplify.find(({ end }) => {
+            return isMatch({ pattern, name, action }, end);
+        });
+
+        if (nestingEnd) {
+            recording = agent.handleNestingEnd(recording, nestingEnd);
+            break;
+        }
+    }
 
     console.log('recording', recording);
 
