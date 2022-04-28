@@ -190,9 +190,30 @@ export default class Agent extends EventEmitter {
             return;
         }
 
-        const newItems = merger([this._sessionRecordingDb[this._sessionRecordingDb.length - 1], recording]);
+        this._sessionRecordingDb = [...this._sessionRecordingDb, recording];
 
-        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -1), ...newItems];
+        if (recording.nestingEnd) {
+            let nestingStartIndex = this._sessionRecordingDb.length - 1;
+            for (; nestingStartIndex >= 0; nestingStartIndex--) {
+                if (
+                    this._sessionRecordingDb[nestingStartIndex].nestingStart &&
+                    this._sessionRecordingDb[nestingStartIndex].depth === recording.depth
+                ) {
+                    break;
+                }
+            }
+
+            const nesting = foobar(this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length));
+
+            this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, nestingStartIndex), ...nesting];
+        }
+
+        const newItems = merger([
+            this._sessionRecordingDb[this._sessionRecordingDb.length - 2],
+            this._sessionRecordingDb[this._sessionRecordingDb.length - 1],
+        ]);
+
+        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -2), ...newItems];
 
         if (!this._sessionRecordingMeta.description) {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
@@ -221,11 +242,36 @@ export default class Agent extends EventEmitter {
 
     handleNestingStart = (recording, config) => {
         console.log('handleNestingStart', config);
-        return recording;
+        return {
+            ...recording,
+            depth: ++this._sessionRecordingNestingDepth,
+            nestingStart: true,
+        };
     };
 
     handleNestingEnd = (recording, config) => {
         console.log('handleNestingEnd', config);
-        return recording;
+        return {
+            ...recording,
+            depth: this._sessionRecordingNestingDepth--,
+            nestingEnd: true,
+        };
     };
+}
+
+function foobar(arr) {
+    console.log('foobar', arr);
+
+    const recording = {
+        type: 'event',
+        id: arr[arr.length - 1].id,
+
+        name: 'lel',
+        owners: [{ pattern: 'Foo', action: 'kekw' }],
+        pattern: 'Foo',
+        action: 'kekw',
+        args: ['topkek'],
+    };
+    
+    return [recording];
 }

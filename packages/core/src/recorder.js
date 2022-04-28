@@ -197,20 +197,12 @@ function makeRecordingEvent(event, annotation, agent) {
     let recording = {
         type: 'event',
         id: currentFiberId,
-
-        // app actions
+        
         name,
         owners,
         pattern,
         action,
         args,
-
-        // native
-        value: event.target.value,
-        tagName: event.target.tagName,
-        keyCode: event.keyCode ? event.keyCode : null,
-        href: event.target.href ? event.target.href : null,
-        coordinates: getCoordinates(event),
     };
 
     console.log('raw recording', recording);
@@ -236,22 +228,18 @@ function makeRecordingEvent(event, annotation, agent) {
     }
 
     console.log('recording', recording);
-
-    // agent.window.recordings = agent.window.recordings || [];
-    // agent.window.recordings.push(recording);
-
     console.groupEnd();
 
     return recording;
 }
 
-function getCoordinates(event) {
-    const eventsWithCoordinates = {
-        mouseup: true,
-        mousedown: true,
-        mousemove: true,
-        mouseover: true,
-    };
+// function getCoordinates(event) {
+//     const eventsWithCoordinates = {
+//         mouseup: true,
+//         mousedown: true,
+//         mousemove: true,
+//         mouseover: true,
+//     };
 
-    return eventsWithCoordinates[event.type] ? { x: event.clientX, y: event.clientY } : null;
-}
+//     return eventsWithCoordinates[event.type] ? { x: event.clientX, y: event.clientY } : null;
+// }
