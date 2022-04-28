@@ -240,38 +240,40 @@ export default class Agent extends EventEmitter {
         this.sendRecordingEvent(assert);
     };
 
-    handleNestingStart = (recording, config) => {
-        console.log('handleNestingStart', config);
+    handleNestingStart = (recording, simplify, owners) => {
+        console.log('handleNestingStart', simplify);
         return {
             ...recording,
+            owners,
             depth: ++this._sessionRecordingNestingDepth,
             nestingStart: true,
+            simplify,
         };
     };
 
-    handleNestingEnd = (recording, config) => {
-        console.log('handleNestingEnd', config);
+    handleNestingEnd = (recording, simplify, owners) => {
+        console.log('handleNestingEnd', simplify);
         return {
             ...recording,
+            owners,
             depth: this._sessionRecordingNestingDepth--,
             nestingEnd: true,
+            simplify,
         };
     };
 }
 
 function foobar(arr) {
-    console.log('foobar', arr);
-
+    const nestingEnd = arr[arr.length - 1];
+    const { pattern, action } = nestingEnd.simplify;
+    // debugger;
     const recording = {
-        type: 'event',
-        id: arr[arr.length - 1].id,
+        ...nestingEnd,
 
-        name: 'lel',
-        owners: [{ pattern: 'Foo', action: 'kekw' }],
-        pattern: 'Foo',
-        action: 'kekw',
-        args: ['topkek'],
+        pattern,
+        action,
+        args: ['TODO'],
     };
-    
+
     return [recording];
 }
