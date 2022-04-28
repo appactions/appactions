@@ -162,13 +162,15 @@ export function getOwnerPatterns(fiber) {
         if (driver) {
             const fiberInfo = getFiberInfo(fiber);
             const name = driver.getName(fiberInfo);
-            const simplify = Object.entries(driver.simplify).map(([name, { start, end }]) => ({
-                name,
+            const pattern = driver.pattern;
+            const simplify = Object.entries(driver.simplify).map(([action, { start, end }]) => ({
+                pattern,
+                action,
                 start,
                 end,
             }));
             result.unshift({
-                pattern: driver.pattern,
+                pattern,
                 name,
                 simplify,
             });

@@ -197,7 +197,7 @@ function makeRecordingEvent(event, annotation, agent) {
     let recording = {
         type: 'event',
         id: currentFiberId,
-        
+
         name,
         owners,
         pattern,
@@ -208,21 +208,23 @@ function makeRecordingEvent(event, annotation, agent) {
     console.log('raw recording', recording);
 
     for (let i = owners.length - 1; i >= 0; i--) {
-        const nestingStart = owners[i].simplify.find(({ start }) => {
+        const { simplify } = owners[i];
+
+        const nestingStart = simplify.find(({ start }) => {
             return isMatch({ pattern, name, action }, start);
         });
 
         if (nestingStart) {
-            recording = agent.handleNestingStart(recording, nestingStart);
+            recording = agent.handleNestingStart(recording, nestingStart, owners.slice(0, i + 1));
             break;
         }
 
-        const nestingEnd = owners[i].simplify.find(({ end }) => {
+        const nestingEnd = simplify.find(({ end }) => {
             return isMatch({ pattern, name, action }, end);
         });
 
         if (nestingEnd) {
-            recording = agent.handleNestingEnd(recording, nestingEnd);
+            recording = agent.handleNestingEnd(recording, nestingEnd, owners.slice(0, i + 1));
             break;
         }
     }
