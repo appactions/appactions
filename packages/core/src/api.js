@@ -183,3 +183,7 @@ export function getOwnerPatterns(fiber) {
 export function isFiberMounted(fiber) {
     return Cypress.AppActions.reactApi.isFiberMounted(fiber);
 }
+
+export function findFiberByOwners(owners) {
+    throw new Error('Unimplemented');
+}

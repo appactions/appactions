@@ -13,7 +13,6 @@ export default class Agent extends EventEmitter {
         this._rendererInterfaces = {};
         this._sessionRecordingEvents = [];
         this._previousRecordEvent = null;
-        this._idToOwners = new WeakMap();
         this.window = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
 
         this._isRecording = false;
@@ -78,8 +77,6 @@ export default class Agent extends EventEmitter {
                         end,
                     }));
                     result.owners = getOwnerPatterns(fiber);
-
-                    this.saveOwners(fiber, result.owners);
 
                     if (fiberInfo.driver.getName) {
                         result.name = fiberInfo.driver.getName(fiberInfo);
@@ -162,21 +159,9 @@ export default class Agent extends EventEmitter {
         this.sendYAML();
     };
 
-    saveOwners = (fiber, owners) => {
-        // TODO this should be a graph, so a new owner updates all the previous ones
-        this._idToOwners.set(fiber, owners);
+    getOwners = id => {
+        return [{ pattern: '*', name: '*', simplify: [] }];
     };
-
-    getOwners = fiber => {
-        if (isFiberMounted(fiber)) {
-            return getOwnerPatterns(fiber);
-        } else if (this._idToOwners.has(fiber)) {
-            return this._idToOwners.get(fiber);
-        } else {
-            return getOwnerPatterns(fiber);
-        }
-    };
-
     generateYAML = () => {
         return renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
     };
@@ -203,7 +188,10 @@ export default class Agent extends EventEmitter {
                 }
             }
 
-            const nesting = foobar(this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length));
+            const nesting = foobar(
+                this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length),
+                this._sessionRecordingDb,
+            );
 
             this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, nestingStartIndex), ...nesting];
         }
@@ -224,9 +212,8 @@ export default class Agent extends EventEmitter {
 
     onSessionRecordingAssert = payload => {
         const { id, action, test, value } = payload;
-        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
 
-        const owners = this.getOwners(fiber);
+        const owners = this.getOwners(id);
 
         const assert = {
             type: 'assert',
@@ -242,6 +229,7 @@ export default class Agent extends EventEmitter {
 
     handleNestingStart = (recording, simplify, owners) => {
         console.log('handleNestingStart', simplify);
+        // debugger;
         return {
             ...recording,
             owners,
@@ -263,7 +251,7 @@ export default class Agent extends EventEmitter {
     };
 }
 
-function foobar(arr) {
+function foobar(arr, db) {
     const nestingEnd = arr[arr.length - 1];
     const { pattern, action } = nestingEnd.simplify;
     // debugger;
