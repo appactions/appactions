@@ -182,7 +182,7 @@ function makeRecordingEvent(event, annotation, agent) {
     const driver = getDriver(fiber);
 
     const annotationGenerator = processAnnotation(driver, event, annotation);
-    const owners = agent.getOwners(fiber);
+    const owners = agent.getOwners(currentFiberId);
     // const name = driver.getName(getFiberInfo(fiber));
     const { name } = owners[owners.length - 1];
 
