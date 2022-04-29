@@ -10,11 +10,20 @@ import data from './data.json';
 
 createDriver(Board, {
     pattern: 'Board',
-    // actions: {
-    //     add: ({ hooks }, id, title) => {
-    //         hooks.add({ id, title });
-    //     },
-    // },
+    simplify: {
+        addLane: {
+            start: {
+                pattern: 'Button',
+                name: '+ Add another lane',
+                action: 'click',
+            },
+            end: {
+                pattern: 'Button',
+                name: 'Add lane',
+                action: 'click',
+            },
+        },
+    },
 });
 createDriver(Lane, {
     pattern: 'Lane',
@@ -59,10 +68,10 @@ createDriver(AddCardLink, {
     getName: ({ $el }) => $el.text().trim(),
 });
 createDriver(NewCardForm, {
-    pattern: 'NewCardForm',
+    pattern: 'Form',
 });
 createDriver(EditableLabel, {
-    pattern: 'EditableLabel',
+    pattern: 'Input',
     getName(info) {
         return info.fiber.stateNode.props.placeholder;
     },
