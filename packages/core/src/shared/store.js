@@ -71,7 +71,7 @@ export default class Store extends VendorStore {
         }
     };
 
-    onMutation = ([addedElementIDs]) => {
+    onMutation = ([addedElementIDs, removedElementIDs]) => {
         addedElementIDs.forEach(async id => {
             if (!this._idToPattern[id]) {
                 try {
@@ -89,6 +89,13 @@ export default class Store extends VendorStore {
                 } catch (error) {
                     console.error(error);
                 }
+            }
+        });
+
+        removedElementIDs.forEach((parentID, id) => {
+            if (this._selectedElementID === id) {
+                this._selectedElementID = null;
+                this.emit('selectionChange');
             }
         });
     };
