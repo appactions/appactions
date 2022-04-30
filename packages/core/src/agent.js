@@ -201,12 +201,15 @@ export default class Agent extends EventEmitter {
             this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, nestingStartIndex), ...nesting];
         }
 
-        const newItems = merger([
-            this._sessionRecordingDb[this._sessionRecordingDb.length - 2],
-            this._sessionRecordingDb[this._sessionRecordingDb.length - 1],
-        ]);
-
-        this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -2), ...newItems];
+        // if there are at least two items, check if the last two can be merged
+        if (this._sessionRecordingDb.length > 1) {
+            const newItems = merger([
+                this._sessionRecordingDb[this._sessionRecordingDb.length - 2],
+                this._sessionRecordingDb[this._sessionRecordingDb.length - 1],
+            ]);
+            
+            this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -2), ...newItems];
+        }
 
         if (!this._sessionRecordingMeta.description) {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;

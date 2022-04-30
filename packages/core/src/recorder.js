@@ -28,6 +28,7 @@ const extractArgs = {
 const mergeEvents = {
     type: (prev, curr) => {
         return {
+            ...prev,
             ...curr,
             args: [prev.args[0] + curr.args[0]],
         };
@@ -118,10 +119,6 @@ export function setupRecorder(bridge, agent) {
 }
 
 export function merger([prev, curr]) {
-    if (!prev) {
-        return [curr];
-    }
-
     if (curr.type === 'event') {
         if (mergeEvents[curr.action] && prev.action === curr.action) {
             if (isEqual(prev.owners, curr.owners)) {
@@ -135,6 +132,7 @@ export function merger([prev, curr]) {
             return [
                 {
                     ...prev,
+                    ...curr,
                     assert: {
                         ...prev.assert,
                         ...curr.assert,

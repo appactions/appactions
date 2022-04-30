@@ -11,13 +11,7 @@ export default function renderYAML(meta, steps) {
             route: meta.start.route,
             auth: meta.start.auth,
         },
-        steps: steps.map(step => {
-            if (step.type === 'assert') {
-                return renderAssertStep(step);
-            }
-
-            return renderEventStep(step);
-        }),
+        steps: steps.map(renderStep),
     };
 
     return json2yaml(result);
@@ -27,21 +21,34 @@ function getOwner({ name, pattern }) {
     return name ? { [pattern]: name } : pattern;
 }
 
-function renderEventStep(step) {
-    return {
+function renderStep(step) {
+    const result = {
         with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
-        do: step.args.length === 0 ? step.action : { [step.action]: step.args },
     };
+
+    // "do" is not a valid identifier in js :(
+    const interaction = getDo(step);
+    if (interaction) {
+        result.do = interaction;
+    }
+
+    const assert = getAssert(step);
+    if (assert) {
+        result.assert = assert;
+    }
+
+    return result;
 }
 
-function renderAssertStep(step) {
-    return {
-        with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
-        assert: getAssert(step),
-    };
+function getDo(step) {
+    return step.args.length === 0 ? step.action : { [step.action]: step.args };
 }
 
 function getAssert(step) {
+    if (!step.assert) {
+        return null;
+    }
+
     const asserts = Object.entries(step.assert);
 
     if (asserts.length === 1 && !asserts[0][1].test && !asserts[0][1].value) {
