@@ -157,6 +157,7 @@ function getAllFrames(windowElement, allFrames = []) {
 
 function makeRecordingEvent(event, annotation, agent) {
     console.group(event.type);
+    // console.groupCollapsed(event.type);
 
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
@@ -172,8 +173,7 @@ function makeRecordingEvent(event, annotation, agent) {
     console.log('targetFiber', targetFiber, event.target);
 
     const fiber = Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, fiber => {
-        const driver = getDriver(fiber);
-        return driver && driver.pattern;
+        return !!getDriver(fiber);
     });
 
     console.log('fiber', fiber);
@@ -182,7 +182,7 @@ function makeRecordingEvent(event, annotation, agent) {
     const driver = getDriver(fiber);
 
     const annotationGenerator = processAnnotation(driver, event, annotation);
-    const owners = agent.getOwners(currentFiberId);
+    const owners = agent.getOwners(fiber);
     // const name = driver.getName(getFiberInfo(fiber));
     const { name } = owners[owners.length - 1];
 
@@ -215,7 +215,7 @@ function makeRecordingEvent(event, annotation, agent) {
         });
 
         if (nestingStart) {
-            recording = agent.handleNestingStart(recording, nestingStart, owners.slice(0, i + 1));
+            recording = agent.handleNestingStart(recording);
             break;
         }
 

@@ -159,8 +159,12 @@ export default class Agent extends EventEmitter {
         this.sendYAML();
     };
 
-    getOwners = id => {
-        return [{ pattern: '*', name: '*', simplify: [] }];
+    getOwners = fiber => {
+        if (isFiberMounted(fiber)) {
+            return getOwnerPatterns(fiber);
+        }
+
+        return Cypress.AppActions.hook.getUnmountedOwners(fiber);
     };
     generateYAML = () => {
         return renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
@@ -213,7 +217,9 @@ export default class Agent extends EventEmitter {
     onSessionRecordingAssert = payload => {
         const { id, action, test, value } = payload;
 
-        const owners = this.getOwners(id);
+        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+
+        const owners = this.getOwners(fiber);
 
         const assert = {
             type: 'assert',
@@ -227,20 +233,17 @@ export default class Agent extends EventEmitter {
         this.sendRecordingEvent(assert);
     };
 
-    handleNestingStart = (recording, simplify, owners) => {
-        console.log('handleNestingStart', simplify);
-        // debugger;
+    handleNestingStart = (recording) => {
+        console.log('handleNestingStart');
         return {
             ...recording,
-            owners,
             depth: ++this._sessionRecordingNestingDepth,
             nestingStart: true,
-            simplify,
         };
     };
 
     handleNestingEnd = (recording, simplify, owners) => {
-        console.log('handleNestingEnd', simplify);
+        console.log('handleNestingEnd', simplify, owners);
         return {
             ...recording,
             owners,
