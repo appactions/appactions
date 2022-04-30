@@ -122,25 +122,27 @@ export function merger([prev, curr]) {
         return [curr];
     }
 
-    if (mergeEvents[curr.action]) {
-        if (mergeEvents[prev.action] === mergeEvents[curr.action]) {
+    if (curr.type === 'event') {
+        if (mergeEvents[curr.action] && prev.action === curr.action) {
             if (isEqual(prev.owners, curr.owners)) {
                 return [mergeEvents[curr.action](prev, curr)];
             }
         }
     }
 
-    // TODO this seems like not doing what is should
-    // if (curr.action === 'assert' && prev.action !== 'assert') {
-    //     if (isEqual(prev.owners, curr.owners)) {
-    //         return [
-    //             {
-    //                 ...prev,
-    //                 assert: curr.assert,
-    //             },
-    //         ];
-    //     }
-    // }
+    if (curr.type === 'assert') {
+        if (isEqual(prev.owners, curr.owners)) {
+            return [
+                {
+                    ...prev,
+                    assert: {
+                        ...prev.assert,
+                        ...curr.assert,
+                    },
+                },
+            ];
+        }
+    }
 
     return [prev, curr];
 }

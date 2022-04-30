@@ -37,6 +37,21 @@ function renderEventStep(step) {
 function renderAssertStep(step) {
     return {
         with: step.owners.length === 1 ? getOwner(step.owners[0]) : step.owners.map(getOwner),
-        assert: !step.test && !step.value ? step.action : [step.action, step.test, step.value],
+        assert: getAssert(step),
     };
+}
+
+function getAssert(step) {
+    const asserts = Object.entries(step.assert);
+
+    if (asserts.length === 1 && !asserts[0][1].test && !asserts[0][1].value) {
+        return asserts[0][0];
+    }
+
+    return asserts.reduce((acc, [action, { test, value }]) => {
+        return {
+            ...acc,
+            [action]: !test && !value ? true : [test, value],
+        };
+    }, {});
 }
