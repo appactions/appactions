@@ -41,6 +41,10 @@ function renderStep(step) {
 }
 
 function getDo(step) {
+    if (!step.action) {
+        return null;
+    }
+    
     return step.args.length === 0 ? step.action : { [step.action]: step.args };
 }
 
