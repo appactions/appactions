@@ -2,6 +2,7 @@ function init() {
     return {
         drivers: {},
         patterns: new Set(),
+        simplify: new Map(),
         annotations: [],
     };
 }
@@ -24,6 +25,10 @@ export const createDriver = (Component, config) => {
         window.__REACT_APP_ACTIONS__.patterns.add(config.pattern);
     }
 
+    if (config.simplify) {
+        window.__REACT_APP_ACTIONS__.simplify.set(config.pattern, config.simplify);
+    }
+
     if (typeof Component === 'string') {
         // this is a hack for now, because defineProperty does not work on strings
         window.__REACT_APP_ACTIONS__.drivers[Component] = config;
@@ -35,11 +40,6 @@ export const createDriver = (Component, config) => {
             },
         });
     }
-
-    return {
-        Component,
-        config,
-    };
 };
 
 export const annotate = (eventOrMatcher, payload) => {
