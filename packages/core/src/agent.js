@@ -66,6 +66,7 @@ export default class Agent extends EventEmitter {
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;
                     result.actions = Object.keys(fiberInfo.driver.actions);
+                    result.key = fiber.key;
                     result.asserts = Object.entries(fiberInfo.driver.asserts).map(([name, { test, input }]) => ({
                         name,
                         test,
@@ -192,7 +193,7 @@ export default class Agent extends EventEmitter {
                 }
             }
 
-            const nesting = foobar(
+            const nesting = this.handleNesting(
                 this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length),
                 this._sessionRecordingDb,
             );
@@ -233,7 +234,7 @@ export default class Agent extends EventEmitter {
         this.sendRecordingEvent(assert);
     };
 
-    handleNestingStart = (recording) => {
+    handleNestingStart = recording => {
         console.log('handleNestingStart');
         return {
             ...recording,
@@ -252,19 +253,61 @@ export default class Agent extends EventEmitter {
             simplify,
         };
     };
+
+    handleNesting = (collection) => {
+        const nestingEnd = collection[collection.length - 1];
+        const { pattern, action } = nestingEnd.simplify;
+        const simplify = this.window.__REACT_APP_ACTIONS__.simplify.get(nestingEnd.simplify.pattern);
+        let args = [];
+        try {
+            args = simplify[action].collect(new Generator(collection));
+        } catch (e) {
+            console.error(e);
+            console.log('collection', collection);
+        }
+        const recording = {
+            ...nestingEnd,
+
+            pattern,
+            action,
+            args,
+        };
+
+        return [recording];
+    };
 }
 
-function foobar(arr, db) {
-    const nestingEnd = arr[arr.length - 1];
-    const { pattern, action } = nestingEnd.simplify;
-    // debugger;
-    const recording = {
-        ...nestingEnd,
+class Generator {
+    constructor(collection) {
+        this.collection = collection;
+        this.index = 0;
+    }
 
-        pattern,
-        action,
-        args: ['TODO'],
+    query = ({ pattern, action, name }) => {
+        const matches = this.collection.filter(recording => {
+            if (name && name !== recording.name) {
+                return false;
+            }
+
+            if (pattern && pattern !== recording.pattern) {
+                return false;
+            }
+
+            if (action && action !== recording.action) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if (matches.length === 0) {
+            return [];
+        }
+
+        if (matches.length > 1) {
+            throw new Error('Multiple matches');
+        }
+
+        return matches[0].args;
     };
-
-    return [recording];
 }

@@ -2,14 +2,19 @@ import Board from 'react-trello';
 import Lane from 'react-trello/dist/controllers/Lane';
 import Card from 'react-trello/dist/components/Card';
 import NewCardForm from 'react-trello/dist/components/NewCardForm';
+import NewLaneForm from 'react-trello/dist/components/NewLaneForm';
 import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
+import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
 import { createDriver, annotate } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
     pattern: 'Board',
+    actions: {
+        addLane() {},
+    },
     simplify: {
         addLane: {
             start: {
@@ -21,6 +26,9 @@ createDriver(Board, {
                 pattern: 'Button',
                 name: 'Add lane',
                 action: 'click',
+            },
+            collect(generator) {
+                return generator.query({ pattern: 'Input', action: 'type' });
             },
         },
     },
@@ -48,9 +56,9 @@ createDriver(Lane, {
                 action: 'click',
             },
             collect(generator) {
-                const [title] = generator.getArgsOf('Input', 'title');
-                const [label] = generator.getArgsOf('Input', 'label');
-                const [description] = generator.getArgsOf('Input', 'description');
+                const [title] = generator.query({ pattern: 'Input', name: 'title', action: 'type' });
+                const [label] = generator.query({ pattern: 'Input', name: 'label', action: 'type' });
+                const [description] = generator.query({ pattern: 'Input', name: 'description', action: 'type' });
 
                 return [title, label, description];
             },
@@ -70,11 +78,17 @@ createDriver(AddCardLink, {
 createDriver(NewCardForm, {
     pattern: 'Form',
 });
+createDriver(NewLaneForm, {
+    pattern: 'Form',
+});
 createDriver(EditableLabel, {
     pattern: 'Input',
     getName(info) {
         return info.fiber.stateNode.props.placeholder;
     },
+});
+createDriver(NewLaneTitleEditor, {
+    pattern: 'Input',
 });
 createDriver(InlineInputController, {
     pattern: 'Input',
