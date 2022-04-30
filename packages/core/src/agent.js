@@ -226,9 +226,12 @@ export default class Agent extends EventEmitter {
             type: 'assert',
             id,
             owners,
-            action,
-            test,
-            value,
+            assert: {
+                [action]: {
+                    test,
+                    value,
+                },
+            },
         };
 
         this.sendRecordingEvent(assert);
@@ -254,7 +257,7 @@ export default class Agent extends EventEmitter {
         };
     };
 
-    handleNesting = (collection) => {
+    handleNesting = collection => {
         const nestingEnd = collection[collection.length - 1];
         const { pattern, action } = nestingEnd.simplify;
         const simplify = this.window.__REACT_APP_ACTIONS__.simplify.get(nestingEnd.simplify.pattern);
