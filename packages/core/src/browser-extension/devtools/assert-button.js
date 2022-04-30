@@ -22,35 +22,37 @@ export default function AssertButton() {
     const { bridge } = useDevtoolsContext();
     const [open, setOpen] = useState(false);
     const [currentValue, setCurrentValue] = useState('');
-    const [justPressed, setPressed] = useTemporaryState(false);
+    const [justSubmitted, setSubmitted] = useTemporaryState(false);
     const [preferredAssert, setPreferredAssert] = useState(null);
     const selectedElement = useStore('selectionChange', store => {
         return store.getPatternByID(store.selectedElementID);
     });
+    const submit = event => {
+        event.preventDefault();
+        bridge.send('session-recording-assert', {
+            id: selectedElement.id,
+            action: assertConfig.name,
+            test: assertConfig.test,
+            value: currentValue,
+        });
+        setSubmitted(true);
+        setCurrentValue('');
+    };
 
     if (!selectedElement) {
         return <span className="inline-flex text-gray-500 items-center">Select a pattern for assert</span>;
     }
 
-    const assertConfig = selectedElement.asserts.find(assert => assert.name === preferredAssert) || selectedElement.asserts[0];
+    const assertConfig =
+        selectedElement.asserts.find(assert => assert.name === preferredAssert) || selectedElement.asserts[0];
 
     return (
-        <>
+        <form className="inline-flex gap-x-2" onSubmit={submit}>
             <span className="inline-flex text-gray-500 items-center">Assert:</span>
             <span className="relative z-0 inline-flex shadow-sm rounded-md">
                 <button
                     className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 min-w-[120px] max-w-[320px] truncate flex-col"
-                    onClick={() => {
-                        bridge.send('session-recording-assert', {
-                            id: selectedElement.id,
-                            action: assertConfig.name,
-                            test: assertConfig.test,
-                            value: currentValue,
-                        });
-                        setPressed(true);
-                        setCurrentValue('');
-                    }}
-                    disabled={justPressed}
+                    disabled={justSubmitted}
                     onPointerEnter={() => {
                         bridge.send('highlightNativeElement', {
                             id: selectedElement.id,
@@ -58,11 +60,12 @@ export default function AssertButton() {
                     }}
                     onPointerLeave={() => bridge.send('clearNativeElementHighlight')}
                 >
-                    {justPressed ? <TickIcon /> : assertConfig.name}
+                    {justSubmitted ? <TickIcon /> : assertConfig.name}
                 </button>
 
                 <span className="-ml-px relative block">
                     <button
+                        type="button"
                         className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                         onClick={() => setOpen(open => !open)}
                     >
@@ -110,7 +113,7 @@ export default function AssertButton() {
                     </label>
                 </div>
             ) : null}
-        </>
+        </form>
     );
 }
 
