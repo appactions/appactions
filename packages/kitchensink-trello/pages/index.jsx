@@ -56,9 +56,9 @@ createDriver(Lane, {
                 action: 'click',
             },
             collect(generator) {
-                const [title] = generator.query({ pattern: 'Input', name: 'title', action: 'type' });
-                const [label] = generator.query({ pattern: 'Input', name: 'label', action: 'type' });
-                const [description] = generator.query({ pattern: 'Input', name: 'description', action: 'type' });
+                const [title] = generator.query({ pattern: 'Input', name: 'title', action: 'type', optional: true });
+                const [label] = generator.query({ pattern: 'Input', name: 'label', action: 'type', optional: true });
+                const [description] = generator.query({ pattern: 'Input', name: 'description', action: 'type', optional: true });
 
                 return [title, label, description];
             },
