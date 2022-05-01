@@ -195,7 +195,6 @@ export default class Agent extends EventEmitter {
 
             const nesting = this.handleNesting(
                 this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length),
-                this._sessionRecordingDb,
             );
 
             this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, nestingStartIndex), ...nesting];
@@ -207,7 +206,7 @@ export default class Agent extends EventEmitter {
                 this._sessionRecordingDb[this._sessionRecordingDb.length - 2],
                 this._sessionRecordingDb[this._sessionRecordingDb.length - 1],
             ]);
-            
+
             this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -2), ...newItems];
         }
 
@@ -264,22 +263,26 @@ export default class Agent extends EventEmitter {
         const nestingEnd = collection[collection.length - 1];
         const { pattern, action } = nestingEnd.simplify;
         const simplify = this.window.__REACT_APP_ACTIONS__.simplify.get(nestingEnd.simplify.pattern);
-        let args = [];
+
         try {
-            args = simplify[action].collect(new Generator(collection));
-        } catch (e) {
-            console.error(e);
+            const args = simplify[action].collect(new Generator(collection));
+
+            const recording = {
+                ...nestingEnd,
+
+                pattern,
+                action,
+                args,
+            };
+
+            return [recording];
+        } catch (error) {
+            console.error('Nesting failed:', error);
             console.log('collection', collection);
         }
-        const recording = {
-            ...nestingEnd,
 
-            pattern,
-            action,
-            args,
-        };
-
-        return [recording];
+        // nesting failed, we return the original collection
+        return collection;
     };
 }
 
@@ -289,7 +292,7 @@ class Generator {
         this.index = 0;
     }
 
-    query = ({ pattern, action, name }) => {
+    query = ({ pattern, action, name, optional = false }) => {
         const matches = this.collection.filter(recording => {
             if (name && name !== recording.name) {
                 return false;
@@ -307,11 +310,15 @@ class Generator {
         });
 
         if (matches.length === 0) {
-            return [];
+            if (optional) {
+                return [];
+            } else {
+                throw new Error(`No matching recording found for ${pattern} ${action} ${name}`);
+            }
         }
 
         if (matches.length > 1) {
-            throw new Error('Multiple matches');
+            throw new Error(`Multiple matches found for ${pattern} ${action} ${name}`);
         }
 
         return matches[0].args;
