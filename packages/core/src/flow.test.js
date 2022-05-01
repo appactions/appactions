@@ -1,99 +1,121 @@
 import { preprocessFlows } from './flow';
+import json2yaml from './json-to-yaml';
 
-test('simple "do"', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
+test('convert flow to cypress', () => {
+    const json = {
+        description: 'Test recorded at 5/1/2022, 6:35:47 PM',
+        start: {
+            route: '/',
+            auth: false,
+        },
+        steps: [
+            {
+                with: [
+                    'Board',
+                    {
+                        Lane: 'Planned Tasks',
+                    },
+                ],
+                do: {
+                    addCard: ['foo', 'bar', 'baz'],
+                },
+            },
+            {
+                with: 'Board',
+                do: {
+                    addLane: 'aaa',
+                },
+            },
+            {
+                with: [
+                    'Board',
+                    {
+                        Lane: 'aaa',
+                    },
+                ],
+                do: {
+                    addCard: ['fff', 'ggg', 'hhh'],
+                },
+                assert: 'exists',
+            },
+            {
+                with: [
+                    'Board',
+                    {
+                        Lane: 'aaa',
+                    },
+                ],
+                do: {
+                    addCard: ['bbb', 'nnn', 'mmm'],
+                },
+                assert: {
+                    exists: null,
+                    text: ['===', 'aaa'],
+                },
+            },
+        ],
+    };
+
+    const content = json2yaml(json);
+    
+    expect(content).toMatchInlineSnapshot(`
+"description: \\"Test recorded at 5/1/2022, 6:35:47 PM\\"
+start: 
+  route: \\"/\\"
   auth: false
-steps:
+steps: 
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+    do: 
+      addCard: [foo, bar, baz]
   - with: Board
-    do: click
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Board')
-        	.do('Board', 'click');
-        
-    });
-});"
+    do: 
+      { addLane: aaa }
+  - with: 
+      - Board
+      - { Lane: aaa }
+    do: 
+      addCard: [fff, ggg, hhh]
+    assert: exists
+  - with: 
+      - Board
+      - { Lane: aaa }
+    do: 
+      addCard: [bbb, nnn, mmm]
+    assert: 
+      exists: null
+      text: [===, aaa]
+"
 `);
-});
 
-test('"do" after chain', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: Board
-  - with: { Lane: Planned Tasks, Button: /^Click to add card$/ }
-    do: click
-`;
     expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
 "describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Board');
-        
-        cy
-        	.with('Lane', 'Planned Tasks')
-        	.with('Button', /^Click to add card$/)
-        	.do('Button', 'click');
-        
-    });
-});"
-`);
-});
+  it('Test recorded at 5/1/2022, 6:35:47 PM', () => {
+    cy.visit('/');
 
-test('"do" with arguments', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: Input
-    do: { type: $data.user.email }
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Input')
-        	.do('Input', 'type', ['$data.user.email']);
-        
-    });
-});"
-`);
-});
-
-test('"with" should correctly work when no name specified', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: { NewCardForm, EditableLabel }
-    do: { type: 'foobarbaz' }
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('NewCardForm')
-        	.with('EditableLabel')
-        	.do('EditableLabel', 'type', ['foobarbaz']);
-        
-    });
+    cy
+    	.with('Board')
+    	.with('Lane', 'Planned Tasks')
+    	.do('TODO', 'addCard', ['foo', 'bar', 'baz']);
+    
+    cy
+    	.with('Board')
+    	.do('TODO', 'addLane', 'aaa');
+    
+    cy
+    	.with('Board')
+    	.with('Lane', 'aaa')
+    	.do('TODO', 'addCard', ['fff', 'ggg', 'hhh'])
+    	.should('exists');
+    
+    cy
+    	.with('Board')
+    	.with('Lane', 'aaa')
+    	.do('TODO', 'addCard', ['bbb', 'nnn', 'mmm'])
+    	.should('exists')
+    	.should('text', ['===', 'aaa']);
+  });
 });"
 `);
 });
