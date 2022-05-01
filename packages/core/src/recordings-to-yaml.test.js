@@ -181,41 +181,6 @@ const recordings = [
     },
 ];
 
-const yaml = `description: "Test recorded at 4/21/2022, 5:23:37 PM"
-start: 
-  route: "/"
-  auth: false
-steps: 
-  - with:
-      - Board
-      - Lane: "Planned Tasks"
-      - Button: "Click to add card"
-    do: click
-  - with:
-      - Board
-      - Lane: "Planned Tasks"
-      - NewCardForm
-      - EditableLabel: title
-    do: keydown
-  - with:
-      - Board
-      - Lane: "Planned Tasks"
-      - NewCardForm
-      - Button: "Add card"
-    do: { add: s }
-  - with:{ Button: + Add another lane }
-    do: click
-  - with:Board
-    do: keydown
-  - with:Board
-    do: keydown
-  - with:Board
-    do: change
-  - with:
-      - Board
-      - Button: "Add lane"
-    do: click`;
-
 const meta = {
     description: 'Test recorded at 4/21/2022, 5:23:37 PM',
     start: {
@@ -234,22 +199,24 @@ start:
 steps: 
   - with: 
       - Board
-      - Lane: \\"Planned Tasks\\"
-      - Button: \\"Click to add card\\"
+      - { Lane: Planned Tasks }
+      - { Button: Click to add card }
     do: click
   - with: 
       - Board
-      - Lane: \\"Planned Tasks\\"
+      - { Lane: Planned Tasks }
       - NewCardForm
-      - EditableLabel: title
+      - { EditableLabel: title }
     do: keydown
   - with: 
       - Board
-      - Lane: \\"Planned Tasks\\"
+      - { Lane: Planned Tasks }
       - NewCardForm
-      - Button: \\"Add card\\"
-    do: { add: s }
-  - with: { Button: + Add another lane }
+      - { Button: Add card }
+    do: 
+      add: [s]
+  - with: 
+      { Button: + Add another lane }
     do: click
   - with: Board
     do: keydown
@@ -259,7 +226,7 @@ steps:
     do: change
   - with: 
       - Board
-      - Button: \\"Add lane\\"
+      - { Button: Add lane }
     do: click
 "
 `);
