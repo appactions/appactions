@@ -19,7 +19,14 @@ describe('${fileName}', () => {
     cy.visit('${flow.start.route}');
 
     ${flow.steps
-        .map(step => new Chain().addWith(step.with).addDo(step.do).addAssert(step.assert).toString())
+        .map((step, index) => {
+            const subjectVar = `subject${index + 1}`;
+            const subject = new Chain(`const ${subjectVar} = cy`).addWith(step.with);
+
+            const body = new Chain(subjectVar, subject).addDo(step.do).addAssert(step.assert);
+
+            return `${subject}\n\n${body}`;
+        })
         .join('\n\n')}
   });
 });
@@ -27,20 +34,25 @@ describe('${fileName}', () => {
 };
 
 class Chain {
-    constructor() {
+    constructor(head = 'cy', parentChain) {
+        this._head = head;
+        this._parentChain = parentChain;
         this._withNodes = [];
         this._doNodes = [];
         this._assertNodes = [];
         this._needsSubjectReference = false;
     }
 
-    getLastPattern = () => {
-        if (!this._withNodes.length) {
-            throw new Error('No "with" node found');
+    getLastPatternFromWith = () => {
+        if (this._parentChain && this._parentChain._withNodes.length) {
+            return this._parentChain._withNodes[this._parentChain._withNodes.length - 1].args[0];
         }
 
-        // returns the last pattern
-        return this._withNodes[this._withNodes.length - 1].args[0];
+        if (this._withNodes.length) {
+            return this._withNodes[this._withNodes.length - 1].args[0];
+        }
+
+        throw new Error('No "with" node found');
     };
 
     addWith = withValue => {
@@ -88,7 +100,7 @@ class Chain {
             return this;
         } else if (typeof doValue === 'object' && doValue !== null) {
             Object.entries(doValue).forEach(([action, args]) => {
-                const lastPattern = this.getLastPattern();
+                const lastPattern = this.getLastPatternFromWith();
                 this._doNodes.push({
                     command: 'do',
                     args: args ? [lastPattern, action, args] : [lastPattern, action],
@@ -142,7 +154,7 @@ class Chain {
             throw new Error(`Unrecognized test "${test}".`);
         }
 
-        const lastPattern = this.getLastPattern();
+        const lastPattern = this.getLastPatternFromWith();
 
         return [
             {
@@ -165,7 +177,7 @@ class Chain {
 
     toString = () => {
         const nodes = [...this._withNodes, ...this._doNodes, ...this._assertNodes];
-        return ['cy', ...nodes.map(this.renderNode)].join('\n  ');
+        return [this._head, ...nodes.map(this.renderNode)].join('\n  ');
     };
 }
 

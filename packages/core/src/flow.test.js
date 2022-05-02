@@ -94,24 +94,32 @@ steps:
   it('Test recorded at 5/1/2022, 6:35:47 PM', () => {
     cy.visit('/');
 
-    cy
+    const subject1 = cy
       .with('Board')
-      .with('Lane', 'Planned Tasks')
+      .with('Lane', 'Planned Tasks');
+    
+    subject1
       .do('Lane', 'addCard', ['foo', 'bar', 'baz']);
     
-    cy
-      .with('Board')
+    const subject2 = cy
+      .with('Board');
+    
+    subject2
       .do('Board', 'addLane', ['aaa']);
     
-    cy
+    const subject3 = cy
       .with('Board')
-      .with('Lane', 'aaa')
+      .with('Lane', 'aaa');
+    
+    subject3
       .do('Lane', 'addCard', ['fff'])
       .should('exists');
     
-    cy
+    const subject4 = cy
       .with('Board')
-      .with('Lane', 'aaa')
+      .with('Lane', 'aaa');
+    
+    subject4
       .do('Lane', 'addCard', [])
       .should('exists')
       .do('Lane', 'text', ['TODO'])
