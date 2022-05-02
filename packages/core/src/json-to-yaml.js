@@ -22,15 +22,15 @@ function convert(obj, ret) {
 
     switch (type) {
         case 'array':
-            if (obj.length && obj.every(isPrimitive)) {
+            if (isPrimitiveArray(obj)) {
                 ret.push(`[${obj.join(', ')}]`);
             } else {
                 convertArray(obj, ret);
             }
             break;
         case 'hash':
-            const entries = Object.entries(obj);
-            if (entries.length === 1 && isPrimitive(entries[0][0]) && isPrimitive(entries[0][1])) {
+            if (isPrimitiveObject(obj)) {
+                const entries = Object.entries(obj);
                 ret.push(`{ ${entries[0][0]}: ${entries[0][1]} }`);
             } else {
                 convertHash(obj, ret);
@@ -65,6 +65,21 @@ function isPrimitive(obj) {
     }
 }
 
+function isPrimitiveArray(obj) {
+    if (getType(obj) !== 'array') {
+        return false;
+    }
+    return obj.every(isPrimitive);
+}
+
+function isPrimitiveObject(obj) {
+    if (getType(obj) !== 'hash') {
+        return false;
+    }
+    const entries = Object.entries(obj);
+    return entries.length === 1 && isPrimitive(entries[0][0]) && isPrimitive(entries[0][1]);
+}
+
 function convertArray(obj, ret) {
     if (obj.length === 0) {
         ret.push('[]');
@@ -94,7 +109,8 @@ function convertHash(obj, ret) {
                 type == 'null' ||
                 type == 'number' ||
                 type == 'boolean' ||
-                (Array.isArray(ele) && ele.every(isPrimitive))
+                isPrimitiveArray(ele) ||
+                isPrimitiveObject(ele)
             ) {
                 ret.push(normalizeString(k) + ': ' + recurse[0]);
             } else {

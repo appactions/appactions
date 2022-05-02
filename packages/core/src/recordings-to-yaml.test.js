@@ -1,5 +1,6 @@
 import renderYAML from './recordings-to-yaml';
 
+// TODO update this data, add assert and nesting examples
 const recordings = [
     {
         pattern: 'Button',
@@ -215,8 +216,7 @@ steps:
       - { Button: Add card }
     do: 
       add: [s]
-  - with: 
-      { Button: + Add another lane }
+  - with: { Button: + Add another lane }
     do: click
   - with: Board
     do: keydown
