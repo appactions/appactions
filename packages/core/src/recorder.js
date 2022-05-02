@@ -76,15 +76,7 @@ function processAnnotation(driver, event, annotation = {}) {
     return self;
 }
 
-let isRecorderInitialized = false;
-
 export function setupRecorder(bridge, agent) {
-    if (isRecorderInitialized) {
-        throw new Error('Recorder is already initialized');
-    }
-
-    isRecorderInitialized = true;
-
     const elementsToListen = getAllFrames(agent.window);
 
     elementsToListen.forEach(element => {
