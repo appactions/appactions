@@ -97,33 +97,35 @@ steps:
     const subject1 = cy
       .with('Board')
       .with('Lane', 'Planned Tasks');
-    
     subject1
       .do('Lane', 'addCard', ['foo', 'bar', 'baz']);
     
+    
     const subject2 = cy
       .with('Board');
-    
     subject2
       .do('Board', 'addLane', ['aaa']);
+    
     
     const subject3 = cy
       .with('Board')
       .with('Lane', 'aaa');
-    
     subject3
-      .do('Lane', 'addCard', ['fff'])
+      .do('Lane', 'addCard', ['fff']);
+    subject3
       .should('exists');
     
     const subject4 = cy
       .with('Board')
       .with('Lane', 'aaa');
-    
     subject4
-      .do('Lane', 'addCard', [])
+      .do('Lane', 'addCard', []);
+    subject4
       .should('exists')
+    subject4
       .do('Lane', 'text', ['TODO'])
       .should('toBe', 'aaa');
+    
   });
 });"
 `);

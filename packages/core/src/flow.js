@@ -21,13 +21,15 @@ describe('${fileName}', () => {
     ${flow.steps
         .map((step, index) => {
             const subjectVar = `subject${index + 1}`;
+
             const subject = new Chain(`const ${subjectVar} = cy`).addWith(step.with);
 
-            const body = new Chain(subjectVar, subject).addDo(step.do).addAssert(step.assert);
+            const interaction = new Chain(subjectVar, subject).addDo(step.do);
+            const asserts = new Chain(subjectVar, subject).addAssert(step.assert);
 
-            return `${subject}\n\n${body}`;
+            return `${subject}\n${interaction}\n${asserts}\n`;
         })
-        .join('\n\n')}
+        .join('\n')}
   });
 });
 `;
@@ -37,19 +39,17 @@ class Chain {
     constructor(head = 'cy', parentChain) {
         this._head = head;
         this._parentChain = parentChain;
-        this._withNodes = [];
-        this._doNodes = [];
-        this._assertNodes = [];
-        this._needsSubjectReference = false;
+        this._lastPattern = null;
+        this._nodes = [];
     }
 
     getLastPatternFromWith = () => {
-        if (this._parentChain && this._parentChain._withNodes.length) {
-            return this._parentChain._withNodes[this._parentChain._withNodes.length - 1].args[0];
+        if (this._parentChain && this._parentChain._lastPattern) {
+            return this._parentChain._lastPattern;
         }
 
-        if (this._withNodes.length) {
-            return this._withNodes[this._withNodes.length - 1].args[0];
+        if (this._lastPattern) {
+            return this._lastPattern;
         }
 
         throw new Error('No "with" node found');
@@ -67,19 +67,21 @@ class Chain {
 
             return this;
         } else if (typeof withValue === 'string') {
-            this._withNodes.push({
+            this._nodes.push({
                 command: 'with',
                 args: [withValue],
             });
+            this._lastPattern = withValue;
 
             return this;
         } else if (typeof withValue === 'object' && withValue !== null) {
             const [[pattern, name]] = Object.entries(withValue);
 
-            this._withNodes.push({
+            this._nodes.push({
                 command: 'with',
                 args: [pattern, name],
             });
+            this._lastPattern = pattern;
 
             return this;
         }
@@ -93,7 +95,7 @@ class Chain {
         }
 
         if (typeof doValue === 'string') {
-            this._doNodes.push({
+            this._nodes.push({
                 command: 'do',
                 args: [doValue],
             });
@@ -101,7 +103,7 @@ class Chain {
         } else if (typeof doValue === 'object' && doValue !== null) {
             Object.entries(doValue).forEach(([action, args]) => {
                 const lastPattern = this.getLastPatternFromWith();
-                this._doNodes.push({
+                this._nodes.push({
                     command: 'do',
                     args: args ? [lastPattern, action, args] : [lastPattern, action],
                 });
@@ -119,13 +121,13 @@ class Chain {
 
         if (typeof assertValue === 'string') {
             this.createAssertChain(assertValue).forEach(node => {
-                this._assertNodes.push(node);
+                this._nodes.push(node);
             });
             return this;
         } else if (typeof assertValue === 'object' && assertValue !== null) {
             Object.entries(assertValue).forEach(([assert, args]) => {
                 this.createAssertChain(assert, args).forEach(node => {
-                    this._assertNodes.push(node);
+                    this._nodes.push(node);
                 });
             });
             return this;
@@ -135,15 +137,14 @@ class Chain {
     };
 
     createAssertChain = (action, _args = []) => {
-        const args = Array.isArray(_args) ? _args : [null, _args];
-        const [test, value] = args;
+        const [test, value] = Array.isArray(_args) ? _args : [null, _args];
 
         if (!test) {
             return [
                 {
                     command: 'should',
                     args: [action],
-                    subjectIsWith: true,
+                    needsOriginalSubject: true,
                 },
             ];
         }
@@ -160,7 +161,7 @@ class Chain {
             {
                 command: 'do',
                 args: [lastPattern, action, ['TODO']],
-                subjectIsWith: true,
+                needsOriginalSubject: true,
             },
             {
                 command: 'should',
@@ -171,13 +172,20 @@ class Chain {
 
     renderNode = (node, index, { length }) => {
         const last = index === length - 1;
-        const command = `.${node.command}(${node.args.map(Identifier).join(', ')})`;
+        const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
         return last ? `${command};` : command;
     };
 
     toString = () => {
-        const nodes = [...this._withNodes, ...this._doNodes, ...this._assertNodes];
-        return [this._head, ...nodes.map(this.renderNode)].join('\n  ');
+        return this._nodes
+            .reduce((acc, node, index, array) => {
+                if (index === 0 || node.needsOriginalSubject) {
+                    acc.push(this._head);
+                }
+                acc.push(this.renderNode(node, index, array));
+                return acc;
+            }, [])
+            .join('\n');
     };
 }
 
