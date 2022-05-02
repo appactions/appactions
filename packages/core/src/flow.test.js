@@ -23,7 +23,7 @@ test('convert flow to cypress', () => {
             {
                 with: 'Board',
                 do: {
-                    addLane: 'aaa',
+                    addLane: ['aaa'],
                 },
             },
             {
@@ -34,7 +34,7 @@ test('convert flow to cypress', () => {
                     },
                 ],
                 do: {
-                    addCard: ['fff', 'ggg', 'hhh'],
+                    addCard: ['fff'],
                 },
                 assert: 'exists',
             },
@@ -46,7 +46,7 @@ test('convert flow to cypress', () => {
                     },
                 ],
                 do: {
-                    addCard: ['bbb', 'nnn', 'mmm'],
+                    addCard: [],
                 },
                 assert: {
                     exists: null,
@@ -71,18 +71,18 @@ steps:
       addCard: [foo, bar, baz]
   - with: Board
     do: 
-      { addLane: aaa }
+      addLane: [aaa]
   - with: 
       - Board
       - { Lane: aaa }
     do: 
-      addCard: [fff, ggg, hhh]
+      addCard: [fff]
     assert: exists
   - with: 
       - Board
       - { Lane: aaa }
     do: 
-      addCard: [bbb, nnn, mmm]
+      addCard: []
     assert: 
       exists: null
       text: [===, aaa]
@@ -101,18 +101,18 @@ steps:
     
     cy
     	.with('Board')
-    	.do('Board', 'addLane', 'aaa');
+    	.do('Board', 'addLane', ['aaa']);
     
     cy
     	.with('Board')
     	.with('Lane', 'aaa')
-    	.do('Lane', 'addCard', ['fff', 'ggg', 'hhh'])
+    	.do('Lane', 'addCard', ['fff'])
     	.should('exists');
     
     cy
     	.with('Board')
     	.with('Lane', 'aaa')
-    	.do('Lane', 'addCard', ['bbb', 'nnn', 'mmm'])
+    	.do('Lane', 'addCard', [])
     	.should('exists')
     	.should('text', ['===', 'aaa']);
   });
