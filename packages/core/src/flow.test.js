@@ -97,22 +97,22 @@ steps:
     cy
     	.with('Board')
     	.with('Lane', 'Planned Tasks')
-    	.do('TODO', 'addCard', ['foo', 'bar', 'baz']);
+    	.do('Lane', 'addCard', ['foo', 'bar', 'baz']);
     
     cy
     	.with('Board')
-    	.do('TODO', 'addLane', 'aaa');
+    	.do('Board', 'addLane', 'aaa');
     
     cy
     	.with('Board')
     	.with('Lane', 'aaa')
-    	.do('TODO', 'addCard', ['fff', 'ggg', 'hhh'])
+    	.do('Lane', 'addCard', ['fff', 'ggg', 'hhh'])
     	.should('exists');
     
     cy
     	.with('Board')
     	.with('Lane', 'aaa')
-    	.do('TODO', 'addCard', ['bbb', 'nnn', 'mmm'])
+    	.do('Lane', 'addCard', ['bbb', 'nnn', 'mmm'])
     	.should('exists')
     	.should('text', ['===', 'aaa']);
   });
