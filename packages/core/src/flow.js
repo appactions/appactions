@@ -1,6 +1,6 @@
 import { source } from 'common-tags';
 import yaml from 'yaml';
-import { builtInTesters } from './built-in-actions';
+import { createAssertChain } from './built-in-actions';
 
 export const preprocessFlows = (content, { fileName }) => {
     const flow = yaml.parse(content);
@@ -101,18 +101,15 @@ class Chain {
     };
 
     addAssert = assertValue => {
-        // TODO: use builtInTesters to map correct cypress parameters
-
         if (typeof assertValue === 'string') {
-            return this.addNode({
-                command: 'should',
-                args: [assertValue],
+            createAssertChain(assertValue).forEach(node => {
+                this.addNode(node);
             });
+            return this;
         } else if (typeof assertValue === 'object' && assertValue !== null) {
             Object.entries(assertValue).forEach(([assert, args]) => {
-                this.addNode({
-                    command: 'should',
-                    args: args ? [assert, args] : [assert],
+                createAssertChain(assert, args).forEach(node => {
+                    this.addNode(node);
                 });
             });
             return this;

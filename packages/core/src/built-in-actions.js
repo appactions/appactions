@@ -158,3 +158,12 @@ export const builtInTesters = {
     'String .endsWith': (actual, expected) => actual.endsWith(expected),
     'String .match': (actual, expected) => actual.match(expected),
 };
+
+export const createAssertChain = (action, args) => {
+    return [
+        {
+            command: 'should',
+            args: args ? [action, args] : [action],
+        },
+    ];
+};
