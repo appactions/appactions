@@ -49,7 +49,7 @@ test('convert flow to cypress', () => {
                     addCard: [],
                 },
                 assert: {
-                    exists: null,
+                    exists: true,
                     text: ['===', 'aaa'],
                 },
             },
@@ -57,7 +57,7 @@ test('convert flow to cypress', () => {
     };
 
     const content = json2yaml(json);
-    
+
     expect(content).toMatchInlineSnapshot(`
 "description: \\"Test recorded at 5/1/2022, 6:35:47 PM\\"
 start: 
@@ -84,7 +84,7 @@ steps:
     do: 
       addCard: []
     assert: 
-      exists: null
+      exists: true
       text: [===, aaa]
 "
 `);
@@ -114,7 +114,8 @@ steps:
       .with('Lane', 'aaa')
       .do('Lane', 'addCard', [])
       .should('exists')
-      .should('text', ['===', 'aaa']);
+      .do('Lane', 'text', ['TODO'])
+      .should('toBe', 'aaa');
   });
 });"
 `);

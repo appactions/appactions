@@ -149,21 +149,14 @@ export const builtInAsserts = {
 };
 
 export const builtInTesters = {
-    '===': (actual, expected) => actual === expected,
-    '!==': (actual, expected) => actual !== expected,
-    '_.isEqual': (actual, expected) => isEqual(actual, expected),
-    '_.isMatch': (actual, expected) => isMatch(actual, expected),
-    'String .includes': (actual, expected) => actual.includes(expected),
-    'String .startsWith': (actual, expected) => actual.startsWith(expected),
-    'String .endsWith': (actual, expected) => actual.endsWith(expected),
-    'String .match': (actual, expected) => actual.match(expected),
-};
-
-export const createAssertChain = (action, args) => {
-    return [
-        {
-            command: 'should',
-            args: args ? [action, args] : [action],
-        },
-    ];
+    '===': 'toBe',
+    equal: 'toEqual',
+    // '===': (actual, expected) => actual === expected,
+    // '!==': (actual, expected) => actual !== expected,
+    // '_.isEqual': (actual, expected) => isEqual(actual, expected),
+    // '_.isMatch': (actual, expected) => isMatch(actual, expected),
+    // 'String .includes': (actual, expected) => actual.includes(expected),
+    // 'String .startsWith': (actual, expected) => actual.startsWith(expected),
+    // 'String .endsWith': (actual, expected) => actual.endsWith(expected),
+    // 'String .match': (actual, expected) => actual.match(expected),
 };

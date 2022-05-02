@@ -1,6 +1,6 @@
 import { source } from 'common-tags';
 import yaml from 'yaml';
-import { createAssertChain } from './built-in-actions';
+import { builtInTesters } from './built-in-actions';
 
 export const preprocessFlows = (content, { fileName }) => {
     const flow = yaml.parse(content);
@@ -28,25 +28,19 @@ describe('${fileName}', () => {
 
 class Chain {
     constructor() {
-        this._nodes = [];
+        this._withNodes = [];
+        this._doNodes = [];
+        this._assertNodes = [];
+        this._needsSubjectReference = false;
     }
 
-    addNode = data => {
-        this._nodes.push(data);
-        return this;
-    };
-
     getLastPattern = () => {
-        for (let i = this._nodes.length - 1; i >= 0; i--) {
-            const node = this._nodes[i];
-
-            if (node.command === 'with') {
-                // returns the pattern
-                return node.args[0];
-            }
+        if (!this._withNodes.length) {
+            throw new Error('No "with" node found');
         }
 
-        throw new Error('No "with" node found');
+        // returns the last pattern
+        return this._withNodes[this._withNodes.length - 1].args[0];
     };
 
     addWith = withValue => {
@@ -58,19 +52,24 @@ class Chain {
             withValue.forEach(value => {
                 this.addWith(value);
             });
+
             return this;
         } else if (typeof withValue === 'string') {
-            return this.addNode({
+            this._withNodes.push({
                 command: 'with',
                 args: [withValue],
             });
+
+            return this;
         } else if (typeof withValue === 'object' && withValue !== null) {
             const [[pattern, name]] = Object.entries(withValue);
 
-            return this.addNode({
+            this._withNodes.push({
                 command: 'with',
                 args: [pattern, name],
             });
+
+            return this;
         }
 
         throw new Error('Invalid `with` type');
@@ -82,14 +81,15 @@ class Chain {
         }
 
         if (typeof doValue === 'string') {
-            return this.addNode({
+            this._doNodes.push({
                 command: 'do',
                 args: [doValue],
             });
+            return this;
         } else if (typeof doValue === 'object' && doValue !== null) {
-            Object.entries(doValue).forEach(([action, args], index, array) => {
+            Object.entries(doValue).forEach(([action, args]) => {
                 const lastPattern = this.getLastPattern();
-                this.addNode({
+                this._doNodes.push({
                     command: 'do',
                     args: args ? [lastPattern, action, args] : [lastPattern, action],
                 });
@@ -106,20 +106,55 @@ class Chain {
         }
 
         if (typeof assertValue === 'string') {
-            createAssertChain(assertValue).forEach(node => {
-                this.addNode(node);
+            this.createAssertChain(assertValue).forEach(node => {
+                this._assertNodes.push(node);
             });
             return this;
         } else if (typeof assertValue === 'object' && assertValue !== null) {
             Object.entries(assertValue).forEach(([assert, args]) => {
-                createAssertChain(assert, args).forEach(node => {
-                    this.addNode(node);
+                this.createAssertChain(assert, args).forEach(node => {
+                    this._assertNodes.push(node);
                 });
             });
             return this;
         }
 
         throw new Error('Invalid `assert` type');
+    };
+
+    createAssertChain = (action, _args = []) => {
+        const args = Array.isArray(_args) ? _args : [null, _args];
+        const [test, value] = args;
+
+        if (!test) {
+            return [
+                {
+                    command: 'should',
+                    args: [action],
+                    subjectIsWith: true,
+                },
+            ];
+        }
+
+        const tester = builtInTesters[test];
+
+        if (!tester) {
+            throw new Error(`Unrecognized test "${test}".`);
+        }
+
+        const lastPattern = this.getLastPattern();
+
+        return [
+            {
+                command: 'do',
+                args: [lastPattern, action, ['TODO']],
+                subjectIsWith: true,
+            },
+            {
+                command: 'should',
+                args: [tester, value],
+            },
+        ];
     };
 
     renderNode = (node, index, { length }) => {
@@ -129,7 +164,8 @@ class Chain {
     };
 
     toString = () => {
-        return ['cy', ...this._nodes.map(this.renderNode)].join('\n  ');
+        const nodes = [...this._withNodes, ...this._doNodes, ...this._assertNodes];
+        return ['cy', ...nodes.map(this.renderNode)].join('\n  ');
     };
 }
 
