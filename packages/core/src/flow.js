@@ -37,7 +37,6 @@ describe('${fileName}', () => {
 class Chain {
     constructor() {
         this._nodes = [];
-        this._lastPattern = null;
     }
 
     addNode = data => {
@@ -46,8 +45,16 @@ class Chain {
     };
 
     getLastPattern = () => {
-        // return this._lastPattern;
-        return 'TODO';
+        for (let i = this._nodes.length - 1; i >= 0; i--) {
+            const node = this._nodes[i];
+
+            if (node.command === 'with') {
+                // returns the pattern
+                return node.args[0];
+            }
+        }
+
+        throw new Error('No "with" node found');
     };
 
     addWith = withValue => {
@@ -82,7 +89,7 @@ class Chain {
         } else if (typeof doValue === 'object' && doValue !== null) {
             Object.entries(doValue).forEach(([action, args], index, array) => {
                 const lastPattern = this.getLastPattern();
-                return this.addNode({
+                this.addNode({
                     command: 'do',
                     args: args ? [lastPattern, action, args] : [lastPattern, action],
                 });
@@ -103,7 +110,7 @@ class Chain {
             });
         } else if (typeof assertValue === 'object' && assertValue !== null) {
             Object.entries(assertValue).forEach(([assert, args]) => {
-                return this.addNode({
+                this.addNode({
                     command: 'should',
                     args: args ? [assert, args] : [assert],
                 });
@@ -141,7 +148,6 @@ function Identifier(value) {
             .map(([key, value]) => `${key}: ${Identifier(value)}`)
             .join(', ')} }`;
     } else {
-        console.log(value);
         throw new Error('Invalid identifier type');
     }
 }
