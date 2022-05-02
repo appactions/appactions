@@ -95,26 +95,26 @@ steps:
     cy.visit('/');
 
     cy
-    	.with('Board')
-    	.with('Lane', 'Planned Tasks')
-    	.do('Lane', 'addCard', ['foo', 'bar', 'baz']);
+      .with('Board')
+      .with('Lane', 'Planned Tasks')
+      .do('Lane', 'addCard', ['foo', 'bar', 'baz']);
     
     cy
-    	.with('Board')
-    	.do('Board', 'addLane', ['aaa']);
+      .with('Board')
+      .do('Board', 'addLane', ['aaa']);
     
     cy
-    	.with('Board')
-    	.with('Lane', 'aaa')
-    	.do('Lane', 'addCard', ['fff'])
-    	.should('exists');
+      .with('Board')
+      .with('Lane', 'aaa')
+      .do('Lane', 'addCard', ['fff'])
+      .should('exists');
     
     cy
-    	.with('Board')
-    	.with('Lane', 'aaa')
-    	.do('Lane', 'addCard', [])
-    	.should('exists')
-    	.should('text', ['===', 'aaa']);
+      .with('Board')
+      .with('Lane', 'aaa')
+      .do('Lane', 'addCard', [])
+      .should('exists')
+      .should('text', ['===', 'aaa']);
   });
 });"
 `);

@@ -5,29 +5,21 @@ import { createAssertChain } from './built-in-actions';
 export const preprocessFlows = (content, { fileName }) => {
     const flow = yaml.parse(content);
 
+    if (!fileName) {
+        throw new Error('fileName is required');
+    }
+
+    if (!flow.steps) {
+        throw new Error(`Flow file ${fileName} does not contain steps`);
+    }
+
     return source`
 describe('${fileName}', () => {
   it('${flow.description}', () => {
     cy.visit('${flow.start.route}');
 
     ${flow.steps
-        .map(step => {
-            const chain = new Chain();
-
-            if (step.with) {
-                chain.addWith(step.with);
-            }
-
-            if (step.do) {
-                chain.addDo(step.do);
-            }
-
-            if (step.assert) {
-                chain.addAssert(step.assert);
-            }
-
-            return chain.toString();
-        })
+        .map(step => new Chain().addWith(step.with).addDo(step.do).addAssert(step.assert).toString())
         .join('\n\n')}
   });
 });
@@ -58,6 +50,10 @@ class Chain {
     };
 
     addWith = withValue => {
+        if (!withValue) {
+            return this;
+        }
+
         if (Array.isArray(withValue)) {
             withValue.forEach(value => {
                 this.addWith(value);
@@ -81,6 +77,10 @@ class Chain {
     };
 
     addDo = doValue => {
+        if (!doValue) {
+            return this;
+        }
+
         if (typeof doValue === 'string') {
             return this.addNode({
                 command: 'do',
@@ -101,6 +101,10 @@ class Chain {
     };
 
     addAssert = assertValue => {
+        if (!assertValue) {
+            return this;
+        }
+
         if (typeof assertValue === 'string') {
             createAssertChain(assertValue).forEach(node => {
                 this.addNode(node);
@@ -125,7 +129,7 @@ class Chain {
     };
 
     toString = () => {
-        return ['cy', ...this._nodes.map(this.renderNode)].join('\n\t');
+        return ['cy', ...this._nodes.map(this.renderNode)].join('\n  ');
     };
 }
 
