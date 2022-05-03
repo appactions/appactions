@@ -24,10 +24,11 @@ describe('${fileName}', () => {
 
             const subject = new Chain(`const ${subjectVar} = cy`).addWith(step.with);
 
-            const interaction = new Chain(subjectVar, subject).addDo(step.do);
-            const asserts = new Chain(subjectVar, subject).addAssert(step.assert);
+            const interaction = subject.fork(subjectVar).addDo(step.do);
+            // const asserts = new Chain(subjectVar, subject).addAssert(step.assert);
 
-            return `${subject}\n${interaction}\n${asserts}\n`;
+            return `${subject}\n${interaction}\n`;
+            // return `${subject}\n${interaction}\n${asserts}\n`;
         })
         .join('\n')}
   });
@@ -42,6 +43,10 @@ class Chain {
         this._lastPattern = null;
         this._nodes = [];
     }
+
+    fork = (head = 'cy') => {
+        return new Chain(head, this);
+    };
 
     getLastPatternFromWith = () => {
         if (this._parentChain && this._parentChain._lastPattern) {
@@ -94,7 +99,13 @@ class Chain {
             return this;
         }
 
-        if (typeof doValue === 'string') {
+        if (Array.isArray(doValue)) {
+            doValue.forEach(value => {
+                this.addDo(value);
+            });
+
+            return this;
+        } else if (typeof doValue === 'string') {
             this._nodes.push({
                 command: 'do',
                 args: [doValue],
@@ -103,10 +114,15 @@ class Chain {
         } else if (typeof doValue === 'object' && doValue !== null) {
             Object.entries(doValue).forEach(([action, args]) => {
                 const lastPattern = this.getLastPatternFromWith();
-                this._nodes.push({
-                    command: 'do',
-                    args: args ? [lastPattern, action, args] : [lastPattern, action],
-                });
+
+                if (action === 'assert') {
+                    this._nodes.push(...this.createAssertChain(action, args));
+                } else {
+                    this._nodes.push({
+                        command: 'do',
+                        args: args ? [lastPattern, action, args] : [lastPattern, action],
+                    });
+                }
             });
             return this;
         }
@@ -114,27 +130,27 @@ class Chain {
         throw new Error('Invalid `do` type');
     };
 
-    addAssert = assertValue => {
-        if (!assertValue) {
-            return this;
-        }
+    // addAssert = assertValue => {
+    //     if (!assertValue) {
+    //         return this;
+    //     }
 
-        if (typeof assertValue === 'string') {
-            this.createAssertChain(assertValue).forEach(node => {
-                this._nodes.push(node);
-            });
-            return this;
-        } else if (typeof assertValue === 'object' && assertValue !== null) {
-            Object.entries(assertValue).forEach(([assert, args]) => {
-                this.createAssertChain(assert, args).forEach(node => {
-                    this._nodes.push(node);
-                });
-            });
-            return this;
-        }
+    //     if (typeof assertValue === 'string') {
+    //         this.createAssertChain(assertValue).forEach(node => {
+    //             this._nodes.push(node);
+    //         });
+    //         return this;
+    //     } else if (typeof assertValue === 'object' && assertValue !== null) {
+    //         Object.entries(assertValue).forEach(([assert, args]) => {
+    //             this.createAssertChain(assert, args).forEach(node => {
+    //                 this._nodes.push(node);
+    //             });
+    //         });
+    //         return this;
+    //     }
 
-        throw new Error('Invalid `assert` type');
-    };
+    //     throw new Error('Invalid `assert` type');
+    // };
 
     createAssertChain = (action, _args = []) => {
         const [test, value] = Array.isArray(_args) ? _args : [null, _args];
