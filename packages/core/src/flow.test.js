@@ -16,15 +16,19 @@ test('convert flow to cypress', () => {
                         Lane: 'Planned Tasks',
                     },
                 ],
-                do: {
-                    addCard: ['foo', 'bar', 'baz'],
-                },
+                do: [
+                    {
+                        addCard: ['foo', 'bar', 'baz'],
+                    },
+                ],
             },
             {
                 with: 'Board',
-                do: {
-                    addLane: ['aaa'],
-                },
+                do: [
+                    {
+                        addLane: ['aaa'],
+                    },
+                ],
             },
             {
                 with: [
@@ -33,10 +37,12 @@ test('convert flow to cypress', () => {
                         Lane: 'aaa',
                     },
                 ],
-                do: {
-                    addCard: ['fff'],
-                },
-                assert: 'exists',
+                do: [
+                    {
+                        addCard: ['fff'],
+                    },
+                    { assert: 'exists' },
+                ],
             },
             {
                 with: [
@@ -45,13 +51,17 @@ test('convert flow to cypress', () => {
                         Lane: 'aaa',
                     },
                 ],
-                do: {
-                    addCard: [],
-                },
-                assert: {
-                    exists: true,
-                    text: ['===', 'aaa'],
-                },
+                do: [
+                    {
+                        addCard: [],
+                    },
+                    {
+                        assert: {
+                            exists: true,
+                            text: ['===', 'aaa'],
+                        },
+                    },
+                ],
             },
         ],
     };
@@ -68,24 +78,24 @@ steps:
       - Board
       - { Lane: Planned Tasks }
     do: 
-      addCard: [foo, bar, baz]
+      - addCard: [foo, bar, baz]
   - with: Board
     do: 
-      addLane: [aaa]
+      - addLane: [aaa]
   - with: 
       - Board
       - { Lane: aaa }
     do: 
-      addCard: [fff]
-    assert: exists
+      - addCard: [fff]
+      - { assert: exists }
   - with: 
       - Board
       - { Lane: aaa }
     do: 
-      addCard: []
-    assert: 
-      exists: true
-      text: [===, aaa]
+      - addCard: []
+      - assert: 
+          exists: true
+          text: [===, aaa]
 "
 `);
 
@@ -100,12 +110,10 @@ steps:
     subject1
       .do('Lane', 'addCard', ['foo', 'bar', 'baz']);
     
-    
     const subject2 = cy
       .with('Board');
     subject2
       .do('Board', 'addLane', ['aaa']);
-    
     
     const subject3 = cy
       .with('Board')
@@ -113,7 +121,7 @@ steps:
     subject3
       .do('Lane', 'addCard', ['fff']);
     subject3
-      .should('exists');
+      .should('assert');
     
     const subject4 = cy
       .with('Board')
@@ -121,10 +129,7 @@ steps:
     subject4
       .do('Lane', 'addCard', []);
     subject4
-      .should('exists');
-    subject4
-      .do('Lane', 'text', ['TODO'])
-      .should('toBe', 'aaa');
+      .should('assert');
     
   });
 });"
