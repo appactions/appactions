@@ -191,7 +191,6 @@ const meta = {
 };
 
 test('Recording to YAML', () => {
-    // TODO don't use snapshot here, make the test more secure (no accidental updates)
     expect(renderYAML(meta, recordings)).toMatchInlineSnapshot(`
 "description: \\"Test recorded at 4/21/2022, 5:23:37 PM\\"
 start: 
