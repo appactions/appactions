@@ -170,8 +170,8 @@ class Chain {
         ];
     };
 
-    renderNode = (node, index, { length }) => {
-        const last = index === length - 1;
+    renderNode = (node, index, array) => {
+        const last = !array[index + 1] || array[index + 1].needsOriginalSubject;
         const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
         return last ? `${command};` : command;
     };

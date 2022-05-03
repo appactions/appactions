@@ -121,7 +121,7 @@ steps:
     subject4
       .do('Lane', 'addCard', []);
     subject4
-      .should('exists')
+      .should('exists');
     subject4
       .do('Lane', 'text', ['TODO'])
       .should('toBe', 'aaa');
