@@ -1,9 +1,12 @@
+import isEqual from 'lodash.isequal';
 import json2yaml from './json-to-yaml';
 
-export default function renderYAML(meta, steps) {
-    if (steps.length === 0) {
+export default function renderYAML({ agent, meta, recordings }) {
+    if (recordings.length === 0) {
         return '# empty test';
     }
+
+    const steps = convertRecordingsToFlow(agent, recordings);
 
     const result = {
         description: meta.description,
@@ -32,23 +35,10 @@ function renderStep(step) {
         result.do = interaction;
     }
 
-    // const assert = getAssert(step);
-    // if (assert) {
-    //     result.assert = assert;
-    // }
-
     return result;
 }
 
 function getDo(step) {
-    // if (!step.action) {
-    //     return null;
-    // }
-
-    // if (step.type === 'assert'){
-
-    // } else if (step.type === 'event') {
-
     return step.payload.map(({ type, action, args, value }) => {
         if (type === 'assert') {
             if (!value && args.length === 0) {
@@ -59,28 +49,152 @@ function getDo(step) {
 
         return { [action]: args };
     });
-
-    return step.args.length === 0 ? step.action : { [step.action]: step.args };
-    // }
-
-    // throw new Error(`Unknown step type: ${step.type}`);
 }
 
-// function getAssert(step) {
-//     if (!step.assert) {
-//         return null;
-//     }
+const mergeEvents = {
+    type: (prev, curr) => {
+        return [
+            {
+                ...curr,
+                args: [prev.args[0] + curr.args[0]],
+            },
+        ];
+    },
+};
 
-//     const asserts = Object.entries(step.assert);
+export function merger([prev, curr]) {
+    if (isEqual(prev.owners, curr.owners)) {
+        let payload = [...prev.payload, ...curr.payload];
 
-//     if (asserts.length === 1 && !asserts[0][1].test && !asserts[0][1].value) {
-//         return asserts[0][0];
-//     }
+        const lastPayload = payload[payload.length - 1];
+        const lastButOnePayload = payload[payload.length - 2];
 
-//     return asserts.reduce((acc, [action, { test, value }]) => {
-//         return {
-//             ...acc,
-//             [action]: !test && !value ? true : [test, value],
-//         };
-//     }, {});
-// }
+        if (mergeEvents[lastPayload.action] && lastButOnePayload.action === lastPayload.action) {
+            const mergedPayload = mergeEvents[lastPayload.action](lastButOnePayload, lastPayload);
+            payload = [...payload.slice(0, -2), ...mergedPayload];
+        }
+
+        return [
+            {
+                owners: curr.owners,
+                payload,
+            },
+        ];
+    }
+
+    return [prev, curr];
+}
+
+function convertRecordingsToFlow(agent, recordings) {
+    return recordings.reduce((flow, currentRecording, index) => {
+        let result = [...flow, currentRecording];
+
+        if (currentRecording.nestingEnd) {
+            let nestingStartIndex = index;
+            for (; nestingStartIndex >= 0; nestingStartIndex--) {
+                if (
+                    recordings[nestingStartIndex].nestingStart &&
+                    recordings[nestingStartIndex].depth === currentRecording.depth
+                ) {
+                    break;
+                }
+            }
+
+            const nesting = handleNesting(agent, recordings.slice(nestingStartIndex, index + 1));
+
+            result = [...flow.slice(0, nestingStartIndex), ...nesting];
+        }
+
+        if (result.length > 1) {
+            const newItems = merger([result[result.length - 2], result[result.length - 1]]);
+            result = [...result.slice(0, -2), ...newItems];
+        }
+
+        return result;
+    }, []);
+}
+
+export function handleNestingStart(agent, recording) {
+    console.log('handleNestingStart');
+    return {
+        ...recording,
+        depth: ++agent._sessionRecordingNestingDepth,
+        nestingStart: true,
+    };
+}
+
+export function handleNestingEnd(agent, recording, simplify, owners) {
+    console.log('handleNestingEnd', simplify, owners);
+    return {
+        ...recording,
+        owners,
+        depth: agent._sessionRecordingNestingDepth--,
+        nestingEnd: true,
+        simplify,
+    };
+}
+
+function handleNesting(agent, collection) {
+    const nestingEnd = collection[collection.length - 1];
+    const { pattern, action } = nestingEnd.simplify;
+    const simplify = agent.getSimplifyForPattern(nestingEnd.simplify.pattern);
+
+    try {
+        const args = simplify[action].collect(new Generator(collection));
+
+        const recording = {
+            ...nestingEnd,
+
+            payload: [{ action, args }],
+        };
+
+        return [recording];
+    } catch (error) {
+        console.error('Nesting failed:', error);
+        console.log('collection', collection);
+    }
+
+    // nesting failed, we return the original collection
+    return collection;
+}
+
+class Generator {
+    constructor(collection) {
+        this.collection = collection;
+        this.index = 0;
+    }
+
+    query = ({ pattern, action, name, optional = false }) => {
+        const matches = this.collection.filter(recording => {
+            // TODO update this to reflect new shape of recording
+
+            if (name && name !== recording.name) {
+                return false;
+            }
+
+            if (pattern && pattern !== recording.pattern) {
+                return false;
+            }
+
+            if (action && action !== recording.action) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if (matches.length === 0) {
+            if (optional) {
+                return [];
+            } else {
+                throw new Error(`No matching recording found for ${pattern} ${action} ${name}`);
+            }
+        }
+
+        if (matches.length > 1) {
+            throw new Error(`Multiple matches found for ${pattern} ${action} ${name}`);
+        }
+
+        return matches[0].args;
+    };
+}

@@ -1,7 +1,7 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
-import { setupRecorder, convertRecordingsToFlow, makeAssertionEvent } from './recorder';
+import { setupRecorder, makeAssertionEvent } from './recorder';
 import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
 import renderYAML from './recordings-to-yaml';
 
@@ -170,8 +170,7 @@ export default class Agent extends EventEmitter {
 
     generateYAML = () => {
         try {
-            const output = convertRecordingsToFlow(this, this._sessionRecordingDb);
-            return renderYAML(this._sessionRecordingMeta, output);
+            return renderYAML({ agent: this, meta: this._sessionRecordingMeta, recordings: this._sessionRecordingDb });
         } catch (error) {
             console.error(error);
             return `# Error: ${error.message}`;
@@ -204,5 +203,9 @@ export default class Agent extends EventEmitter {
         const assert = makeAssertionEvent({ action, args, value, owners });
 
         this.sendRecordingEvent(assert);
+    };
+
+    getSimplifyForPattern = pattern => {
+        return this.window.__REACT_APP_ACTIONS__.simplify.get(pattern);
     };
 }

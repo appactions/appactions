@@ -1,0 +1,1550 @@
+[
+    {
+        "id": 162,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Button",
+                "name": "Click to add card",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "click",
+                "args": []
+            }
+        ],
+        "depth": 1,
+        "nestingStart": true
+    },
+    {
+        "id": 148,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "title",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["q"]
+            }
+        ]
+    },
+    {
+        "id": 148,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "title",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["q"]
+            }
+        ]
+    },
+    {
+        "id": 148,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "title",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["q"]
+            }
+        ]
+    },
+    {
+        "id": 152,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "label",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "click",
+                "args": []
+            }
+        ]
+    },
+    {
+        "id": 152,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "label",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["w"]
+            }
+        ]
+    },
+    {
+        "id": 152,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "label",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["w"]
+            }
+        ]
+    },
+    {
+        "id": 152,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "label",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["w"]
+            }
+        ]
+    },
+    {
+        "id": 156,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "description",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "click",
+                "args": []
+            }
+        ]
+    },
+    {
+        "id": 156,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "description",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["e"]
+            }
+        ]
+    },
+    {
+        "id": 156,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "description",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["e"]
+            }
+        ]
+    },
+    {
+        "id": 156,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Form",
+                "name": null,
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": "description",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["e"]
+            }
+        ]
+    },
+    {
+        "id": 193,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "click",
+                "args": []
+            }
+        ],
+        "depth": 1,
+        "nestingEnd": true,
+        "simplify": {
+            "pattern": "Lane",
+            "action": "addCard",
+            "start": {
+                "pattern": "Button",
+                "name": "Click to add card",
+                "action": "click"
+            },
+            "end": {
+                "pattern": "Button",
+                "name": "Add card",
+                "action": "click"
+            }
+        }
+    },
+    {
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "assert",
+                "action": "exists",
+                "value": null,
+                "args": []
+            }
+        ]
+    },
+    {
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "assert",
+                "action": "getValue",
+                "value": "fff",
+                "args": []
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["f"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["f"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["f"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["Backspace"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["Backspace"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["Backspace"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["b"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["b"]
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milk",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "event",
+                "action": "type",
+                "args": ["b"]
+            }
+        ]
+    },
+    {
+        "owners": [
+            {
+                "pattern": "Board",
+                "name": null,
+                "simplify": [
+                    {
+                        "pattern": "Board",
+                        "action": "addLane",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "+ Add another lane",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add lane",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Lane",
+                "name": "Planned Tasks",
+                "simplify": [
+                    {
+                        "pattern": "Lane",
+                        "action": "addCard",
+                        "start": {
+                            "pattern": "Button",
+                            "name": "Click to add card",
+                            "action": "click"
+                        },
+                        "end": {
+                            "pattern": "Button",
+                            "name": "Add card",
+                            "action": "click"
+                        }
+                    }
+                ]
+            },
+            {
+                "pattern": "Card",
+                "name": "Buy milkbbb",
+                "simplify": []
+            },
+            {
+                "pattern": "Input",
+                "name": null,
+                "simplify": []
+            }
+        ],
+        "payload": [
+            {
+                "type": "assert",
+                "action": "text",
+                "value": null,
+                "args": []
+            }
+        ]
+    }
+]
