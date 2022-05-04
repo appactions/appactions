@@ -27,9 +27,12 @@ const extractArgs = {
 
 const mergeEvents = {
     type: (prev, curr) => {
-        return {
-            args: [prev.args[0] + curr.args[0]],
-        };
+        return [
+            {
+                ...curr,
+                args: [prev.args[0] + curr.args[0]],
+            },
+        ];
     },
 };
 
@@ -110,10 +113,20 @@ export function setupRecorder(bridge, agent) {
 
 export function merger([prev, curr]) {
     if (isEqual(prev.owners, curr.owners)) {
+        let payload = [...prev.payload, ...curr.payload];
+
+        const lastPayload = payload[payload.length - 1];
+        const lastButOnePayload = payload[payload.length - 2];
+
+        if (mergeEvents[lastPayload.action] && lastButOnePayload.action === lastPayload.action) {
+            const mergedPayload = mergeEvents[lastPayload.action](lastButOnePayload, lastPayload);
+            payload = [...payload.slice(0, -2), ...mergedPayload];
+        }
+
         return [
             {
                 owners: curr.owners,
-                payload: [...prev.payload, ...curr.payload],
+                payload,
             },
         ];
     }
