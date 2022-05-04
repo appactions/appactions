@@ -83,7 +83,7 @@ steps:
       - Board
       - { Lane: Planned Tasks }
     do: 
-      - addCard: [, , ]
+      - addCard: [qqq, www, eee]
   - with: 
       - Board
       - { Lane: Planned Tasks }

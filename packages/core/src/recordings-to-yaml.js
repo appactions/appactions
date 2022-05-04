@@ -100,7 +100,7 @@ function convertRecordingsToFlow(agent, recordings) {
                 }
             }
 
-            const nesting = handleNesting(agent, recordings.slice(nestingStartIndex, index + 1));
+            const nesting = handleNesting(agent, result.slice(nestingStartIndex, index + 1));
 
             result = [...flow.slice(0, nestingStartIndex), ...nesting];
         }
@@ -165,23 +165,30 @@ class Generator {
     }
 
     query = ({ pattern, action, name, optional = false }) => {
-        const matches = this.collection.filter(recording => {
-            // TODO update this to reflect new shape of recording
+        const matches = this.collection
+            .flatMap(recording => {
+                return recording.payload.map(step => ({
+                    ...step,
+                    owners: recording.owners,
+                }));
+            })
+            .filter(recording => {
+                const currentElement = recording.owners[recording.owners.length - 1];
 
-            if (name && name !== recording.name) {
-                return false;
-            }
+                if (name && name !== currentElement.name) {
+                    return false;
+                }
 
-            if (pattern && pattern !== recording.pattern) {
-                return false;
-            }
+                if (pattern && pattern !== currentElement.pattern) {
+                    return false;
+                }
 
-            if (action && action !== recording.action) {
-                return false;
-            }
+                if (action && action !== recording.action) {
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            });
 
         if (matches.length === 0) {
             if (optional) {
