@@ -1,4 +1,4 @@
-import { getDriver, getFiberInfo } from './api';
+import { getDriver } from './api';
 import isMatch from 'lodash.ismatch';
 import isEqual from 'lodash.isequal';
 
@@ -188,11 +188,9 @@ function makeRecordingEvent(event, annotation, agent) {
 
     const annotationGenerator = processAnnotation(driver, event, annotation);
     const owners = agent.getOwners(fiber);
-    // const name = driver.getName(getFiberInfo(fiber));
     const { name } = owners[owners.length - 1];
 
     console.log('annotation', annotation);
-    // console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
     console.log('owners', owners);
 
     const pattern = annotationGenerator.getPattern();
@@ -224,7 +222,7 @@ function makeRecordingEvent(event, annotation, agent) {
         });
 
         if (nestingStart) {
-            recording = agent.handleNestingStart(recording);
+            recording = handleNestingStart(agent, recording);
             break;
         }
 
@@ -233,7 +231,7 @@ function makeRecordingEvent(event, annotation, agent) {
         });
 
         if (nestingEnd) {
-            recording = agent.handleNestingEnd(recording, nestingEnd, owners.slice(0, i + 1));
+            recording = handleNestingEnd(agent, recording, nestingEnd, owners.slice(0, i + 1));
             break;
         }
     }
@@ -242,6 +240,146 @@ function makeRecordingEvent(event, annotation, agent) {
     console.groupEnd();
 
     return recording;
+}
+
+export function makeAssertionEvent({ action, args, value, owners }) {
+    const assert = {
+        id,
+
+        owners,
+        payload: [
+            {
+                type: 'assert',
+                action,
+                value,
+                args,
+            },
+        ],
+        // pattern: 'TODO_ASSERT_PATTERN',
+
+        // owners,
+        // action,
+        // test,
+        // value,
+    };
+
+    return assert;
+}
+
+export function convertRecordingsToFlow(agent, recordings) {
+    return recordings.reduce((flow, currentRecording, index) => {
+        let result = [...flow, currentRecording];
+
+        if (currentRecording.nestingEnd) {
+            let nestingStartIndex = index;
+            for (; nestingStartIndex >= 0; nestingStartIndex--) {
+                if (
+                    recordings[nestingStartIndex].nestingStart &&
+                    recordings[nestingStartIndex].depth === currentRecording.depth
+                ) {
+                    break;
+                }
+            }
+
+            const nesting = handleNesting(agent, recordings.slice(nestingStartIndex, index + 1));
+
+            result = [...flow.slice(0, nestingStartIndex), ...nesting];
+        }
+
+        if (result.length > 1) {
+            const newItems = merger([result[result.length - 2], result[result.length - 1]]);
+            result = [...result.slice(0, -2), ...newItems];
+        }
+
+        return result;
+    }, []);
+}
+
+function handleNestingStart(agent, recording) {
+    console.log('handleNestingStart');
+    return {
+        ...recording,
+        depth: ++agent._sessionRecordingNestingDepth,
+        nestingStart: true,
+    };
+}
+
+function handleNestingEnd(agent, recording, simplify, owners) {
+    console.log('handleNestingEnd', simplify, owners);
+    return {
+        ...recording,
+        owners,
+        depth: agent._sessionRecordingNestingDepth--,
+        nestingEnd: true,
+        simplify,
+    };
+}
+
+function handleNesting(agent, collection) {
+    const nestingEnd = collection[collection.length - 1];
+    const { pattern, action } = nestingEnd.simplify;
+    const simplify = agent.window.__REACT_APP_ACTIONS__.simplify.get(nestingEnd.simplify.pattern);
+
+    try {
+        const args = simplify[action].collect(new Generator(collection));
+
+        const recording = {
+            ...nestingEnd,
+
+            // pattern,
+            payload: [{ action, args }],
+        };
+
+        return [recording];
+    } catch (error) {
+        console.error('Nesting failed:', error);
+        console.log('collection', collection);
+    }
+
+    // nesting failed, we return the original collection
+    return collection;
+}
+
+class Generator {
+    constructor(collection) {
+        this.collection = collection;
+        this.index = 0;
+    }
+
+    query = ({ pattern, action, name, optional = false }) => {
+        const matches = this.collection.filter(recording => {
+            //
+            // TODO update this to reflect new shape of recording
+
+            if (name && name !== recording.name) {
+                return false;
+            }
+
+            if (pattern && pattern !== recording.pattern) {
+                return false;
+            }
+
+            if (action && action !== recording.action) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if (matches.length === 0) {
+            if (optional) {
+                return [];
+            } else {
+                throw new Error(`No matching recording found for ${pattern} ${action} ${name}`);
+            }
+        }
+
+        if (matches.length > 1) {
+            throw new Error(`Multiple matches found for ${pattern} ${action} ${name}`);
+        }
+
+        return matches[0].args;
+    };
 }
 
 // function getCoordinates(event) {
