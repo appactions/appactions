@@ -32,37 +32,55 @@ function renderStep(step) {
         result.do = interaction;
     }
 
-    const assert = getAssert(step);
-    if (assert) {
-        result.assert = assert;
-    }
+    // const assert = getAssert(step);
+    // if (assert) {
+    //     result.assert = assert;
+    // }
 
     return result;
 }
 
 function getDo(step) {
-    if (!step.action) {
-        return null;
-    }
-    
+    // if (!step.action) {
+    //     return null;
+    // }
+
+    // if (step.type === 'assert'){
+
+    // } else if (step.type === 'event') {
+
+    return step.payload.map(({ type, action, args, value }) => {
+        if (type === 'assert') {
+            if (!value && args.length === 0) {
+                return { assert: action };
+            }
+            return { assert: { action: args.length ? { [action]: args } : action, value } };
+        }
+
+        return { [action]: args };
+    });
+
     return step.args.length === 0 ? step.action : { [step.action]: step.args };
+    // }
+
+    // throw new Error(`Unknown step type: ${step.type}`);
 }
 
-function getAssert(step) {
-    if (!step.assert) {
-        return null;
-    }
+// function getAssert(step) {
+//     if (!step.assert) {
+//         return null;
+//     }
 
-    const asserts = Object.entries(step.assert);
+//     const asserts = Object.entries(step.assert);
 
-    if (asserts.length === 1 && !asserts[0][1].test && !asserts[0][1].value) {
-        return asserts[0][0];
-    }
+//     if (asserts.length === 1 && !asserts[0][1].test && !asserts[0][1].value) {
+//         return asserts[0][0];
+//     }
 
-    return asserts.reduce((acc, [action, { test, value }]) => {
-        return {
-            ...acc,
-            [action]: !test && !value ? true : [test, value],
-        };
-    }, {});
-}
+//     return asserts.reduce((acc, [action, { test, value }]) => {
+//         return {
+//             ...acc,
+//             [action]: !test && !value ? true : [test, value],
+//         };
+//     }, {});
+// }

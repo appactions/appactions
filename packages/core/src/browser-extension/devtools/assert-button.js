@@ -32,8 +32,9 @@ export default function AssertButton() {
         bridge.send('session-recording-assert', {
             id: selectedElement.id,
             action: assertConfig.name,
-            test: assertConfig.test,
-            value: currentValue,
+            // test: assertConfig.test,
+            args: [],
+            value: currentValue ? currentValue : null,
         });
         setSubmitted(true);
         setCurrentValue('');

@@ -21,6 +21,17 @@ steps:
       - Board
       - { Lane: aaa }
     do:
-      - addCard: []
-      - assert: { text: fff }
-      - assert: exists
+      # - text: []
+      # - { text: [], assert: fff }
+      # - { text: [], expect: fff }
+      # - { text: [] }: fff
+      # - { text: fff }: []
+      # - { text: fff }
+      # - { text: { args: [], assert: fff } }
+      # - assert:
+      #     action: { text: [] }
+      #     value: fff
+      - assert:
+          action:
+            text: []
+          value: fff

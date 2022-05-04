@@ -214,26 +214,36 @@ export default class Agent extends EventEmitter {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
         }
 
+        console.log('recording', this._sessionRecordingDb);
+
         this.sendYAML();
     };
 
     onSessionRecordingAssert = payload => {
-        const { id, action, test, value } = payload;
+        const { id, action, args, value } = payload;
 
         const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
 
         const owners = this.getOwners(fiber);
 
         const assert = {
-            type: 'assert',
             id,
+
             owners,
-            assert: {
-                [action]: {
-                    test,
+            payload: [
+                {
+                    type: 'assert',
+                    action,
                     value,
+                    args,
                 },
-            },
+            ],
+            // pattern: 'TODO_ASSERT_PATTERN',
+
+            // owners,
+            // action,
+            // test,
+            // value,
         };
 
         this.sendRecordingEvent(assert);
@@ -270,9 +280,8 @@ export default class Agent extends EventEmitter {
             const recording = {
                 ...nestingEnd,
 
-                pattern,
-                action,
-                args,
+                // pattern,
+                payload: [{ action, args }],
             };
 
             return [recording];
@@ -294,6 +303,9 @@ class Generator {
 
     query = ({ pattern, action, name, optional = false }) => {
         const matches = this.collection.filter(recording => {
+
+            // TODO update this to reflect new shape of recording
+            
             if (name && name !== recording.name) {
                 return false;
             }

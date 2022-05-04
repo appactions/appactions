@@ -28,8 +28,6 @@ const extractArgs = {
 const mergeEvents = {
     type: (prev, curr) => {
         return {
-            ...prev,
-            ...curr,
             args: [prev.args[0] + curr.args[0]],
         };
     },
@@ -105,34 +103,49 @@ export function setupRecorder(bridge, agent) {
         const recording = makeRecordingEvent(event, annotation, agent);
 
         if (recording) {
-            agent.sendRecordingEvent(recording, merger);
+            agent.sendRecordingEvent(recording);
         }
     }
 }
 
 export function merger([prev, curr]) {
-    if (curr.type === 'event') {
-        if (mergeEvents[curr.action] && prev.action === curr.action) {
-            if (isEqual(prev.owners, curr.owners)) {
-                return [mergeEvents[curr.action](prev, curr)];
-            }
-        }
+    if (isEqual(prev.owners, curr.owners)) {
+        return [
+            {
+                owners: curr.owners,
+                payload: [...prev.payload, ...curr.payload],
+            },
+        ];
     }
 
-    if (curr.type === 'assert') {
-        if (isEqual(prev.owners, curr.owners)) {
-            return [
-                {
-                    ...prev,
-                    ...curr,
-                    assert: {
-                        ...prev.assert,
-                        ...curr.assert,
-                    },
-                },
-            ];
-        }
-    }
+    // if (curr.type === 'event') {
+    //     if (mergeEvents[curr.action] && prev.action === curr.action) {
+    //         if (isEqual(prev.owners, curr.owners)) {
+    //             const { args } = mergeEvents[curr.action](prev, curr);
+    //             return [
+    //                 {
+    //                     owners: curr.owners,
+    //                     // pattern: curr.pattern,
+    //                     // name: curr.name,
+    //                     action: curr.action,
+    //                     args,
+    //                 },
+    //             ];
+    //         }
+    //     }
+    // }
+
+    // if (curr.type === 'assert') {
+    //     if (isEqual(prev.owners, curr.owners)) {
+    //         return [{
+    //             owners: curr.owners,
+    //             // pattern: curr.pattern,
+    //             // name: curr.name,
+    //             action: curr.action,
+    //             args: curr.args,
+    //         }];
+    //     }
+    // }
 
     return [prev, curr];
 }
@@ -187,14 +200,18 @@ function makeRecordingEvent(event, annotation, agent) {
     const args = annotationGenerator.getArgs();
 
     let recording = {
-        type: 'event',
         id: currentFiberId,
 
-        name,
         owners,
-        pattern,
-        action,
-        args,
+        // pattern,
+        // name,
+        payload: [
+            {
+                type: 'event',
+                action,
+                args,
+            },
+        ],
     };
 
     console.log('raw recording', recording);

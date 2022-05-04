@@ -176,7 +176,7 @@ class Chain {
         return [
             {
                 command: 'do',
-                args: [lastPattern, action, ['TODO']],
+                args: [lastPattern, action, ['TODO_ASSERT_ARGS_IN_FLOW']],
                 needsOriginalSubject: true,
             },
             {

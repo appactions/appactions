@@ -1,184 +1,267 @@
 import renderYAML from './recordings-to-yaml';
 
-// TODO update this data, add assert and nesting examples
 const recordings = [
     {
-        pattern: 'Button',
-        name: '',
         owners: [
             {
                 pattern: 'Board',
                 name: null,
+                simplify: [
+                    {
+                        pattern: 'Board',
+                        action: 'addLane',
+                        start: {
+                            pattern: 'Button',
+                            name: '+ Add another lane',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add lane',
+                            action: 'click',
+                        },
+                    },
+                ],
             },
             {
                 pattern: 'Lane',
                 name: 'Planned Tasks',
-            },
-            {
-                pattern: 'Button',
-                name: 'Click to add card',
+                simplify: [
+                    {
+                        pattern: 'Lane',
+                        action: 'addCard',
+                        start: {
+                            pattern: 'Button',
+                            name: 'Click to add card',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add card',
+                            action: 'click',
+                        },
+                    },
+                ],
             },
         ],
-        action: 'click',
-        args: [],
-        tagName: 'A',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 162,
+        payload: [
+            {
+                action: 'addCard',
+                args: [null, null, null],
+            },
+            {
+                type: 'assert',
+                action: 'exists',
+                value: '',
+                args: ['TODO_ASSERT_ACTION_ARGS'],
+            },
+        ],
     },
     {
-        pattern: 'EditableLabel',
-        name: 'title',
+        id: 208,
         owners: [
             {
                 pattern: 'Board',
                 name: null,
+                simplify: [
+                    {
+                        pattern: 'Board',
+                        action: 'addLane',
+                        start: {
+                            pattern: 'Button',
+                            name: '+ Add another lane',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add lane',
+                            action: 'click',
+                        },
+                    },
+                ],
             },
-            {
-                pattern: 'Lane',
-                name: 'Planned Tasks',
-            },
-            {
-                pattern: 'NewCardForm',
-                name: null,
-            },
-            {
-                pattern: 'EditableLabel',
-                name: 'title',
-            },
-        ],
-        action: 'keydown',
-        args: [],
-        tagName: 'DIV',
-        keyCode: 83,
-        href: null,
-        coordinates: null,
-        id: 148,
-    },
-    {
-        pattern: 'Card',
-        name: 'Add card',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-            {
-                pattern: 'Lane',
-                name: 'Planned Tasks',
-            },
-            {
-                pattern: 'NewCardForm',
-                name: null,
-            },
-            {
-                pattern: 'Button',
-                name: 'Add card',
-            },
-        ],
-        action: 'add',
-        args: ['s'],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 193,
-    },
-    {
-        pattern: 'Button',
-        name: '+ Add another lane',
-        owners: [
             {
                 pattern: 'Button',
                 name: '+ Add another lane',
+                simplify: [],
             },
         ],
-        action: 'click',
-        args: [],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 208,
+        payload: [
+            {
+                type: 'event',
+                action: 'click',
+                args: [],
+            },
+        ],
+        depth: 1,
+        nestingStart: true,
     },
     {
-        pattern: 'Board',
-        name: null,
         owners: [
             {
                 pattern: 'Board',
                 name: null,
+                simplify: [
+                    {
+                        pattern: 'Board',
+                        action: 'addLane',
+                        start: {
+                            pattern: 'Button',
+                            name: '+ Add another lane',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add lane',
+                            action: 'click',
+                        },
+                    },
+                ],
+            },
+            {
+                pattern: 'Form',
+                name: null,
+                simplify: [],
+            },
+            {
+                pattern: 'Input',
+                name: null,
+                simplify: [],
             },
         ],
-        action: 'keydown',
-        args: [],
-        value: '',
-        tagName: 'TEXTAREA',
-        keyCode: 87,
-        href: null,
-        coordinates: null,
-        id: 19,
+        payload: [
+            {
+                type: 'event',
+                action: 'type',
+                args: ['w'],
+            },
+            {
+                type: 'event',
+                action: 'type',
+                args: ['w'],
+            },
+            {
+                type: 'event',
+                action: 'type',
+                args: ['w'],
+            },
+            {
+                type: 'event',
+                action: 'type',
+                args: ['w'],
+            },
+        ],
     },
     {
-        pattern: 'Board',
-        name: null,
+        id: 254,
         owners: [
             {
                 pattern: 'Board',
                 name: null,
+                simplify: [
+                    {
+                        pattern: 'Board',
+                        action: 'addLane',
+                        start: {
+                            pattern: 'Button',
+                            name: '+ Add another lane',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add lane',
+                            action: 'click',
+                        },
+                    },
+                ],
             },
         ],
-        action: 'keydown',
-        args: [],
-        value: 'w',
-        tagName: 'TEXTAREA',
-        keyCode: 87,
-        href: null,
-        coordinates: null,
-        id: 19,
-    },
-    {
-        pattern: 'Board',
-        name: null,
-        owners: [
+        payload: [
             {
-                pattern: 'Board',
-                name: null,
+                type: 'event',
+                action: 'click',
+                args: [],
             },
         ],
-        action: 'change',
-        args: [],
-        value: 'ww',
-        tagName: 'TEXTAREA',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 19,
-    },
-    {
-        pattern: 'Button',
-        name: 'Add lane',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
+        depth: 1,
+        nestingEnd: true,
+        simplify: {
+            pattern: 'Board',
+            action: 'addLane',
+            start: {
+                pattern: 'Button',
+                name: '+ Add another lane',
+                action: 'click',
             },
-            {
+            end: {
                 pattern: 'Button',
                 name: 'Add lane',
+                action: 'click',
+            },
+        },
+    },
+    {
+        owners: [
+            {
+                pattern: 'Board',
+                name: null,
+                simplify: [
+                    {
+                        pattern: 'Board',
+                        action: 'addLane',
+                        start: {
+                            pattern: 'Button',
+                            name: '+ Add another lane',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add lane',
+                            action: 'click',
+                        },
+                    },
+                ],
+            },
+            {
+                pattern: 'Lane',
+                name: 'wwww',
+                simplify: [
+                    {
+                        pattern: 'Lane',
+                        action: 'addCard',
+                        start: {
+                            pattern: 'Button',
+                            name: 'Click to add card',
+                            action: 'click',
+                        },
+                        end: {
+                            pattern: 'Button',
+                            name: 'Add card',
+                            action: 'click',
+                        },
+                    },
+                ],
             },
         ],
-        action: 'click',
-        args: [],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 254,
+        payload: [
+            {
+                type: 'assert',
+                action: 'text',
+                value: 'fff',
+                args: ['TODO_ASSERT_ACTION_ARGS'],
+            },
+            {
+                type: 'assert',
+                action: 'exists',
+                value: '',
+                args: ['TODO_ASSERT_ACTION_ARGS'],
+            },
+            {
+                type: 'event',
+                action: 'click',
+                args: [],
+            },
+        ],
     },
 ];
 
@@ -200,33 +283,39 @@ steps:
   - with: 
       - Board
       - { Lane: Planned Tasks }
-      - { Button: Click to add card }
-    do: click
-  - with: 
-      - Board
-      - { Lane: Planned Tasks }
-      - NewCardForm
-      - { EditableLabel: title }
-    do: keydown
-  - with: 
-      - Board
-      - { Lane: Planned Tasks }
-      - NewCardForm
-      - { Button: Add card }
     do: 
-      add: [s]
-  - with: { Button: + Add another lane }
-    do: click
-  - with: Board
-    do: keydown
-  - with: Board
-    do: keydown
-  - with: Board
-    do: change
+      - addCard: [, , ]
+      - assert: 
+          action: 
+            exists: [TODO_ASSERT_ACTION_ARGS]
+          value: \\"\\"
   - with: 
       - Board
-      - { Button: Add lane }
-    do: click
+      - { Button: + Add another lane }
+    do: 
+      - click: []
+  - with: [Board, Form, Input]
+    do: 
+      - type: [w]
+      - type: [w]
+      - type: [w]
+      - type: [w]
+  - with: Board
+    do: 
+      - click: []
+  - with: 
+      - Board
+      - { Lane: wwww }
+    do: 
+      - assert: 
+          action: 
+            text: [TODO_ASSERT_ACTION_ARGS]
+          value: fff
+      - assert: 
+          action: 
+            exists: [TODO_ASSERT_ACTION_ARGS]
+          value: \\"\\"
+      - click: []
 "
 `);
 });
