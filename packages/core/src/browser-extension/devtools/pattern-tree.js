@@ -12,7 +12,7 @@ export default function PatternTree() {
 
     const isBackendReady = useStore('backend-ready', store => store.isBackendReady);
 
-    const numElements = useStore('mutated', store => {
+    const { numElements } = useStore('mutated', store => {
         let numElements = 0;
 
         store.roots.forEach(rootID => {
@@ -20,7 +20,7 @@ export default function PatternTree() {
             numElements += weight;
         });
 
-        return numElements;
+        return { numElements };
     });
 
     if (!isBackendReady) {
