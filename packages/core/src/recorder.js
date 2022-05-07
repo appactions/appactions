@@ -111,8 +111,8 @@ function getAllFrames(windowElement, allFrames = []) {
 }
 
 function makeRecordingEvent(event, annotation, agent) {
-    console.group(event.type);
-    // console.groupCollapsed(event.type);
+    // console.group('event:', event.type);
+    console.groupCollapsed('event:', event.type);
 
     // TODO refactor that .get(1) thing
     const targetFiber = Cypress.AppActions.hook.renderers.get(1).findFiberByHostInstance(event.target);
@@ -190,6 +190,8 @@ function makeRecordingEvent(event, annotation, agent) {
 }
 
 export function makeAssertionEvent({ action, args, value, owners }) {
+    console.groupCollapsed('assertion:', action);
+
     const assert = {
         owners,
         payload: [
@@ -201,6 +203,9 @@ export function makeAssertionEvent({ action, args, value, owners }) {
             },
         ],
     };
+
+    console.log('assert', assert);
+    console.groupEnd();
 
     return assert;
 }
