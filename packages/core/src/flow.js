@@ -13,8 +13,10 @@ export const preprocessFlows = (content, { fileName }) => {
         throw new Error(`Flow file ${fileName} does not contain steps`);
     }
 
+    const mainContext = flow.skip ? 'describe.skip' : 'describe';
+
     return source`
-describe('${fileName}', () => {
+${mainContext}('${fileName}', () => {
   it('${flow.description}', () => {
     cy.visit('${flow.start.route}');
 
@@ -176,7 +178,7 @@ class Chain {
         return [
             {
                 command: 'do',
-                args: [lastPattern, action, ['TODO']],
+                args: [lastPattern, action, ['TODO_ASSERT_ARGS_IN_FLOW']],
                 needsOriginalSubject: true,
             },
             {

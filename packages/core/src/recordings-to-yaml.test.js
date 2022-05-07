@@ -1,186 +1,68 @@
 import renderYAML from './recordings-to-yaml';
+import recordings from './recordings.fixture.json';
 
-// TODO update this data, add assert and nesting examples
-const recordings = [
-    {
-        pattern: 'Button',
-        name: '',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
+const agent = {
+    _sessionRecordingNestingDepth: 0,
+    getSimplifyForPattern(pattern) {
+        const simplifiers = {
+            Board: {
+                addLane: {
+                    start: {
+                        pattern: 'Button',
+                        name: '+ Add another lane',
+                        action: 'click',
+                    },
+                    end: {
+                        pattern: 'Button',
+                        name: 'Add lane',
+                        action: 'click',
+                    },
+                    collect(generator) {
+                        return generator.query({ pattern: 'Input', action: 'type' });
+                    },
+                },
             },
-            {
-                pattern: 'Lane',
-                name: 'Planned Tasks',
+            Lane: {
+                addCard: {
+                    start: {
+                        pattern: 'Button',
+                        name: 'Click to add card',
+                        action: 'click',
+                    },
+                    end: {
+                        pattern: 'Button',
+                        name: 'Add card',
+                        action: 'click',
+                    },
+                    collect(generator) {
+                        const [title] = generator.query({
+                            pattern: 'Input',
+                            name: 'title',
+                            action: 'type',
+                            optional: true,
+                        });
+                        const [label] = generator.query({
+                            pattern: 'Input',
+                            name: 'label',
+                            action: 'type',
+                            optional: true,
+                        });
+                        const [description] = generator.query({
+                            pattern: 'Input',
+                            name: 'description',
+                            action: 'type',
+                            optional: true,
+                        });
+
+                        return [title, label, description];
+                    },
+                },
             },
-            {
-                pattern: 'Button',
-                name: 'Click to add card',
-            },
-        ],
-        action: 'click',
-        args: [],
-        tagName: 'A',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 162,
+        };
+
+        return simplifiers[pattern];
     },
-    {
-        pattern: 'EditableLabel',
-        name: 'title',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-            {
-                pattern: 'Lane',
-                name: 'Planned Tasks',
-            },
-            {
-                pattern: 'NewCardForm',
-                name: null,
-            },
-            {
-                pattern: 'EditableLabel',
-                name: 'title',
-            },
-        ],
-        action: 'keydown',
-        args: [],
-        tagName: 'DIV',
-        keyCode: 83,
-        href: null,
-        coordinates: null,
-        id: 148,
-    },
-    {
-        pattern: 'Card',
-        name: 'Add card',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-            {
-                pattern: 'Lane',
-                name: 'Planned Tasks',
-            },
-            {
-                pattern: 'NewCardForm',
-                name: null,
-            },
-            {
-                pattern: 'Button',
-                name: 'Add card',
-            },
-        ],
-        action: 'add',
-        args: ['s'],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 193,
-    },
-    {
-        pattern: 'Button',
-        name: '+ Add another lane',
-        owners: [
-            {
-                pattern: 'Button',
-                name: '+ Add another lane',
-            },
-        ],
-        action: 'click',
-        args: [],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 208,
-    },
-    {
-        pattern: 'Board',
-        name: null,
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-        ],
-        action: 'keydown',
-        args: [],
-        value: '',
-        tagName: 'TEXTAREA',
-        keyCode: 87,
-        href: null,
-        coordinates: null,
-        id: 19,
-    },
-    {
-        pattern: 'Board',
-        name: null,
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-        ],
-        action: 'keydown',
-        args: [],
-        value: 'w',
-        tagName: 'TEXTAREA',
-        keyCode: 87,
-        href: null,
-        coordinates: null,
-        id: 19,
-    },
-    {
-        pattern: 'Board',
-        name: null,
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-        ],
-        action: 'change',
-        args: [],
-        value: 'ww',
-        tagName: 'TEXTAREA',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 19,
-    },
-    {
-        pattern: 'Button',
-        name: 'Add lane',
-        owners: [
-            {
-                pattern: 'Board',
-                name: null,
-            },
-            {
-                pattern: 'Button',
-                name: 'Add lane',
-            },
-        ],
-        action: 'click',
-        args: [],
-        value: '',
-        tagName: 'BUTTON',
-        keyCode: null,
-        href: null,
-        coordinates: null,
-        id: 254,
-    },
-];
+};
 
 const meta = {
     description: 'Test recorded at 4/21/2022, 5:23:37 PM',
@@ -191,7 +73,7 @@ const meta = {
 };
 
 test('Recording to YAML', () => {
-    expect(renderYAML(meta, recordings)).toMatchInlineSnapshot(`
+    expect(renderYAML({ agent, meta, recordings })).toMatchInlineSnapshot(`
 "description: \\"Test recorded at 4/21/2022, 5:23:37 PM\\"
 start: 
   route: \\"/\\"
@@ -200,33 +82,41 @@ steps:
   - with: 
       - Board
       - { Lane: Planned Tasks }
-      - { Button: Click to add card }
-    do: click
-  - with: 
-      - Board
-      - { Lane: Planned Tasks }
-      - NewCardForm
-      - { EditableLabel: title }
-    do: keydown
-  - with: 
-      - Board
-      - { Lane: Planned Tasks }
-      - NewCardForm
-      - { Button: Add card }
     do: 
-      add: [s]
-  - with: { Button: + Add another lane }
-    do: click
-  - with: Board
-    do: keydown
-  - with: Board
-    do: keydown
-  - with: Board
-    do: change
+      - addCard: [ddd, fff, ggg]
   - with: 
       - Board
-      - { Button: Add lane }
-    do: click
+      - { Lane: Planned Tasks }
+      - { Card: Dispose Garbage }
+      - Input
+    do: 
+      - { assert: exists }
+      - assert: 
+          action: getValue
+          value: \\"Dispose Garbage\\"
+  - with: Board
+    do: 
+      - addLane: [jjj]
+  - with: 
+      - Board
+      - { Lane: jjj }
+      - { Button: Click to add card }
+    do: 
+      - { assert: exists }
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Card: Buy milk }
+      - Input
+    do: 
+      - type: [aaa]
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Card: aaa }
+      - Input
+    do: 
+      - { assert: exists }
 "
 `);
 });

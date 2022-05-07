@@ -1,7 +1,7 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
 import { setupAssertMenu } from './assert-menu';
-import { setupRecorder, merger } from './recorder';
+import { setupRecorder, makeAssertionEvent } from './recorder';
 import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
 import renderYAML from './recordings-to-yaml';
 
@@ -167,8 +167,14 @@ export default class Agent extends EventEmitter {
 
         return Cypress.AppActions.hook.getUnmountedOwners(fiber);
     };
+
     generateYAML = () => {
-        return renderYAML(this._sessionRecordingMeta, this._sessionRecordingDb);
+        try {
+            return renderYAML({ agent: this, meta: this._sessionRecordingMeta, recordings: this._sessionRecordingDb });
+        } catch (error) {
+            console.error(error);
+            return `# Error: ${error.message}`;
+        }
     };
 
     sendYAML = () => {
@@ -182,33 +188,7 @@ export default class Agent extends EventEmitter {
 
         this._sessionRecordingDb = [...this._sessionRecordingDb, recording];
 
-        if (recording.nestingEnd) {
-            let nestingStartIndex = this._sessionRecordingDb.length - 1;
-            for (; nestingStartIndex >= 0; nestingStartIndex--) {
-                if (
-                    this._sessionRecordingDb[nestingStartIndex].nestingStart &&
-                    this._sessionRecordingDb[nestingStartIndex].depth === recording.depth
-                ) {
-                    break;
-                }
-            }
-
-            const nesting = this.handleNesting(
-                this._sessionRecordingDb.slice(nestingStartIndex, this._sessionRecordingDb.length),
-            );
-
-            this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, nestingStartIndex), ...nesting];
-        }
-
-        // if there are at least two items, check if the last two can be merged
-        if (this._sessionRecordingDb.length > 1) {
-            const newItems = merger([
-                this._sessionRecordingDb[this._sessionRecordingDb.length - 2],
-                this._sessionRecordingDb[this._sessionRecordingDb.length - 1],
-            ]);
-
-            this._sessionRecordingDb = [...this._sessionRecordingDb.slice(0, -2), ...newItems];
-        }
+        console.log('recordings', this._sessionRecordingDb);
 
         if (!this._sessionRecordingMeta.description) {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
@@ -217,110 +197,15 @@ export default class Agent extends EventEmitter {
         this.sendYAML();
     };
 
-    onSessionRecordingAssert = payload => {
-        const { id, action, test, value } = payload;
-
+    onSessionRecordingAssert = ({ id, action, args, value }) => {
         const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
-
         const owners = this.getOwners(fiber);
-
-        const assert = {
-            type: 'assert',
-            id,
-            owners,
-            assert: {
-                [action]: {
-                    test,
-                    value,
-                },
-            },
-        };
+        const assert = makeAssertionEvent({ action, args, value, owners });
 
         this.sendRecordingEvent(assert);
     };
 
-    handleNestingStart = recording => {
-        console.log('handleNestingStart');
-        return {
-            ...recording,
-            depth: ++this._sessionRecordingNestingDepth,
-            nestingStart: true,
-        };
-    };
-
-    handleNestingEnd = (recording, simplify, owners) => {
-        console.log('handleNestingEnd', simplify, owners);
-        return {
-            ...recording,
-            owners,
-            depth: this._sessionRecordingNestingDepth--,
-            nestingEnd: true,
-            simplify,
-        };
-    };
-
-    handleNesting = collection => {
-        const nestingEnd = collection[collection.length - 1];
-        const { pattern, action } = nestingEnd.simplify;
-        const simplify = this.window.__REACT_APP_ACTIONS__.simplify.get(nestingEnd.simplify.pattern);
-
-        try {
-            const args = simplify[action].collect(new Generator(collection));
-
-            const recording = {
-                ...nestingEnd,
-
-                pattern,
-                action,
-                args,
-            };
-
-            return [recording];
-        } catch (error) {
-            console.error('Nesting failed:', error);
-            console.log('collection', collection);
-        }
-
-        // nesting failed, we return the original collection
-        return collection;
-    };
-}
-
-class Generator {
-    constructor(collection) {
-        this.collection = collection;
-        this.index = 0;
-    }
-
-    query = ({ pattern, action, name, optional = false }) => {
-        const matches = this.collection.filter(recording => {
-            if (name && name !== recording.name) {
-                return false;
-            }
-
-            if (pattern && pattern !== recording.pattern) {
-                return false;
-            }
-
-            if (action && action !== recording.action) {
-                return false;
-            }
-
-            return true;
-        });
-
-        if (matches.length === 0) {
-            if (optional) {
-                return [];
-            } else {
-                throw new Error(`No matching recording found for ${pattern} ${action} ${name}`);
-            }
-        }
-
-        if (matches.length > 1) {
-            throw new Error(`Multiple matches found for ${pattern} ${action} ${name}`);
-        }
-
-        return matches[0].args;
+    getSimplifyForPattern = pattern => {
+        return this.window.__REACT_APP_ACTIONS__.simplify.get(pattern);
     };
 }
