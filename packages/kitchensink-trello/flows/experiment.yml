@@ -2,6 +2,7 @@ description: 'Test recorded at 5/1/2022, 6:35:47 PM'
 start:
   route: /
   auth: false
+skip: true
 steps:
   - with:
       - Board

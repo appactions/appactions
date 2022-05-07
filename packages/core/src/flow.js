@@ -13,8 +13,10 @@ export const preprocessFlows = (content, { fileName }) => {
         throw new Error(`Flow file ${fileName} does not contain steps`);
     }
 
+    const mainContext = flow.skip ? 'describe.skip' : 'describe';
+
     return source`
-describe('${fileName}', () => {
+${mainContext}('${fileName}', () => {
   it('${flow.description}', () => {
     cy.visit('${flow.start.route}');
 
