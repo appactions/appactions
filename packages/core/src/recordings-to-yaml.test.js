@@ -83,11 +83,24 @@ steps:
       - Board
       - { Lane: Planned Tasks }
     do: 
-      - addCard: [qqq, www, eee]
+      - addCard: [ddd, fff, ggg]
   - with: 
       - Board
       - { Lane: Planned Tasks }
-      - { Card: Buy milk }
+      - { Card: Dispose Garbage }
+      - Input
+    do: 
+      - { assert: exists }
+      - assert: 
+          action: getValue
+          value: \\"Dispose Garbage\\"
+  - with: Board
+    do: 
+      - addLane: [jjj]
+  - with: 
+      - Board
+      - { Lane: jjj }
+      - { Button: Click to add card }
     do: 
       - { assert: exists }
   - with: 
@@ -96,17 +109,14 @@ steps:
       - { Card: Buy milk }
       - Input
     do: 
-      - assert: 
-          action: getValue
-          value: fff
-      - type: [fffBackspaceBackspaceBackspacebbb]
+      - type: [aaa]
   - with: 
       - Board
       - { Lane: Planned Tasks }
-      - { Card: Buy milkbbb }
+      - { Card: aaa }
       - Input
     do: 
-      - { assert: text }
+      - { assert: exists }
 "
 `);
 });

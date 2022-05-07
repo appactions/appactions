@@ -188,11 +188,11 @@ export default class Agent extends EventEmitter {
 
         this._sessionRecordingDb = [...this._sessionRecordingDb, recording];
 
+        console.log('recordings', this._sessionRecordingDb);
+
         if (!this._sessionRecordingMeta.description) {
             this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
         }
-
-        console.log('recording', this._sessionRecordingDb);
 
         this.sendYAML();
     };

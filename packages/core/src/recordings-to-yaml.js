@@ -90,11 +90,11 @@ function convertRecordingsToFlow(agent, recordings) {
         let result = [...flow, currentRecording];
 
         if (currentRecording.nestingEnd) {
-            let nestingStartIndex = index;
+            let nestingStartIndex = result.length - 1;
             for (; nestingStartIndex >= 0; nestingStartIndex--) {
                 if (
-                    recordings[nestingStartIndex].nestingStart &&
-                    recordings[nestingStartIndex].depth === currentRecording.depth
+                    result[nestingStartIndex].nestingStart &&
+                    result[nestingStartIndex].depth === currentRecording.depth
                 ) {
                     break;
                 }
@@ -137,7 +137,7 @@ export function handleNestingEnd(agent, recording, simplify, owners) {
 function handleNesting(agent, collection) {
     const nestingEnd = collection[collection.length - 1];
     const { pattern, action } = nestingEnd.simplify;
-    const simplify = agent.getSimplifyForPattern(nestingEnd.simplify.pattern);
+    const simplify = agent.getSimplifyForPattern(pattern);
 
     try {
         const args = simplify[action].collect(new Generator(collection));

@@ -121,7 +121,6 @@ function makeRecordingEvent(event, annotation, agent) {
         console.log('No fiber found for target');
         console.groupEnd();
         // TODO send "event.target.location.pathname" on the laod event
-        // debugger;
         return;
     }
 
