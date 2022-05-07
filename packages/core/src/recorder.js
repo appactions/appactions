@@ -1,6 +1,6 @@
-import { getDriver, getFiberInfo } from './api';
+import { getDriver } from './api';
 import isMatch from 'lodash.ismatch';
-import isEqual from 'lodash.isequal';
+import { handleNestingStart, handleNestingEnd } from './recordings-to-yaml';
 
 // const eventsToRecord = {
 //     CLICK: 'click',
@@ -23,16 +23,6 @@ const eventsToRecord = {
 const extractArgs = {
     type: event => [event.key],
     goto: event => [event.target.href],
-};
-
-const mergeEvents = {
-    type: (prev, curr) => {
-        return {
-            ...prev,
-            ...curr,
-            args: [prev.args[0] + curr.args[0]],
-        };
-    },
 };
 
 function processAnnotation(driver, event, annotation = {}) {
@@ -105,36 +95,9 @@ export function setupRecorder(bridge, agent) {
         const recording = makeRecordingEvent(event, annotation, agent);
 
         if (recording) {
-            agent.sendRecordingEvent(recording, merger);
+            agent.sendRecordingEvent(recording);
         }
     }
-}
-
-export function merger([prev, curr]) {
-    if (curr.type === 'event') {
-        if (mergeEvents[curr.action] && prev.action === curr.action) {
-            if (isEqual(prev.owners, curr.owners)) {
-                return [mergeEvents[curr.action](prev, curr)];
-            }
-        }
-    }
-
-    if (curr.type === 'assert') {
-        if (isEqual(prev.owners, curr.owners)) {
-            return [
-                {
-                    ...prev,
-                    ...curr,
-                    assert: {
-                        ...prev.assert,
-                        ...curr.assert,
-                    },
-                },
-            ];
-        }
-    }
-
-    return [prev, curr];
 }
 
 function getAllFrames(windowElement, allFrames = []) {
@@ -158,7 +121,6 @@ function makeRecordingEvent(event, annotation, agent) {
         console.log('No fiber found for target');
         console.groupEnd();
         // TODO send "event.target.location.pathname" on the laod event
-        // debugger;
         return;
     }
 
@@ -175,11 +137,9 @@ function makeRecordingEvent(event, annotation, agent) {
 
     const annotationGenerator = processAnnotation(driver, event, annotation);
     const owners = agent.getOwners(fiber);
-    // const name = driver.getName(getFiberInfo(fiber));
     const { name } = owners[owners.length - 1];
 
     console.log('annotation', annotation);
-    // console.log('owners', owners.map(x => `${x.pattern} (${x.name})`).join(' > '));
     console.log('owners', owners);
 
     const pattern = annotationGenerator.getPattern();
@@ -187,14 +147,16 @@ function makeRecordingEvent(event, annotation, agent) {
     const args = annotationGenerator.getArgs();
 
     let recording = {
-        type: 'event',
         id: currentFiberId,
 
-        name,
         owners,
-        pattern,
-        action,
-        args,
+        payload: [
+            {
+                type: 'event',
+                action,
+                args,
+            },
+        ],
     };
 
     console.log('raw recording', recording);
@@ -207,7 +169,7 @@ function makeRecordingEvent(event, annotation, agent) {
         });
 
         if (nestingStart) {
-            recording = agent.handleNestingStart(recording);
+            recording = handleNestingStart(agent, recording);
             break;
         }
 
@@ -216,7 +178,7 @@ function makeRecordingEvent(event, annotation, agent) {
         });
 
         if (nestingEnd) {
-            recording = agent.handleNestingEnd(recording, nestingEnd, owners.slice(0, i + 1));
+            recording = handleNestingEnd(agent, recording, nestingEnd, owners.slice(0, i + 1));
             break;
         }
     }
@@ -225,6 +187,22 @@ function makeRecordingEvent(event, annotation, agent) {
     console.groupEnd();
 
     return recording;
+}
+
+export function makeAssertionEvent({ action, args, value, owners }) {
+    const assert = {
+        owners,
+        payload: [
+            {
+                type: 'assert',
+                action,
+                value,
+                args,
+            },
+        ],
+    };
+
+    return assert;
 }
 
 // function getCoordinates(event) {
