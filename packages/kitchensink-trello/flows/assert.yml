@@ -1,0 +1,21 @@
+description: "Test recorded at 5/1/2022, 6:35:47 PM"
+start:
+  route: /
+  auth: false
+steps:
+  - with:
+      - Board
+      - { Lane: Planned Tasks }
+    do:
+      - { assert: exists }
+  - with: Board
+    do:
+      - addLane: [New lane]
+  - with:
+      - Board
+      - { Lane: New lane }
+    do:
+      - { assert: exists }
+      - assert:
+          exists: true
+          text: New lane
