@@ -138,7 +138,7 @@ function handleNesting(agent, collection) {
     const simplify = agent.getSimplifyForPattern(pattern);
 
     try {
-        const args = simplify[action].collect(new Generator(collection));
+        const args = simplify[action].collect(new Generator(collection)).map(value => value || null);
 
         const recording = {
             ...nestingEnd,
