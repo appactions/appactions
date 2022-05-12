@@ -32,7 +32,12 @@ steps:
       # - assert:
       #     action: { text: [] }
       #     value: fff
-      - assert:
-          action:
-            text: []
-          value: fff
+      # - assert:
+      #     action:
+      #       text: []
+      #     value: fff
+      # - assert:
+      #     text: []
+      #     value: fff
+      - text: []
+        assert: fff

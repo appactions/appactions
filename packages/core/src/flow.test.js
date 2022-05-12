@@ -11,7 +11,8 @@ steps:
       - Board
       - { Lane: Planned Tasks }
     do:
-      - { assert: exists }
+      - exists: []
+        assert: null
   - with: Board
     do:
       - addLane: [New lane]
@@ -19,10 +20,20 @@ steps:
       - Board
       - { Lane: New lane }
     do:
-      - { assert: exists }
-      - assert:
-          exists: true
-          text: New lane
+      - exists: []
+        assert: null
+      - text: []
+        assert: New lane
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Card: Dispose Garbage }
+      - Input
+    do: 
+      - exists: []
+        assert: null
+      - getValue: []
+        assert: Dispose Garbage
 `;
 
     expect(preprocessFlows(flow, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
@@ -34,20 +45,33 @@ steps:
       .with('Board')
       .with('Lane', 'Planned Tasks');
     subject1
-      .should('assert');
+      .should('exist');
     
     const subject2 = cy
       .with('Board');
     subject2
-      .do('Board', 'addLane', ['New lane']);
+      .do('Board', 'addLane', ['New lane'])
+    
     
     const subject3 = cy
       .with('Board')
       .with('Lane', 'New lane');
     subject3
-      .should('assert');
+      .should('exist');
     subject3
-      .should('assert');
+      .do('Lane', 'text', [])
+      .should('toBe', 'New lane');
+    
+    const subject4 = cy
+      .with('Board')
+      .with('Lane', 'Planned Tasks')
+      .with('Card', 'Dispose Garbage')
+      .with('Input');
+    subject4
+      .should('exist');
+    subject4
+      .do('Input', 'getValue', [])
+      .should('toBe', 'Dispose Garbage');
     
   });
 });"

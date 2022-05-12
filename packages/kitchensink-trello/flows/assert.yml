@@ -16,6 +16,6 @@ steps:
       - { Lane: New lane }
     do:
       - { assert: exists }
-      - assert:
-          exists: true
-          text: New lane
+      - assert: exists
+      - text: []
+        assert: New lane
