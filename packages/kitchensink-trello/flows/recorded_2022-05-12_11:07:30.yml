@@ -1,0 +1,10 @@
+description: "Test recorded at 5/12/2022, 1:07:12 PM"
+start: 
+  route: "/"
+  auth: false
+steps: 
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+    do: 
+      - addCard: [aaa, null, sss]

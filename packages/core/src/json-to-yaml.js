@@ -23,7 +23,7 @@ function convert(obj, ret) {
     switch (type) {
         case 'array':
             if (isPrimitiveArray(obj)) {
-                ret.push(`[${obj.join(', ')}]`);
+                ret.push(`[${obj.map(v => v === null ? 'null' : v).join(', ')}]`);
             } else {
                 convertArray(obj, ret);
             }
