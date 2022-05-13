@@ -13,7 +13,9 @@ import data from './data.json';
 createDriver(Board, {
     pattern: 'Board',
     actions: {
-        addLane() {},
+        addLane() {
+            console.log('Lane added');
+        },
     },
     simplify: {
         addLane: {
@@ -58,7 +60,12 @@ createDriver(Lane, {
             collect(generator) {
                 const [title] = generator.query({ pattern: 'Input', name: 'title', action: 'type', optional: true });
                 const [label] = generator.query({ pattern: 'Input', name: 'label', action: 'type', optional: true });
-                const [description] = generator.query({ pattern: 'Input', name: 'description', action: 'type', optional: true });
+                const [description] = generator.query({
+                    pattern: 'Input',
+                    name: 'description',
+                    action: 'type',
+                    optional: true,
+                });
 
                 return [title, label, description];
             },
@@ -112,7 +119,7 @@ createDriver('button', {
 const Home = () => {
     return (
         <main className="">
-            <button
+            {/* <button
                 onClick={event => {
                     annotate(event, {
                         args: ['test'],
@@ -120,7 +127,7 @@ const Home = () => {
                 }}
             >
                 Test
-            </button>
+            </button> */}
             <Board
                 id="EditableBoard1"
                 draggable
