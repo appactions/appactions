@@ -90,10 +90,10 @@ steps:
       - { Card: Dispose Garbage }
       - Input
     do: 
-      - { assert: exists }
-      - assert: 
-          action: getValue
-          value: \\"Dispose Garbage\\"
+      - exists: []
+        assert: null
+      - getValue: []
+        assert: \\"Dispose Garbage\\"
   - with: Board
     do: 
       - addLane: [jjj]
@@ -102,7 +102,8 @@ steps:
       - { Lane: jjj }
       - { Button: Click to add card }
     do: 
-      - { assert: exists }
+      - exists: []
+        assert: null
   - with: 
       - Board
       - { Lane: Planned Tasks }
@@ -116,7 +117,8 @@ steps:
       - { Card: aaa }
       - Input
     do: 
-      - { assert: exists }
+      - exists: []
+        assert: null
 "
 `);
 });

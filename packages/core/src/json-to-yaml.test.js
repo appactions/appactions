@@ -40,3 +40,16 @@ test('json2yaml', () => {
     // let's see if parsing it again results the correct json data
     expect(yaml.parse(yamlContent)).toEqual(json);
 });
+
+test('handle null in primitive array (rendered in a single line)', () => {
+    const json = {
+        foo: ['bar', null, 'baz'],
+    };
+
+    const yamlContent = json2yaml(json);
+
+    expect(yamlContent).toMatchInlineSnapshot(`
+"foo: [bar, null, baz]
+"
+`);
+});

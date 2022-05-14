@@ -41,10 +41,8 @@ function renderStep(step) {
 function getDo(step) {
     return step.payload.map(({ type, action, args, value }) => {
         if (type === 'assert') {
-            if (!value && args.length === 0) {
-                return { assert: action };
-            }
-            return { assert: { action: args.length ? { [action]: args } : action, value } };
+            // TODO handle shorthand (when action can be omitted)
+            return { [action]: args, assert: value };
         }
 
         return { [action]: args };
@@ -140,7 +138,7 @@ function handleNesting(agent, collection) {
     const simplify = agent.getSimplifyForPattern(pattern);
 
     try {
-        const args = simplify[action].collect(new Generator(collection));
+        const args = simplify[action].collect(new Generator(collection)).map(value => value || null);
 
         const recording = {
             ...nestingEnd,

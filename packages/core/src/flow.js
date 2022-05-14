@@ -107,61 +107,58 @@ class Chain {
             });
 
             return this;
-        } else if (typeof doValue === 'string') {
-            this._nodes.push({
-                command: 'do',
-                args: [doValue],
-            });
-            return this;
-        } else if (typeof doValue === 'object' && doValue !== null) {
-            Object.entries(doValue).forEach(([action, args]) => {
-                const lastPattern = this.getLastPatternFromWith();
+        }
 
-                if (action === 'assert') {
-                    this._nodes.push(...this.createAssertChain(action, args));
-                } else {
-                    this._nodes.push({
+        if (typeof doValue === 'object' && doValue !== null) {
+            const { assert, ...actions } = doValue;
+
+            if (Object.keys(actions).length > 1) {
+                throw new Error('More than one actions found in "do"');
+            }
+
+            const [[action, args]] = Object.entries(actions);
+
+            const lastPattern = this.getLastPatternFromWith();
+
+            // TODO handle shorthands without hardcoding
+            if (action === 'exists') {
+                this._nodes.push({
+                    command: 'should',
+                    args: ['exist'],
+                });
+            } else {
+                this._nodes.push(
+                    {
                         command: 'do',
-                        args: args ? [lastPattern, action, args] : [lastPattern, action],
-                    });
-                }
-            });
+                        args: [lastPattern, action, args],
+                        needsOriginalSubject: true,
+                    },
+                    {
+                        command: 'should',
+                        args: ['toBe', assert],
+                    },
+                );
+            }
+
             return this;
         }
 
         throw new Error('Invalid `do` type');
     };
 
-    // addAssert = assertValue => {
-    //     if (!assertValue) {
-    //         return this;
-    //     }
-
-    //     if (typeof assertValue === 'string') {
-    //         this.createAssertChain(assertValue).forEach(node => {
-    //             this._nodes.push(node);
-    //         });
-    //         return this;
-    //     } else if (typeof assertValue === 'object' && assertValue !== null) {
-    //         Object.entries(assertValue).forEach(([assert, args]) => {
-    //             this.createAssertChain(assert, args).forEach(node => {
-    //                 this._nodes.push(node);
-    //             });
-    //         });
-    //         return this;
-    //     }
-
-    //     throw new Error('Invalid `assert` type');
-    // };
-
     createAssertChain = (action, _args = []) => {
+        // TODO handle multiple asserts
+        return this.createAssert(action, _args);
+    };
+
+    createAssert = (action, _args = []) => {
         const [test, value] = Array.isArray(_args) ? _args : [null, _args];
 
         if (!test) {
             return [
                 {
                     command: 'should',
-                    args: [action],
+                    args: [value],
                     needsOriginalSubject: true,
                 },
             ];
@@ -178,7 +175,8 @@ class Chain {
         return [
             {
                 command: 'do',
-                args: [lastPattern, action, ['TODO_ASSERT_ARGS_IN_FLOW']],
+                // TODO add a feature to set assert action args
+                args: [lastPattern, action, []],
                 needsOriginalSubject: true,
             },
             {
@@ -189,9 +187,13 @@ class Chain {
     };
 
     renderNode = (node, index, array) => {
-        const last = !array[index + 1] || array[index + 1].needsOriginalSubject;
-        const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
-        return last ? `${command};` : command;
+        try {
+            const last = !array[index + 1] || array[index + 1].needsOriginalSubject;
+            const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
+            return last ? `${command};` : command;
+        } catch (e) {
+            debugger;
+        }
     };
 
     toString = () => {

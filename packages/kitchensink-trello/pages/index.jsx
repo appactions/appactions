@@ -1,3 +1,4 @@
+import React from 'react';
 import Board from 'react-trello';
 import Lane from 'react-trello/dist/controllers/Lane';
 import Card from 'react-trello/dist/components/Card';
@@ -7,13 +8,15 @@ import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { createDriver, annotate } from '@appactions/driver';
+import { createDriver, annotate, useAction, setReactInstance } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
     pattern: 'Board',
     actions: {
-        addLane() {},
+        addLane({ hooks }) {
+            console.log('add lane', hooks);
+        },
     },
     simplify: {
         addLane: {
@@ -58,7 +61,12 @@ createDriver(Lane, {
             collect(generator) {
                 const [title] = generator.query({ pattern: 'Input', name: 'title', action: 'type', optional: true });
                 const [label] = generator.query({ pattern: 'Input', name: 'label', action: 'type', optional: true });
-                const [description] = generator.query({ pattern: 'Input', name: 'description', action: 'type', optional: true });
+                const [description] = generator.query({
+                    pattern: 'Input',
+                    name: 'description',
+                    action: 'type',
+                    optional: true,
+                });
 
                 return [title, label, description];
             },
@@ -110,17 +118,15 @@ createDriver('button', {
 });
 
 const Home = () => {
+    // TODO useAction should be usable outside of their component 
+    useAction('addLane', (...args) => {
+        console.log('addLane', ...args);
+    });
+    useAction('addCard', (...args) => {
+        console.log('addCard', ...args);
+    });
     return (
-        <main className="">
-            <button
-                onClick={event => {
-                    annotate(event, {
-                        args: ['test'],
-                    });
-                }}
-            >
-                Test
-            </button>
+        <main>
             <Board
                 id="EditableBoard1"
                 draggable
@@ -143,3 +149,5 @@ const Home = () => {
 };
 
 export default Home;
+
+setReactInstance(React);
