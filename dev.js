@@ -9,16 +9,6 @@ const [quick] = process.argv.slice(2);
 
 const choices = [
     {
-        choice: { name: 'Cypress version with Nextjs kitchensink', value: 'next' },
-        concurrently: [
-            { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
-            { name: 'driver', command: 'yarn workspace @appactions/driver dev', prefixColor: 'cyan' },
-            { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
-            { name: 'kitchensink-nextjs', command: 'yarn workspace kitchensink-nextjs dev', prefixColor: 'green' },
-            { name: 'cypress', command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-nextjs cypress', prefixColor: 'green' },
-        ],
-    },
-    {
         choice: { name: 'Cypress version with R3F kitchensink', value: 'r3f' },
         concurrently: [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
