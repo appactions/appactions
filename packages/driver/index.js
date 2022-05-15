@@ -65,20 +65,10 @@ export const annotate = (eventOrMatcher, payload) => {
     });
 };
 
-let reactInstance = null;
-
-export function setReactInstance(instance) {
-    reactInstance = instance;
-}
-
 export function useAction(name, callback) {
-    // TODO maybe use this instead:
-    // const fiber = Cypress.AppActions.hook.renderers.get(1).getCurrentFiber();
-    // const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
-    // so reactInstance won't be needed
-
-    if (!reactInstance) {
-        throw new Error('React instance is not defined. ');
+    if (typeof Cypress === 'undefined') {
+        return;
     }
-    reactInstance.useState(() => ({ name, callback, actionHook: true }));
+
+    Cypress.AppActions.reactApi.useAction(name, callback);
 }

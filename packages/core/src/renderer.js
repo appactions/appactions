@@ -142,6 +142,12 @@ export function attach(hook, rendererID, renderer, global) {
         }, {});
     };
 
+    const useAction = (name, callback) => {
+        const dispatcher = Cypress.AppActions.hook.renderers.get(1).currentDispatcherRef;
+
+        dispatcher.current.useState(() => ({ name, callback, actionHook: true }));
+    };
+
     return {
         findFiber,
         getParentFiber, // going to replace findFiberForInteraction
@@ -162,7 +168,9 @@ export function attach(hook, rendererID, renderer, global) {
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
 
+        // hooks stuff
         listActionHooksOfFiber,
+        useAction,
 
         // for debug only
         devtoolsInterface,

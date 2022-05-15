@@ -8,7 +8,7 @@ import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { createDriver, annotate, useAction, setReactInstance } from '@appactions/driver';
+import { createDriver, annotate, useAction } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
@@ -118,12 +118,15 @@ createDriver('button', {
 });
 
 const Home = () => {
-    // TODO useAction should be usable outside of their component 
-    useAction('addLane', (...args) => {
-        console.log('addLane', ...args);
-    });
-    useAction('addCard', (...args) => {
-        console.log('addCard', ...args);
+    // TODO useAction should be usable outside of their component
+    // useAction('Board', 'addLane', (...args) => {
+    //     console.log('addLane', ...args);
+    // });
+    // useAction('Lane', 'addCard', (...args) => {
+    //     console.log('addCard', ...args);
+    // });
+    useAction('foobar', (...args) => {
+        console.log('foobar', ...args);
     });
     return (
         <main>
@@ -150,4 +153,12 @@ const Home = () => {
 
 export default Home;
 
-setReactInstance(React);
+
+createDriver(Home, {
+    pattern: 'Home',
+    actions: {
+        foobar: ({ hooks }, ...args) => {
+            hooks.foobar('bazbaz', ...args);
+        },
+    },
+});
