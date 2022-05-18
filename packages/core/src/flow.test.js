@@ -34,6 +34,10 @@ steps:
         assert: null
       - getValue: []
         assert: Dispose Garbage
+  - with:
+      - Lane
+    do:
+      - addCard: [1, 2, 3]
 `;
 
     expect(preprocessFlows(flow, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
@@ -50,8 +54,7 @@ steps:
     const subject2 = cy
       .with('Board');
     subject2
-      .do('Board', 'addLane', ['New lane'])
-    
+      .do('Board', 'addLane', ['New lane']);
     
     const subject3 = cy
       .with('Board')
@@ -72,6 +75,11 @@ steps:
     subject4
       .do('Input', 'getValue', [])
       .should('toBe', 'Dispose Garbage');
+    
+    const subject5 = cy
+      .with('Lane');
+    subject5
+      .do('Lane', 'addCard', [1, 2, 3]);
     
   });
 });"
