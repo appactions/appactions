@@ -1,4 +1,4 @@
-import React from 'react';
+import { useReducer } from 'react';
 import Board from 'react-trello';
 import Lane from 'react-trello/dist/controllers/Lane';
 import Card from 'react-trello/dist/components/Card';
@@ -14,8 +14,8 @@ import data from './data.json';
 createDriver(Board, {
     pattern: 'Board',
     actions: {
-        addLane({ hook }) {
-            hook('asd');
+        addLane({ hook }, title) {
+            hook(title);
         },
     },
     simplify: {
@@ -43,7 +43,7 @@ createDriver(Lane, {
     },
     actions: {
         addCard({ hook }, title, label, description) {
-            hook('addCard', title, label, description);
+            hook(title, label, description);
         },
     },
     simplify: {
@@ -117,14 +117,64 @@ createDriver('button', {
     getName: ({ $el }) => $el.text().trim(),
 });
 
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'addCard':
+            return {
+                ...state,
+                lanes: state.lanes.map(lane => {
+                    // TODO handle id
+                    // if (lane.id === action.laneId) {
+                    if (lane.id) {
+                        return {
+                            ...lane,
+                            cards: lane.cards.concat({
+                                id: String(Date.now()),
+                                title: action.payload.title,
+                                label: action.payload.label,
+                                description: action.payload.description,
+                            }),
+                        };
+                    }
+                }),
+            };
+        case 'addLane':
+            return {
+                ...state,
+                lanes: state.lanes.concat({
+                    id: String(Date.now()),
+                    title: action.payload.title,
+                    cards: [],
+                }),
+            };
+        default:
+            return state;
+    }
+};
+
 const Home = () => {
-    // TODO useAction should be usable outside of their component
-    useAction({ pattern: 'Board', action: 'addLane' }, (...args) => {
-        console.log('cb addLane', ...args);
+    const [state, dispatch] = useReducer(reducer, data);
+
+    useAction({ pattern: 'Board', action: 'addLane' }, title => {
+        dispatch({
+            type: 'addLane',
+            payload: {
+                title,
+            },
+        });
     });
-    useAction({ pattern: 'Lane', action: 'addCard' }, (...args) => {
-        console.log('cb addCard', ...args);
+
+    useAction({ pattern: 'Lane', action: 'addCard' }, (title, label, description) => {
+        dispatch({
+            type: 'addCard',
+            payload: {
+                title,
+                label,
+                description,
+            },
+        });
     });
+
     return (
         <main>
             <Board
@@ -132,7 +182,7 @@ const Home = () => {
                 draggable
                 canAddLanes
                 editable
-                data={data}
+                data={state}
                 onCardAdd={(card, laneId) => {
                     annotate(
                         { type: 'click' },
