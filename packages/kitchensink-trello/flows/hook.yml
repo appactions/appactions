@@ -3,7 +3,7 @@ start:
   route: '/'
   auth: false
 steps:
-  - with: Home
+  - with: Lane
     do:
-      - foobar: [1, 2, 3]
+      - addCard: [1, 2, 3]
   

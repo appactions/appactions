@@ -65,10 +65,10 @@ export const annotate = (eventOrMatcher, payload) => {
     });
 };
 
-export function useAction(name, callback) {
+export function useAction(config, callback) {
     if (typeof Cypress === 'undefined') {
         return;
     }
 
-    Cypress.AppActions.reactApi.useAction(name, callback);
+    Cypress.AppActions.reactApi.useAction(config, callback);
 }

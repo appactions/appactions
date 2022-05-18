@@ -51,7 +51,6 @@ export function getDriver(fiber) {
 
 export function getFiberInfo(fiber) {
     const nodes = Cypress.AppActions.reactApi.findNativeNodes(fiber);
-    const hooks = Cypress.AppActions.reactApi.listActionHooksOfFiber(fiber);
     const driver = getDriver(fiber);
     return {
         nodes,
@@ -59,7 +58,6 @@ export function getFiberInfo(fiber) {
         fiber,
         instance: fiber.stateNode || null,
         driver,
-        hooks,
     };
 }
 
@@ -186,4 +184,22 @@ export function isFiberMounted(fiber) {
 
 export function findFiberByOwners(owners) {
     throw new Error('Unimplemented');
+}
+
+export function findActionHook(pattern, action, fiber) {
+    let result = null;
+
+    Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, fiber => {
+        const hooks = Cypress.AppActions.reactApi.listActionHooksOfFiber(fiber);
+        const hook = hooks && hooks.find(hook => hook.pattern === pattern && hook.action === action);
+
+        if (!hook) {
+            return false;
+        }
+
+        result = hook.callback;
+        return true;
+    });
+
+    return result;
 }

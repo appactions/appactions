@@ -14,8 +14,8 @@ import data from './data.json';
 createDriver(Board, {
     pattern: 'Board',
     actions: {
-        addLane({ hooks }) {
-            console.log('add lane', hooks);
+        addLane({ hook }) {
+            hook('asd');
         },
     },
     simplify: {
@@ -42,8 +42,8 @@ createDriver(Lane, {
         return info.fiber.stateNode.props.title;
     },
     actions: {
-        addCard({}, title, label, description) {
-            console.log('addCard', title, label, description);
+        addCard({ hook }, title, label, description) {
+            hook('addCard', title, label, description);
         },
     },
     simplify: {
@@ -119,14 +119,11 @@ createDriver('button', {
 
 const Home = () => {
     // TODO useAction should be usable outside of their component
-    // useAction('Board', 'addLane', (...args) => {
-    //     console.log('addLane', ...args);
-    // });
-    // useAction('Lane', 'addCard', (...args) => {
-    //     console.log('addCard', ...args);
-    // });
-    useAction('foobar', (...args) => {
-        console.log('foobar', ...args);
+    useAction({ pattern: 'Board', action: 'addLane' }, (...args) => {
+        console.log('cb addLane', ...args);
+    });
+    useAction({ pattern: 'Lane', action: 'addCard' }, (...args) => {
+        console.log('cb addCard', ...args);
     });
     return (
         <main>
@@ -152,13 +149,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-createDriver(Home, {
-    pattern: 'Home',
-    actions: {
-        foobar: ({ hooks }, ...args) => {
-            hooks.foobar('bazbaz', ...args);
-        },
-    },
-});
