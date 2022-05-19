@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Board from 'react-trello';
 import Lane from 'react-trello/dist/controllers/Lane';
 import Card from 'react-trello/dist/components/Card';
@@ -8,14 +8,15 @@ import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { createDriver, annotate, useAction, setReactInstance } from '@appactions/driver';
+import { AddLaneLink, AddButton, CancelButton } from 'react-trello/dist/styles/Elements';
+import { createDriver, annotate, useAction } from '@appactions/driver';
 import data from './data.json';
 
 createDriver(Board, {
     pattern: 'Board',
     actions: {
-        addLane({ hooks }) {
-            console.log('add lane', hooks);
+        addLane({ hook }, title) {
+            hook(title || '');
         },
     },
     simplify: {
@@ -42,8 +43,12 @@ createDriver(Lane, {
         return info.fiber.stateNode.props.title;
     },
     actions: {
-        addCard({}, title, label, description) {
-            console.log('addCard', title, label, description);
+        addCard({ actions, hook }, title, label, description) {
+            const laneId = actions.getLaneId();
+            hook(laneId, { title: title || '', label: label || '', description: description || '' });
+        },
+        getLaneId({ fiber }) {
+            return fiber.stateNode.props.id;
         },
     },
     simplify: {
@@ -112,19 +117,44 @@ createDriver(InlineInputController, {
         },
     },
 });
-createDriver('button', {
+createDriver(AddLaneLink, {
+    pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
+});
+createDriver(AddButton, {
+    pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
+});
+createDriver(CancelButton, {
     pattern: 'Button',
     getName: ({ $el }) => $el.text().trim(),
 });
 
 const Home = () => {
-    // TODO useAction should be usable outside of their component 
-    useAction('addLane', (...args) => {
-        console.log('addLane', ...args);
+    const [eventBus, setEventBus] = useState(null);
+
+    useAction({ pattern: 'Board', action: 'addLane' }, title => {
+        eventBus.publish({
+            type: 'UPDATE_LANES',
+            lanes: [
+                ...data.lanes,
+                {
+                    id: String(Date.now()),
+                    title,
+                    cards: [],
+                },
+            ],
+        });
     });
-    useAction('addCard', (...args) => {
-        console.log('addCard', ...args);
+
+    useAction({ pattern: 'Lane', action: 'addCard' }, (laneId, { title, label, description }) => {
+        eventBus.publish({
+            type: 'ADD_CARD',
+            laneId,
+            card: { id: String(Date.now()), title, label, description },
+        });
     });
+
     return (
         <main>
             <Board
@@ -133,6 +163,7 @@ const Home = () => {
                 canAddLanes
                 editable
                 data={data}
+                eventBusHandle={setEventBus}
                 onCardAdd={(card, laneId) => {
                     annotate(
                         { type: 'click' },
@@ -149,5 +180,3 @@ const Home = () => {
 };
 
 export default Home;
-
-setReactInstance(React);

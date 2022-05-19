@@ -23,14 +23,11 @@ ${mainContext}('${fileName}', () => {
     ${flow.steps
         .map((step, index) => {
             const subjectVar = `subject${index + 1}`;
-
             const subject = new Chain(`const ${subjectVar} = cy`).addWith(step.with);
 
             const interaction = subject.fork(subjectVar).addDo(step.do);
-            // const asserts = new Chain(subjectVar, subject).addAssert(step.assert);
 
             return `${subject}\n${interaction}\n`;
-            // return `${subject}\n${interaction}\n${asserts}\n`;
         })
         .join('\n')}
   });
@@ -118,26 +115,16 @@ class Chain {
 
             const [[action, args]] = Object.entries(actions);
 
-            const lastPattern = this.getLastPatternFromWith();
-
-            // TODO handle shorthands without hardcoding
-            if (action === 'exists') {
-                this._nodes.push({
-                    command: 'should',
-                    args: ['exist'],
-                });
+            if (doValue.hasOwnProperty('assert')) {
+                this._nodes.push(...this.createAssert(action, args, assert));
             } else {
-                this._nodes.push(
-                    {
-                        command: 'do',
-                        args: [lastPattern, action, args],
-                        needsOriginalSubject: true,
-                    },
-                    {
-                        command: 'should',
-                        args: ['toBe', assert],
-                    },
-                );
+                const lastPattern = this.getLastPatternFromWith();
+
+                this._nodes.push({
+                    command: 'do',
+                    args: [lastPattern, action, args],
+                    needsOriginalSubject: true,
+                });
             }
 
             return this;
@@ -146,23 +133,20 @@ class Chain {
         throw new Error('Invalid `do` type');
     };
 
-    createAssertChain = (action, _args = []) => {
-        // TODO handle multiple asserts
-        return this.createAssert(action, _args);
-    };
-
-    createAssert = (action, _args = []) => {
-        const [test, value] = Array.isArray(_args) ? _args : [null, _args];
-
-        if (!test) {
+    createAssert = (action, args = [], value) => {
+        // TODO hack for now
+        if (action === 'exists') {
             return [
                 {
                     command: 'should',
-                    args: [value],
+                    args: ['exist'],
                     needsOriginalSubject: true,
                 },
             ];
         }
+
+        // TODO get the test fn based on the driver
+        const test = '==='
 
         const tester = builtInTesters[test];
 
@@ -176,7 +160,7 @@ class Chain {
             {
                 command: 'do',
                 // TODO add a feature to set assert action args
-                args: [lastPattern, action, []],
+                args: [lastPattern, action, args],
                 needsOriginalSubject: true,
             },
             {
@@ -187,13 +171,9 @@ class Chain {
     };
 
     renderNode = (node, index, array) => {
-        try {
-            const last = !array[index + 1] || array[index + 1].needsOriginalSubject;
-            const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
-            return last ? `${command};` : command;
-        } catch (e) {
-            debugger;
-        }
+        const last = !array[index + 1] || array[index + 1].needsOriginalSubject;
+        const command = `  .${node.command}(${node.args.map(Identifier).join(', ')})`;
+        return last ? `${command};` : command;
     };
 
     toString = () => {
@@ -210,7 +190,9 @@ class Chain {
 }
 
 function Identifier(value) {
-    if (typeof value === 'string') {
+    if (typeof value === 'undefined') {
+        return 'undefined';
+    } else if (typeof value === 'string') {
         return `'${value}'`;
     } else if (typeof value === 'number') {
         return value;

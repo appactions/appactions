@@ -1,6 +1,6 @@
 import { isJquery, AppActionsError, formatArguments } from './cypress-utils';
 import { refresh } from './refresh-subject';
-import { listFiberForInteraction, getDisplayName, getFiberInfo } from '../api';
+import { listFiberForInteraction, getDisplayName, findActionHook, getFiberInfo } from '../api';
 
 const getElements = $el => {
     const $arr = Array.from($el);
@@ -173,6 +173,8 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                 throw new Error(`Multiple fibers found for interaction with pattern: ${pattern}`);
             }
 
+            const hookCallback = findActionHook(pattern, action, matches[0].fiber);
+
             const match = {
                 ...matches[0],
                 actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
@@ -181,6 +183,11 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                     };
                     return result;
                 }, {}),
+                hook: hookCallback
+                    ? hookCallback
+                    : () => {
+                          throw new Error(`Could not find hook for ${pattern}.${action}`);
+                      },
                 retryable: retryContext.retryable,
                 nonRetryable: retryContext.nonRetryable,
             };

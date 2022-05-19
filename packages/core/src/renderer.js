@@ -127,19 +127,27 @@ export function attach(hook, rendererID, renderer, global) {
 
     const listActionHooksOfFiber = fiber => {
         if (!isUsingHooks(fiber)) {
-            return [];
+            return null;
         }
 
         const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
-        const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.actionHook);
+        const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.useAction);
 
-        return actionHooks.reduce((acc, hook) => {
-            const { name, callback } = hook.value;
+        return actionHooks.map(hook => hook.value);
+    };
 
-            acc[name] = callback;
+    const useAction = (config, callback) => {
+        const dispatcher = Cypress.AppActions.hook.renderers.get(1).currentDispatcherRef;
 
-            return acc;
-        }, {});
+        const data = {
+            pattern: config.pattern,
+            action: config.action,
+            callback,
+            useAction: true,
+        };
+
+        const [ref] = dispatcher.current.useState(() => data);
+        ref.callback = callback;
     };
 
     return {
@@ -162,7 +170,9 @@ export function attach(hook, rendererID, renderer, global) {
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
 
+        // hooks stuff
         listActionHooksOfFiber,
+        useAction,
 
         // for debug only
         devtoolsInterface,
