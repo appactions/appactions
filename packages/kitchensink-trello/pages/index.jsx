@@ -8,7 +8,7 @@ import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
-import { AddLaneLink } from 'react-trello/dist/styles/Elements';
+import { AddLaneLink, AddButton, CancelButton } from 'react-trello/dist/styles/Elements';
 import { createDriver, annotate, useAction } from '@appactions/driver';
 import data from './data.json';
 
@@ -118,6 +118,14 @@ createDriver(InlineInputController, {
     },
 });
 createDriver(AddLaneLink, {
+    pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
+});
+createDriver(AddButton, {
+    pattern: 'Button',
+    getName: ({ $el }) => $el.text().trim(),
+});
+createDriver(CancelButton, {
     pattern: 'Button',
     getName: ({ $el }) => $el.text().trim(),
 });
