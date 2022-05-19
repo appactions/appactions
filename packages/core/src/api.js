@@ -1,4 +1,4 @@
-import { builtInActions } from './built-in-actions';
+import { builtInActions, builtInAsserts } from './built-in-actions';
 
 if (!Cypress.AppActions) {
     Cypress.AppActions = {
@@ -25,21 +25,32 @@ export function getRawDriver(fiber) {
     return fiber.type.__REACT_APP_ACTIONS__;
 }
 
-export function getDriver(fiber) {
-    const driver = getRawDriver(fiber);
+const defaultGetName = () => null;
 
-    if (!driver) {
+export function getDriver(fiber) {
+    const rawDriver = getRawDriver(fiber);
+
+    if (!rawDriver) {
         return null;
     }
 
-    const result = Object.create(driver);
-    result.actions = Object.assign(Object.create(builtInActions), driver.actions);
+    const result = Object.create(rawDriver);
+    result.actions = {
+        ...builtInActions,
+        ...rawDriver.actions,
+    };
+    result.asserts = {
+        ...builtInAsserts,
+        ...rawDriver.asserts,
+    };
+    result.simplify = rawDriver.simplify || {};
+    result.getName = result.getName || defaultGetName;
+    result.rawDriver = rawDriver;
     return result;
 }
 
 export function getFiberInfo(fiber) {
     const nodes = Cypress.AppActions.reactApi.findNativeNodes(fiber);
-    const hooks = Cypress.AppActions.reactApi.listActionHooksOfFiber(fiber);
     const driver = getDriver(fiber);
     return {
         nodes,
@@ -47,7 +58,6 @@ export function getFiberInfo(fiber) {
         fiber,
         instance: fiber.stateNode || null,
         driver,
-        hooks,
     };
 }
 
@@ -140,4 +150,56 @@ export function findAncestorElementByReactComponentName(fiber, componentName) {
 
 export function findOverride($root, pattern) {
     throw new Error('Override API is not supported anymore');
+}
+
+export function getOwnerPatterns(fiber) {
+    const result = [];
+
+    do {
+        const driver = getDriver(fiber);
+        if (driver) {
+            const fiberInfo = getFiberInfo(fiber);
+            const name = driver.getName(fiberInfo);
+            const pattern = driver.pattern;
+            const simplify = Object.entries(driver.simplify).map(([action, { start, end }]) => ({
+                pattern,
+                action,
+                start,
+                end,
+            }));
+            result.unshift({
+                pattern,
+                name,
+                simplify,
+            });
+        }
+    } while ((fiber = fiber.return));
+
+    return result;
+}
+
+export function isFiberMounted(fiber) {
+    return Cypress.AppActions.reactApi.isFiberMounted(fiber);
+}
+
+export function findFiberByOwners(owners) {
+    throw new Error('Unimplemented');
+}
+
+export function findActionHook(pattern, action, fiber) {
+    let result = null;
+
+    Cypress.AppActions.reactApi.findAncestorElementByPredicate(fiber, fiber => {
+        const hooks = Cypress.AppActions.reactApi.listActionHooksOfFiber(fiber);
+        const hook = hooks && hooks.find(hook => hook.pattern === pattern && hook.action === action);
+
+        if (!hook) {
+            return false;
+        }
+
+        result = hook.callback;
+        return true;
+    });
+
+    return result;
 }

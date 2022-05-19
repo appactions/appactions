@@ -12449,6 +12449,10 @@ function attach(hook, rendererID, renderer, global) {
     traceUpdatesEnabled = isEnabled;
   }
 
+  function isFiberHostComponent(fiber) {
+    return fiber.tag === HostComponent || fiber.tag === HostText;
+  }
+
   return {
     cleanup,
     clearErrorsAndWarnings,
@@ -12490,7 +12494,10 @@ function attach(hook, rendererID, renderer, global) {
     getOrGenerateFiberID,
     getDisplayNameForFiber,
     inspectHooksOfFiber,
-    isUsingHooks
+    isUsingHooks,
+    // TODO add this to the patch
+    assertIsMounted,
+    isFiberHostComponent
   };
 }
 

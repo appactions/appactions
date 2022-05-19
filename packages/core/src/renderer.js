@@ -15,7 +15,18 @@ export function attach(hook, rendererID, renderer, global) {
         inspectElement,
         inspectHooksOfFiber,
         isUsingHooks,
+        assertIsMounted,
+        isFiberHostComponent,
     } = devtoolsInterface;
+
+    const isFiberMounted = fiber => {
+        try {
+            assertIsMounted(fiber);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    };
 
     const findFiber = subject => {
         let id;
@@ -71,7 +82,15 @@ export function attach(hook, rendererID, renderer, global) {
 
         return fiber;
     };
-    const findNativeNodes = fiber => findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
+    const findNativeNodes = fiber => {
+        if (isFiberMounted(fiber)) {
+            return findNativeNodesForFiberID(getOrGenerateFiberID(fiber));
+        }
+        if (isFiberHostComponent(fiber)) {
+            return [fiber.stateNode];
+        }
+        return null;
+    };
     const getOwner = fiber => {
         if (fiber._debugOwner) {
             return fiber._debugOwner;
@@ -97,30 +116,38 @@ export function attach(hook, rendererID, renderer, global) {
     };
 
     const findAncestorElementByPredicate = (fiber, predicate) => {
-        while ((fiber = fiber.return)) {
+        do {
             if (predicate(fiber)) {
                 return fiber;
             }
-        }
+        } while ((fiber = fiber.return));
 
         return null;
     };
 
     const listActionHooksOfFiber = fiber => {
         if (!isUsingHooks(fiber)) {
-            return [];
+            return null;
         }
 
         const reactHooks = inspectHooksOfFiber(fiber, renderer.currentDispatcherRef);
-        const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.actionHook);
+        const actionHooks = reactHooks.filter(hook => hook.name === 'State' && hook.value && hook.value.useAction);
 
-        return actionHooks.reduce((acc, hook) => {
-            const { name, callback } = hook.value;
+        return actionHooks.map(hook => hook.value);
+    };
 
-            acc[name] = callback;
+    const useAction = (config, callback) => {
+        const dispatcher = Cypress.AppActions.hook.renderers.get(1).currentDispatcherRef;
 
-            return acc;
-        }, {});
+        const data = {
+            pattern: config.pattern,
+            action: config.action,
+            callback,
+            useAction: true,
+        };
+
+        const [ref] = dispatcher.current.useState(() => data);
+        ref.callback = callback;
     };
 
     return {
@@ -137,12 +164,15 @@ export function attach(hook, rendererID, renderer, global) {
         findCurrentFiberUsingSlowPathById,
         getOrGenerateFiberID,
         findNativeNodesForFiberID,
+        isFiberMounted,
 
         // react calls these to communicate the component tree
         handleCommitFiberUnmount,
         handleCommitFiberRoot,
 
+        // hooks stuff
         listActionHooksOfFiber,
+        useAction,
 
         // for debug only
         devtoolsInterface,

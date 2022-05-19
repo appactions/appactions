@@ -3,7 +3,7 @@ export const isJquery = obj => {
 };
 
 const formatArgument = arg => {
-    if (arg === 'null') return 'null';
+    if (arg === null) return 'null';
     if (typeof arg === 'string') return `"${arg}"`;
     if (arg instanceof RegExp) return String(arg);
     if (typeof arg === 'function') return '[function]';

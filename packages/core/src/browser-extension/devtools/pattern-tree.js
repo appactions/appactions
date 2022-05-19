@@ -12,7 +12,7 @@ export default function PatternTree() {
 
     const isBackendReady = useStore('backend-ready', store => store.isBackendReady);
 
-    const numElements = useStore('mutated', store => {
+    const { numElements } = useStore('mutated', store => {
         let numElements = 0;
 
         store.roots.forEach(rootID => {
@@ -20,24 +20,24 @@ export default function PatternTree() {
             numElements += weight;
         });
 
-        return numElements;
+        return { numElements };
     });
 
     if (!isBackendReady) {
-        return <h4>Waiting to detect React.</h4>;
+        return <h4 className="m-2">Waiting to detect React.</h4>;
     }
 
     if (numElements === 0) {
         // TODO show link to docs
         return (
             <Delay key="no-elements">
-                <h4>Could not find any patterns. Annotate your components with drivers.</h4>
+                <h4 className="m-2">Could not find any patterns. Annotate your components with drivers.</h4>
             </Delay>
         );
     }
 
     return (
-        <div onPointerLeave={onLeave}>
+        <div className="my-2" onPointerLeave={onLeave}>
             {Array(numElements)
                 .fill(0)
                 .map((_, index) => {
@@ -49,7 +49,7 @@ export default function PatternTree() {
 }
 
 function Element({ element }) {
-    const { id, depth, displayName, hocDisplayNames, key, type } = element;
+    const { id, depth } = element;
     const { bridge, store } = useDevtoolsContext();
 
     const patternElement = useStore('newElementAdded', store => {
@@ -58,15 +58,8 @@ function Element({ element }) {
     const selectedElementID = useStore('selectionChange', store => store.selectedElementID);
 
     const onHover = useCallback(() => {
-        const rendererID = store.getRendererIDForElement(id);
-
         bridge.send('highlightNativeElement', {
-            displayName,
-            hideAfterTimeout: false,
             id,
-            openNativeElementsPanel: false,
-            rendererID,
-            scrollIntoView: false,
         });
     }, [bridge, id]);
 
@@ -82,12 +75,13 @@ function Element({ element }) {
 
     return (
         <div
-            className={`cursor-pointer ${isSelected ? 'bg-blue-300' : 'hover:bg-blue-100'}`}
-            style={{ paddingLeft: depth * 12 + 2 }}
+            className={`cursor-pointer ${isSelected ? 'bg-[#d4e7fa]' : 'hover:bg-[#e7f1fa]'}`}
+            style={{ paddingLeft: (depth + 1) * 12 }}
             onPointerEnter={onHover}
             onPointerDown={onClick}
         >
-            {patternElement.pattern}
+            <span className="mr-2">{patternElement.pattern}</span>
+            {patternElement.name ? <span className="text-gray-500">{patternElement.name}</span> : null}
         </div>
     );
 }

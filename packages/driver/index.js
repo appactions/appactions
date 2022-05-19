@@ -1,3 +1,12 @@
+function init() {
+    return {
+        drivers: {},
+        patterns: new Set(),
+        simplify: new Map(),
+        annotations: [],
+    };
+}
+
 export const createDriver = (Component, config) => {
     // Do no run in a server side env
     if (typeof window === 'undefined') {
@@ -9,17 +18,21 @@ export const createDriver = (Component, config) => {
     }
 
     if (!window.__REACT_APP_ACTIONS__) {
-        window.__REACT_APP_ACTIONS__ = { drivers: {}, patterns: new Set() };
+        window.__REACT_APP_ACTIONS__ = init();
     }
 
     if (config.pattern) {
         window.__REACT_APP_ACTIONS__.patterns.add(config.pattern);
     }
 
+    if (config.simplify) {
+        window.__REACT_APP_ACTIONS__.simplify.set(config.pattern, config.simplify);
+    }
+
     if (typeof Component === 'string') {
         // this is a hack for now, because defineProperty does not work on strings
         window.__REACT_APP_ACTIONS__.drivers[Component] = config;
-    } else {
+    } else if (!Component.__REACT_APP_ACTIONS__) {
         Object.defineProperty(Component, '__REACT_APP_ACTIONS__', {
             enumerable: false,
             get() {
@@ -27,45 +40,35 @@ export const createDriver = (Component, config) => {
             },
         });
     }
-
-    return {
-        Component,
-        config,
-    };
 };
 
-export const tunnel = event => {
-    return {
-        action: (patternName, actionName, ...args) => {
-            if (!Cypress.AppActions.hook) {
-                console.error('Cypress.AppActions.hook is not defined');
-                return;
-            }
-            if (!event) {
-                console.warn('Cannot tunnel event, because event is not passed');
-                return;
-            }
-
-            const target = event.nativeEvent?.target || event.target;
-            if (!target) {
-                console.warn('Cannot tunnel event, because target is not present in event object');
-                return;
-            }
-
-            Cypress.AppActions.hook.emit('session-recording-event', { args, patternName, actionName, event });
-        },
-    };
-};
-
-let reactInstance = null;
-
-export function setReactInstance(instance) {
-    reactInstance = instance;
-}
-
-export function useAction(name, callback) {
-    if (!reactInstance) {
-        throw new Error('React instance is not defined. ');
+export const annotate = (eventOrMatcher, payload) => {
+    if (!payload) {
+        throw new Error('Payload must be specified');
     }
-    reactInstance.useState(() => ({ name, callback, actionHook: true }));
+
+    // TODO use postMessage instead of window.__REACT_APP_ACTIONS__?
+    // eg. Cypress.AppActions.hook.emit('session-recording-event-annotation', {
+    //     matcher: eventOrMatcher,
+    //     payload,
+    //     timestamp: Date.now(),
+    // });
+
+    if (!window.__REACT_APP_ACTIONS__) {
+        window.__REACT_APP_ACTIONS__ = init();
+    }
+
+    window.__REACT_APP_ACTIONS__.annotations.push({
+        matcher: eventOrMatcher,
+        payload,
+        timestamp: Date.now(),
+    });
+};
+
+export function useAction(config, callback) {
+    if (typeof Cypress === 'undefined') {
+        return;
+    }
+
+    Cypress.AppActions.reactApi.useAction(config, callback);
 }

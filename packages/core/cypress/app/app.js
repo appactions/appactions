@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import { createDriver, tunnel } from '@appactions/driver';
+import { createDriver, annotate } from '@appactions/driver';
 import './style.css';
 
 class PageIndex extends Component {
@@ -199,7 +199,11 @@ class Table extends Component {
             direction,
         });
         
-        tunnel(event).action('Table', 'sort', label, direction);
+        annotate(event, {
+            pattern: 'Table',
+            action: 'sort',
+            args: [label, direction],
+        });
     };
     render() {
         const { header, data: rawData, className } = this.props;

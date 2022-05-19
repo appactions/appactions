@@ -1,17 +1,9 @@
 import EventEmitter from './shared/event-emitter';
 import { setupHighlighter } from './highlighter';
-import { setupAssertMenu } from './assert-menu'
-import { getDriver, getFiberInfo } from './api';
-
-function getMockedSessionRecordEvent() {
-    return {
-        args: [],
-        patternName: null,
-        actionName: null,
-        id: null,
-        __MOCKED__: true,
-    };
-}
+import { setupAssertMenu } from './assert-menu';
+import { setupRecorder, makeAssertionEvent } from './recorder';
+import { getFiberInfo, getOwnerPatterns, isFiberMounted } from './api';
+import renderYAML from './recordings-to-yaml';
 
 export default class Agent extends EventEmitter {
     constructor(bridge) {
@@ -20,17 +12,32 @@ export default class Agent extends EventEmitter {
         this._bridge = bridge;
         this._rendererInterfaces = {};
         this._sessionRecordingEvents = [];
+        this._previousRecordEvent = null;
+        this.window = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
+
         this._isRecording = false;
+        this._sessionRecordingDb = [];
+        this._sessionRecordingNestingDepth = 0;
+        this._sessionRecordingMeta = {
+            description: undefined,
+            start: {
+                route: '/',
+                auth: false,
+            },
+        };
 
         bridge.addListener('inspectElement', this.inspectElement);
         bridge.addListener('shutdown', this.shutdown);
-        bridge.addListener('session-recording-toggle', this.toggleSessionRecording);
-        bridge.addListener('session-recording-replay', this.replaySessionRecording);
-        bridge.addListener('session-recording-clear', this.clearSessionRecording);
-        bridge.addListener('session-recording-save', this.saveSessionRecording);
+
+        bridge.addListener('session-recording-toggle', this.onToggleSessionRecording);
+        bridge.addListener('session-recording-clear', this.onSessionRecordingClear);
+        bridge.addListener('session-recording-replay', this.onReplaySessionRecording);
+        bridge.addListener('session-recording-save', this.onSaveSessionRecording);
+        bridge.addListener('session-recording-assert', this.onSessionRecordingAssert);
 
         setupHighlighter(bridge, this);
         setupAssertMenu(bridge, this);
+        setupRecorder(bridge, this);
     }
 
     inspectElement = ({ id, path, rendererID, requestID }) => {
@@ -58,7 +65,19 @@ export default class Agent extends EventEmitter {
                 const fiberInfo = getFiberInfo(fiber);
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;
-                    result.actions = Object.keys(fiberInfo.driver.actions || {});
+                    result.actions = Object.keys(fiberInfo.driver.actions);
+                    result.key = fiber.key;
+                    result.asserts = Object.entries(fiberInfo.driver.asserts).map(([name, { test, input }]) => ({
+                        name,
+                        test,
+                        input,
+                    }));
+                    result.simplify = Object.entries(fiberInfo.driver.simplify).map(([name, { start, end }]) => ({
+                        name,
+                        start,
+                        end,
+                    }));
+                    result.owners = getOwnerPatterns(fiber);
 
                     if (fiberInfo.driver.getName) {
                         result.name = fiberInfo.driver.getName(fiberInfo);
@@ -70,6 +89,7 @@ export default class Agent extends EventEmitter {
                     value: result,
                 });
             } catch (error) {
+                console.error(error);
                 this._bridge.send('inspectedElement', {
                     type: 'error',
                     id,
@@ -113,91 +133,79 @@ export default class Agent extends EventEmitter {
     onBackendReady = () => {
         this._isRecording = true;
         this._bridge.send('backend-ready');
+        this.sendYAML();
     };
 
-    toggleSessionRecording = () => {
+    onToggleSessionRecording = () => {
         this._isRecording = !this._isRecording;
         this._bridge.send('session-recording-toggle', this._isRecording);
     };
 
-    clearSessionRecording = () => {
-        this._sessionRecordingEvents = [];
-
-        this._bridge.send('session-recording-clear');
+    onReplaySessionRecording = () => {
+        throw new Error('Not implemented');
     };
 
-    replaySessionRecording = () => {
-        this._isRecording = false;
-        this._bridge.send('session-recording-toggle', this._isRecording);
+    onSaveSessionRecording = () => {
+        const content = this.generateYAML();
+        const fileName = `recorded_${new Date().toISOString().replace('T', '_').substring(0, 19)}.yml`;
+        Cypress.backend('task', {
+            task: 'saveSessionRecording',
+            arg: { content, fileName },
+            timeout: 4000,
+        });
     };
 
-    onSessionRecordingEvent = payload => {
+    onSessionRecordingClear = () => {
+        this._sessionRecordingDb = [];
+        this.sendYAML();
+    };
+
+    getOwners = fiber => {
+        if (isFiberMounted(fiber)) {
+            return getOwnerPatterns(fiber);
+        }
+
+        return Cypress.AppActions.hook.getUnmountedOwners(fiber);
+    };
+
+    generateYAML = () => {
+        try {
+            return renderYAML({ agent: this, meta: this._sessionRecordingMeta, recordings: this._sessionRecordingDb });
+        } catch (error) {
+            console.error(error);
+            return `# Error: ${error.message}`;
+        }
+    };
+
+    sendYAML = () => {
+        this._bridge.send('session-recording-yaml-change', this.generateYAML());
+    };
+
+    sendRecordingEvent = recording => {
         if (!this._isRecording) {
             return;
         }
 
-        const { args, patternName, actionName, event } = payload;
-        const target = event.nativeEvent?.target || event.target;
+        this._sessionRecordingDb = [...this._sessionRecordingDb, recording];
 
-        const fiber = getFiberOfTarget(target, patternName, actionName);
-        const fiberInfo = getFiberInfo(fiber);
-        const id = Cypress.AppActions.reactApi.getOrGenerateFiberID(fiber);
+        // console.log('recordings', this._sessionRecordingDb);
 
-        const currentEvent = { args, patternName, actionName, id };
-
-        const [head, ...tail] = this._sessionRecordingEvents;
-
-        let result = [head, currentEvent];
-
-        if (fiberInfo.driver?.tunnel?.[actionName]) {
-            // let's transform the last two events
-            result = fiberInfo.driver?.tunnel?.[actionName](
-                // when an event is null, we pass in a mocked object instead
-                ...result.map(event => (event ? event : getMockedSessionRecordEvent())),
-            );
-
-            if (!result || !Array.isArray(result) || result.length !== 2) {
-                throw new Error(`Tunnel function must return an array of two elements (${patternName}.${actionName})`);
-            }
+        if (!this._sessionRecordingMeta.description) {
+            this._sessionRecordingMeta.description = `Test recorded at ${new Date().toLocaleString()}`;
         }
 
-        // reverting the mocked object back to null
-        result = result.map(event => (event && event.__MOCKED__ ? null : event));
-
-        const [prev, current] = result;
-
-        if (!prev && !current) {
-            this._sessionRecordingEvents = tail;
-        } else if (!prev) {
-            this._sessionRecordingEvents = [current, ...tail];
-        } else if (!current) {
-            this._sessionRecordingEvents = [prev, ...tail];
-        } else {
-            this._sessionRecordingEvents = [current, prev, ...tail];
-        }
-
-        this._bridge.send('session-recording-event', [prev, current]);
+        this.sendYAML();
     };
 
-    saveSessionRecording = payload => {
-        Cypress.backend('task', {
-            task: 'saveSessionRecording',
-            arg: payload,
-            timeout: 4000,
-        });
-    };
-}
+    onSessionRecordingAssert = ({ id, action, args, value }) => {
+        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+        const owners = this.getOwners(fiber);
+        const assert = makeAssertionEvent({ action, args, value, owners });
 
-function getFiberOfTarget(target, patternName, actionName) {
-    let targetFiber;
-    try {
-        targetFiber = Cypress.AppActions.reactApi.findFiber(target);
-    } catch (error) {
-        throw new Error(`Cannot find fiber for event target`);
-    }
-    const hasDriverWeNeed = fiber => {
-        const driver = getDriver(fiber);
-        return driver && driver.pattern === patternName && driver.actions?.[actionName];
+        this.sendRecordingEvent(assert);
     };
-    return Cypress.AppActions.reactApi.findAncestorElementByPredicate(targetFiber, hasDriverWeNeed);
+
+    getSimplifyForPattern = pattern => {
+        return this.window.__REACT_APP_ACTIONS__.simplify.get(pattern);
+    };
 }

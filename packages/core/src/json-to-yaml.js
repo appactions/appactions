@@ -2,7 +2,7 @@ var spacing = '  ';
 
 function getType(obj) {
     var type = typeof obj;
-    if (obj instanceof Array) {
+    if (Array.isArray(obj)) {
         return 'array';
     } else if (type == 'string') {
         return 'string';
@@ -22,10 +22,19 @@ function convert(obj, ret) {
 
     switch (type) {
         case 'array':
-            convertArray(obj, ret);
+            if (isPrimitiveArray(obj)) {
+                ret.push(`[${obj.map(v => v === null ? 'null' : v).join(', ')}]`);
+            } else {
+                convertArray(obj, ret);
+            }
             break;
         case 'hash':
-            convertHash(obj, ret);
+            if (isPrimitiveObject(obj)) {
+                const entries = Object.entries(obj);
+                ret.push(`{ ${entries[0][0]}: ${entries[0][1]} }`);
+            } else {
+                convertHash(obj, ret);
+            }
             break;
         case 'string':
             convertString(obj, ret);
@@ -56,6 +65,21 @@ function isPrimitive(obj) {
     }
 }
 
+function isPrimitiveArray(obj) {
+    if (getType(obj) !== 'array') {
+        return false;
+    }
+    return obj.every(isPrimitive);
+}
+
+function isPrimitiveObject(obj) {
+    if (getType(obj) !== 'hash') {
+        return false;
+    }
+    const entries = Object.entries(obj);
+    return entries.length === 1 && isPrimitive(entries[0][0]) && isPrimitive(entries[0][1]);
+}
+
 function convertArray(obj, ret) {
     if (obj.length === 0) {
         ret.push('[]');
@@ -77,16 +101,17 @@ function convertHash(obj, ret) {
         if (obj.hasOwnProperty(k)) {
             var ele = obj[k];
 
-            // CUSTOM
-            const couldInline = getType(ele) === 'array' && ele.every(isPrimitive);
-            if (couldInline) {
-                recurse.push('[' + ele.join(', ') + ']');
-            } else {
-                convert(ele, recurse, k);
-            }
+            convert(ele, recurse, k);
 
             var type = getType(ele);
-            if (type == 'string' || type == 'null' || type == 'number' || type == 'boolean' || couldInline) {
+            if (
+                type == 'string' ||
+                type == 'null' ||
+                type == 'number' ||
+                type == 'boolean' ||
+                isPrimitiveArray(ele) ||
+                isPrimitiveObject(ele)
+            ) {
                 ret.push(normalizeString(k) + ': ' + recurse[0]);
             } else {
                 ret.push(normalizeString(k) + ': ');

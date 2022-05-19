@@ -1,99 +1,87 @@
 import { preprocessFlows } from './flow';
 
-test('simple "do"', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
+test('convert flow to cypress', () => {
+    const flow = `
+description: "Test recorded at 5/1/2022, 6:35:47 PM"
 start:
-  route: '/'
+  route: /
   auth: false
 steps:
+  - with:
+      - Board
+      - { Lane: Planned Tasks }
+    do:
+      - exists: []
+        assert: null
   - with: Board
-    do: click
+    do:
+      - addLane: [New lane]
+  - with:
+      - Board
+      - { Lane: New lane }
+    do:
+      - exists: []
+        assert: null
+      - text: []
+        assert: New lane
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Card: Dispose Garbage }
+      - Input
+    do: 
+      - exists: []
+        assert: null
+      - getValue: []
+        assert: Dispose Garbage
+  - with:
+      - Lane
+    do:
+      - addCard: [1, 2, 3]
 `;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Board')
-        	.do('Board', 'click');
-        
-    });
-});"
-`);
-});
 
-test('"do" after chain', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: Board
-  - with: { Lane: Planned Tasks, Button: /^Click to add card$/ }
-    do: click
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
+    expect(preprocessFlows(flow, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
 "describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Board');
-        
-        cy
-        	.with('Lane', 'Planned Tasks')
-        	.with('Button', /^Click to add card$/)
-        	.do('Button', 'click');
-        
-    });
-});"
-`);
-});
+  it('Test recorded at 5/1/2022, 6:35:47 PM', () => {
+    cy.visit('/');
 
-test('"do" with arguments', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: Input
-    do: { type: $data.user.email }
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('Input')
-        	.do('Input', 'type', ['$data.user.email']);
-        
-    });
-});"
-`);
-});
-
-test('"with" should correctly work when no name specified', () => {
-    const content = `
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
-  auth: false
-steps:
-  - with: { NewCardForm, EditableLabel }
-    do: { type: 'foobarbaz' }
-`;
-    expect(preprocessFlows(content, { fileName: 'main.yml' })).toMatchInlineSnapshot(`
-"describe('main.yml', () => {
-    it('Test recorded at 1/7/2022, 7:35:19 PM', () => {
-        cy.visit('/');
-        cy
-        	.with('NewCardForm')
-        	.with('EditableLabel')
-        	.do('EditableLabel', 'type', ['foobarbaz']);
-        
-    });
+    const subject1 = cy
+      .with('Board')
+      .with('Lane', 'Planned Tasks');
+    subject1
+      .should('exist');
+    
+    const subject2 = cy
+      .with('Board');
+    subject2
+      .do('Board', 'addLane', ['New lane']);
+    
+    const subject3 = cy
+      .with('Board')
+      .with('Lane', 'New lane');
+    subject3
+      .should('exist');
+    subject3
+      .do('Lane', 'text', [])
+      .should('toBe', 'New lane');
+    
+    const subject4 = cy
+      .with('Board')
+      .with('Lane', 'Planned Tasks')
+      .with('Card', 'Dispose Garbage')
+      .with('Input');
+    subject4
+      .should('exist');
+    subject4
+      .do('Input', 'getValue', [])
+      .should('toBe', 'Dispose Garbage');
+    
+    const subject5 = cy
+      .with('Lane');
+    subject5
+      .do('Lane', 'addCard', [1, 2, 3]);
+    
+  });
 });"
 `);
 });

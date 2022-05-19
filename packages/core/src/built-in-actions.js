@@ -1,30 +1,7 @@
 import { getCypressElementCoordinates } from './coord-utils';
-import { keyCodeDefinitions } from './keyboard-definitions';
-
-function getKeyDefinition(key) {
-    const keyDefinition = keyCodeDefinitions[key];
-
-    if (!keyDefinition) {
-        throw new Error(`Unsupported key '${key}'.`);
-    }
-
-    const keyCode = keyDefinition.keyCode ?? 0;
-    return {
-        keyCode,
-        key: keyDefinition?.key ?? '',
-        text: keyDefinition.key.length === 1 ? keyDefinition.key : undefined,
-        code: keyDefinition.code ?? '',
-        location: keyDefinition.location ?? 0,
-        windowsVirtualKeyCode: keyCode,
-    };
-}
-
-const keyToModifierBitMap = {
-    Alt: 1,
-    Control: 2,
-    Meta: 4,
-    Shift: 8,
-};
+import { keyCodeDefinitions, keyToModifierBitMap, getKeyDefinition } from './keyboard-definitions';
+import isMatch from 'lodash.ismatch';
+import isEqual from 'lodash.isequal';
 
 export const builtInActions = {
     async click({ $el }) {
@@ -147,4 +124,39 @@ export const builtInActions = {
     mouseUp({ $el }) {
         throw new Error('Not implemented');
     },
+    goto() {
+        throw new Error('Not implemented');
+    },
+
+    // for assertions
+    exists() {
+        throw new Error('Not implemented');
+    },
+    text() {
+        throw new Error('Not implemented');
+    },
+};
+
+export const builtInAsserts = {
+    exists: {
+        test: null,
+        input: null,
+    },
+    text: {
+        test: '===',
+        input: 'text',
+    },
+};
+
+export const builtInTesters = {
+    '===': 'toBe',
+    equal: 'toEqual',
+    // '===': (actual, expected) => actual === expected,
+    // '!==': (actual, expected) => actual !== expected,
+    // '_.isEqual': (actual, expected) => isEqual(actual, expected),
+    // '_.isMatch': (actual, expected) => isMatch(actual, expected),
+    // 'String .includes': (actual, expected) => actual.includes(expected),
+    // 'String .startsWith': (actual, expected) => actual.startsWith(expected),
+    // 'String .endsWith': (actual, expected) => actual.endsWith(expected),
+    // 'String .match': (actual, expected) => actual.match(expected),
 };

@@ -1,6 +1,6 @@
 import { isJquery, AppActionsError, formatArguments } from './cypress-utils';
 import { refresh } from './refresh-subject';
-import { listFiberForInteraction, getDisplayName, getFiberInfo } from '../api';
+import { listFiberForInteraction, getDisplayName, findActionHook, getFiberInfo } from '../api';
 
 const getElements = $el => {
     const $arr = Array.from($el);
@@ -78,7 +78,7 @@ function createRetryContext() {
 }
 
 export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
-    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, actionName, args, picker) => {
+    Cypress.Commands.add(name, { prevSubject: true }, ($subject, pattern, action, args, picker) => {
         if (!isJquery($subject)) {
             throw new AppActionsError(`Subject passed to cy.${name} is not a jQuery selector`);
         }
@@ -97,7 +97,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
         const options = {
             log: true,
             _log: Cypress.log({
-                message: args.length ? `${pattern}.${actionName} ${formatArguments(args)}` : `${pattern}.${actionName}`,
+                message: args.length ? `${pattern}.${action} ${formatArguments(args)}` : `${pattern}.${action}`,
             }),
             error: null,
         };
@@ -105,7 +105,7 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
         const getConsolePropsWithoutResult = () => {
             const result = {
                 Command: name,
-                Call: `${pattern}.${actionName}`,
+                Call: `${pattern}.${action}`,
                 Arguments: args,
                 Subject: $subject,
                 Duration: performance.now() - now,
@@ -173,6 +173,8 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                 throw new Error(`Multiple fibers found for interaction with pattern: ${pattern}`);
             }
 
+            const hookCallback = findActionHook(pattern, action, matches[0].fiber);
+
             const match = {
                 ...matches[0],
                 actions: Object.entries(matches[0].driver.actions).reduce((result, [name, fn]) => {
@@ -181,11 +183,16 @@ export const register = (name = 'do', { returnValueIsSubject = true } = {}) => {
                     };
                     return result;
                 }, {}),
+                hook: hookCallback
+                    ? hookCallback
+                    : () => {
+                          throw new Error(`Could not find hook for ${pattern}.${action}`);
+                      },
                 retryable: retryContext.retryable,
                 nonRetryable: retryContext.nonRetryable,
             };
 
-            const fn = match.driver.actions[actionName];
+            const fn = match.driver.actions[action];
             const componentName = getDisplayName(match.fiber);
 
             let value = await fn(match, ...args);

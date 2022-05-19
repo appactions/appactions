@@ -1,9 +1,9 @@
 export function setupAssertMenu(bridge, agent) {
-    const contentWindow = window.__APP_ACTIONS_TARGET_WINDOW__ || window;
+    // const contentWindow = agent.window;
 
     // TODO this is unimplemented now
 
-    // contentWindow.document.addEventListener('contextmenu', event => {
+    // contentWindow.addEventListener('contextmenu', event => {
     //     event.preventDefault();
     // });
 }

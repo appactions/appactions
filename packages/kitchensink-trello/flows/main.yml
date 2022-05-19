@@ -1,16 +1,40 @@
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
-start:
-  route: '/'
+description: "Test recorded at 5/12/2022, 1:23:42 PM"
+start: 
+  route: "/"
   auth: false
-steps:
-  - with: Board
-  - with: { Lane: Planned Tasks, Button: /^Click to add card$/ }
-    do: click
-  - with: { NewCardForm, EditableLabel: title }
-    do: { type: 'foo' }
-  - with: { NewCardForm, EditableLabel: label }
-    do: { type: 'bar' }
-  - with: { NewCardForm, EditableLabel: description }
-    do: { type: 'baz' }
-  - with: { NewCardForm, Button: Add card }
-    do: click
+steps: 
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Button: Click to add card }
+    do: 
+      - click: []
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - Form
+      - { Input: title }
+    do: 
+      - type: [Foo]
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - Form
+      - { Input: description }
+    do: 
+      - click: []
+      - type: [Bar]
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - Form
+      - { Button: Add card }
+    do: 
+      - click: []
+  - with: 
+      - Board
+      - { Lane: Planned Tasks }
+      - { Card: Foo }
+    do: 
+      - exists: []
+        assert: null

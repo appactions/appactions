@@ -1,6 +1,8 @@
+import { getOwnerPatterns, getDriver } from './api';
+
 export function installHook(target) {
     if (target.hasOwnProperty('__REACT_DEVTOOLS_GLOBAL_HOOK__')) {
-        throw new Error("react-app-actions cannot install react devtools hook, because it's already installed");
+        throw new Error("App Actions cannot install react devtools hook, because it's already installed");
     }
 
     let uidCounter = 0;
@@ -61,9 +63,23 @@ export function installHook(target) {
         return roots[rendererID];
     }
 
+    const unmountedFiberOwners = new Map();
+
+    function getUnmountedOwners(fiber) {
+        if (!unmountedFiberOwners.has(fiber._debugID)) {
+            throw new Error('Fiber could not be looked up by _debugID');
+        }
+        return unmountedFiberOwners.get(fiber._debugID);
+    }
+
     function onCommitFiberUnmount(rendererID, fiber) {
         const rendererInterface = rendererInterfaces.get(rendererID);
         if (rendererInterface != null) {
+            const driver = getDriver(fiber);
+            if (driver) {
+                const owners = getOwnerPatterns(fiber);
+                unmountedFiberOwners.set(fiber._debugID, owners);
+            }
             rendererInterface.handleCommitFiberUnmount(fiber);
         }
     }
@@ -128,6 +144,7 @@ export function installHook(target) {
                 .flatMap(set => Array.from(set))
                 .map(rootNode => rootNode.current);
         },
+        getUnmountedOwners,
     };
 
     Object.defineProperty(target, '__REACT_DEVTOOLS_GLOBAL_HOOK__', {
