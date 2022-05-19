@@ -127,12 +127,15 @@ const Home = () => {
 
     useAction({ pattern: 'Board', action: 'addLane' }, title => {
         eventBus.publish({
-            type: 'ADD_LANE',
-            lane: {
-                id: String(Date.now()),
-                title,
-                cards: [],
-            },
+            type: 'UPDATE_LANES',
+            lanes: [
+                ...data.lanes,
+                {
+                    id: String(Date.now()),
+                    title,
+                    cards: [],
+                },
+            ],
         });
     });
 

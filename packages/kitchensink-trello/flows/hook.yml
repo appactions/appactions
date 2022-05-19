@@ -3,16 +3,16 @@ start:
   route: '/'
   auth: false
 steps:
-  # - with: Board
-  #   do:
-  #     - addLane: [Foo]
-  # - with:
-  #     - Board
-  #     - { Lane: Foo }
-  #   do:
-  #     - addCard: [Bar, null, Baz]
+  - with: Board
+    do:
+      - addLane: [Foo]
+  - with:
+      - Board
+      - { Lane: Foo }
+    do:
+      - addCard: [Bar, null, Baz]
   - with:
       - Board
       - { Lane: Planned Tasks }
     do:
-      - addCard: [Bar, null, Baz]
+      - addCard: [xxx, yyy, zzz]
