@@ -1,9 +1,18 @@
-description: 'Test recorded at 1/7/2022, 7:35:19 PM'
+description: 'Test recorded at 5/18/2022, 6:54:26 PM'
 start:
   route: '/'
   auth: false
 steps:
-  - with: Lane
+  # - with: Board
+  #   do:
+  #     - addLane: [Foo]
+  # - with:
+  #     - Board
+  #     - { Lane: Foo }
+  #   do:
+  #     - addCard: [Bar, null, Baz]
+  - with:
+      - Board
+      - { Lane: Planned Tasks }
     do:
-      - addCard: [1, 2, 3]
-  
+      - addCard: [Bar, null, Baz]
