@@ -1,6 +1,6 @@
 {
     "name": "@appactions/driver",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Driver annotation for App Actions",
     "main": "build/index.js",
     "author": "Miklos Megyes <hello@miklos.dev>",
