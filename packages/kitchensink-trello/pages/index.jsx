@@ -8,6 +8,7 @@ import EditableLabel from 'react-trello/dist/widgets/EditableLabel';
 import InlineInputController from 'react-trello/dist/widgets/InlineInput';
 import NewLaneTitleEditor from 'react-trello/dist/widgets/NewLaneTitleEditor';
 import AddCardLink from 'react-trello/dist/components/AddCardLink';
+import { AddLaneLink } from 'react-trello/dist/styles/Elements';
 import { createDriver, annotate, useAction } from '@appactions/driver';
 import data from './data.json';
 
@@ -15,7 +16,7 @@ createDriver(Board, {
     pattern: 'Board',
     actions: {
         addLane({ hook }, title) {
-            hook(title);
+            hook(title || '');
         },
     },
     simplify: {
@@ -44,7 +45,7 @@ createDriver(Lane, {
     actions: {
         addCard({ actions, hook }, title, label, description) {
             const laneId = actions.getLaneId();
-            hook(laneId, { title, label, description });
+            hook(laneId, { title: title || '', label: label || '', description: description || '' });
         },
         getLaneId({ fiber }) {
             return fiber.stateNode.props.id;
@@ -116,7 +117,7 @@ createDriver(InlineInputController, {
         },
     },
 });
-createDriver('button', {
+createDriver(AddLaneLink, {
     pattern: 'Button',
     getName: ({ $el }) => $el.text().trim(),
 });
@@ -139,12 +140,7 @@ const Home = () => {
         eventBus.publish({
             type: 'ADD_CARD',
             laneId,
-            card: {
-                id: String(Date.now()),
-                title,
-                label,
-                description,
-            },
+            card: { id: String(Date.now()), title, label, description },
         });
     });
 

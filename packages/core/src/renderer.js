@@ -139,12 +139,15 @@ export function attach(hook, rendererID, renderer, global) {
     const useAction = (config, callback) => {
         const dispatcher = Cypress.AppActions.hook.renderers.get(1).currentDispatcherRef;
 
-        dispatcher.current.useState(() => ({
+        const data = {
             pattern: config.pattern,
             action: config.action,
             callback,
             useAction: true,
-        }));
+        };
+
+        const [ref] = dispatcher.current.useState(() => data);
+        ref.callback = callback;
     };
 
     return {
