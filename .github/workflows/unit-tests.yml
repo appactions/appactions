@@ -12,13 +12,21 @@ jobs:
         with:
           node-version: '14'
 
+      - id: yarn-cache
+        run: |
+          echo "::set-output name=dir::$(yarn cache dir)"
+
       - uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: |
+            ${{ steps.yarn-cache.outputs.dir }}
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
 
       - name: install packages
-        run: yarn install
+        run: yarn install --prefer-offline
 
       - name: build package
         run: yarn workspace @appactions/core build

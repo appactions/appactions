@@ -1,15 +1,15 @@
 # App Actions
 
-App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a test runner agnostics solution that integrates with Cypress and Selenium*.
+App Actions is a utility library and developer tool for writing end-to-end (E2E) tests for React apps. It's a test runner agnostics solution that integrates with Cypress and Selenium\*.
 
-**Out of the box Selenium support is work in progress.*
+\*_Out of the box Selenium support is work in progress._
 
 App Actions helps to solve the following problems:
 
-- Speed up the test writing process.
-- Minimize the amount of work needed for test maintenance.
-- Optimize test running speed.
-- Enable non-frontend developers to write automation tests.
+-   Speed up the test writing process.
+-   Minimize the amount of work needed for test maintenance.
+-   Optimize test running speed.
+-   Enable non-frontend developers to write automation tests.
 
 ## Getting started
 
@@ -90,10 +90,10 @@ This is why the App Actions drivers can communicate hints, like loading state, w
 
 Drivers are defined by the `createDriver` function. It expects a React component (function or string), and a config object, that has 4 keys:
 
-- `pattern` (mandatory)
-- `getName`
-- `isLoading`
-- `actions`
+-   `pattern` (mandatory)
+-   `getName`
+-   `isLoading`
+-   `actions`
 
 `pattern` is the only mandatory field, defining what UX pattern this driver is responsible for.
 
@@ -114,6 +114,7 @@ TODO
 ```
 $(el).vDomFind('.foo Pattern1 Pattern2');
 ```
+
 Returns the DOM node rendered by Pattern2.
 
 TODO
