@@ -20,7 +20,7 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache.outputs.dir }}
-            /runner/.cache/Cypress
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-modules-
