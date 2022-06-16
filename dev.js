@@ -51,6 +51,14 @@ const choices = [
         ],
     },
     {
+        choice: { name: 'Run development watch mode without Cypress', value: 'watch' },
+        concurrently: [
+            { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
+            { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
+            { name: 'driver', command: 'yarn workspace @appactions/driver dev', prefixColor: 'cyan' },
+        ],
+    },
+    {
         choice: { name: 'Standalone React App Actions', value: 'standalone' },
         concurrently: [
             // TODO: improve this once react-app-actions is developed again
