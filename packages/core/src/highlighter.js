@@ -29,8 +29,10 @@ export function setupHighlighter(bridge, agent) {
 
     function highlightNativeElement({
         id,
+        rendererID,
     }) {
-        const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+        const renderer = agent.rendererInterfaces[rendererID];
+        const fiber = renderer.findCurrentFiberUsingSlowPathById(id);
         const nodes = Cypress.AppActions.reactApi.findNativeNodes(fiber);
 
         if (nodes != null && nodes[0] != null) {

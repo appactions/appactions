@@ -61,7 +61,7 @@ export default class Agent extends EventEmitter {
                     actions: [],
                 };
 
-                const fiber = Cypress.AppActions.reactApi.findCurrentFiberUsingSlowPathById(id);
+                const fiber = renderer.findCurrentFiberUsingSlowPathById(id);
                 const fiberInfo = getFiberInfo(fiber);
                 if (fiberInfo.driver) {
                     result.pattern = fiberInfo.driver.pattern;

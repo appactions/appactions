@@ -19,7 +19,7 @@ function ChevronDownIcon({ className }) {
 }
 
 export default function AssertButton() {
-    const { bridge } = useDevtoolsContext();
+    const { bridge, store } = useDevtoolsContext();
     const [open, setOpen] = useState(false);
     const [currentValue, setCurrentValue] = useState('');
     const [justSubmitted, setSubmitted] = useTemporaryState(false);
@@ -41,7 +41,7 @@ export default function AssertButton() {
     };
 
     if (!selectedElement) {
-        return <span className="inline-flex text-gray-500 items-center">Select a pattern for assert</span>;
+        return <span className="inline-flex items-center text-gray-500">Select a pattern for assert</span>;
     }
 
     const assertConfig =
@@ -49,14 +49,16 @@ export default function AssertButton() {
 
     return (
         <form className="inline-flex gap-x-2" onSubmit={submit}>
-            <span className="inline-flex text-gray-500 items-center">Assert:</span>
+            <span className="inline-flex items-center text-gray-500">Assert:</span>
             <span className="relative z-0 inline-flex shadow-sm rounded-md">
                 <button
-                    className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 min-w-[120px] max-w-[320px] truncate flex-col"
+                    className="relative inline-flex flex-col items-center px-4 py-2 text-sm font-medium text-gray-700 truncate bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 min-w-[120px] max-w-[320px]"
                     disabled={justSubmitted}
                     onPointerEnter={() => {
+                        const rendererID = store.getRendererIDForElement(selectedElement.id);
                         bridge.send('highlightNativeElement', {
                             id: selectedElement.id,
+                            rendererID,
                         });
                     }}
                     onPointerLeave={() => bridge.send('clearNativeElementHighlight')}
@@ -64,17 +66,17 @@ export default function AssertButton() {
                     {justSubmitted ? <TickIcon /> : assertConfig.name}
                 </button>
 
-                <span className="-ml-px relative block">
+                <span className="relative block -ml-px">
                     <button
                         type="button"
-                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        className="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50"
                         onClick={() => setOpen(open => !open)}
                     >
                         <span className="sr-only">Open options</span>
-                        <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                        <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
                     </button>
                     {open ? (
-                        <ul className="origin-top-right absolute right-0 mt-2 -mr-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 text-center">
+                        <ul className="absolute right-0 w-56 mt-2 -mr-1 text-center bg-white shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5">
                             <div className="py-1">
                                 {selectedElement.asserts.map(assert => (
                                     <li key={assert.name}>
@@ -98,15 +100,15 @@ export default function AssertButton() {
                 </span>
             </span>
             {assertConfig.input ? (
-                <div className="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm">
+                <div className="relative px-3 py-2 border border-gray-300 rounded-md shadow-sm">
                     <label>
-                        <span className="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900">
+                        <span className="absolute inline-block px-1 -mt-px text-xs font-medium text-gray-900 bg-white -top-2 left-2">
                             {assertConfig.test}
                         </span>
                         <input
                             type={assertConfig.input}
                             name="value"
-                            className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 sm:text-sm focus:ring-0"
+                            className="block w-full p-0 text-gray-900 placeholder-gray-500 border-0 sm:text-sm focus:ring-0"
                             placeholder={''}
                             onChange={event => setCurrentValue(event.target.value)}
                             value={currentValue}
