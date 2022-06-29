@@ -23,6 +23,20 @@ const choices = [
         ],
     },
     {
+        choice: { name: 'AI Agent', value: 'quixe' },
+        concurrently: [
+            // TODO add Cypress to project
+            // { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
+            // { name: 'driver', command: 'yarn workspace @appactions/driver dev', prefixColor: 'cyan' },
+            // { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
+            {
+                name: 'app',
+                command: 'yarn workspace kitchensink-quixe start',
+                prefixColor: 'green',
+            },
+        ],
+    },
+    {
         choice: { name: 'Cypress version with Trello kitchensink', value: 'trello' },
         concurrently: [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
