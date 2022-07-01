@@ -11,3 +11,5 @@ yarn-error.log*
 .vercel
 
 cdk.out.json
+
+.env.local

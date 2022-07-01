@@ -3,7 +3,8 @@ import React, { useEffect, useReducer } from 'react';
 const filteredText = new Set(['', '>']);
 
 const callback = dispatch => mutationList => {
-    // dispatch({ type: 'startScene' });
+    let result = null;
+
     for (const mutation of mutationList) {
         if (mutation.addedNodes.length > 0) {
             for (const node of mutation.addedNodes) {
@@ -13,12 +14,18 @@ const callback = dispatch => mutationList => {
                 }
 
                 if (node.classList.contains('BufferLine')) {
-                    dispatch({ type: 'addText', text });
+                    result = result ? `${result}\n${text}` : text;
                 }
             }
         }
     }
-    // dispatch({ type: 'endScene' });
+
+    const header = document
+        .querySelector('.WindowFrame.GridWindow')
+        .textContent.trim()
+        .replace(/\s{3,}/g, '  ');
+
+    dispatch({ type: 'setNode', header, text: result });
 };
 
 const config = {
@@ -30,17 +37,14 @@ const targetNode = document.getElementById('gameport');
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'startScene': {
-            return state;
-        }
-        case 'addText': {
+        case 'setNode': {
             return {
                 ...state,
+                textHistory: [state.text, ...state.textHistory],
+                headerHistory: [state.header, ...state.headerHistory],
                 text: action.text,
+                header: action.header,
             };
-        }
-        case 'endScene': {
-            return state;
         }
         default: {
             return state;
@@ -48,8 +52,10 @@ const reducer = (state, action) => {
     }
 };
 
+const initial = { text: null, header: null, textHistory: [], headerHistory: [] };
+
 const useBridge = () => {
-    const [state, dispatch] = useReducer(reducer, { text: null });
+    const [state, dispatch] = useReducer(reducer, initial);
 
     useEffect(() => {
         const observer = new MutationObserver(callback(dispatch));
@@ -62,6 +68,12 @@ const useBridge = () => {
 
 export default function App() {
     const state = useBridge();
-    console.log('state', state);
-    return <h1>YOLO</h1>;
+    return (
+        <>
+            <h1>Quixe</h1>
+            <h2>{state.header ? state.header : '-'}</h2>
+            <h2>{state.text ? state.text : '-'}</h2>
+            <h2>History size: {state.textHistory.length}</h2>
+        </>
+    );
 }
