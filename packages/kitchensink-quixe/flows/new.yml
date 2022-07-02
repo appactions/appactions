@@ -3,4 +3,4 @@ start:
   route: '/'
   auth: false
 steps:
-  - with: App
+  - with: Game

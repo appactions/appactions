@@ -9,7 +9,7 @@
     "test:cypress": "start-server-and-test http://localhost:12000 cypress",
     "test:jest": "jest",
     "test": "yarn test:cypress && yarn test:jest",
-    "wait-for-dev": "yarn run clean && wait-on build/index.js && wait-on build/browser-extension/main.js",
+    "wait-for-dev": "wait-on build/index.js && wait-on build/browser-extension/main.js",
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:library": "NODE_ENV=development rollup --config rollup.config.js --watch",
     "dev:extension": "NODE_ENV=development webpack --config webpack.config.js --watch",

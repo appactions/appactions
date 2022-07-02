@@ -55,7 +55,7 @@ const reducer = (state, action) => {
 
 const initial = { text: null, header: null, textHistory: [], headerHistory: [] };
 
-const useBridge = () => {
+const useGameScraper = () => {
     const [state, dispatch] = useReducer(reducer, initial);
 
     useEffect(() => {
@@ -67,18 +67,58 @@ const useBridge = () => {
     return state;
 };
 
-export default function App() {
-    const state = useBridge();
+function Header({ data }) {
     return (
-        <>
-            <h1>Quixe</h1>
-            <h2>{state.header ? state.header : '-'}</h2>
-            <h2>{state.text ? state.text : '-'}</h2>
-            <h2>History size: {state.textHistory.length}</h2>
-        </>
+        <tr>
+            <th>Header</th>
+            <td>{data}</td>
+        </tr>
     );
 }
 
-createDriver(App, {
-    pattern: 'App',
+function Text({ data }) {
+    return (
+        <tr>
+            <th>Text</th>
+            <td>{data}</td>
+        </tr>
+    );
+}
+
+function History({ data }) {
+    return (
+        <tr>
+            <th>History size (text)</th>
+            <td>{data}</td>
+        </tr>
+    );
+}
+
+export default function Game() {
+    const data = useGameScraper();
+    return (
+        <table>
+            <tbody>
+                <Header data={data.header} />
+                <Text data={data.text} />
+                <History data={data.textHistory.length} />
+            </tbody>
+        </table>
+    );
+}
+
+createDriver(Game, {
+    pattern: 'Game',
+});
+
+createDriver(Header, {
+    pattern: 'Header',
+});
+
+createDriver(Text, {
+    pattern: 'Text',
+});
+
+createDriver(History, {
+    pattern: 'History',
 });
