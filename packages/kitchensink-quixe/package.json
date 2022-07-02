@@ -11,7 +11,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom"
+    "test": "react-scripts test --env=jsdom",
+    "cypress": "start-server-and-test 3000 'cypress open'"
   },
   "browserslist": [
     ">0.2%",
@@ -19,5 +20,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "license": "unlicensed"
+  "license": "unlicensed",
+  "devDependencies": {
+    "cypress": "^10.3.0",
+    "start-server-and-test": "^1.14.0"
+  }
 }

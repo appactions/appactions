@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import { createDriver } from '@appactions/driver';
 
 const filteredText = new Set(['', '>']);
 
@@ -77,3 +78,7 @@ export default function App() {
         </>
     );
 }
+
+createDriver(App, {
+    pattern: 'App',
+});
