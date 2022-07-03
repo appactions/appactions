@@ -3,6 +3,8 @@ import { createDriver } from '@appactions/driver';
 
 const filteredText = new Set(['', '>']);
 
+const targetNode = document.getElementById('gameport');
+
 const callback = dispatch => mutationList => {
     let result = null;
 
@@ -21,7 +23,7 @@ const callback = dispatch => mutationList => {
         }
     }
 
-    const header = document
+    const header = targetNode
         .querySelector('.WindowFrame.GridWindow')
         .textContent.trim()
         .replace(/\s{3,}/g, '  ');
@@ -33,8 +35,6 @@ const config = {
     childList: true,
     subtree: true,
 };
-
-const targetNode = document.getElementById('gameport');
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -94,6 +94,35 @@ function History({ data }) {
     );
 }
 
+function Input() {
+    const onSubmit = event => {
+        event.preventDefault();
+        const input = event.target.querySelector('input');
+        const text = input.value;
+        input.value = '';
+
+        targetNode.querySelector('.InvisibleCursor input').value = text;
+        targetNode.querySelector('.InvisibleCursor input').dispatchEvent(
+            new KeyboardEvent('keypress', {
+                bubbles: true,
+                cancelable: true,
+                keyCode: 13, // Enter
+            }),
+        );
+    };
+    return (
+        <tr>
+            <th>Command</th>
+            <td>
+                <form onSubmit={onSubmit}>
+                    <input type="text" />
+                    <button type="submit">Send</button>
+                </form>
+            </td>
+        </tr>
+    );
+}
+
 export default function Game() {
     const data = useGameScraper();
     return (
@@ -102,6 +131,7 @@ export default function Game() {
                 <Header data={data.header} />
                 <Text data={data.text} />
                 <History data={data.textHistory.length} />
+                <Input />
             </tbody>
         </table>
     );
