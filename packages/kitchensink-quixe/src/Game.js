@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { createDriver } from '@appactions/driver';
+import { createDriver, annotate } from '@appactions/driver';
 
 const filteredText = new Set(['', '>']);
 
@@ -39,12 +39,25 @@ const config = {
 const reducer = (state, action) => {
     switch (action.type) {
         case 'setNode': {
+            let header = null;
+            const parsedHeader = action.header.match(
+                /Erő:\s(?<power>\d+)\s+Eredmény:\s(?<score>\d+)\s+(?<direction>[\u10C80-\u10CFF ]+)/,
+            );
+
+            if (parsedHeader) {
+                header = {
+                    power: Number(parsedHeader.groups.power),
+                    score: Number(parsedHeader.groups.score),
+                    directions: parsedHeader.groups.direction.split(' ').filter(Boolean),
+                };
+            }
+
             return {
                 ...state,
                 textHistory: [state.text, ...state.textHistory],
                 headerHistory: [state.header, ...state.headerHistory],
                 text: action.text,
-                header: action.header,
+                header: header ? header : {},
             };
         }
         default: {
@@ -53,7 +66,7 @@ const reducer = (state, action) => {
     }
 };
 
-const initial = { text: null, header: null, textHistory: [], headerHistory: [] };
+const initial = { text: null, header: {}, textHistory: [], headerHistory: [] };
 
 const useGameScraper = () => {
     const [state, dispatch] = useReducer(reducer, initial);
@@ -71,7 +84,7 @@ function Header({ data }) {
     return (
         <tr>
             <th>Header</th>
-            <td>{data}</td>
+            <td>{JSON.stringify(data)}</td>
         </tr>
     );
 }
@@ -94,11 +107,13 @@ function History({ data }) {
     );
 }
 
-function Input() {
+function Input({ directions = [] }) {
     const onSubmit = event => {
         event.preventDefault();
+
         const input = event.target.querySelector('input');
-        const text = input.value;
+        const text = event.nativeEvent.submitter.name ?? input.value;
+        // reset even when direction button was used
         input.value = '';
 
         targetNode.querySelector('.InvisibleCursor input').value = text;
@@ -109,6 +124,12 @@ function Input() {
                 keyCode: 13, // Enter
             }),
         );
+
+        annotate(event, {
+            pattern: 'Input',
+            action: 'send',
+            args: [text],
+        });
     };
     return (
         <tr>
@@ -117,6 +138,12 @@ function Input() {
                 <form onSubmit={onSubmit}>
                     <input type="text" />
                     <button type="submit">Send</button>
+                    {' • '}
+                    {directions.map(direction => (
+                        <button key={direction} type="submit" name={direction}>
+                            {direction}
+                        </button>
+                    ))}
                 </form>
             </td>
         </tr>
@@ -131,7 +158,7 @@ export default function Game() {
                 <Header data={data.header} />
                 <Text data={data.text} />
                 <History data={data.textHistory.length} />
-                <Input />
+                <Input directions={data.header.directions} />
             </tbody>
         </table>
     );
@@ -151,4 +178,8 @@ createDriver(Text, {
 
 createDriver(History, {
     pattern: 'History',
+});
+
+createDriver(Input, {
+    pattern: 'Input',
 });

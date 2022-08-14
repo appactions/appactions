@@ -5,6 +5,10 @@ if (!Cypress.AppActions) {
         isRepresentingRole: fiber => {
             return !!getDriver(fiber);
         },
+        _config: null,
+        setConfig: config => {
+            Cypress.AppActions._config = config;
+        }
     };
 }
 
