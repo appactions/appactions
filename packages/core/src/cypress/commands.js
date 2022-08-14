@@ -4,7 +4,8 @@ import { addVDOMUtilsToJQuery } from '../add-vdom-utils-to-jquery';
 import { installHook } from '../hook';
 import { activateBackend } from '../backend';
 
-export function registerCypressCommands() {
+export function registerCypressCommands(config) {
+    Cypress.AppActions.setConfig(config);
 
     Cypress.on('window:before:load', win => {
         Cypress.AppActions.hook = installHook(win);

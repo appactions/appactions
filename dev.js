@@ -14,10 +14,24 @@ const choices = [
             { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
             { name: 'driver', command: 'yarn workspace @appactions/driver dev', prefixColor: 'cyan' },
             { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
-            // the cypress command also handles the dev server
+            // the cypress command also handles the r3f dev server
             {
                 name: 'cypress',
                 command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-r3f cypress',
+                prefixColor: 'green',
+            },
+        ],
+    },
+    {
+        choice: { name: 'AI Agent', value: 'quixe' },
+        concurrently: [
+            { name: 'core', command: 'yarn workspace @appactions/core dev:library', prefixColor: 'blue' },
+            { name: 'driver', command: 'yarn workspace @appactions/driver dev', prefixColor: 'cyan' },
+            { name: 'browser-ext', command: 'yarn workspace @appactions/core dev:extension', prefixColor: 'yellow' },
+            // the cypress command also handles the quixe dev server
+            {
+                name: 'cypress',
+                command: 'yarn workspace @appactions/core wait-for-dev && yarn workspace kitchensink-quixe cypress',
                 prefixColor: 'green',
             },
         ],

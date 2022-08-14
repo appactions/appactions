@@ -1,0 +1,28 @@
+{
+  "name": "kitchensink-quixe",
+  "version": "1.0.0",
+  "description": "Run the AI Agent on",
+  "main": "src/index.js",
+  "dependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-scripts": "4.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "cypress": "start-server-and-test 3000 'cypress open'"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "license": "unlicensed",
+  "devDependencies": {
+    "cypress": "^10.3.0",
+    "start-server-and-test": "^1.14.0"
+  }
+}
